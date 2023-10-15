@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Accueil{% endblock %} - APEAJ</title>
+    <link {% block favicon %}rel="icon" href="{{ url_for('static',filename='images/logo.png') }}" {% endblock %}>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+    {% block stylesheets %}{% endblock %}
+
+    {% block javascripts %}{% endblock %}
+
+    {% block headSuppl %}{% endblock %}
+</head>
+
+<body>
+{% include "_partial/_nav.html" %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div style="{% if category == 'message' %}background-color: #6ce56c;{% else %}
+                 background-color: #e83c55;
+                 {% endif %} color: black">
+                <ul class="flashes" style="margin-top: revert">
+                    <li>{{ message }}</li>
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% block body %}{% endblock %}
+
+{% include "_partial/_footer.html" %}
+</body>
+{% block javascripts2 %}{% endblock %}
+</html>

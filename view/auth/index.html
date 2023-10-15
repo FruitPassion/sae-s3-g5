@@ -1,0 +1,14 @@
+{% extends 'common/base.html' %}
+
+
+{% block body %}
+    <p>Liste des membres du personnel</p>
+    <div>
+        <p>Id - Nom - Prenom - Role</p>
+    </div>
+    {% for p in personnel %}
+        <div>
+            <p>{{ p["Id_Personnel"] }} - {{ p["Nom"] }} - {{ p["Prenom"] }} - {{ p["Role"] }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

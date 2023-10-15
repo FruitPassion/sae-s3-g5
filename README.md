@@ -1,11 +1,6 @@
-<br/>
-<div style="text-align: center">
-  <a href="https://github.com/FruitPassion/sae-s3-g5">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Flask_logo.svg/1200px-Flask_logo.svg.png"
-    alt="flask-logo" height="80">
-  </a>
-  <h1>SAE3 - Application d'aides aux élèves en difficulté</h1>
 
+<div align="center">
+  <h1>SAE3 - Application d'aides aux élèves en difficulté</h1>
   <p>
     Documentation de développement et d'utilisation de l'application web.
     <br />
@@ -16,11 +11,14 @@
 
 ## Prérequis
 
-### Utilisation d'une base de données
+### - Utilisation de XAMPP/WAMP
 
-**A FAIRE** :
-- [ ] Creation d'utilisateur
-- [ ] Creation de la base de donnée
+L'utilisation de XAMPP est nécessaire, mais uniquement pour faire tourner la base de donnée. Ainsi, il suffit seulement
+de lancer MySql.
+
+Une fois mysql démaré, on cherchera à executer en tant que root le script `db_creation.sql` en se basant sur 
+[ces méthodes](https://dev.mysql.com/doc/refman/8.0/en/mysql-batch-commands.html). Ledit script permet ainsi de créer
+l'utilisateur nécessaire à la connexion mais aussi de créer le schéma de la base de donnée.
 
 ### - Installation de Python 3.10
 
@@ -94,11 +92,11 @@ On peut ensuite se rendre sur son navigateur web et acceder à l'index via `http
 
 ## Présentation du projet
 
+### Architecutre 
 
-### Structure du projet
-
-Le projet suit le modèle de conception MVC. Ce concept de MVC (Model-View-Controller) dans une application web, comme Flask, est une manière de structurer et
-d'organiser le code pour améliorer la clarté et la maintenabilité de l'application. Ainsi :
+Le projet suit le modèle de conception MVC. Ce concept de MVC (Model-View-Controller) dans une application web, comme 
+Flask, est une manière de structurer et  d'organiser le code pour améliorer la clarté et la maintenabilité de
+l'application. Ainsi :
 
 - **Modèle (Model) :**
   <br>Le modèle représente les données de l'application. Il s'agit de la logique métier qui stocke, gère et manipule les
@@ -125,6 +123,17 @@ d'organiser le code pour améliorer la clarté et la maintenabilité de l'applic
 <img src="https://files.realpython.com/media/mvc_diagram_with_routes.e12c5b982ac8.png" alt="flask-logo" width="60%">
 </div>
 
+### Structure 
+
+Ainsi, à la racine du projet, on retrouve plusieurs fichiers et dossiers :
+- **Controller** : ssd
+- **Custom-Paquets** : ssd
+- **Model** : ssd
+- **Model-DB** : ssd
+- **Static** : ssd
+- **View** : ssd
+- **app.py** : ssd
+- **config.py** : ssd
 
 ***
 
