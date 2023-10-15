@@ -1,6 +1,6 @@
 <br><br>
 <div align="center">
-   <img src="https://www.apeaj.com/wp-content/uploads/2022/05/APEAJ_color2.png" height="130px">
+   <img src="https://imgur.com/mAozU4s.png" height="140px">
   <h1>SAE3 - Application d'aide aux élèves en difficulté</h1>
   <p>
     Documentation de développement et d'utilisation de l'application web.
@@ -10,7 +10,7 @@
 
 ***
 <div align="center">
-<img src="https://blog.appseed.us/content/images/2022/01/blog-flask-cover.jpg">
+<img src="https://imgur.com/EPtdU76.png">
 </div>
 
 ***
@@ -100,7 +100,7 @@ ou `http://127.0.0.1:5000/`
 ***
 
 <div align="center">
-<img src="https://www.payette.com/wp-content/uploads/2018/10/blog-banner_2018_01jan_sketches_3840x1200-e1539271126270-1920x600.jpg" style="height: 120px;width: 100%;object-fit: cover;">
+<img src="https://imgur.com/nsEGruA.png">
 </div>
 
 ***
@@ -138,7 +138,7 @@ l'application. Ainsi :
 ***
 
 <div align="center">
-<img src="https://images.unsplash.com/photo-1555680510-34daedadbdb1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y29tcHV0ZXIlMjBjb2RlfGVufDB8fDB8fHww&w=1000&q=80" style="height: 120px;width: 100%;object-fit: cover;">
+<img src="https://imgur.com/SAbFj1w.png">
 </div>
 
 ***
