@@ -17,19 +17,7 @@
 <body>
 {% include "_partial/_nav.html" %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div style="{% if category == 'message' %}background-color: #6ce56c;{% else %}
-                 background-color: #e83c55;
-                 {% endif %} color: black">
-                <ul class="flashes" style="margin-top: revert">
-                    <li>{{ message }}</li>
-                </ul>
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+
 
 {% block body %}{% endblock %}
 
