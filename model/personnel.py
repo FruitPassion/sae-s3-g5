@@ -10,6 +10,6 @@ def getAllPersonnel():
 
     :return: La liste des membres du personnel
     """
-    personnel = Personnel.query.with_entities(Personnel.Id_Personnel, Personnel.Nom, Personnel.Prenom,
-                                              Personnel.Role).all()
+    personnel = Personnel.query.with_entities(Personnel.id_personnel, Personnel.nom, Personnel.prenom,
+                                              Personnel.role).all()
     return convertToDict(personnel)

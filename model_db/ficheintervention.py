@@ -1,25 +1,28 @@
 from model_db.shared_model import db
 
 
-class Fiche(db.Model):
-    __tablename__ = 'Fiche'
+class FicheIntervention(db.Model):
+    __tablename__ = 'FicheIntervention'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
-    Id_Fiche = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
-    NumFiche = db.Column(db.Integer, nullable=False)
-    NomDemandeur = db.Column(db.String(50), nullable=False)
-    DateDemande = db.Column(db.Date, nullable=False)
-    Localisation = db.Column(db.String(100), nullable=False)
-    Descrition = db.Column(db.Text, nullable=False)
-    DegreUrgence = db.Column(db.Integer, nullable=False)
-    EtatFicheApprenti = db.Column(db.String(50), nullable=False)
-    Id_Apprenti = db.Columndb.Column(db.ForeignKey(f'db_fiches_dev.Apprenti.Id_Apprenti'), nullable=False, index=True)
-    Id_Intervention = db.Column(db.ForeignKey(f'db_fiches_dev.Intervention.Id_Intervention'), nullable=False,
-                                index=True)
-    Id_Session = db.Column(db.ForeignKey(f'db_fiches_dev.Session.Id_Session'), nullable=False, index=True)
+    id_fiche = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
+    numero = db.Column(db.Integer, nullable=False)
+    nom_du_demandeur = db.Column(db.String(50))
+    date_demande = db.Column(db.Date)
+    date_intervention = db.Column(db.Date)
+    duree_intervention = db.Column(db.String(50))
+    localisation = db.Column(db.String(50))
+    description_demande = db.Column(db.Text)
+    degre_urgence = db.Column(db.String(50))
+    type_intervention = db.Column(db.String(50))
+    nature_intervention = db.Column(db.String(50))
+    couleur_intervention = db.Column(db.String(50))
+    etat_fiche = db.Column(db.String(50))
+    date_creation = db.Column(db.Datetime)
+    id_apprenti = db.Columndb.Column(db.ForeignKey(f'db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
+    id_personnel = db.Column(db.ForeignKey(f'db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
 
-    Apprenti = db.relationship('Apprenti', primaryjoin='Fiche.Id_Apprenti == Apprenti.Id_Apprenti', backref='fiches')
-    Intervention = db.relationship('Intervention', primaryjoin='Fiche.Id_Intervention == Intervention.Id_Intervention',
-                                   backref='fiches')
-    Session = db.relationship('Session', primaryjoin='Fiche.Id_Session == Session.Id_Session', backref='fiches')
-
+    Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
+                               backref='fiches')
+    Personnel = db.relationship('Personnel', primaryjoin='FicheIntervention.id_personnel == Personnel.id_personnel',
+                                backref='fiches')
