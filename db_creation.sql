@@ -5,126 +5,131 @@ grant all privileges on db_fiches_dev.* TO 'local_user'@'localhost' identified b
 flush privileges;
 USE db_fiches_dev;
 
-CREATE TABLE Formation(
-   Id_Formation INT AUTO_INCREMENT,
-   Intitule VARCHAR(100) NOT NULL,
-   NiveauQualif VARCHAR(25) NOT NULL,
-   PRIMARY KEY(Id_Formation)
-);
-
-CREATE TABLE Session(
-   Id_Session INT AUTO_INCREMENT,
-   Theme VARCHAR(25) NOT NULL,
-   Cours VARCHAR(50) NOT NULL,
-   Debut DATE NOT NULL,
-   Duree DATE NOT NULL,
-   PRIMARY KEY(Id_Session)
+CREATE TABLE Personnel(
+   id_personnel INT AUTO_INCREMENT,
+   nom VARCHAR(50) NOT NULL,
+   prenom VARCHAR(50) NOT NULL,
+   login VARCHAR(50) NOT NULL,
+   mdp TEXT NOT NULL,
+   role VARCHAR(50),
+   PRIMARY KEY(id_personnel)
 );
 
 CREATE TABLE Apprenti(
-   Id_Apprenti INT AUTO_INCREMENT,
-   Nom VARCHAR(50) NOT NULL,
-   Prenom VARCHAR(50) NOT NULL,
-   Login VARCHAR(50) NOT NULL,
-   MDP INT,
-   Id_Formation INT NOT NULL,
-   PRIMARY KEY(Id_Apprenti),
-   FOREIGN KEY(Id_Formation) REFERENCES Formation(Id_Formation)
+   id_apprenti INT AUTO_INCREMENT,
+   nom VARCHAR(50) NOT NULL,
+   prenom VARCHAR(50) NOT NULL,
+   login VARCHAR(50),
+   mdp TEXT,
+   photo VARCHAR(100),
+   PRIMARY KEY(id_apprenti)
 );
 
-CREATE TABLE ElementForm(
-   Id_ElementForm INT AUTO_INCREMENT,
-   TypeElt VARCHAR(50) NOT NULL,
-   Picto VARCHAR(100),
-   Libelle VARCHAR(100) NOT NULL,
-   Audio VARCHAR(100),
-   TailleLibelle INT NOT NULL,
-   PoliceLibelle VARCHAR(50) NOT NULL,
-   CouleurLibelle CHAR(6) NOT NULL,
-   CouleurFondLib CHAR(6) NOT NULL,
-   NiveauAffichage TINYINT NOT NULL,
-   DateHeure DATETIME NOT NULL,
-   ReponseApprenti TEXT,
-   PRIMARY KEY(Id_ElementForm)
+CREATE TABLE Formation(
+   id_formation INT AUTO_INCREMENT,
+   intitule VARCHAR(50) NOT NULL,
+   niveau_qualif VARCHAR(25),
+   groupe VARCHAR(50),
+   PRIMARY KEY(id_formation)
 );
 
-CREATE TABLE Personnel(
-   Id_Personnel INT AUTO_INCREMENT,
-   Nom VARCHAR(50) NOT NULL,
-   Prenom VARCHAR(50) NOT NULL,
-   Login VARCHAR(50) NOT NULL,
-   MDP VARCHAR(50) NOT NULL,
-   Role VARCHAR(50) NOT NULL,
-   PRIMARY KEY(Id_Personnel)
+CREATE TABLE Session(
+   id_session INT AUTO_INCREMENT,
+   theme VARCHAR(50),
+   cours VARCHAR(50),
+   duree INT,
+   id_formation INT NOT NULL,
+   PRIMARY KEY(id_session),
+   FOREIGN KEY(id_formation) REFERENCES formation(id_formation)
 );
 
-CREATE TABLE Intervention(
-   Id_Intervention INT AUTO_INCREMENT,
-   DateIntervention DATE NOT NULL,
-   TypeIntervention VARCHAR(50) NOT NULL,
-   NatureIntervention VARCHAR(50) NOT NULL,
-   PRIMARY KEY(Id_Intervention)
+CREATE TABLE EducAdmin(
+   id_personnel INT,
+   PRIMARY KEY(id_personnel),
+   FOREIGN KEY(id_personnel) REFERENCES personnel(id_personnel)
 );
 
-CREATE TABLE Archiver(
-   Id_Apprenti INT,
-   Date_archive DATETIME,
-   O_N BOOLEAN NOT NULL,
-   Id_Personnel INT NOT NULL,
-   PRIMARY KEY(Id_Apprenti, Date_archive),
-   UNIQUE(Id_Apprenti),
-   FOREIGN KEY(Id_Apprenti) REFERENCES Apprenti(Id_Apprenti),
-   FOREIGN KEY(Id_Personnel) REFERENCES Personnel(Id_Personnel)
+CREATE TABLE Pictogramme(
+   id_pictogramme INT AUTO_INCREMENT,
+   label VARCHAR(50),
+   url VARCHAR(100),
+   categorie VARCHAR(50),
+   PRIMARY KEY(Id_Pictogramme)
 );
 
-CREATE TABLE Fiche(
-   Id_Fiche INT AUTO_INCREMENT,
-   NumFiche INT NOT NULL,
-   NomDemandeur VARCHAR(50) NOT NULL,
-   DateDemande DATE NOT NULL,
-   Localisation VARCHAR(100) NOT NULL,
-   Description TEXT NOT NULL,
-   DegreUrgence INT NOT NULL,
-   EtatFicheApprenti VARCHAR(50) NOT NULL,
-   Id_Apprenti INT NOT NULL,
-   Id_Intervention INT NOT NULL,
-   Id_Session INT NOT NULL,
-   PRIMARY KEY(Id_Fiche),
-   FOREIGN KEY(Id_Apprenti) REFERENCES Apprenti(Id_Apprenti),
-   FOREIGN KEY(Id_Intervention) REFERENCES Intervention(Id_Intervention),
-   FOREIGN KEY(Id_Session) REFERENCES Session(Id_Session)
+CREATE TABLE ElementDefaut(
+   id_element INT AUTO_INCREMENT,
+   type VARCHAR(50),
+   text VARCHAR(50),
+   audio VARCHAR(50),
+   Id_Pictogramme INT NOT NULL,
+   id_personnel INT NOT NULL,
+   PRIMARY KEY(id_element),
+   FOREIGN KEY(id_pictogramme) REFERENCES Pictogramme(id_pictogramme),
+   FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel)
+);
+
+CREATE TABLE FicheIntervention(
+   id_fiche INT AUTO_INCREMENT,
+   numero SMALLINT,
+   nom_du_demandeur VARCHAR(50),
+   date_demande DATE,
+   date_intervention DATE,
+   duree_intervention VARCHAR(50),
+   localisation VARCHAR(50),
+   description_demande TEXT,
+   degre_urgence VARCHAR(50),
+   type_intervention VARCHAR(50),
+   nature_intervention VARCHAR(50),
+   couleur_intervention VARCHAR(50),
+   etat_fiche VARCHAR(50),
+   date_creation DATETIME,
+   id_personnel INT NOT NULL,
+   id_apprenti INT NOT NULL,
+   PRIMARY KEY(id_fiche),
+   FOREIGN KEY(id_apprenti) REFERENCES apprenti(id_apprenti),
+   FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel)
 );
 
 CREATE TABLE Trace(
-   Id_Fiche INT,
-   DateFinFiche DATETIME,
-   EvalTextuelle TEXT NOT NULL,
-   Intitule VARCHAR(50) NOT NULL,
-   EvalAudio VARCHAR(100),
-   CommentaireTextuel TEXT NOT NULL,
-   CommentaireAudio VARCHAR(100),
-   Id_Personnel INT NOT NULL,
-   PRIMARY KEY(Id_Fiche, DateFinFiche),
-   FOREIGN KEY(Id_Fiche) REFERENCES Fiche(Id_Fiche),
-   FOREIGN KEY(Id_Personnel) REFERENCES Personnel(Id_Personnel)
+   id_personnel INT,
+   horodatage DATETIME,
+   intitule VARCHAR(50),
+   eval_texte TEXT,
+   commentaire_texte TEXT,
+   eval_audio VARCHAR(255),
+   commentaire_audio VARCHAR(50),
+   id_fiche INT NOT NULL,
+   PRIMARY KEY(id_personnel, horodatage),
+   FOREIGN KEY(id_personnel) REFERENCES personnel(id_personnel),
+   FOREIGN KEY(id_fiche) REFERENCES fiche_intervention(id_fiche)
 );
 
-CREATE TABLE Avoir(
-   Id_ElementForm INT,
-   Id_Fiche INT,
-   PRIMARY KEY(Id_ElementForm, Id_Fiche),
-   FOREIGN KEY(Id_ElementForm) REFERENCES ElementForm(Id_ElementForm),
-   FOREIGN KEY(Id_Fiche) REFERENCES Fiche(Id_Fiche)
+CREATE TABLE Assister(
+   id_apprenti INT,
+   id_session INT,
+   PRIMARY KEY(id_apprenti, id_session),
+   FOREIGN KEY(id_apprenti) REFERENCES apprenti(id_apprenti),
+   FOREIGN KEY(id_session) REFERENCES session(id_session)
 );
 
-CREATE TABLE Responsable(
-   Id_Formation INT,
-   Id_Personnel INT,
-   PRIMARY KEY(Id_Formation, Id_Personnel),
-   FOREIGN KEY(Id_Formation) REFERENCES Formation(Id_Formation),
-   FOREIGN KEY(Id_Personnel) REFERENCES Personnel(Id_Personnel)
+CREATE TABLE Composer(
+   id_element INT,
+   id_fiche INT,
+   picto VARCHAR(50),
+   text VARCHAR(50),
+   taille_texte VARCHAR(50),
+   police VARCHAR(50),
+   audio VARCHAR(50),
+   couleur VARCHAR(50),
+   couleur_fond VARCHAR(50),
+   niveau TINYINT,
+   PRIMARY KEY(id_element, id_fiche),
+   FOREIGN KEY(id_element) REFERENCES element_defaut(id_element),
+   FOREIGN KEY(id_fiche) REFERENCES fiche_intervention(id_fiche)
 );
 
-INSERT INTO Personnel (Nom, Prenom, Login, MDP, Role)
+
+INSERT INTO Personnel (nom, prenom, login, mdp, role)
 VALUES ('Lamar', 'Allain', 'LAA34', 'mdp23434', 'Educateur'),
        ('Dupont', 'Jean', 'DUJ14', 'smlksfpof', 'Administrateur');
