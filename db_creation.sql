@@ -40,13 +40,13 @@ CREATE TABLE Session(
    duree INT,
    id_formation INT NOT NULL,
    PRIMARY KEY(id_session),
-   FOREIGN KEY(id_formation) REFERENCES formation(id_formation)
+   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
 );
 
 CREATE TABLE EducAdmin(
    id_personnel INT,
    PRIMARY KEY(id_personnel),
-   FOREIGN KEY(id_personnel) REFERENCES personnel(id_personnel)
+   FOREIGN KEY(id_personnel) REFERENCES Personnel(id_personnel)
 );
 
 CREATE TABLE Pictogramme(
@@ -102,7 +102,7 @@ CREATE TABLE Trace(
    id_fiche INT NOT NULL,
    PRIMARY KEY(id_personnel, horodatage),
    FOREIGN KEY(id_personnel) REFERENCES personnel(id_personnel),
-   FOREIGN KEY(id_fiche) REFERENCES fiche_intervention(id_fiche)
+   FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
 
 CREATE TABLE Assister(
@@ -125,8 +125,8 @@ CREATE TABLE Composer(
    couleur_fond VARCHAR(50),
    niveau TINYINT,
    PRIMARY KEY(id_element, id_fiche),
-   FOREIGN KEY(id_element) REFERENCES element_defaut(id_element),
-   FOREIGN KEY(id_fiche) REFERENCES fiche_intervention(id_fiche)
+   FOREIGN KEY(id_element) REFERENCES elementdefaut(id_element),
+   FOREIGN KEY(id_fiche) REFERENCES ficheintervention(id_fiche)
 );
 
 
