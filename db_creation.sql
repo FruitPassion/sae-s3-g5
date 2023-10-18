@@ -10,9 +10,10 @@ CREATE TABLE Personnel(
    nom VARCHAR(50) NOT NULL,
    prenom VARCHAR(50) NOT NULL,
    login VARCHAR(50) NOT NULL,
-   mdp TEXT NOT NULL,
+   mdp TEXT,
    role VARCHAR(50),
    PRIMARY KEY(id_personnel)
+   CONSTRAINT ch_personnel_role CHECK (role IN ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP'))
 );
 
 CREATE TABLE Apprenti(
@@ -27,9 +28,9 @@ CREATE TABLE Apprenti(
 
 CREATE TABLE Formation(
    id_formation INT AUTO_INCREMENT,
-   intitule VARCHAR(50) NOT NULL,
+   intitule VARCHAR(100) NOT NULL,
    niveau_qualif VARCHAR(25),
-   groupe VARCHAR(50),
+   groupe INT,
    PRIMARY KEY(id_formation)
 );
 
@@ -87,7 +88,7 @@ CREATE TABLE FicheIntervention(
    id_personnel INT NOT NULL,
    id_apprenti INT NOT NULL,
    PRIMARY KEY(id_fiche),
-   FOREIGN KEY(id_apprenti) REFERENCES apprenti(id_apprenti),
+   FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
    FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel)
 );
 
@@ -101,7 +102,7 @@ CREATE TABLE Trace(
    commentaire_audio VARCHAR(50),
    id_fiche INT NOT NULL,
    PRIMARY KEY(id_personnel, horodatage),
-   FOREIGN KEY(id_personnel) REFERENCES personnel(id_personnel),
+   FOREIGN KEY(id_personnel) REFERENCES Personnel(id_personnel),
    FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
 
@@ -109,8 +110,8 @@ CREATE TABLE Assister(
    id_apprenti INT,
    id_session INT,
    PRIMARY KEY(id_apprenti, id_session),
-   FOREIGN KEY(id_apprenti) REFERENCES apprenti(id_apprenti),
-   FOREIGN KEY(id_session) REFERENCES session(id_session)
+   FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
+   FOREIGN KEY(id_session) REFERENCES Session(id_session)
 );
 
 CREATE TABLE Composer(
@@ -125,11 +126,31 @@ CREATE TABLE Composer(
    couleur_fond VARCHAR(50),
    niveau TINYINT,
    PRIMARY KEY(id_element, id_fiche),
-   FOREIGN KEY(id_element) REFERENCES elementdefaut(id_element),
-   FOREIGN KEY(id_fiche) REFERENCES ficheintervention(id_fiche)
+   FOREIGN KEY(id_element) REFERENCES ElementDefaut(id_element),
+   FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
 
+INSERT INTO Apprenti (nom, prenom, login)
+VALUES ('Jacquard', 'Davy', 'DAJ12'),
+       ('Guilbert', 'Ange', 'ANG12'),
+       ('Poussin', 'Christian', 'CHP14'),
+       ('Trouvé', 'Éloi', 'ELT10'),
+       ('Cordonnier', 'Danny', 'DAC15'),
+       ('Massé', 'Xavier', 'XAM11'),
+       ('Meissa', 'Abdelkhader', 'ABM17');
 
-INSERT INTO Personnel (nom, prenom, login, mdp, role)
-VALUES ('Lamar', 'Allain', 'LAA34', 'mdp23434', 'Educateur'),
-       ('Dupont', 'Jean', 'DUJ14', 'smlksfpof', 'Administrateur');
+INSERT INTO Personnel (nom, prenom, login, role)
+VALUES ('Dupont', 'Jean', 'JED10', 'SuperAdministrateur'),
+       ('Lamar', 'Allain', 'ALL11', 'Educateur Administrateur'),
+       ('DitCharo', 'Mathieu', 'MAD14', 'Educateur Administrateur'),
+       ('Oskour', 'Jeanne', 'JEO12', 'Educateur'),
+       ('Curry', 'Marie', 'MAC10', 'Educateur'),
+       ('Barre', 'Lenny', 'LEB08', 'Educateur'),
+       ('Zirot', 'Benoit', 'BEZ11', 'Educateur'),
+       ('Rouselle', 'Fabienne', 'FAR16', 'CIP');
+
+INSERT INTO Formation (intitule, niveau_qualif, groupe)
+VALUES ('Parcour plomberie','CAP',1),
+       ('Agent de maintenance en bâtiment','Licence',2);
+
+

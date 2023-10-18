@@ -9,5 +9,5 @@ class Personnel(db.Model):
     nom = db.Column(db.String(50), nullable=False)
     prenom = db.Column(db.String(50), nullable=False)
     login = db.Column(db.String(50), nullable=False)
-    mdp = db.Column(db.Text, nullable=False)
+    mdp = db.Column(db.Text)
     role = db.Column(db.String(50), nullable=False)

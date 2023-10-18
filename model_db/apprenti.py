@@ -9,6 +9,6 @@ class Apprenti(db.Model):
     nom = db.Column(db.String(50), nullable=False)
     prenom = db.Column(db.String(50), nullable=False)
     login = db.Column(db.String(50), nullable=False)
-    mdp = db.Column(db.Text, nullable=False)
+    mdp = db.Column(db.Text)
     photo = db.Column(db.String(50), nullable=False)
     
