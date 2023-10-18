@@ -17,7 +17,7 @@
 
 ## Prérequis
 
-### - Utilisation de XAMPP/WAMP  <img src="https://pic.clubic.com/v1/images/1501317/raw" height="20">
+### - Utilisation de XAMPP/WAMP  <img src="https://pic.clubic.com/v1/images/1501317/raw" height="21">
 
 L'utilisation de XAMPP est nécessaire, mais uniquement pour faire tourner la base de donnée. Ainsi, il suffit seulement
 de lancer MySql.
