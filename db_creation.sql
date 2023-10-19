@@ -12,7 +12,7 @@ CREATE TABLE Personnel(
    login VARCHAR(50) NOT NULL,
    mdp TEXT,
    role VARCHAR(50),
-   PRIMARY KEY(id_personnel)
+   PRIMARY KEY(id_personnel),
    CONSTRAINT ch_personnel_role CHECK (role IN ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP'))
 );
 
