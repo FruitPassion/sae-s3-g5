@@ -1,3 +1,8 @@
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
+
 class DevConfig:
     SECRET_KEY = "3@$=)+Nj{HlH8E&u-43}K.~)C3JTSCL5L9a63_iH#UN6V4nd9d"
     ENVIRONMENT = "development"
