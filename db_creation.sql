@@ -130,24 +130,24 @@ CREATE TABLE Composer(
    FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
 
-INSERT INTO Apprenti (nom, prenom, login)
-VALUES ('Jacquard', 'Davy', 'DAJ12'),
-       ('Guilbert', 'Ange', 'ANG12'),
-       ('Poussin', 'Christian', 'CHP14'),
-       ('Trouvé', 'Éloi', 'ELT10'),
-       ('Cordonnier', 'Danny', 'DAC15'),
-       ('Massé', 'Xavier', 'XAM11'),
-       ('Meissa', 'Abdelkhader', 'ABM17');
+INSERT INTO Apprenti (nom, prenom, mdp, login)
+VALUES ('Jacquard', 'Davy', '12369', 'DAJ12'),
+       ('Guilbert', 'Ange', '12369', 'ANG12'),
+       ('Poussin', 'Christian', '12369', 'CHP14'),
+       ('Trouvé', 'Éloi', '12369', 'ELT10'),
+       ('Cordonnier', 'Danny', '12369', 'DAC15'),
+       ('Massé', 'Xavier', '12369', 'XAM11'),
+       ('Meissa', 'Abdelkhader', '12369', 'ABM17');
 
-INSERT INTO Personnel (nom, prenom, login, role)
-VALUES ('Dupont', 'Jean', 'JED10', 'SuperAdministrateur'),
-       ('Lamar', 'Allain', 'ALL11', 'Educateur Administrateur'),
-       ('DitCharo', 'Mathieu', 'MAD14', 'Educateur Administrateur'),
-       ('Oskour', 'Jeanne', 'JEO12', 'Educateur'),
-       ('Curry', 'Marie', 'MAC10', 'Educateur'),
-       ('Barre', 'Lenny', 'LEB08', 'Educateur'),
-       ('Zirot', 'Benoit', 'BEZ11', 'Educateur'),
-       ('Rouselle', 'Fabienne', 'FAR16', 'CIP');
+INSERT INTO Personnel (nom, prenom, login, mdp, role)
+VALUES ('Dupont', 'Jean', 'JED10', 'superadmin','SuperAdministrateur'),
+       ('Lamar', 'Allain', 'ALL11', 'educadmin','Educateur Administrateur'),
+       ('DitCharo', 'Mathieu', 'MAD14', 'educadmin','Educateur Administrateur'),
+       ('Oskour', 'Jeanne', 'JEO12', 'educ', 'Educateur'),
+       ('Curry', 'Marie', 'MAC10', 'educ', 'Educateur'),
+       ('Barre', 'Lenny', 'LEB08', 'educ', 'Educateur'),
+       ('Zirot', 'Benoit', 'BEZ11', 'educ', 'Educateur'),
+       ('Rouselle', 'Fabienne', 'FAR16', 'cip', 'CIP');
 
 INSERT INTO Formation (intitule, niveau_qualif, groupe)
 VALUES ('Parcour plomberie','CAP',1),
