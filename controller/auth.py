@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 
+from custom_paquets.custom_form import RegisterPersonnelForm
 from model.personnel import getAllPersonnel
 
 auth = Blueprint('auth', __name__)
@@ -27,7 +28,10 @@ def connexion_apprentis():
 
 @auth.route('/connexion-personnel', methods=['GET', 'POST'])
 def connexion_personnel():
-    return "Hello World"
+    form = RegisterPersonnelForm()
+    if form.validate_on_submit():
+        return "connecté"
+    return render_template('auth/connexion_personnel.html', form=form)
 
 
 @auth.route('/logout', methods=['GET', 'POST'])
