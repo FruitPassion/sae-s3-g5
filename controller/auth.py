@@ -20,11 +20,6 @@ def choix_eleve_apprentis():
     return "Hello world"
 
 
-@auth.route('/choix-eleve', methods=['GET', 'POST'])
-def choix_eleve_apprentis():
-    return "Hello world"
-
-
 @auth.route('/connexion-apprentis', methods=['GET', 'POST'])
 def connexion_apprentis():
     return "Hello World"
