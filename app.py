@@ -3,6 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, url_for
 
 from controller.api import api
+from controller.personnel import personnel
 from model_db.shared_model import db
 
 from controller.auth import auth
@@ -12,6 +13,7 @@ app.config.from_object('config.DevConfig')
 toolbar = DebugToolbarExtension(app)
 app.register_blueprint(auth)
 app.register_blueprint(api)
+app.register_blueprint(personnel)
 db.init_app(app)
 
 
