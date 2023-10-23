@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request
 
-from custom_paquets.custom_form import RegisterPersonnelForm
+from custom_paquets.custom_form import LoginPersonnelForm
+from model.apprenti import getApprentiByLogin, checkPasswordApprenti
 from model.assister import getApprentisByFormation
 from model.formation import getAllFormation
 from model.personnel import checkPersonnel, checkPassword
@@ -15,7 +16,7 @@ def choix_connexion():
 
 @auth.route('/connexion-personnel', methods=['GET', 'POST'])
 def connexion_personnel():
-    form = RegisterPersonnelForm()
+    form = LoginPersonnelForm()
     if form.validate_on_submit():
         if not checkPersonnel(form.login.data) or not checkPassword(form.login.data, form.password.data):
             flash('Compte inconnu ou mot de passe erroné.', 'error')
@@ -38,7 +39,15 @@ def choix_eleve_apprentis(nom_formation):
 
 @auth.route('/connexion-apprentis/<login_apprenti>', methods=['GET', 'POST'])
 def connexion_apprentis(login_apprenti):
-    return "Hello World"
+    apprenti = getApprentiByLogin(login_apprenti)
+    if request.method == "POST":
+        login = request.form.get("login")
+        password = request.form.get("pass")
+        if checkPasswordApprenti(login, password):
+            return redirect(url_for('apprenti.redirection_connexion'))
+        else:
+            flash('Compte inconnu ou mot de passe erroné.', 'error')
+    return render_template('auth/connexion_apprentis.html', apprenti=apprenti)
 
 
 @auth.route('/logout', methods=['GET', 'POST'])
