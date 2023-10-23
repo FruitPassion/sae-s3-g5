@@ -1,12 +1,90 @@
-div {
-    background-color: #D9D9D9;
-    font-size: 25px;
+/* Style for the main title */
+h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-#zone_texte{
+/* Styles for the sub-headers (Texte and Champs) */
+h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: black;
+    border-bottom: 2px solid #aaa;
+    padding-bottom: 10px;
+}
+
+/* Main divs (zone_texte and zone_champs) styling */
+#zone_texte, #zone_champs {
+    background-color: #fff;
+    padding: 15px;
+    margin: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Styles for labels */
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Styles for the select dropdowns */
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Styles for the number and text inputs */
+input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Specific styling for the RVB section */
+#RVB {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+}
+
+#visualisation {
+    display: flex;
     align-items: center;
+    margin-top: 20px;
 }
 
-h3{
-    text-align: left;
+#visualisation_couleur {
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    margin-right: 10px; /* Ajoute un espace entre la couleur et le texte */
+}
+
+#visualisation_texte {
+    text-align: right;
+}
+
+/* Styling for the Retour and Suivant buttons */
+#boutons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #D9D9D9;
+    color: black;
+    cursor: pointer;
 }

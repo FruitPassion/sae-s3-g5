@@ -10,4 +10,4 @@ def redirection_connexion():
 
 @personnel.route("/personnalisation", methods=["GET"])
 def personnalisation():
-    return render_template('personnel/personnaliser_fiche_Texte_Champs.html')
+    return render_template('personnel/personnaliser_fiche_texte_champs.html')
