@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 personnel = Blueprint('personnel', __name__, url_prefix="/personnel")
 
@@ -6,3 +6,8 @@ personnel = Blueprint('personnel', __name__, url_prefix="/personnel")
 @personnel.route("/redirection-connexion", methods=["GET"])
 def redirection_connexion():
     return "connexion validée"
+
+
+@personnel.route("/personnalisation", methods=["GET"])
+def personnalisation():
+    return render_template('personnel/personnaliser_fiche_Texte_Champs.html')
