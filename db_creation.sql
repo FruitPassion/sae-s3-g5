@@ -108,10 +108,10 @@ CREATE TABLE Trace(
 
 CREATE TABLE Assister(
    id_apprenti INT,
-   id_session INT,
-   PRIMARY KEY(id_apprenti, id_session),
+   id_formation INT,
+   PRIMARY KEY(id_apprenti, id_formation),
    FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
-   FOREIGN KEY(id_session) REFERENCES Session(id_session)
+   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
 );
 
 CREATE TABLE Composer(
@@ -152,5 +152,14 @@ VALUES ('Dupont', 'Jean', 'JED10', 'd044ba79445b0cb09cf67529817f8cfc5ff6fa651ea8
 INSERT INTO Formation (intitule, niveau_qualif, groupe)
 VALUES ('Parcour plomberie','CAP',1),
        ('Agent de maintenance en bâtiment','Licence',2);
+
+INSERT INTO Assister (id_apprenti, id_formation)
+VALUES (1, 1),
+       (2, 1),
+       (3, 1),
+       (4, 1),
+       (5, 2),
+       (6, 2),
+       (7, 2);
 
 
