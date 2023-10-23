@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Connexion Apprentis{% endblock %}
+
+{% block body %}
+    <h1>Dessinez votre code</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        {{ form.login }}
+        {{ form.password }}
+        {{ form.submit }}
+    </form>
+{% endblock %}

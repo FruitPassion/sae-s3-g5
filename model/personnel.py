@@ -37,5 +37,10 @@ def checkPersonnel(login: str):
 
 
 def checkPassword(login: str, password: str):
+    """
+    À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
+
+    :return: Ub booleen vrai si le mot de passe est valide
+    """
     passwd = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
     return compare_digest(encryptPassword(password, login), passwd)

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 
 from custom_paquets.custom_form import RegisterPersonnelForm
+from model.formation import getAllFormation
 from model.personnel import getAllPersonnel, checkPersonnel, checkPassword
 
 auth = Blueprint('auth', __name__)
@@ -29,12 +30,13 @@ def connexion_apprentis():
 
 @auth.route('/choix-formation-apprentis', methods=['GET', 'POST'])
 def choix_formation_apprentis():
-    return "Hello world"
+    formations = getAllFormation()
+    return render_template('auth/choix_formation_apprentis.html', formations=formations)
 
 
-@auth.route('/choix-eleve-apprentis', methods=['GET', 'POST'])
-def choix_eleve_apprentis():
-    return "Hello world"
+@auth.route('/choix-eleve-apprentis/<nom_formation>', methods=['GET', 'POST'])
+def choix_eleve_apprentis(nom_formation):
+    return ""+nom_formation
 
 
 @auth.route('/logout', methods=['GET', 'POST'])

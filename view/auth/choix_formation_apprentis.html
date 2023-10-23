@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Choix formation{% endblock %}
+
+{% block body %}
+
+    <p>Choisir votre formation</p>
+    {% for formation in formations %}
+        <a href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation["intitule"]) }}">
+            <button>{{ formation["intitule"] }}</button>
+        </a>
+    {% endfor %}
+{% endblock %}

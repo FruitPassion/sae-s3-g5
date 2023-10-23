@@ -6,9 +6,9 @@ class Assister(db.Model):
     __table_args__ = {'schema': 'db_fiches_dev'}
 
     id_apprenti = db.Column(db.ForeignKey(f'db_fiches_dev.Apprenti.id_apprenti'), primary_key=True)
-    id_session = db.Column(db.ForeignKey(f'db_fiches_dev.Session.id_session'), primary_key=True)
+    id_formation = db.Column(db.ForeignKey(f'db_fiches_dev.Formation.id_formation'), primary_key=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='Assister.id_apprenti == Apprenti.id_apprenti',
-                                backref='assistes')
-    Session = db.relationship('Session', primaryjoin='Assister.id_session == Session.id_session',
                                backref='assistes')
+    Formation = db.relationship('Formation', primaryjoin='Assister.id_formation == Formation.id_formation',
+                                backref='assistes')
