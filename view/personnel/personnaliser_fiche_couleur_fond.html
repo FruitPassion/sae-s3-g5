@@ -1,25 +1,33 @@
 {% extends 'common/base.html' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/personnalisation_fiche.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ url_for('static',filename='js/personnalisation_fiche.js') }}"></script>
+{% endblock %}
+
 {%block body%}
     <h1>Ajouter une fiche</h1>
     <!-- Bloc concernant le changement de couleur du fond des champs-->
-    <div>
+    <div id="cercle">
         <h3>Couleur</h3>
         <!--Intégration d'un cercle chromatique mais à voir avec les membres de l'équipe-->
         <canvas id="cercle_chromatique" ></canvas><br>
 
         <!--Codes Hexadéciamux et RVB-->
         <!--Partie hexadecimale-->
-        <label for="hexadecimal">Hex</label>
+        <label for="hexadecimal"><b>Hex</b></label>
         <input type="text" id="couleur_fond_hex" value="#000000" >
 
         <!--partie RVB-->
         <div id="RVB" >
-            <label for="rouge">R</label>
+            <label for="rouge"><b>R</b></label>
                 <span id="rouge">0</span><br>
-            <label for="vert">V</label>
+            <label for="vert"><b>V</b></label>
                 <span id="vert">0</span><br>
-            <label for="bleu">B</label>
+            <label for="bleu"><b>B</b></label>
                 <span id="bleu">0</span><br>
         </div>
 
@@ -30,7 +38,7 @@
     </div>
 
     <!--Boutons Retour et Suivant-->
-    <div>
+    <div id="boutons">
         <button id="bouton_retour" >Retour</button>
         <button id="bouton_suivant" >Suivant</button>
     </div>
