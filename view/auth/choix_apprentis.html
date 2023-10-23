@@ -1,0 +1,19 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Choix apprentis{% endblock %}
+
+{% block body %}
+
+    <p>Choisir votre profil</p>
+    <div>
+        {% for apprenti in apprentis %}
+            <div>
+                <a href="{{ url_for('auth.connexion_apprentis', login_apprenti=apprenti['login']) }}">
+                    <img src="{{ url_for('static', filename='images/defaut_profile.png') }}" alt="profil picture"
+                         height="50px">
+                </a>
+                <p>{{ apprenti["prenom"] }} {{ apprenti["nom"] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

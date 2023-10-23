@@ -1,4 +1,5 @@
 from model_db.shared_model import db
+from model_db.assister import Assister
 
 
 class Formation(db.Model):

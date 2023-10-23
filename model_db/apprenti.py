@@ -2,7 +2,7 @@ from model_db.shared_model import db
 
 
 class Apprenti(db.Model):
-    __tablename__ = 'Commentaire'
+    __tablename__ = 'Apprenti'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
     id_apprenti = db.Column(db.Integer, primary_key=True, autoincrement=True)
