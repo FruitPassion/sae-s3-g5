@@ -14,5 +14,5 @@ def getApprentisByFormation(nom_formation: str):
     :return: Une liste d'apprentis
     """
     return convertToDict(Assister.query.filter_by(id_formation=getFormationId(nom_formation)).join(
-        Apprenti).with_entities(Apprenti.id_apprenti, Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo).
+        Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo).
                          all())

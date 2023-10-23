@@ -7,6 +7,17 @@
     <link {% block favicon %}rel="icon" href="{{ url_for('static',filename='images/logo.png') }}" {% endblock %}>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @media (min-width: 1200px) {
+            body {
+                width: 1200px;
+                height: 1920px;
+                margin: 0 auto;
+                overflow: auto;
+            }
+        }
+    </style>
     {% block stylesheets %}{% endblock %}
 
     {% block javascripts %}{% endblock %}
@@ -21,8 +32,8 @@
     {% if messages %}
         {% for category, message in messages %}
             <div style="{% if category == 'message' %}background-color: #6ce56c;{% else %}
-                 background-color: #e83c55;
-                 {% endif %} color: black">
+                background-color: #e83c55;
+            {% endif %} color: black">
                 <ul class="flashes" style="margin-top: revert">
                     <li>{{ message }}</li>
                 </ul>
