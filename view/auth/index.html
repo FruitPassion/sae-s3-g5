@@ -2,13 +2,13 @@
 
 
 {% block body %}
-    <p>Liste des membres du personnel</p>
-    <div>
-        <p>Id - Nom - Prenom - Role</p>
-    </div>
-    {% for p in personnel %}
-        <div>
-            <p>{{ p["id_personnel"] }} - {{ p["nom"] }} - {{ p["prenom"] }} - {{ p["role"] }}</p>
-        </div>
-    {% endfor %}
+
+    <p>Choisir votre connexion</p>
+    <a href="{{ url_for('auth.connexion_apprentis') }}">
+        <button>Apprentis</button>
+    </a>
+
+    <a href="{{ url_for('auth.connexion_personnel') }}">
+        <button>Personnel</button>
+    </a>
 {% endblock %}

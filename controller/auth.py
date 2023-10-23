@@ -6,9 +6,9 @@ from model.personnel import getAllPersonnel, checkPersonnel, checkPassword
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/', methods=['GET', 'POST'])
+@auth.route('/')
 def choix_connexion():
-    return "Hello World"
+    return render_template('auth/index.html')
 
 
 @auth.route('/connexion-personnel', methods=['GET', 'POST'])
