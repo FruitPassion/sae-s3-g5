@@ -13,8 +13,9 @@ def getAllPersonnel():
 
     :return: La liste des membres du personnel
     """
-    personnel = (Personnel.query.with_entities(Personnel.id_personnel, Personnel.nom, Personnel.prenom, Personnel.role).
-                 all())
+    personnel = Personnel.query.with_entities(
+        Personnel.id_personnel, Personnel.nom, Personnel.prenom, Personnel.role
+    ).all()
     return convertToDict(personnel)
 
 
@@ -24,7 +25,13 @@ def checkSuperAdmin(login: str):
 
     :return: Ub booleen vrai si l'username appartient à un compte superadmin
     """
-    return Personnel.query.with_entities(Personnel.role).query.filter_by(login=login).first().role == "SuperAdministrateur"
+    return (
+        Personnel.query.with_entities(Personnel.role)
+        .query.filter_by(login=login)
+        .first()
+        .role
+        == "SuperAdministrateur"
+    )
 
 
 def checkPersonnel(login: str):
@@ -42,5 +49,24 @@ def checkPassword(login: str, password: str):
 
     :return: Ub booleen vrai si le mot de passe est valide
     """
-    passwd = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
+    passwd = (
+        Personnel.query.with_entities(Personnel.mdp)
+        .filter_by(login=login)
+        .first()
+        .mdp
+    )
     return compare_digest(encryptPassword(password, login), passwd)
+
+
+def getRole(login: str):
+    """
+    À partir d'un login recupere le role
+
+    :return: Un role
+    """
+    return (
+        Personnel.query.filter_by(login=login)
+        .with_entities(Personnel.role)
+        .first()
+        .role
+    )
