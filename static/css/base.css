@@ -1,0 +1,7 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    width: 1200px;
+    height: 1920px;
+    margin: 0 auto; /* Centrer la page horizontalement */
+    overflow: auto; /* Permettre le défilement si le contenu dépasse */
+}

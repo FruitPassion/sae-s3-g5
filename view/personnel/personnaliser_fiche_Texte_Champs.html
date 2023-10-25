@@ -15,7 +15,7 @@
         <h3>Texte</h3>
         <!-- Sélection d'une police d'écriture -->
         <label for="police">Police</label>
-        <select id="selecteur_police" >
+        <select id="selecteur_police" onchange="changer_police()" >
             <option value="Arial, sans-serif">Arial</option>
             <option value="Courier New, monospace">Courier New</option>
             <option value="Times New Roman, serif">Times New Roman</option>
@@ -26,26 +26,34 @@
 
         <!-- Sélection de la taille de la police d'écriture -->
         <label for="taille">Taille</label>
-        <input type="number" id="taille_police" min="1" max="100" value="14" >
+        <input type="number" id="taille_police" min="1" max="100" value="14" ><br>
 
         <!-- Sélection de la couleur de la police d'écriture -->
         <!-- Partie hexadéciamle -->
         <label for="hexadecimal"><b>Hex</b></label>
-        <input type="text" id="couleur_police_hex" value="#000000" >
+        <input type="text" id="couleur_police_hex" value="#000000" oninput="changer_couleur()">
 
         <!--partie RVB-->
         <div id="RVB" >
             <label for="rouge"><b>R</b></label>
-                <span id="rouge">0</span><br>
+                <span id="rouge">0</span>
             <label for="vert"><b>V</b></label>
-                <span id="vert">0</span><br>
+                <span id="vert">0</span>
             <label for="bleu"><b>B</b></label>
-                <span id="bleu">0</span><br>
+                <span id="bleu">0</span>
         </div>
 
-        <!--Visualisation de la couleur-->
-        <div id="visualisation_couleur" >
-            <!-- Bloc qui visualise la couleur -->
+        <!--Visualisation-->
+        <div id="visualisation">
+            <!--Visualisation de la couleur-->
+            <div id="visualisation_couleur" >
+                <!-- Bloc qui visualise la couleur -->
+            </div>
+
+            <!--Visualisation du texte et de sa couleur-->
+            <div id="visualisation_texte" >
+                <p id="texte_visualisation">Ceci est le texte de visualisation de votre choix</p>
+            </div>
         </div>
     </div>
 
@@ -69,7 +77,7 @@
             <option value="2">2</option>
             <option value="2">3</option>
             <option value="2">4</option>
-        </select>
+        </select><br>
 
         <!-- Sélection du pictogramme à associer -->
         <label for="pictogramme">Pictogramme</label>
