@@ -16,11 +16,9 @@
         <!-- Sélection d'une police d'écriture -->
         <label for="police">Police</label>
         <select id="selecteur_police" onchange="changer_police()" >
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Courier New, monospace">Courier New</option>
-            <option value="Times New Roman, serif">Times New Roman</option>
-            <option value="Verdana, sans-serif">Verdana</option>
-            <option value="Impact, Charcoal, sans-serif">Impact</option>
+            {% for police in polices %}
+            <option value="{{ police }}" style="font-family: {{ police }}">{{ police }}</option>
+            {% endfor %}
             <!-- Autres polices à rajouter éventuellement -->
         </select>
 
@@ -30,7 +28,7 @@
 
         <!-- Sélection de la couleur de la police d'écriture -->
         <!-- Partie hexadéciamle -->
-        <label for="hexadecimal"><b>Couleur Hexadécimal</b></label>
+        <label for="hexadecimal"><b>Couleur de la Police Hexadecimal</b></label>
         <input type="text" id="couleur_police_hex" value="#000000" oninput="changer_couleur()">
 
         <!--partie RVB-->
@@ -73,10 +71,10 @@
         <!-- Sélection du Niveau -->
         <label for="niveau">Niveau</label>
         <select id="selecteur_niveau" >
-            <option value="1">1 Pas d'affichage - Elements cachés</option>
-            <option value="2">2 Facile - Pictogrammes</option>
-            <option value="2">3 Aidé - Pictogrammes et Texte</option>
-            <option value="2">4 Pro - Version d'examen</option>
+            <option value="1">1 - Pas d'affichage - Elements cachés</option>
+            <option value="2">2 - Facile - Pictogrammes</option>
+            <option value="2">3 - Aidé - Pictogrammes et Texte</option>
+            <option value="2">4 - Pro - Version d'examen</option>
         </select><br>
 
         <!-- Sélection du pictogramme à associer -->

@@ -10,4 +10,6 @@ def redirection_connexion():
 
 @personnel.route("/personnalisation", methods=["GET"])
 def personnalisation():
-    return render_template('personnel/personnaliser_fiche_texte_champs.html')
+    liste_police = ["Arial","Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans", "Lato", "Oswald", "Poppins"]
+
+    return render_template('personnel/personnaliser_fiche_texte_champs.html', polices=liste_police)
