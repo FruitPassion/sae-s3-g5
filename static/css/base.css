@@ -5,3 +5,20 @@ body {
     margin: 0 auto; /* Centrer la page horizontalement */
     overflow: auto; /* Permettre le défilement si le contenu dépasse */
 }
+
+#box_nav_deconnecte{
+    background-color: #FFBF73;
+    height: 150px;
+    width: 100%;
+}
+
+#img_nav{
+    height: 110px;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+#logo_nav{
+    object-fit: scale-down;
+    height: 100%;
+}
