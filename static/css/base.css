@@ -6,6 +6,16 @@ body {
     overflow: auto; /* Permettre le défilement si le contenu dépasse */
 }
 
+h1, h2, h3, h4{
+    font-family: 'Montserrat', serif;
+    font-size: 22px;
+}
+
+p{
+    font-family: 'Oswald', serif;
+    font-size: 22px;
+}
+
 #box_nav_deconnecte {
     background-color: #FFBF73;
     height: 150px;
