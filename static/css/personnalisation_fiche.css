@@ -1,20 +1,3 @@
-/* Style for the main title */
-h1 {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Styles for the sub-headers (Texte and Champs) */
-h3 {
-    font-size: 20px;
-    margin-bottom: 15px;
-    color: black;
-    border-bottom: 2px solid #aaa;
-    padding-bottom: 10px;
-}
-
 /* Main divs (zone_texte and zone_champs) styling */
 #zone_texte, #zone_champs {
     background-color: #fff;
@@ -69,8 +52,8 @@ input[type="number"], input[type="text"] {
     margin-right: 10px; /* Ajoute un espace entre la couleur et le texte */
 }
 
-#visualisation_texte {
-    text-align: right;
+#texte_visualisation{
+    padding-left: 20px;
 }
 
 /* Styling for the Retour and Suivant buttons */

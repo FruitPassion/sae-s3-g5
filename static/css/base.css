@@ -9,11 +9,12 @@ body {
 h1{
     font-family: Oswald;
     font-size:5em;
+    text-align: center;
 }
 
 h2, h3, h4{
     font-family: 'Oswald', serif;
-    font-size: 22px;
+    font-size:2em;
 }
 
 p{
