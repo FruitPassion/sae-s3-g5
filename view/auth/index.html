@@ -1,14 +1,31 @@
 {% extends 'common/base.html' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
 
 {% block body %}
 
-    <p>Choisir votre connexion</p>
-    <a href="{{ url_for('auth.choix_formation_apprentis') }}">
-        <button>Apprentis</button>
-    </a>
+    <center><h1>Choisir votre connexion</h1></center>
 
-    <a href="{{ url_for('auth.connexion_personnel') }}">
-        <button>Personnel</button>
-    </a>
+    <br>
+    <br>
+    <div id="choix">
+        <a href="{{ url_for('auth.choix_formation_apprentis') }}">
+            <img src="{{ url_for('static', filename='images/eleve.png') }}" alt="icone eleve" height="30%">
+            <br>
+            <label id="labelEleve">Eleve</label>
+        </a>
+    
+        <div id="space"></div>
+
+        <a href="{{ url_for('auth.connexion_personnel') }}">
+            <img src="{{ url_for('static', filename='images/prof.png') }}" alt="icone prof"
+                                height="30%"><br>
+            <label id="labelProf">Educateur</label>
+        </a>
+
+    </div>
+   
+
 {% endblock %}

@@ -1,0 +1,21 @@
+#choix{
+    margin-top: 10%;
+    margin-left: 15%;
+    display: flex;
+    justify-content: center;
+}
+
+#space {
+    height: auto;
+    display: inline-block;
+}
+
+#labelProf{
+    margin-left: 3%;
+    font-size: 2em;
+}
+
+#labelEleve{
+    margin-left: 8%;
+    font-size: 2em;
+}
