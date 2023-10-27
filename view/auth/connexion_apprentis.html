@@ -10,10 +10,11 @@
 {% block stylesheets %}
     <link href=" https://cdn.jsdelivr.net/npm/@garyliao/pattern-lock-js-advanced@1.0.1/patternlock.min.css "
           rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style_connexion_apprentis.css') }}">
 {% endblock %}
 
 {% block body %}
-    <p>Saisissez votre code</p>
+    <h1>Saisissez votre code</h1>
     <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="300px">
         <g class="lock-actives"></g>
         <g class="lock-lines"></g>
@@ -35,6 +36,7 @@
         <input type="hidden" name="login" id="login" value="{{ apprenti[0]['login'] }}">
         <input type="hidden" name="pass" id="pass" value="">
     </form>
+    <button id="bouton_retour">Retour</button>
 {% endblock %}
 
 {% block javascripts2 %}

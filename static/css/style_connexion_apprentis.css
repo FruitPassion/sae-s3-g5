@@ -1,0 +1,19 @@
+h1 {
+  text-align: center;
+  font-size: 4.5em;
+  margin-top: 18%;
+}
+
+#lock {
+  width: 115%;
+  height: 120%;
+  margin-left: -8%;
+}
+
+button{
+  width: 20%;
+  height: 38%;
+  margin-left: 67%;
+  font-size: 3.5em;
+  margin-bottom: 5%;
+}
