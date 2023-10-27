@@ -57,6 +57,7 @@ def connexion_apprentis(login_apprenti):
         login = request.form.get("login")
         password = request.form.get("pass")
         if checkPasswordApprenti(login, password):
+            session["role"] = "apprentis"
             return redirect(url_for("apprenti.redirection_connexion"))
         else:
             flash("Compte inconnu ou mot de passe erroné.", "error")
