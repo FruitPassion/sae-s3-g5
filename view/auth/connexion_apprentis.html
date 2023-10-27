@@ -36,7 +36,9 @@
         <input type="hidden" name="login" id="login" value="{{ apprenti[0]['login'] }}">
         <input type="hidden" name="pass" id="pass" value="">
     </form>
-    <button id="bouton_retour">Retour</button>
+    <a href="{{ url_for('auth.choix_formation_apprentis')}}">
+        <button id="bouton_retour">Retour</button>
+    </a>
 {% endblock %}
 
 {% block javascripts2 %}
