@@ -24,3 +24,14 @@ function mettre_a_jour_texte() {
     visualisation_texte.style.fontFamily = police;
     visualisation_texte.style.color = couleur;
 }
+
+// Clic sur le bouton "Suivant" de la page "personnaliser_fiche_texte_champs.html"
+document.getElementById("bouton_suivant").addEventListener("click", function() {
+    window.location.href = "personnel/personnaliser_fiche_couleur_fond.html"; });
+
+// Visualisation de la couleur de fond
+function mettre_a_jour_couleur_fond() {
+    var visualisation_couleur = document.getElementById("couleur_fond");
+    var couleur = document.getElementById("color_picker").value;
+    visualisation_couleur.style.backgroundColor = couleur;
+}
