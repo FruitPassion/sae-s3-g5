@@ -37,7 +37,10 @@
         <input type="hidden" name="pass" id="pass" value="">
     </form>
     <a href="{{ url_for('auth.choix_formation_apprentis')}}">
-        <button id="bouton_retour">Retour</button>
+        <button id="bouton_retour">
+        <span id="texte_retour">Retour</span>
+        <img id="image_retour" src="{{ url_for('static', filename='images/fleche_retour.png') }}">
+        </button>
     </a>
 {% endblock %}
 

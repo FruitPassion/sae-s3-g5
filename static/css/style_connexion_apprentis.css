@@ -10,10 +10,15 @@ h1 {
   margin-left: -8%;
 }
 
-button{
-  width: 20%;
-  height: 38%;
+button {
+  width: 30%;
+  height: 37%;
   margin-left: 67%;
   font-size: 3.5em;
   margin-bottom: 5%;
+}
+
+#image_retour { 
+  width: 20%;
+  vertical-align: middle;
 }
