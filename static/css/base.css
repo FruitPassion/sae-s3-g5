@@ -6,35 +6,52 @@ body {
     overflow: auto; /* Permettre le défilement si le contenu dépasse */
 }
 
-h1{
+h1 {
     font-family: Oswald;
-    font-size:5em;
+    font-size: 5em;
     text-align: center;
 }
 
-h2, h3, h4{
+h2, h3, h4 {
     font-family: 'Oswald', serif;
-    font-size:2em;
+    font-size: 2em;
 }
 
-p{
+p {
     font-family: 'Montserrat', serif;
     font-size: 22px;
 }
 
-#box_nav_deconnecte {
-    background-color: #FFBF73;
+#box_nav {
     height: 150px;
     width: 100%;
+    display: flex;
+    justify-content: right;
 }
 
-#img_nav {
+
+#logo_nav {
     height: 110px;
     padding-top: 20px;
     padding-left: 20px;
+    margin-left: 0px;
+    margin-right: auto;
 }
 
-#logo_nav {
+#logo_nav_img {
+    object-fit: scale-down;
+    height: 100%;
+}
+
+#deco_nav {
+    height: 80px;
+    padding-top: 35px;
+    padding-right: 35px;
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+#deco_nav_img {
     object-fit: scale-down;
     height: 100%;
 }

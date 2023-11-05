@@ -1,0 +1,13 @@
+<header>
+    <div id="box_nav"
+         style="background-color:{% if session['role'] == 'apprentis' %} #96DBF2;{% else %} #90E3BE;{% endif %}">
+        <div id="logo_nav">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" id="logo_nav_img">
+        </div>
+        <div id="deco_nav">
+            <a href="{{ url_for('auth.logout') }}">
+                <img src="{{ url_for('static', filename='images/deconnexion.png') }}" alt="deco" id="deco_nav_img">
+            </a>
+        </div>
+    </div>
+</header>

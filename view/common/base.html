@@ -31,7 +31,11 @@
 </head>
 
 <body>
+{% if not session["role"] %}
 {% include "_partial/_nav_deconnecte.html" %}
+{% else %}
+{% include "_partial/_nav_connexion.html" %}
+{% endif %}
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
