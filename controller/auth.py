@@ -66,4 +66,5 @@ def connexion_apprentis(login_apprenti):
 
 @auth.route("/logout", methods=["GET", "POST"])
 def logout():
-    return "Hello World"
+    session.pop('role', None)
+    return redirect(url_for("auth.choix_connexion"))
