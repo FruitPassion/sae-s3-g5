@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    <center><h1>Choisir votre connexion</h1></center>
+    <h1>Choisir votre connexion</h1>
 
     <br>
     <br>
@@ -20,8 +20,7 @@
         <div id="space"></div>
 
         <a href="{{ url_for('auth.connexion_personnel') }}">
-            <img src="{{ url_for('static', filename='images/prof.png') }}" alt="icone prof"
-                                height="30%"><br>
+            <img src="{{ url_for('static', filename='images/prof.png') }}" alt="icone prof"  height="30%"><br>
             <label id="labelProf">Educateur</label>
         </a>
 
