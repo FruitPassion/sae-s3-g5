@@ -2,13 +2,25 @@
 
 {% block title %}Connexion Personnel{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/connexion_personnel.css') }}">
+{% endblock %}
+
 {% block body %}
     <h1>Entrez vos identifiants</h1>
     <form method="post">
         {{ form.hidden_tag() }}
-        {{ form.login }}
-        {{ form.password }}
-        {{ form.submit }}
+        <div id="choix-milieux">
+        <p class="label">Login : </p>
+            {{ form.login(class="boutton-formation") }}
+        </div>
+        <div id="choix-milieux">
+        <p class="label">Mot de Passe :</p>
+            {{ form.password(class="boutton-formation") }}
+        </div>
+        <div id="choix-milieux">
+            {{ form.submit(class="boutton-formation") }}
+        </div>
     </form>
     {% include "_partial/_retour_bouton.html" %}
 {% endblock %}

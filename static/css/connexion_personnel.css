@@ -1,0 +1,18 @@
+#choix-milieux{
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.boutton-formation{
+    font-size: 3.5em;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.label{
+    font-size: 3em;
+}

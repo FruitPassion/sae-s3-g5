@@ -2,6 +2,7 @@ import os
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, url_for
 
+from controller.admin import admin
 from controller.api import api
 from controller.apprentis import apprenti
 from controller.personnel import personnel
@@ -16,6 +17,7 @@ app.register_blueprint(auth)
 app.register_blueprint(api)
 app.register_blueprint(personnel)
 app.register_blueprint(apprenti)
+app.register_blueprint(admin)
 db.init_app(app)
 
 

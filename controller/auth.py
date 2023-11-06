@@ -31,8 +31,12 @@ def connexion_personnel():
         ):
             flash("Compte inconnu ou mot de passe erroné.", "error")
         else:
-            session["role"] = getRole(form.login.data)
-            return redirect(url_for("personnel.redirection_connexion"))
+            session["name"] = form.login.data
+            session["role"] =  getRole(form.login.data)
+            if session["role"] == 'SuperAdministrateur':
+                return redirect(url_for("admin.redirection_connexion"))
+            else:
+                return redirect(url_for("personnel.redirection_connexion"))
     return render_template("auth/connexion_personnel.html", form=form)
 
 
@@ -57,6 +61,7 @@ def connexion_apprentis(login_apprenti):
         login = request.form.get("login")
         password = request.form.get("pass")
         if checkPasswordApprenti(login, password):
+            session["name"] = login
             session["role"] = "apprentis"
             return redirect(url_for("apprenti.redirection_connexion"))
         else:
