@@ -71,7 +71,9 @@
         </select>
     </div>
 
-    {% include "_partial/_retour_bouton.html" %}
-    <a href="{{ url_for('personnel.personnalisation_bis') }}">Suivant</a>
+    <div id="boutons">
+        <a href="{{ url_for('personnel.personnalisation_bis') }}">Suivant</a>
+        {% include "_partial/_retour_bouton.html" %}
+    </div>
 
 {% endblock %}
