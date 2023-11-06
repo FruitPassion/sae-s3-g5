@@ -13,3 +13,8 @@ def personnalisation():
     liste_police = ["Arial","Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans", "Lato", "Oswald", "Poppins"]
 
     return render_template('personnel/personnaliser_fiche_texte_champs.html', polices=liste_police)
+
+
+@personnel.route("/personnalisation-bis", methods=["GET"])
+def personnalisation_bis():
+    return render_template('personnel/personnaliser_fiche_couleur_fond.html')

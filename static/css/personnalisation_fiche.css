@@ -45,29 +45,12 @@ input[type="number"], input[type="text"] {
     margin-top: 20px;
 }
 
-#visualisation_couleur {
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    margin-right: 10px; /* Ajoute un espace entre la couleur et le texte */
-}
-
 #texte_visualisation{
     padding-left: 20px;
 }
 
-/* Styling for the Retour and Suivant buttons */
-#boutons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
+#couleur_fond{
+    height: 150px;
+    width: 500px;
     border-radius: 5px;
-    background-color: #D9D9D9;
-    color: black;
-    cursor: pointer;
 }

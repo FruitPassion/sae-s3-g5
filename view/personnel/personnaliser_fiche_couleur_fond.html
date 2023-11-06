@@ -11,21 +11,14 @@
 {%block body%}
     <h1>Ajouter une fiche</h1>
     <!-- Bloc concernant le changement de couleur du fond des champs-->
-    <div id="cercle">
-        <h3>Couleur</h3>
-        <!--Visualisation de la couleur-->
-        <div id="visualisation">
-            <input type="color" id="color_picker" oninput="mettre_a_jour_couleur_fond()">
-            <div id="couleur_fond">
-                <!-- Visualisation de la couleur de fond -->
-            </div>
+    <div id="couleur">
+        <h3>Couleur de fond</h3>
+        <input type="color" id="color_picker" oninput="mettre_a_jour_couleur_fond()">
+        <div id="couleur_fond">
+            <!-- Visualisation de la couleur de fond -->
         </div>
     </div>
 
-    <!--Boutons Retour et Suivant-->
-    <div id="boutons">
-        <button id="bouton_retour" >Retour</button>
-        <button id="bouton_suivant2" >Suivant</button>
-    </div>
-
+    {% include "_partial/_retour_bouton.html" %}
+    <button id="bouton_valider">Valider</button>
 {%endblock%}

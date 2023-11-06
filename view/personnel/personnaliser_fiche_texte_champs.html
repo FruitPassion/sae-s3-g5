@@ -71,10 +71,7 @@
         </select>
     </div>
 
-    <!--Boutons Retour et Suivant-->
-    <div id="boutons">
-        <button id="bouton_retour">Retour</button>
-        <button id="bouton_suivant">Suivant</button>
-    </div>
+    {% include "_partial/_retour_bouton.html" %}
+    <a href="{{ url_for('personnel.personnalisation_bis') }}">Suivant</a>
 
 {% endblock %}
