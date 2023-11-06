@@ -62,8 +62,3 @@ p {
     margin-right: auto;
     padding: 15px;
 }
-
-#vertical-center {
-    top: 50%;
-    transform: translateY(50%);
-}
