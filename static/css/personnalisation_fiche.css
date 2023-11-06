@@ -53,4 +53,5 @@ input[type="number"], input[type="text"] {
     height: 150px;
     width: 500px;
     border-radius: 5px;
+    margin-left: 25%;
 }
