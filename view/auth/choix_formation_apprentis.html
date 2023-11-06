@@ -1,7 +1,8 @@
 {% extends 'common/base.html' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/choix_formation_apprentis.css') }}">
 {% endblock %}
 
 {% block title %}Choix formation{% endblock %}
@@ -9,11 +10,15 @@
 {% block body %}
 
     <h1>Choisissez votre formation</h1>
-    {% for formation in formations %}
-        <a href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation["intitule"])}}">
-            <button>{{formation["intitule"]}}</button><br>
-        </a>
-    {% endfor %}
+
+    <div id="choix-milieux">
+        {% for formation in formations %}
+            <a class="lien-formation" href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation["intitule"]) }}">
+                <button class="boutton-formation">{{ formation["intitule"] }}</button>
+                <br>
+            </a>
+        {% endfor %}
+    </div>
     {% include "_partial/_retour_bouton.html" %}
-    
+
 {% endblock %}

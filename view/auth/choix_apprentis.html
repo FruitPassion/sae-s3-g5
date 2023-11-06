@@ -5,16 +5,14 @@
 
 {% block body %}
     <h1>Choisissez votre profil</h1>
-    <div>
-        {% for apprenti in apprentis %}
-            <div>
-                <a href="{{ url_for('auth.connexion_apprentis', login_apprenti=apprenti['login']) }}">
-                    <img src="{{ url_for('static', filename='images/defaut_profile.png') }}" alt="profil picture"
-                         height="50px">
-                </a>
-                <p>{{ apprenti["prenom"] }} {{ apprenti["nom"] }}</p>
-            </div>
-        {% endfor %}
-    </div>
+    {% for apprenti in apprentis %}
+        <div>
+            <a href="{{ url_for('auth.connexion_apprentis', login_apprenti=apprenti['login']) }}">
+                <img src="{{ url_for('static', filename='images/defaut_profile.png') }}" alt="profil picture"
+                     height="50px">
+            </a>
+            <p>{{ apprenti["prenom"] }} {{ apprenti["nom"] }}</p>
+        </div>
+    {% endfor %}
     {% include "_partial/_retour_bouton.html" %}
 {% endblock %}
