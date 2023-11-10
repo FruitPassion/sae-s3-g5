@@ -72,7 +72,12 @@
     </div>
 
     <div id="boutons">
-        <a href="{{ url_for('personnel.personnalisation_bis') }}">Suivant</a>
+        <a href="{{ url_for('personnel.personnalisation_bis') }}">
+            <button id="bouton_suivant" onclick="history.back()">
+                <span id="texte_suivant">Suivant</span>
+                <img id="image_suivant*" src="{{ url_for('static', filename='images/fleche_retour.png') }}">
+            </button>
+        </a>
         {% include "_partial/_retour_bouton.html" %}
     </div>
 
