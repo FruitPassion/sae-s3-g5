@@ -5,6 +5,10 @@ import subprocess
 
 
 def checking():
+    """
+    Permet de verifier si tout les prerequis sont installés et à la bonne version.
+    En cas d'echec, installe et mets à jour dans les bonnes versions.
+    """
     with open("requirements.txt", "r") as f:
         lines = f.readlines()
         dependencies = [s.strip() for s in lines]

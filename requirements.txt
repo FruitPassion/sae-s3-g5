@@ -5,6 +5,7 @@ Flask-WTF
 mysqlclient
 pytest
 pytest-flask
+pygit2
 pymysql
 Jinja2
 SQLAlchemy

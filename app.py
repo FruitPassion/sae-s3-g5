@@ -14,11 +14,23 @@ from controller.auth import auth
 
 from model_db.shared_model import db
 
+from pygit2 import Repository
 
-def create_app():
+
+def create_app(config=None):
+    if config not in [None, "Developpement"]:
+        raise Exception("Configuration invalide")
+
     app = Flask(__name__, template_folder="view")
-    app.config.from_object("config.DevConfig")
-    toolbar = DebugToolbarExtension(app)
+
+    if Repository('.').head.shorthand == "dev" or config == "Developpement":
+        app.config.from_object('config.DevConfig')
+        toolbar = DebugToolbarExtension(app)
+    elif Repository('.').head.shorthand == "main":
+        app.config.from_object('config.ProdConfig')
+    else:
+        raise Exception("Branche inconnue")
+
     app.register_blueprint(auth)
     app.register_blueprint(api)
     app.register_blueprint(personnel)
