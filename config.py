@@ -12,7 +12,6 @@ class DevConfig:
     DEBUG = True
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
@@ -24,6 +23,5 @@ class ProdConfig:
     DEBUG = False
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
     SQLALCHEMY_TRACK_MODIFICATIONS = True

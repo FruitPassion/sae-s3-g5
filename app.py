@@ -3,7 +3,6 @@ from custom_paquets import check_requirements
 check_requirements.checking()
 
 import os
-from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, url_for
 
 from controller.admin import admin
@@ -25,7 +24,6 @@ def create_app(config=None):
 
     if Repository('.').head.shorthand == "dev" or config == "Developpement":
         app.config.from_object('config.DevConfig')
-        toolbar = DebugToolbarExtension(app)
     elif Repository('.').head.shorthand == "main":
         app.config.from_object('config.ProdConfig')
     else:
