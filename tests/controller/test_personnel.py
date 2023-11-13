@@ -1,22 +1,33 @@
-import pytest
+from flask import url_for
+
+'''
+Test des controller du fichier auth.py
+'''
 
 
-# test de la route de redirection de connexion
+# Test de la route de redirection de connexion
 def test_redirection_connexion(client):
-    response = client.get("/personnel/redirection-connexion")
+    response = client.get(url_for("personnel.redirection_connexion"))
+
+    # Test d'accès à la route
     assert response.status_code == 200
-    assert response.request.path == "/personnel/choix_formation.html"
+
+    assert response.request.path == "/personnel/redirection-connexion"
 
 
-# test de la route de personnalisation de la première page
+# Test de la route de personnalisation de la première page
 def test_personnalisation(client):
-    response = client.get("/personnel/personnalisation")
+    response = client.get(url_for("personnel.personnalisation"))
+
+    # Test d'accès à la route
     assert response.status_code == 200
-    assert response.request.path == "/personnel/personnaliser_fiche_texte_champs.html"
+    assert response.request.path == "/personnel/personnalisation"
 
 
-# test de la route de personnalisation de la deuxième page
+# Test de la route de personnalisation de la deuxième page
 def test_personnalisation_bis(client):
-    response = client.get("/personnel/personnalisation-bis")
+    response = client.get(url_for("personnel.personnalisation_bis"))
+
+    # Test d'accès à la route
     assert response.status_code == 200
-    assert response.request.path == "/personnel/personnaliser_fiche_couleur_fond.html"
+    assert response.request.path == "/personnel/personnalisation-bis"
