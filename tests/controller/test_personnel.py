@@ -12,6 +12,7 @@ def test_redirection_connexion(client):
     # Test d'accès à la route
     assert response.status_code == 200
 
+    # Test de vérification de la route
     assert response.request.path == "/personnel/redirection-connexion"
 
 
@@ -21,6 +22,8 @@ def test_personnalisation(client):
 
     # Test d'accès à la route
     assert response.status_code == 200
+
+    # Test de vérification de la route
     assert response.request.path == "/personnel/personnalisation"
 
 
@@ -30,4 +33,6 @@ def test_personnalisation_bis(client):
 
     # Test d'accès à la route
     assert response.status_code == 200
+
+    # Test de vérification de la route
     assert response.request.path == "/personnel/personnalisation-bis"

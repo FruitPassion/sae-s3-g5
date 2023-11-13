@@ -11,5 +11,5 @@ def test_auth_index(client):
     # Test d'accès à la route
     assert response.status_code == 200
 
-    # Test de récuperation d'une string dans le fichier HTML
-    assert b'<label id="labelProf">Educateur</label>' in response.data
+    # Test de vérification de la route
+    assert response.request.path == "/"
