@@ -10,10 +10,9 @@ CREATE TABLE Personnel(
    nom VARCHAR(50) NOT NULL,
    prenom VARCHAR(50) NOT NULL,
    login VARCHAR(50) NOT NULL,
-   mdp TEXT,
+   mdp TEXT NOT NULL,
    role VARCHAR(50),
-   PRIMARY KEY(id_personnel),
-   CONSTRAINT ch_personnel_role CHECK (role IN ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP'))
+   PRIMARY KEY(id_personnel)
 );
 
 CREATE TABLE Apprenti(
@@ -22,15 +21,15 @@ CREATE TABLE Apprenti(
    prenom VARCHAR(50) NOT NULL,
    login VARCHAR(50),
    mdp TEXT,
-   photo VARCHAR(100),
+   photo VARCHAR(50),
    PRIMARY KEY(id_apprenti)
 );
 
 CREATE TABLE Formation(
    id_formation INT AUTO_INCREMENT,
-   intitule VARCHAR(100) NOT NULL,
-   niveau_qualif VARCHAR(25),
-   groupe INT,
+   intitule VARCHAR(50) NOT NULL,
+   niveau_qualif SMALLINT,
+   groupe VARCHAR(50),
    PRIMARY KEY(id_formation)
 );
 
@@ -51,29 +50,17 @@ CREATE TABLE EducAdmin(
 );
 
 CREATE TABLE Pictogramme(
-   id_pictogramme INT AUTO_INCREMENT,
+   Id_Pictogramme INT AUTO_INCREMENT,
    label VARCHAR(50),
    url VARCHAR(100),
    categorie VARCHAR(50),
    PRIMARY KEY(Id_Pictogramme)
 );
 
-CREATE TABLE ElementDefaut(
-   id_element INT AUTO_INCREMENT,
-   type VARCHAR(50),
-   text VARCHAR(50),
-   audio VARCHAR(50),
-   Id_Pictogramme INT NOT NULL,
-   id_personnel INT NOT NULL,
-   PRIMARY KEY(id_element),
-   FOREIGN KEY(id_pictogramme) REFERENCES Pictogramme(id_pictogramme),
-   FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel)
-);
-
 CREATE TABLE FicheIntervention(
    id_fiche INT AUTO_INCREMENT,
    numero SMALLINT,
-   nom_du_demandeur VARCHAR(50),
+   nom_demandeur VARCHAR(50),
    date_demande DATE,
    date_intervention DATE,
    duree_intervention VARCHAR(50),
@@ -88,11 +75,33 @@ CREATE TABLE FicheIntervention(
    id_personnel INT NOT NULL,
    id_apprenti INT NOT NULL,
    PRIMARY KEY(id_fiche),
-   FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
+   FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel),
+   FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti)
+);
+
+CREATE TABLE Categorie(
+   id_categorie INT AUTO_INCREMENT,
+   libelle VARCHAR(50),
+   id_fiche INT NOT NULL,
+   PRIMARY KEY(id_categorie),
+   FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
+);
+
+CREATE TABLE ElementDefaut(
+   id_element INT AUTO_INCREMENT,
+   type VARCHAR(50),
+   texte VARCHAR(50),
+   audio VARCHAR(50),
+   id_categorie INT NOT NULL,
+   id_pictogramme INT NOT NULL,
+   id_personnel INT NOT NULL,
+   PRIMARY KEY(id_element),
+   FOREIGN KEY(Id_Categorie) REFERENCES Categorie(id_categorie),
+   FOREIGN KEY(id_pictogramme) REFERENCES Pictogramme(id_pictogramme),
    FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel)
 );
 
-CREATE TABLE Trace(
+CREATE TABLE LaisserTrace(
    id_personnel INT,
    horodatage DATETIME,
    intitule VARCHAR(50),
@@ -108,27 +117,28 @@ CREATE TABLE Trace(
 
 CREATE TABLE Assister(
    id_apprenti INT,
-   id_formation INT,
-   PRIMARY KEY(id_apprenti, id_formation),
+   id_session INT,
+   PRIMARY KEY(id_apprenti, id_session),
    FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
-   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
+   FOREIGN KEY(id_session) REFERENCES Session(id_session)
 );
 
 CREATE TABLE Composer(
    id_element INT,
    id_fiche INT,
-   picto VARCHAR(50),
-   text VARCHAR(50),
-   taille_texte VARCHAR(50),
    police VARCHAR(50),
-   audio VARCHAR(50),
+   texte VARCHAR(50),
+   niveau TINYINT,
    couleur VARCHAR(50),
    couleur_fond VARCHAR(50),
-   niveau TINYINT,
+   audio VARCHAR(50),
+   picto VARCHAR(50),
+   taille_texte VARCHAR(50),
    PRIMARY KEY(id_element, id_fiche),
    FOREIGN KEY(id_element) REFERENCES ElementDefaut(id_element),
    FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
+
 
 INSERT INTO Apprenti (nom, prenom, mdp, login)
 VALUES ('Jacquard', 'Davy', '9d1e4686b284d51662885140bb6698c4df76b74120f4ac3321e0873a7024760c9a9b9a153111f4c015817af91aa7d071eb66eb003233e59d108d5d876b83f2b3', 'DAJ12'),
@@ -150,7 +160,7 @@ VALUES ('Dupont', 'Jean', 'JED10', 'd044ba79445b0cb09cf67529817f8cfc5ff6fa651ea8
        ('Rouselle', 'Fabienne', 'FAR16', '783dfa2a9aae67aa236a5bb7644c982d5f41ec2939b478ec400a73b1c071a0d59171c0703edede13d800cd4ea39bfc0f22e583a13312f7af16b6f4d8d94f054a', 'CIP');
 
 INSERT INTO Formation (intitule, niveau_qualif, groupe)
-VALUES ('Parcour plomberie','CAP',1),
+VALUES ('Parcours plomberie','CAP',1),
        ('Agent de maintenance en bâtiment','Licence',2);
 
 INSERT INTO Assister (id_apprenti, id_formation)
