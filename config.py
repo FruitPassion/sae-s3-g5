@@ -11,6 +11,7 @@ class DevConfig:
     FLASK_APP = "FichesDev"
     DEBUG = True
     SESSION_PERMANENT = False
+    WTF_CSRF_ENABLED = False
     SESSION_TYPE = "filesystem"
     SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -20,6 +21,7 @@ class ProdConfig:
     SECRET_KEY = os.urandom(32)
     ENVIRONMENT = "production"
     FLASK_APP = "FichesProd"
+    WTF_CSRF_ENABLED = True
     DEBUG = False
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"

@@ -41,10 +41,11 @@ def connexion_personnel():
         if not checkPersonnel(form.login.data) or not checkPassword(
             form.login.data, form.password.data
         ):
-            flash("Compte inconnu ou mot de passe erroné.", "error")
+            flash("Compte inconnu ou mot de passe invalide.", "error")
         else:
             session["name"] = form.login.data
-            session["role"] =  getRole(form.login.data)
+            session["role"] = getRole(form.login.data)
+            flash("Connexion reussie.")
             if session["role"] == 'SuperAdministrateur':
                 return redirect(url_for("admin.redirection_connexion"))
             else:
@@ -86,9 +87,10 @@ def connexion_apprentis(login_apprenti):
         if checkPasswordApprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
+            flash("Connexion reussie.")
             return redirect(url_for("apprenti.redirection_connexion"))
         else:
-            flash("Compte inconnu ou mot de passe erroné.", "error")
+            flash("Compte inconnu ou mot de passe invalide.", "error")
     return render_template("auth/connexion_apprentis.html", apprenti=apprenti)
 
 
@@ -100,4 +102,6 @@ def logout():
     :return: redirection vers la page d'index
     """
     session.pop('role', None)
+    session.pop('name', None)
+    flash("Deconnection reussie.")
     return redirect(url_for("auth.choix_connexion"))
