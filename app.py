@@ -1,3 +1,7 @@
+from custom_paquets import check_requirements
+
+check_requirements.checking()
+
 import os
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, url_for
@@ -6,9 +10,9 @@ from controller.admin import admin
 from controller.api import api
 from controller.apprentis import apprenti
 from controller.personnel import personnel
-from model_db.shared_model import db
-
 from controller.auth import auth
+
+from model_db.shared_model import db
 
 
 def create_app():
@@ -39,4 +43,3 @@ def create_app():
 
 if __name__ == "__main__":
     create_app().run()
-
