@@ -7,6 +7,13 @@ from model.apprenti import checkPasswordApprenti
 api = Blueprint('api', __name__, url_prefix="/api")
 
 
+'''
+Blueprint pour toutes les routes relatives aux URL d'API
+
+Préfixe d'URL : /api/ .
+'''
+
+
 @api.route("/check-password-apprenti/<user>/<password>", methods=["GET", "POST"])
 def api_check_password_apprenti(user, password):
     return {"valide": checkPasswordApprenti(user, password)}

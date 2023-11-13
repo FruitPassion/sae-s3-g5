@@ -3,6 +3,13 @@ from flask import Blueprint, render_template
 personnel = Blueprint("personnel", __name__, url_prefix="/personnel")
 
 
+'''
+Blueprint pour toutes les routes relatives aux URL des pages du personnel (non super admin)
+
+Préfixe d'URL : /personnel/ .
+'''
+
+
 @personnel.route("/redirection-connexion", methods=["GET"])
 def redirection_connexion():
     return render_template("personnel/choix_formation.html")
