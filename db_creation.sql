@@ -5,6 +5,7 @@ grant all privileges on db_fiches_dev.* TO 'local_user'@'localhost' identified b
 flush privileges;
 USE db_fiches_dev;
 
+
 CREATE TABLE Personnel(
    id_personnel INT AUTO_INCREMENT,
    nom VARCHAR(50) NOT NULL,
@@ -13,34 +14,6 @@ CREATE TABLE Personnel(
    mdp TEXT NOT NULL,
    role VARCHAR(50),
    PRIMARY KEY(id_personnel)
-);
-
-CREATE TABLE Apprenti(
-   id_apprenti INT AUTO_INCREMENT,
-   nom VARCHAR(50) NOT NULL,
-   prenom VARCHAR(50) NOT NULL,
-   login VARCHAR(50),
-   mdp TEXT,
-   photo VARCHAR(50),
-   PRIMARY KEY(id_apprenti)
-);
-
-CREATE TABLE Formation(
-   id_formation INT AUTO_INCREMENT,
-   intitule VARCHAR(50) NOT NULL,
-   niveau_qualif SMALLINT,
-   groupe VARCHAR(50),
-   PRIMARY KEY(id_formation)
-);
-
-CREATE TABLE Session(
-   id_session INT AUTO_INCREMENT,
-   theme VARCHAR(50),
-   cours VARCHAR(50),
-   duree INT,
-   id_formation INT NOT NULL,
-   PRIMARY KEY(id_session),
-   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
 );
 
 CREATE TABLE EducAdmin(
@@ -55,6 +28,34 @@ CREATE TABLE Pictogramme(
    url VARCHAR(100),
    categorie VARCHAR(50),
    PRIMARY KEY(Id_Pictogramme)
+);
+
+CREATE TABLE Formation(
+   id_formation INT AUTO_INCREMENT,
+   intitule VARCHAR(50) NOT NULL,
+   niveau_qualif VARCHAR(10),
+   groupe VARCHAR(50),
+   PRIMARY KEY(id_formation)
+);
+
+CREATE TABLE Session(
+   id_session INT AUTO_INCREMENT,
+   theme VARCHAR(50),
+   cours VARCHAR(50),
+   duree INT,
+   id_formation INT NOT NULL,
+   PRIMARY KEY(id_session),
+   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
+);
+
+CREATE TABLE Apprenti(
+   id_apprenti INT AUTO_INCREMENT,
+   nom VARCHAR(50) NOT NULL,
+   prenom VARCHAR(50) NOT NULL,
+   login VARCHAR(50),
+   mdp TEXT,
+   photo VARCHAR(50),
+   PRIMARY KEY(id_apprenti)
 );
 
 CREATE TABLE FicheIntervention(
@@ -80,10 +81,10 @@ CREATE TABLE FicheIntervention(
 );
 
 CREATE TABLE Categorie(
-   id_categorie INT AUTO_INCREMENT,
+   Id_Categorie INT AUTO_INCREMENT,
    libelle VARCHAR(50),
    id_fiche INT NOT NULL,
-   PRIMARY KEY(id_categorie),
+   PRIMARY KEY(Id_Categorie),
    FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
 
@@ -92,12 +93,12 @@ CREATE TABLE ElementDefaut(
    type VARCHAR(50),
    texte VARCHAR(50),
    audio VARCHAR(50),
-   id_categorie INT NOT NULL,
-   id_pictogramme INT NOT NULL,
+   Id_Categorie INT NOT NULL,
+   Id_Pictogramme INT NOT NULL,
    id_personnel INT NOT NULL,
    PRIMARY KEY(id_element),
-   FOREIGN KEY(Id_Categorie) REFERENCES Categorie(id_categorie),
-   FOREIGN KEY(id_pictogramme) REFERENCES Pictogramme(id_pictogramme),
+   FOREIGN KEY(Id_Categorie) REFERENCES Categorie(Id_Categorie),
+   FOREIGN KEY(Id_Pictogramme) REFERENCES Pictogramme(Id_Pictogramme),
    FOREIGN KEY(id_personnel) REFERENCES EducAdmin(id_personnel)
 );
 
@@ -115,14 +116,6 @@ CREATE TABLE LaisserTrace(
    FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
 );
 
-CREATE TABLE Assister(
-   id_apprenti INT,
-   id_session INT,
-   PRIMARY KEY(id_apprenti, id_session),
-   FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
-   FOREIGN KEY(id_session) REFERENCES Session(id_session)
-);
-
 CREATE TABLE Composer(
    id_element INT,
    id_fiche INT,
@@ -137,6 +130,14 @@ CREATE TABLE Composer(
    PRIMARY KEY(id_element, id_fiche),
    FOREIGN KEY(id_element) REFERENCES ElementDefaut(id_element),
    FOREIGN KEY(id_fiche) REFERENCES FicheIntervention(id_fiche)
+);
+
+CREATE TABLE Assister(
+   id_apprenti INT,
+   id_formation INT,
+   PRIMARY KEY(id_apprenti, id_formation),
+   FOREIGN KEY(id_apprenti) REFERENCES Apprenti(id_apprenti),
+   FOREIGN KEY(id_formation) REFERENCES Formation(id_formation)
 );
 
 
@@ -171,5 +172,3 @@ VALUES (1, 1),
        (5, 2),
        (6, 2),
        (7, 2);
-
-
