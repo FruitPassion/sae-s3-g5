@@ -2,8 +2,8 @@ import pytest
 import os, sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from app import create_app
 
+from app import create_app
 
 
 @pytest.fixture()
@@ -13,12 +13,10 @@ def app():
         "TESTING": True,
     })
 
+    yield app
+
 
 @pytest.fixture()
 def client(app):
     return app.test_client()
 
-
-@pytest.fixture()
-def runner(app):
-    return app.test_cli_runner()

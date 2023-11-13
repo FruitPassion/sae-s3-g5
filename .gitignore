@@ -5,3 +5,5 @@ __pycache__
 
 *.loo
 *.lo1
+
+.pytest_cache
