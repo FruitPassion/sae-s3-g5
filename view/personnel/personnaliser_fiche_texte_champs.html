@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/personnalisation_fiche.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bouton_suivant.css') }}">
 {% endblock %}
 
 {% block javascripts %}
@@ -72,13 +73,13 @@
     </div>
 
     <div id="boutons">
+        {% include "_partial/_retour_bouton.html" %}
         <a href="{{ url_for('personnel.personnalisation_bis') }}">
             <button id="bouton_suivant" onclick="history.back()">
                 <span id="texte_suivant">Suivant</span>
-                <img id="image_suivant*" src="{{ url_for('static', filename='images/fleche_retour.png') }}">
+                <img id="image_suivant" src="{{ url_for('static', filename='images/fleche_suivante.png') }}">
             </button>
         </a>
-        {% include "_partial/_retour_bouton.html" %}
     </div>
 
 {% endblock %}

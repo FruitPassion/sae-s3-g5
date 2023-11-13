@@ -49,9 +49,18 @@ input[type="number"], input[type="text"] {
     padding-left: 20px;
 }
 
-/* ALED */
+/* ALED OSKOUR */
 #boutons{
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: auto;
     display: flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+#bouton_retour{
+    margin-left: -10%;
 }
 
 #couleur_fond{
