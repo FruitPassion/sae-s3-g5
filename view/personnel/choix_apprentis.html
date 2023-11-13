@@ -1,0 +1,27 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Choix apprentis{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/choix_apprentis.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Choisissez le profil d'un élève</h1>
+    <center>
+    {% for apprenti in apprentis %}
+        <div class="liste_apprentis">
+            <div class="apprenti">
+                <!-- modifier : url_for('auth.connexion_apprentis'...)
+                par apprentis.liste_fiches_techniques -->
+                <a href="{{ url_for('auth.connexion_apprentis', login_apprenti=apprenti['login']) }}">
+                    <img class="photo_profil" src="{{ url_for('static', filename='images/defaut_profile.png') }}" alt="profil picture">
+                </a>
+                <p class="libelle">{{ apprenti["prenom"] }} {{ apprenti["nom"] }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    </center>
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}

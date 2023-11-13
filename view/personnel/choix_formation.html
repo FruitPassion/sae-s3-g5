@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/choix_formation_apprentis.css') }}">
@@ -7,13 +8,14 @@
 {% block title %}Choix formation{% endblock %}
 
 {% block body %}
+    <!-- à retirer -->
     <p>panel non super admin</p>
 
     <h1>Choisissez une formation</h1>
 
     <div id="choix-milieux">
         {% for formation in formations %}
-            <a class="lien-formation" href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation["intitule"]) }}">
+            <a class="lien-formation" href="{{ url_for('personnel.choix_eleve', nom_formation=formation["intitule"]) }}">
                 <button class="boutton-formation">{{ formation["intitule"] }}</button>
                 <br>
             </a>
