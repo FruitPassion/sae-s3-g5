@@ -32,3 +32,4 @@ def personnalisation():
 @personnel.route("/personnalisation-bis", methods=["GET"])
 def personnalisation_bis():
     return render_template('personnel/personnaliser_fiche_couleur_fond.html')
+
