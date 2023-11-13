@@ -34,8 +34,9 @@ def create_app():
                 values["q"] = int(os.stat(file_path).st_mtime)
         return url_for(endpoint, **values)
 
-    app.run()
+    return app
 
 
 if __name__ == "__main__":
-    create_app()
+    create_app().run()
+
