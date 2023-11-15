@@ -7,3 +7,5 @@ __pycache__
 *.lo1
 
 .pytest_cache
+
+.scannerwork
