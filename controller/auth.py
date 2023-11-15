@@ -9,10 +9,10 @@ from flask import (
 )
 
 from custom_paquets.custom_form import LoginPersonnelForm
-from model.apprenti import getApprentiByLogin, checkPasswordApprenti
-from model.assister import getApprentisByFormation
-from model.formation import getAllFormation
-from model.personnel import checkPersonnel, checkPassword, getRole
+from model.apprenti import get_apprenti_by_login, check_password_apprenti
+from model.assister import get_apprentis_by_formation
+from model.formation import get_all_formation
+from model.personnel import check_personnel, check_password, get_role
 
 auth = Blueprint("auth", __name__)
 
@@ -37,20 +37,22 @@ def choix_connexion():
 @auth.route("/connexion-personnel", methods=["GET", "POST"])
 def connexion_personnel():
     form = LoginPersonnelForm()
+    code = 200
     if form.validate_on_submit():
-        if not checkPersonnel(form.login.data) or not checkPassword(
+        if not check_personnel(form.login.data) or not check_password(
             form.login.data, form.password.data
         ):
             flash("Compte inconnu ou mot de passe invalide.", "error")
+            code = 403
         else:
             session["name"] = form.login.data
-            session["role"] = getRole(form.login.data)
+            session["role"] = get_role(form.login.data)
             flash("Connexion reussie.")
             if session["role"] == 'SuperAdministrateur':
-                return redirect(url_for("admin.redirection_connexion"))
+                return redirect(url_for("admin.redirection_connexion"), 200)
             else:
-                return redirect(url_for("personnel.redirection_connexion"))
-    return render_template("auth/connexion_personnel.html", form=form)
+                return redirect(url_for("personnel.redirection_connexion"), 200)
+    return render_template("auth/connexion_personnel.html", form=form), code
 
 
 @auth.route("/choix-formation-apprentis", methods=["GET", "POST"])
@@ -60,10 +62,8 @@ def choix_formation_apprentis():
 
     :return: rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
-    formations = getAllFormation()
-    return render_template(
-        "auth/choix_formation_apprentis.html", formations=formations
-    )
+    formations = get_all_formation()
+    return render_template("auth/choix_formation_apprentis.html", formations=formations), 200
 
 
 @auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET", "POST"])
@@ -74,24 +74,26 @@ def choix_eleve_apprentis(nom_formation):
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
     :return: rendu de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
-    apprentis = getApprentisByFormation(nom_formation)
-    return render_template("auth/choix_apprentis.html", apprentis=apprentis)
+    apprentis = get_apprentis_by_formation(nom_formation)
+    return render_template("auth/choix_apprentis.html", apprentis=apprentis), 200
 
 
 @auth.route("/connexion-apprentis/<login_apprenti>", methods=["GET", "POST"])
 def connexion_apprentis(login_apprenti):
-    apprenti = getApprentiByLogin(login_apprenti)
+    apprenti = get_apprenti_by_login(login_apprenti)
+    code = 200
     if request.method == "POST":
         login = request.form.get("login")
         password = request.form.get("pass")
-        if checkPasswordApprenti(login, password):
+        if check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
             flash("Connexion reussie.")
-            return redirect(url_for("apprenti.redirection_connexion"))
+            return redirect(url_for("apprenti.redirection_connexion"), 200)
         else:
             flash("Compte inconnu ou mot de passe invalide.", "error")
-    return render_template("auth/connexion_apprentis.html", apprenti=apprenti)
+            code = 403
+    return render_template("auth/connexion_apprentis.html", apprenti=apprenti), code
 
 
 @auth.route("/logout", methods=["GET", "POST"])
@@ -104,4 +106,4 @@ def logout():
     session.pop('role', None)
     session.pop('name', None)
     flash("Deconnection reussie.")
-    return redirect(url_for("auth.choix_connexion"))
+    return redirect(url_for("auth.choix_connexion"), 200)

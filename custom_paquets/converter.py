@@ -1,8 +1,8 @@
-def convertToDict(posts):
-    postList = []
+def convert_to_dict(posts):
+    post_list = []
     if str(type(posts)) == "<class 'sqlalchemy.engine.row.Row'>":
-        postList = posts._asdict()
+        post_list = posts._asdict()
     else:
         for post in posts:
-            postList.append(post._asdict())
-    return postList
+            post_list.append(post._asdict())
+    return post_list

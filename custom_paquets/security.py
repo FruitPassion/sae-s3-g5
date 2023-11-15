@@ -3,7 +3,7 @@ import re
 
 
 # Encrypt password with SHA512 and return it
-def encryptPassword(password, pseudo):
+def encrypt_password(password, pseudo):
     return hashlib.sha512((''.join(str(ord(c)) for c in pseudo)).encode('utf-8') + password.encode('utf-8')).hexdigest()
 
 
@@ -17,7 +17,7 @@ def encryptPassword(password, pseudo):
 #     1 lowercase letter or more
 # Found on :
 # https://stackoverflow.com/questions/16709638/checking-the-strength-of-a-password-how-to-check-conditions#32542964
-def passwordStrenght(password):
+def password_strenght(password):
     length_error = len(password) < 12
     digit_error = re.search(r"\d", password) is None
     uppercase_error = re.search(r"[A-Z]", password) is None

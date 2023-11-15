@@ -7,7 +7,7 @@ class Categorie(db.Model):
 
     id_categorie = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
     libelle = db.Column(db.String(50), nullable=False)
-    id_fiche = db.Column(db.ForeignKey(f'db_fiches_dev.FicheIntervention.id_fiche'), nullable=False, index=True)
+    id_fiche = db.Column(db.ForeignKey('db_fiches_dev.FicheIntervention.id_fiche'), nullable=False, index=True)
 
     FicheIntervention = db.relationship('FicheIntervention', primaryjoin='Categorie.id_fiche == '
                                                                          'FicheIntervention.id_fiche',

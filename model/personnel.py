@@ -1,13 +1,13 @@
 from hmac import compare_digest
 
-from custom_paquets.converter import convertToDict
-from custom_paquets.security import encryptPassword
+from custom_paquets.converter import convert_to_dict
+from custom_paquets.security import encrypt_password
 
 from model_db.shared_model import db
 from model_db.personnel import Personnel
 
 
-def getAllPersonnel():
+def get_all_personnel():
     """
     Récupère l'id, nom, prenom et role de chaque membre du personnel
 
@@ -16,10 +16,10 @@ def getAllPersonnel():
     personnel = Personnel.query.with_entities(
         Personnel.id_personnel, Personnel.nom, Personnel.prenom, Personnel.role
     ).all()
-    return convertToDict(personnel)
+    return convert_to_dict(personnel)
 
 
-def checkSuperAdmin(login: str):
+def check_super_admin(login: str):
     """
     À partir d'un login, verifie si un compte possède le role superadmin.
 
@@ -34,7 +34,7 @@ def checkSuperAdmin(login: str):
     )
 
 
-def checkPersonnel(login: str):
+def check_personnel(login: str):
     """
     À partir d'un login, verifie si un compte existe
 
@@ -43,7 +43,7 @@ def checkPersonnel(login: str):
     return Personnel.query.filter_by(login=login).count() == 1
 
 
-def checkPassword(login: str, password: str):
+def check_password(login: str, password: str):
     """
     À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
 
@@ -55,10 +55,10 @@ def checkPassword(login: str, password: str):
         .first()
         .mdp
     )
-    return compare_digest(encryptPassword(password, login), passwd)
+    return compare_digest(encrypt_password(password, login), passwd)
 
 
-def getRole(login: str):
+def get_role(login: str):
     """
     À partir d'un login recupere le role
 

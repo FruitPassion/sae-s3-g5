@@ -19,8 +19,8 @@ class FicheIntervention(db.Model):
     couleur_intervention = db.Column(db.String(50))
     etat_fiche = db.Column(db.String(50))
     date_creation = db.Column(db.Datetime)
-    id_apprenti = db.Columndb.Column(db.ForeignKey(f'db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
-    id_personnel = db.Column(db.ForeignKey(f'db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
+    id_apprenti = db.Columndb.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
+    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
                                backref='fiches')

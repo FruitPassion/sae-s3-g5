@@ -1,19 +1,19 @@
-from custom_paquets.converter import convertToDict
+from custom_paquets.converter import convert_to_dict
 
 from model_db.shared_model import db
 from model_db.formation import Formation
 
 
-def getAllFormation():
+def get_all_formation():
     """
     Retourn la liste de toute les formations
 
     :return: Une liste des formations
     """
-    return convertToDict(Formation.query.with_entities(Formation.id_formation, Formation.intitule).all())
+    return convert_to_dict(Formation.query.with_entities(Formation.id_formation, Formation.intitule).all())
 
 
-def getFormationId(nom_formation: str):
+def get_formation_id(nom_formation: str):
     """
     Retourn l'id d'une formation a partir de son nom
 

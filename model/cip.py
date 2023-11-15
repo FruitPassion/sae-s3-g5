@@ -1,12 +1,12 @@
-from custom_paquets.converter import convertToDict
+from custom_paquets.converter import convert_to_dict
 from model_db.apprenti import Apprenti
 from model_db.trace import Trace
 
 
-def getCommentairesParLoginEleve(apprenti):
+def get_commentaires_par_login_eleve(apprenti):
     """
     Recupere les commentaires d'une trace d'une fiche technique d'un apprenti à partir de son Login
 
     :return: Les informations de l'apprenti
     """
-    return convertToDict(Trace.query.filter_by(login=apprenti).with_entities(Trace.commentaire_texte, Trace.commentaire_audio).all())
+    return convert_to_dict(Trace.query.filter_by(login=apprenti).with_entities(Trace.commentaire_texte, Trace.commentaire_audio).all())

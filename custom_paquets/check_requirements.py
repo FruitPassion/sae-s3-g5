@@ -15,5 +15,7 @@ def checking():
 
     try:
         pkg_resources.require(dependencies)
-    except:
+    except BaseException as e:
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt', '--upgrade'])
+        print(e)
+

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from model.formation import getAllFormation
-from model.assister import getApprentisByFormation
+from model.formation import get_all_formation
+from model.assister import get_apprentis_by_formation
 
 personnel = Blueprint("personnel", __name__, url_prefix="/personnel")
 
@@ -14,12 +14,12 @@ Préfixe d'URL : /personnel/ .
 
 @personnel.route("/redirection-connexion", methods=["GET"])
 def redirection_connexion():
-    formations = getAllFormation()
+    formations = get_all_formation()
     return render_template("personnel/choix_formation.html", formations = formations)
 
 @personnel.route("/choix-eleves/<nom_formation>", methods =["GET"])
 def choix_eleve(nom_formation):
-    apprentis = getApprentisByFormation(nom_formation)
+    apprentis = get_apprentis_by_formation(nom_formation)
     return render_template("personnel/choix_apprentis.html", apprentis = apprentis)
 
 @personnel.route("/personnalisation", methods=["GET"])

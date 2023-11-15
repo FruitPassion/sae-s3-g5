@@ -1,8 +1,8 @@
 import urllib.parse
 
 from flask import Blueprint, jsonify
-from custom_paquets.security import passwordStrenght
-from model.apprenti import checkPasswordApprenti
+from custom_paquets.security import password_strenght
+from model.apprenti import check_password_apprenti
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -16,4 +16,4 @@ Préfixe d'URL : /api/ .
 
 @api.route("/check-password-apprenti/<user>/<password>", methods=["GET", "POST"])
 def api_check_password_apprenti(user, password):
-    return {"valide": checkPasswordApprenti(user, password)}
+    return {"valide": check_password_apprenti(user, password)}, 200
