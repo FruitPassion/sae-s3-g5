@@ -131,7 +131,7 @@ def test_choix_eleve_apprentis(client):
     # Test de vérification de la route
     assert response.request.path == f"/choix-eleve-apprentis/{nom_formation}"
 
-    # Test de verification de l'utilisation de tout les intitules de formation
+    # Test de verification de l'utilisation de toutes les informations de l'apprentis
     apprentis = getApprentisByFormation(nom_formation)
     html = response.get_data(as_text=True)
     for apprenti in apprentis:
