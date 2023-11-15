@@ -6,6 +6,7 @@ pytest
 pytest-flask
 pygit2
 pymysql
+pytest-cov
 Jinja2
 SQLAlchemy
 Werkzeug==2.3.8
