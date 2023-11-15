@@ -10,7 +10,8 @@ Blueprint pour toutes les routes relatives aux URL des pages du CIP
 Préfixe d'URL : /cip/ .
 '''
 
-@cip.route("/choix-formation/choix-apprenti/choix-action/fiches-techniques/visualisation-commentaires.html", methods=["GET"]):
-def afficher_commentaires(login : str):
-    commentaires = getCommentairesParLoginEleve(login)
+
+@cip.route("/<formation>/<apprenti>/<id_fiche>/visualisation-commentaires", methods=["GET"])
+def afficher_commentaires(formation, apprenti, id_fiche):
+    commentaires = getCommentairesParLoginEleve(apprenti)
     return render_template("cip/afficher_commentaires.html", commentaires = commentaires)
