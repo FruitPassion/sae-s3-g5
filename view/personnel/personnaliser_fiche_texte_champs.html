@@ -15,7 +15,7 @@
     <div id="zone_texte">
         <h3>Texte</h3>
         <!-- Sélection d'une police d'écriture -->
-        <label for="police">Police</label>
+        <label for="selecteur_police">Police</label>
         <select id="selecteur_police" onchange="changer_police()">
             {% for police in polices %}
                 <option value="{{ police }}" style="font-family: {{ police }}">{{ police }}</option>
@@ -24,7 +24,7 @@
         </select>
 
         <!-- Sélection de la taille de la police d'écriture -->
-        <label for="taille">Taille</label>
+        <label for="taille_police">Taille</label>
         <input type="number" id="taille_police" min="1" max="100" value="14" onchange="mettre_a_jour_texte()"><br>
 
 
@@ -47,7 +47,7 @@
     <div id="zone_champs">
         <h3>Champs</h3>
         <!-- Sélection du type de champ -->
-        <label for="type_champ">Type</label>
+        <label for="selecteur_type_champ">Type</label>
         <select id="selecteur_type_champ">
             <option value="champ_checkbox">Checkbox</option>
             <option value="champ_texte">Texte</option>
@@ -57,7 +57,7 @@
         </select>
 
         <!-- Sélection du Niveau -->
-        <label for="niveau">Niveau</label>
+        <label for="selecteur_niveau">Niveau</label>
         <select id="selecteur_niveau">
             <option value="1">1 - Pas d'affichage - Elements cachés</option>
             <option value="2">2 - Facile - Pictogrammes</option>
@@ -66,7 +66,7 @@
         </select><br>
 
         <!-- Sélection du pictogramme à associer -->
-        <label for="pictogramme">Pictogramme</label>
+        <label for="selecteur_pictogramme">Pictogramme</label>
         <select id="selecteur_pictogramme">
             <!-- Pictos de la BD -->
         </select>
@@ -77,7 +77,8 @@
         <a href="{{ url_for('personnel.personnalisation_bis') }}">
             <button id="bouton_suivant" onclick="history.back()">
                 <span id="texte_suivant">Suivant</span>
-                <img id="image_suivant" src="{{ url_for('static', filename='images/fleche_suivante.png') }}">
+                <img id="image_suivant" src="{{ url_for('static', filename='images/fleche_suivante.png') }}"
+                     alt="boutton_suivant">
             </button>
         </a>
     </div>

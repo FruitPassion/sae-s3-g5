@@ -1,19 +1,23 @@
-.liste_apprentis{
-    display: inline-block;
+#liste_appprentis {
+    display: flex;
     text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.apprenti{
-    padding: 10%;
+.apprenti {
+    margin: 3em;
+    width: 10em;
     display: inline-block;
 }
 
-.libelle{
+.libelle {
     text-align: center;
-    margin-left:1%;
+    margin-left: 1%;
     font-size: 2em;
 }
 
-.photo_profil{
-    height:10em;
+.photo_profil {
+    height: 10em;
 }
