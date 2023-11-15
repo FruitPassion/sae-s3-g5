@@ -10,3 +10,9 @@ Jinja2
 SQLAlchemy
 Werkzeug==2.3.8
 WTForms
+click
+gunicorn
+itsdangerous
+MarkupSafe
+xmlrunner
+flask-unittest
