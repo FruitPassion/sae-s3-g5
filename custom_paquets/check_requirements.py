@@ -1,7 +1,13 @@
+import warnings
+
 import pkg_resources
 from pkg_resources import DistributionNotFound, VersionConflict
 import sys
 import subprocess
+
+
+class ProjectError(Exception):
+    pass
 
 
 def checking():
@@ -15,7 +21,8 @@ def checking():
 
     try:
         pkg_resources.require(dependencies)
-    except BaseException as e:
+    except ProjectError as e:
+        warnings.warn("Mise à jour des prérequis : " + str(e))
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt', '--upgrade'])
-        print(e)
+
 
