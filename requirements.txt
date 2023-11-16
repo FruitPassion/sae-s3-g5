@@ -1,7 +1,6 @@
 Flask==2.3.3
 Flask-SQLAlchemy
 Flask-WTF
-mysqlclient
 pytest
 pytest-flask
 pygit2
