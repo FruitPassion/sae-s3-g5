@@ -18,12 +18,21 @@ from model_db.shared_model import db
 from pygit2 import Repository
 
 
+class ProjectError(Exception):
+    pass
 
+
+class GitBranchError(ProjectError):
+    pass
+
+
+class ConfigurationError(ProjectError):
+    pass
 
 
 def create_app(config=None):
     if config not in [None, "Developpement"]:
-        raise Exception("Configuration invalide")
+        raise ConfigurationError("Configuration invalide")
 
     app = Flask(__name__, template_folder="view")
 
@@ -32,7 +41,7 @@ def create_app(config=None):
     elif Repository('.').head.shorthand == "main":
         app.config.from_object('config.ProdConfig')
     else:
-        raise Exception("Branche inconnue")
+        raise GitBranchError("Branche inconnue")
 
     app.register_blueprint(auth)
     app.register_blueprint(api)
