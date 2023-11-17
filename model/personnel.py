@@ -25,13 +25,11 @@ def check_super_admin(login: str):
 
     :return: Ub booleen vrai si l'username appartient à un compte superadmin
     """
-    return (
-        Personnel.query.with_entities(Personnel.role)
-        .query.filter_by(login=login)
-        .first()
-        .role
-        == "SuperAdministrateur"
-    )
+    try:
+        return Personnel.query.with_entities(Personnel.role).filter_by(
+            login=login).first().role == "SuperAdministrateur"
+    except:
+        return False
 
 
 def check_personnel(login: str):

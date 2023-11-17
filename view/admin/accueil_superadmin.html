@@ -4,4 +4,6 @@
 
 {% block body %}
     <p>panel super admin</p>
+
+    <p>Connecté en temps que {{ session["name"] }} avec le role {{ session["role"] }}</p>
 {% endblock %}

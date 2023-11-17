@@ -49,9 +49,9 @@ def connexion_personnel():
             session["role"] = get_role(form.login.data)
             flash("Connexion reussie.")
             if session["role"] == 'SuperAdministrateur':
-                return redirect(url_for("admin.redirection_connexion"), 200)
+                return redirect(url_for("admin.accueil_admin"))
             else:
-                return redirect(url_for("personnel.redirection_connexion"), 200)
+                return redirect(url_for("personnel.choix_formation"))
     return render_template("auth/connexion_personnel.html", form=form), code
 
 
@@ -89,7 +89,7 @@ def connexion_apprentis(login_apprenti):
             session["name"] = login
             session["role"] = "apprentis"
             flash("Connexion reussie.")
-            return redirect(url_for("apprenti.redirection_connexion"), 200)
+            return redirect(url_for("apprenti.redirection_connexion"))
         else:
             flash("Compte inconnu ou mot de passe invalide.", "error")
             code = 403
@@ -106,4 +106,4 @@ def logout():
     session.pop('role', None)
     session.pop('name', None)
     flash("Deconnection reussie.")
-    return redirect(url_for("auth.choix_connexion"), 200)
+    return redirect(url_for("auth.choix_connexion"))
