@@ -1,24 +1,8 @@
 from flask import url_for, session
 
+from custom_paquets.tester_usages import connexion_personnel, deconnexion_personnel
 from model.assister import get_apprentis_by_formation
 from model.formation import get_all_formation
-
-'''
-Fonctions utilitaires
-'''
-
-
-# Fonction de connexion
-def connexion_personnel(client, username, password):
-    return client.post("/connexion-personnel", data=dict(
-        login=username,
-        password=password
-    ), follow_redirects=True)
-
-
-# Fonction de deconnexion
-def deconnexion_personnel(client):
-    return client.get('/logout', follow_redirects=True)
 
 
 '''
@@ -66,7 +50,7 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess.get('name') is None
         assert sess.get('name') is None
-    assert message_reussi in response.data
+    assert b'Deconnection reussie.' in response.data
 
     # Test connexion educateur admin
     username = "ALL11"
