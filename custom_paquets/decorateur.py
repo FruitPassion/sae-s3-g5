@@ -2,7 +2,7 @@ from functools import wraps
 
 from flask import session, redirect, url_for, abort
 
-from model.personnel import check_super_admin
+from model.personnel import check_super_admin, get_role
 
 ACTION_INDEX = "auth.choix_connexion"
 
@@ -31,4 +31,12 @@ def apprenti_login_required(func):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
 
+    return decorated_function
+
+def personnel_login_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if (session.get("name") is None) and (get_role(session.get("name")) not in ["Educateur Administrateur", "Educateur", "CIP"]):
+            return redirect(url_for(ACTION_INDEX))
+        return func(*args, **kwargs)
     return decorated_function

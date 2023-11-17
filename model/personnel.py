@@ -62,9 +62,9 @@ def get_role(login: str):
 
     :return: Un role
     """
-    return (
-        Personnel.query.filter_by(login=login)
-        .with_entities(Personnel.role)
-        .first()
-        .role
-    )
+    try:
+        return Personnel.query.filter_by(login=login).with_entities(
+            Personnel.role
+        ).first().role
+    except:
+        return False
