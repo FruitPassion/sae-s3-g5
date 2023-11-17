@@ -49,7 +49,6 @@ input[type="number"], input[type="text"] {
     padding-left: 20px;
 }
 
-/* ALED OSKOUR */
 #boutons{
     margin-top: 10%;
     margin-left: 10%;
@@ -68,4 +67,17 @@ input[type="number"], input[type="text"] {
     width: 500px;
     border-radius: 5px;
     margin-left: 25%;
+}
+
+#bouton_valider{
+    margin-top: 10px;
+    margin-left: 45%;
+    margin-bottom: 5%;
+    border-radius: 8px;
+    display: flex;
+}
+
+#texte_valider {
+    font-size: 3.5em;
+    flex: 1;
 }
