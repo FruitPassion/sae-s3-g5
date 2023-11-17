@@ -6,6 +6,8 @@ from custom_paquets.security import encrypt_password
 from model_db.shared_model import db
 from model_db.apprenti import Apprenti
 
+from model_db.ficheintervention import FicheIntervention
+
 
 def get_apprenti_by_login(login: str):
     """
@@ -25,3 +27,14 @@ def check_password_apprenti(login: str, password: str):
     """
     passwd = Apprenti.query.with_entities(Apprenti.mdp).filter_by(login=login).first().mdp
     return compare_digest(encrypt_password(password, login), passwd)
+
+
+def get_fiches_techniques_par_login(apprenti):
+    """
+    Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
+
+    :return: Les fiches techniques de l'apprenti
+    """
+    return convert_to_dict(FicheIntervention.query.filter_by(login=apprenti).with_entities(
+        FicheIntervention.id_fiche))
+

@@ -1,5 +1,4 @@
 from custom_paquets.converter import convert_to_dict
-from model_db.apprenti import Apprenti
 from model_db.trace import Trace
 
 
