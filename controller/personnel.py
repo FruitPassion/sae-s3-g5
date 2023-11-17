@@ -47,14 +47,8 @@ def personnalisation_bis():
 def redirection_fiches(apprenti):
     role = get_role(session.get("name"))
     if role == "Educateur Administrateur":
-        return "Redirection educateur administrateur"
+        return redirect(url_for('educ_admin.fiches_apprentis', apprenti=apprenti))
     elif role == "Educateur":
         return "Redirection educateur"
     else:
         return redirect(url_for('cip.fiches_apprentis', apprenti=apprenti))
-
-@personnel.route("<apprenti>/fiches-apprenti", methods=["GET"])
-@personnel_login_required
-def fiches_apprenti(apprenti):
-    fiches = [] # récupérer les fiches de l'apprenti mais bon, à voir par rapport aux requêtes
-    return render_template("personnel/choix_fiches_apprenti.html", fiches, apprenti=apprenti)
