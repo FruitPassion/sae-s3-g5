@@ -40,3 +40,11 @@ def personnel_login_required(func):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
     return decorated_function
+
+def cip_login_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if (session.get("name") is None) and (get_role(session.get("name")) != "CIP"):
+            return redirect(url_for(ACTION_INDEX))
+        return func(*args, **kwargs)
+    return decorated_function
