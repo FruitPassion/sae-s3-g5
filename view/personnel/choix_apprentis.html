@@ -13,7 +13,7 @@
     <div id="liste_appprentis">
         {% for apprenti in apprentis %}
             <div class="apprenti">
-                <a href="{{ url_for('auth.connexion_apprentis', login_apprenti=apprenti['login']) }}">
+                <a href="{{ url_for('personnel.redirection_fiches', login_apprenti=apprenti['login']) }}">
                     <img class="photo_profil" src="{{ url_for('static', filename='images/defaut_profile.png') }}"
                          alt="profil picture">
                 </a>
