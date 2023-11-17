@@ -17,6 +17,6 @@ def afficher_commentaires(formation, apprenti, id_fiche):
     return render_template("cip/afficher_commentaires.html", commentaires = commentaires)
 
 
-@cip.route("/<apprentis>/fiches", methods=["GET"])
-def fiches_apprentis(apprentis):
-    return "voici les fiches de " + apprentis
+@cip.route("/<apprenti>/fiches", methods=["GET"])
+def fiches_apprenti(apprenti):
+    return "voici les fiches de " + apprenti

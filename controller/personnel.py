@@ -51,4 +51,4 @@ def redirection_fiches(apprenti):
     elif role == "Educateur":
         return "Redirection educateur"
     else:
-        return redirect(url_for('cip.fiches_apprentis', apprenti=apprenti))
+        return redirect(url_for('cip.fiches_apprenti', apprenti=apprenti))
