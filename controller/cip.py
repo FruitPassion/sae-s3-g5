@@ -15,3 +15,8 @@ Préfixe d'URL : /cip/ .
 def afficher_commentaires(formation, apprenti, id_fiche):
     commentaires = get_commentaires_par_login_eleve(apprenti)
     return render_template("cip/afficher_commentaires.html", commentaires = commentaires)
+
+
+@cip.route("/<apprentis>/fiches", methods=["GET"])
+def fiches_apprentis(apprentis):
+    return "voici les fiches de " + apprentis

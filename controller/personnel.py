@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session, redirect, url_for
 from model.formation import get_all_formation
 from model.assister import get_apprentis_by_formation
 from custom_paquets.decorateur import personnel_login_required
+from model.personnel import get_role
 
 personnel = Blueprint("personnel", __name__, url_prefix="/personnel")
 
@@ -39,3 +40,15 @@ def personnalisation():
 @personnel_login_required
 def personnalisation_bis():
     return render_template('personnel/personnaliser_fiche_couleur_fond.html')
+
+
+@personnel.route("/redirection-fiches/<apprenti>", methods=["GET"])
+@personnel_login_required
+def redirection_fiches(apprenti):
+    role = get_role(session.get("name"))
+    if role == "Educateur Administrateur":
+        return "Redirection educateur administrateur"
+    elif role == "Educateur":
+        return "Redirection educateur"
+    else:
+        return redirect(url_for('cip.fiches_apprentis', apprenti=apprenti))
