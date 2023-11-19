@@ -19,4 +19,4 @@ def afficher_commentaires(formation, apprenti, id_fiche):
 
 @cip.route("/<apprenti>/fiches", methods=["GET"])
 def fiches_apprenti(apprenti):
-    return "voici les fiches de " + apprenti
+    return "Connecté en tant que cip \n voici les fiches de " + apprenti

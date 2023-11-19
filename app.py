@@ -1,5 +1,8 @@
 from flask_wtf import CSRFProtect
 
+from controller.cip import cip
+from controller.educateur_admin import educ_admin
+from controller.educateur_simple import educ_simple
 from custom_paquets import check_requirements
 
 check_requirements.checking()
@@ -48,6 +51,9 @@ def create_app(config=None):
     app.register_blueprint(personnel)
     app.register_blueprint(apprenti)
     app.register_blueprint(admin)
+    app.register_blueprint(cip)
+    app.register_blueprint(educ_admin)
+    app.register_blueprint(educ_simple)
 
     csrf = CSRFProtect()
     csrf.init_app(app)

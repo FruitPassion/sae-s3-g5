@@ -8,4 +8,5 @@ def get_commentaires_par_login_eleve(apprenti):
 
     :return: Les informations de l'apprenti
     """
-    return convert_to_dict(Trace.query.filter_by(login=apprenti).with_entities(Trace.commentaire_texte, Trace.commentaire_audio).all())
+    return convert_to_dict(
+        Trace.query.filter_by(login=apprenti).with_entities(Trace.commentaire_texte, Trace.commentaire_audio).all())
