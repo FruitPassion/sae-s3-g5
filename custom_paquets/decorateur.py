@@ -21,24 +21,29 @@ def admin_login_required(func):
         if (session.get("name") is None) and (check_super_admin(session.get("name")) is False):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
+
     return decorated_function
 
 
 def apprenti_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if not session.get("name") or session.get("name") != "apprenti":
+        print(session.get("name"))
+        if not session.get("name") or session.get("role") != "apprentis":
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
 
     return decorated_function
 
+
 def personnel_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if (session.get("name") is None) and (get_role(session.get("name")) not in ["Educateur Administrateur", "Educateur", "CIP"]):
+        if (session.get("name") is None) and (
+                get_role(session.get("name")) not in ["Educateur Administrateur", "Educateur", "CIP"]):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
+
     return decorated_function
 
 def cip_login_required(func):
