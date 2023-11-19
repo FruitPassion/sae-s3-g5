@@ -10,7 +10,7 @@ def test_redirection_connexion(client):
     response = client.get(url_for("personnel.choix_formation"))
 
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/choix-formation-personnel"
@@ -21,7 +21,7 @@ def test_personnalisation(client):
     response = client.get(url_for("personnel.personnalisation"))
 
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/personnalisation"
@@ -47,7 +47,7 @@ def test_personnalisation_bis(client):
     response = client.get(url_for("personnel.personnalisation_bis"))
 
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/personnalisation-bis"

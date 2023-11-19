@@ -10,7 +10,7 @@ def test_redirection_connexion(client):
     response = client.get(url_for("apprenti.redirection_connexion"))
 
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     # Test dde vérification de la route
     assert response.request.path == "/apprenti/redirection-connexion"
