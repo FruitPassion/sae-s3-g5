@@ -1,16 +1,22 @@
 from flask import url_for
+from custom_paquets.tester_usages import connexion_personnel
 
 '''
 Test des controller du fichier personnel.py
 '''
 
+# identifiants de connexion pour le test
+username = "JED10"
+passw = "superadmin"
 
 # Test de la route de redirection de connexion
 def test_redirection_connexion(client):
+    connexion_personnel(client, username, passw)
+
     response = client.get(url_for("personnel.choix_formation"))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/choix-formation-personnel"
@@ -18,10 +24,12 @@ def test_redirection_connexion(client):
 
 # Test de la route de personnalisation de la première page
 def test_personnalisation(client):
+    
+    connexion_personnel(client,username,passw)
     response = client.get(url_for("personnel.personnalisation"))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/personnalisation"
@@ -44,10 +52,12 @@ def test_personnalisation(client):
 
 # Test de la route de personnalisation de la deuxième page
 def test_personnalisation_bis(client):
+    connexion_personnel(client,username,passw)
+
     response = client.get(url_for("personnel.personnalisation_bis"))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/personnalisation-bis"
