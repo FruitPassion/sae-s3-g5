@@ -13,11 +13,11 @@ Préfixe d'URL : /cip/ .
 '''
 
 
-@cip.route("/<formation>/<apprenti>/<id_fiche>/visualisation-commentaires", methods=["GET"])
+@cip.route("/<apprenti>/<id_fiche>/visualisation-commentaires", methods=["GET"])
 @cip_login_required
-def afficher_commentaires(formation, apprenti, id_fiche):
+def afficher_commentaires(apprenti, id_fiche):
     commentaires = get_commentaires_par_login_eleve(apprenti)
-    return render_template("cip/afficher_commentaires.html", commentaires = commentaires)
+    return render_template("cip/afficher_commentaires.html", commentaires = commentaires, id_fiche = id_fiche)
 
 
 @cip.route("/<apprenti>/fiches", methods=["GET"])
