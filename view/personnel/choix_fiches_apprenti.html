@@ -8,20 +8,21 @@
 
 {% block body %}
     <h1>Fiches techniques</h1>
+    <div class="contenu">
+        <!-- Affichage des fiches effectuées par l'élève -->
+        <div class="liste">
+            {% for fiche in fiches %}
+                <div class="fiche">
+                    <a href="{{ url_for('personnel.fiche_apprenti', id=fiche.id) }}">{{ fiche.nom }}</a>
+                </div>
+            {% endfor %}
+        </div>
 
-    <!-- Affichage des fiches effectuées par l'élève -->
-    <div class="liste">
-        {% for fiche in fiches %}
-            <div class="fiche">
-                <a href="{{ url_for('personnel.fiche_apprenti', id=fiche.id) }}">{{ fiche.nom }}</a>
-            </div>
-        {% endfor %}
-    </div>
-
-    <!-- Orde d'affichage -->
-    <div class="ordre">
-        <a href="{{ url_for('personnel.choix_fiches_apprenti', id=id, ordre='date') }}">Date</a>
-        <a href="{{ url_for('personnel.choix_fiches_apprenti', id=id, ordre='nom') }}">Nom</a>
+        <!-- Orde d'affichage -->
+        <div class="ordre">
+            <a href="{{ url_for('personnel.choix_fiches_apprenti', id=id, ordre='date') }}" alt="Date">Date</a>
+            <a href="{{ url_for('personnel.choix_fiches_apprenti', id=id, ordre='nom') }}" alt="Nom">Nom</a>
+        </div>
     </div>
 
     <!-- Bouton de retour -->
