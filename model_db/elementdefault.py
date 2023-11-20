@@ -6,16 +6,13 @@ class ElementDefaut(db.Model):
     __table_args__ = {'schema': 'db_fiches_dev'}
 
     id_element = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
+    libelle = db.Column(db.String(50), nullable=False)
     type = db.Column(db.String(50), nullable=False)
-    text = db.Column(db.Text)
-    audio = db.Column(db.String(100), nullable=False)
-    id_categorie = db.Column(db.ForeignKey('db_fiches_dev.Categorie.id_categorie'), nullable=False, index=True)
-    id_pictogramme = db.Column(db.ForeignKey('db_fiches_dev.Pictogramme.id_pictogramme'), nullable=False, index=True)
-    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
+    text = db.Column(db.String(50))
+    audio = db.Column(db.String(100))
+    id_pictogramme = db.Column(db.ForeignKey('db_fiches_dev.Pictogramme.id_pictogramme'), index=True)
+    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), index=True)
 
-    Categorie = db.relationship('Pictogramme',
-                                primaryjoin='ElementDefaut.id_categorie == Categorie.id_categorie',
-                                backref='elementdefauts')
     Pictogramme = db.relationship('Pictogramme',
                                   primaryjoin='ElementDefaut.id_pictogramme == Pictogramme.id_pictogramme',
                                   backref='elementdefauts')

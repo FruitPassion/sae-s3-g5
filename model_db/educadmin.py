@@ -9,4 +9,3 @@ class EducAdmin(db.Model):
 
     Personnel = db.relationship('Personnel', primaryjoin='EducAdmin.id_personnel == Personnel.id_personnel',
                                 backref='educadmins')
-

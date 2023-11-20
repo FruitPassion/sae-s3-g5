@@ -1,8 +1,8 @@
 from model_db.shared_model import db
 
 
-class Trace(db.Model):
-    __tablename__ = 'Trace'
+class LaisserTrace(db.Model):
+    __tablename__ = 'LaisserTrace'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
     id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), primary_key=True)
