@@ -20,7 +20,25 @@ def afficher_commentaires(apprenti, id_fiche):
     return render_template("cip/afficher_commentaires.html", commentaires = commentaires, id_fiche = id_fiche)
 
 
+@cip.route("/<apprenti>/choix-operations", methods=["GET"])
+@cip_login_required
+def affiche_choix(apprenti):
+    return render_template("cip/choix_operations.html", apprenti=apprenti);
+
+
 @cip.route("/<apprenti>/fiches", methods=["GET"])
 @cip_login_required
 def fiches_apprenti(apprenti):
-    return "Connecté en tant que cip \n voici les fiches de " + apprenti
+    return "Voici les fiches de " + apprenti
+
+
+@cip.route("/<apprenti>/suivi-progression", methods=["GET"])
+@cip_login_required
+def suivi_progression_apprenti(apprenti):
+    return "Suivi de progression de " + apprenti
+
+
+@cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
+@cip_login_required
+def adaptation_situation_examen(apprenti):
+    return "Adaptation en situation d'examen de " + apprenti

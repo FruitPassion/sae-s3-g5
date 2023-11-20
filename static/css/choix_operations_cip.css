@@ -1,0 +1,22 @@
+.lignes{
+    line-height: 6em;
+    font-size: 3em;
+    color: white;
+    text-indent: 10%;
+}
+
+#listeOperationsCIP {
+    list-style: none;
+}
+
+#fichesTechniques {
+    background-color: #96DBF2;
+}
+
+#suiviProg {
+    background-color: #FFAADD;
+}
+
+#situationExam {
+    background-color: #FFBF73;
+}
