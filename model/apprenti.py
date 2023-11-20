@@ -18,6 +18,12 @@ def get_apprenti_by_login(login: str):
     return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
                                                                                Apprenti.login).all())
 
+def get_id_apprenti_by_login(login : str):
+    """
+    Renvoie l'id_apprenti à partir du login
+    """
+    return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first())
+
 
 def check_password_apprenti(login: str, password: str):
     """
@@ -29,12 +35,14 @@ def check_password_apprenti(login: str, password: str):
     return compare_digest(encrypt_password(password, login), passwd)
 
 
-def get_fiches_techniques_par_login(apprenti):
+def get_fiches_techniques_par_login(login):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
 
     :return: Les fiches techniques de l'apprenti
     """
-    return convert_to_dict(FicheIntervention.query.filter_by(login=apprenti).with_entities(
-        FicheIntervention.id_fiche))
+    apprenti = get_id_apprenti_by_login(login)
+    
+    return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=apprenti["id_apprenti"]).with_entities(
+        FicheIntervention.id_fiche).all())
 

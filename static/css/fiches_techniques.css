@@ -1,30 +1,31 @@
-/*
-#pause{
-    height: 100px;
-    z-index:10;
+#blocFiches{
+    display:flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    
 }
 
-.fiche {
-    position: absolute;
-    top: 0;
-    left: 0;
+.parent {
+    position: relative;
+    align-items:center;
 }
 
-#parent {
-    position:relative;
-}
-*/
-
-#parent {
-    position: relative; /*l'élément est positionné mais il se place tout seul*/
-  }
-#parent #pause {
+.parent #pause{
     position: absolute;
     top: 37%;
-    left: 12.5%;
+    left: 34%;
     height:100px
 }
-.fiche {
-    z-index: 10;
+
+.parent #check{
+    position:absolute;
+    top: 37%;
+    left:34%;
+    height:100px;
 }
+
+.fiche {
+    z-index: 11;
+}
+
 
