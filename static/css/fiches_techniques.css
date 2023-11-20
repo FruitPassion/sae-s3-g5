@@ -1,0 +1,30 @@
+/*
+#pause{
+    height: 100px;
+    z-index:10;
+}
+
+.fiche {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#parent {
+    position:relative;
+}
+*/
+
+#parent {
+    position: relative; /*l'élément est positionné mais il se place tout seul*/
+  }
+#parent #pause {
+    position: absolute;
+    top: 37%;
+    left: 12.5%;
+    height:100px
+}
+.fiche {
+    z-index: 10;
+}
+

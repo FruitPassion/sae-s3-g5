@@ -1,0 +1,28 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
+{% endblock %}
+
+{% block title %}Fiches techniques{% endblock %}
+
+{% block body %}    
+
+    <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+  
+    <div id = "parent">
+        <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="page blanche">
+        <img id="pause" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
+    </div>
+    
+        
+   
+    
+<!--{% for fiche in fiches_techniques %}
+    <a href="{{ url_for('cip.afficher_commentaires', apprenti=apprenti['login'], id_fiche = fiche['id_fiche']) }}">
+{%endfor%}-->
+
+{% include "_partial/_retour_bouton.html" %}
+
+{% endblock %}
