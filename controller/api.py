@@ -1,7 +1,6 @@
 import urllib.parse
 
 from flask import Blueprint, jsonify
-from custom_paquets.security import password_strenght
 from model.apprenti import check_password_apprenti
 
 api = Blueprint('api', __name__, url_prefix="/api")
