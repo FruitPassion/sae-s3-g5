@@ -14,7 +14,7 @@ def test_redirection_connexion(apprenti):
     passw = "cip"
     connexion_personnel(apprenti, username, passw)
     # identifiant de la fiche 1 d'apprenti
-    id_fiche = 1;
+    id_fiche = 1
 
     response = apprenti.get(url_for("cip.afficher_commentaires"), apprenti = apprenti, idFiche = id_fiche)
 
