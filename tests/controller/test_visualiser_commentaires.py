@@ -1,7 +1,8 @@
 from flask import url_for
 
-def test_visualisation_commentaires(eleve): 
-    response = eleve.get(url_for("cip.visualiser-commentaires"))
+def test_visualisation_commentaires(client):
+    # page n'existe pas encore
+    response = client.get(url_for("cip.visualiser-commentaires"))
     assert response.status_code == 200
     assert response.request.path == "/cip/<apprenti>/<idFiche>/visualiser-commentaires"
 

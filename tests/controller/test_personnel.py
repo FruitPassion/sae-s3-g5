@@ -5,7 +5,7 @@ from custom_paquets.tester_usages import connexion_personnel
 Test des controller du fichier personnel.py
 '''
 
-# identifiants de connexion pour le test
+# identifiants de connexion pour les tests
 username = "JED10"
 passw = "superadmin"
 
