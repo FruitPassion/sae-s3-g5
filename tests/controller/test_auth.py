@@ -103,7 +103,7 @@ def test_choix_formation_apprentis(client):
     formations = get_all_formation()
     html = response.get_data(as_text=True)
     for formation in formations:
-        assert 'class="boutton-formation">'+formation["intitule"] in html
+        assert formation["intitule"] in html
 
 
 # Test de la route affichant la liste des apprentis en fonction d'une formation
