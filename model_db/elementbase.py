@@ -1,8 +1,8 @@
 from model_db.shared_model import db
 
 
-class ElementDefaut(db.Model):
-    __tablename__ = 'ElementDefaut'
+class ElementBase(db.Model):
+    __tablename__ = 'ElementBase'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
     id_element = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -14,7 +14,7 @@ class ElementDefaut(db.Model):
     id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), index=True)
 
     Pictogramme = db.relationship('Pictogramme',
-                                  primaryjoin='ElementDefaut.id_pictogramme == Pictogramme.id_pictogramme',
-                                  backref='elementdefauts')
-    Personnel = db.relationship('Personnel', primaryjoin='ElementDefaut.id_personnel == Personnel.id_personnel',
-                                backref='elementdefauts')
+                                  primaryjoin='ElementBase.id_pictogramme == Pictogramme.id_pictogramme',
+                                  backref='elementbases')
+    Personnel = db.relationship('Personnel', primaryjoin='ElementBase.id_personnel == Personnel.id_personnel',
+                                backref='elementbases')

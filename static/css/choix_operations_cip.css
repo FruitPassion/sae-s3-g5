@@ -1,8 +1,12 @@
 .lignes{
     line-height: 6em;
     font-size: 3em;
-    color: white;
     text-indent: 10%;
+    margin-top: 2em;
+}
+
+.lignes a{
+    color: white;
 }
 
 #listeOperationsCIP {

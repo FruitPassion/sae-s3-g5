@@ -9,7 +9,11 @@
 {% block body %}
     <h1>Commentaires</h1>
     {% for commentaire in commentaires %}
-    <p class="commentaire_educ">{{ commentaires["commentaire_texte"] }}</p>
+        <h2 class="commentaire">{{ commentaire["intitule"] }}</h2>
+        <p class="commentaire">Commentaire : {{ commentaire["commentaire_texte"] }}</p>
+        <p class="commentaire">Evaluation : {{ commentaire["eval_texte"] }}</p>
+    {% endfor %}
+    {% include "_partial/_retour_bouton.html" %}
 
     <!-- insertion commentaire audio ? -->
 {% endblock %}

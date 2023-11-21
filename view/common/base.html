@@ -44,7 +44,7 @@
         {% for category, message in messages %}
             <div style="{% if category == 'message' %}background-color: #6ce56c;{% else %}
                 background-color: #e83c55;
-            {% endif %} color: black">
+            {% endif %} color: black; font-size : 35px">
                 <ul class="flashes" style="margin-top: revert">
                     <li>{{ message }}</li>
                 </ul>

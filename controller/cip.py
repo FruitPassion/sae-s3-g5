@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template
 
 from custom_paquets.decorateur import cip_login_required
-from model.cip import get_commentaires_par_login_eleve
-from model.apprenti import get_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_par_login
+from model.trace import get_commentaires_par_fiche
+from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
+from model.ficheintervention import get_fiches_techniques_finies_par_login
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
 
@@ -24,15 +24,14 @@ def affiche_choix(apprenti):
 @cip_login_required
 def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
-    fiches = get_fiches_techniques_par_login(apprenti)
-    print(fiches)
+    fiches = get_fiches_techniques_finies_par_login(apprenti)
     return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos[0], fiches=fiches)
 
 
 @cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
 @cip_login_required
 def visualiser_commentaires(apprenti, fiche):
-    commentaires = get_commentaires_par_login_eleve(apprenti, fiche)
+    commentaires = get_commentaires_par_fiche(fiche)
     return render_template("cip/commentaires.html", commentaires=commentaires)
 
 

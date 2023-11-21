@@ -34,7 +34,7 @@ CREATE TABLE Formation
 (
     id_formation  INT AUTO_INCREMENT,
     intitule      VARCHAR(50) NOT NULL,
-    niveau_qualif SMALLINT,
+    niveau_qualif SMALLINT    NOT NULL,
     groupe        VARCHAR(50),
     image         VARCHAR(100),
     PRIMARY KEY (id_formation)
@@ -67,7 +67,7 @@ CREATE TABLE Pictogramme
     PRIMARY KEY (id_pictogramme)
 );
 
-CREATE TABLE ElementDefaut
+CREATE TABLE ElementBase
 (
     id_element     INT AUTO_INCREMENT,
     libelle        VARCHAR(50) NOT NULL,
@@ -83,20 +83,18 @@ CREATE TABLE ElementDefaut
 
 CREATE TABLE FicheIntervention
 (
-    id_fiche                INT AUTO_INCREMENT,
-    numero                  SMALLINT,
-    nom_du_demandeur        VARCHAR(50),
-    date_demande            DATE,
-    localisation            VARCHAR(50),
-    description_demande     TEXT,
-    degre_urgence           TINYINT,
-    couleur_intervention    VARCHAR(50),
-    etat_fiche              BOOLEAN,
-    date_creation           DATETIME,
-    commentaire_text_eleve  TEXT,
-    commentaire_audio_eleve TEXT,
-    id_personnel            INT NOT NULL,
-    id_apprenti             INT NOT NULL,
+    id_fiche             INT AUTO_INCREMENT,
+    numero               SMALLINT,
+    nom_du_demandeur     VARCHAR(50),
+    date_demande         DATE,
+    localisation         VARCHAR(50),
+    description_demande  TEXT,
+    degre_urgence        TINYINT,
+    couleur_intervention VARCHAR(50),
+    etat_fiche           BOOLEAN,
+    date_creation        DATETIME,
+    id_personnel         INT NOT NULL,
+    id_apprenti          INT NOT NULL,
     PRIMARY KEY (id_fiche),
     FOREIGN KEY (id_personnel) REFERENCES EducAdmin (id_personnel),
     FOREIGN KEY (id_apprenti) REFERENCES Apprenti (id_apprenti),
@@ -112,6 +110,7 @@ CREATE TABLE LaisserTrace
     commentaire_texte TEXT        NOT NULL,
     eval_audio        VARCHAR(255),
     commentaire_audio VARCHAR(50),
+    apprenti          BOOLEAN,
     id_fiche          INT         NOT NULL,
     PRIMARY KEY (id_personnel, horodatage),
     FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel),
@@ -142,7 +141,7 @@ CREATE TABLE ComposerPresentation
     position_elem      VARCHAR(50),
     ordre_saisie_focus VARCHAR(50),
     PRIMARY KEY (id_element, id_fiche),
-    FOREIGN KEY (id_element) REFERENCES ElementDefaut (id_element),
+    FOREIGN KEY (id_element) REFERENCES ElementBase (id_element),
     FOREIGN KEY (id_fiche) REFERENCES FicheIntervention (id_fiche)
 );
 
@@ -242,7 +241,7 @@ VALUES (2, 1),
        (8, 6),
        (8, 7);
 
-INSERT INTO ElementDefaut (libelle, type, text, audio, id_personnel, id_pictogramme)
+INSERT INTO ElementBase (libelle, type, text, audio, id_personnel, id_pictogramme)
 VALUES ('Intervenant', 'categorie', NULL, NULL, 2, NULL),
        ('Nom de l\'intervenant', 'text-short', NULL, NULL, 2, NULL),
        ('Prénom de l\'intervenant', 'text-short', NULL, NULL, 3, NULL),
@@ -276,33 +275,28 @@ VALUES ('Intervenant', 'categorie', NULL, NULL, 2, NULL),
        ('Materiel 10', 'select-materiel', NULL, NULL, 3, NULL);
 
 INSERT INTO FicheIntervention (id_fiche, numero, nom_du_demandeur, date_demande, localisation, description_demande,
-                               degre_urgence, couleur_intervention, etat_fiche, date_creation, commentaire_text_eleve,
-                               commentaire_audio_eleve, id_personnel, id_apprenti)
-VALUES (1, 0, 'dummy', '1990-01-01', 'dummy', 'dummy', 4, 'vert', 0, '1999-01-01 01:01:01', 'dummy', NUll, 2, 1),
-       (2, 1, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 0, '2023-11-03 12:30:00',
-        'Dur dur', NUll, 2, 2),
-       (3, 1, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 0, '2023-10-05 07:12:01',
-        'Ca vas', NUll, 2, 3),
-       (4, 1, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 0, '2023-05-08 14:34:01',
-        'Un peu de mal', NUll, 3, 4),
-       (5, 1, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 0, '2023-05-24 01:01:01',
-        'Commentaire', NUll, 3, 5),
-       (6, 2, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 1, '2023-11-03 12:30:00',
-        'Dur dur', NUll, 2, 5),
-       (7, 2, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 1, '2023-10-05 07:12:01',
-        'Ca vas', NUll, 2, 2),
-       (8, 2, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 1, '2023-05-08 14:34:01',
-        'Un peu de mal', NUll, 3, 3),
-       (9, 2, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 1, '2023-05-24 01:01:01',
-        'Commentaire', NUll, 3, 4),
+                               degre_urgence, couleur_intervention, etat_fiche, date_creation, id_personnel,
+                               id_apprenti)
+VALUES (1, 0, 'dummy', '1990-01-01', 'dummy', 'dummy', 4, 'vert', 0, '1999-01-01 01:01:01', 2, 1),
+       (2, 1, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 0, '2023-11-03 12:30:00', 2,
+        2),
+       (3, 1, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 0, '2023-10-05 07:12:01', 2, 3),
+       (4, 1, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 0, '2023-05-08 14:34:01', 3,
+        4),
+       (5, 1, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 0, '2023-05-24 01:01:01', 3, 5),
+       (6, 2, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 1, '2023-11-03 12:30:00', 2,
+        5),
+       (7, 2, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 1, '2023-10-05 07:12:01', 2, 2),
+       (8, 2, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 1, '2023-05-08 14:34:01', 3,
+        3),
+       (9, 2, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 1, '2023-05-24 01:01:01', 3, 4),
        (10, 3, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 1, '2023-11-03 12:30:00',
-        'Dur dur', NUll, 2, 4),
-       (11, 3, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 1, '2023-10-05 07:12:01',
-        'Ca vas', NUll, 2, 5),
-       (12, 3, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 1, '2023-05-08 14:34:01',
-        'Un peu de mal', NUll, 3, 2),
-       (13, 3, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 1, '2023-05-24 01:01:01',
-        'Commentaire', NUll, 3, 3);
+        2, 4),
+       (11, 3, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 1, '2023-10-05 07:12:01', 2, 5),
+       (12, 3, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 1, '2023-05-08 14:34:01', 3,
+        2),
+       (13, 3, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 1, '2023-05-24 01:01:01', 3,
+        3);
 
 
 INSERT INTO ComposerPresentation (id_element, id_fiche, picto, text, taille_texte, audio, police, couleur, couleur_fond,
@@ -712,19 +706,53 @@ VALUES (1, 1, NULL, NULL, 15, NULL, 'Oswald', 'black', NULL, NULL, '10', NULL),
        (31, 13, NULL, NULL, 15, NULL, 'Montserrat', 'black', 'white', 1, '610', NULL);
 
 
-INSERT INTO LaisserTrace (id_personnel, horodatage, intitule, eval_texte, commentaire_texte, eval_audio,
-                          commentaire_audio, id_fiche)
-VALUES (2, '2023-03-17 12:30:00', 'Bien', 'Eval ipsum, ca s\'est bien passé', 'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 2),
-       (2, '2023-05-20 07:12:01', 'PLutot Bien', 'Eval ipsum, ca s\'est plutot bien passé', 'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 3),
-       (2, '2023-08-21 14:34:01', 'Assez Bien', 'Eval ipsum, ca s\'est assez bien passé', 'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 4),
-       (2, '2023-12-17 01:01:01', 'Quand meme Bien', 'Eval ipsum, ca s\'est quand meme bien passé', 'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 5),
-
-       (3, '2023-03-17 12:30:00', 'Bien', 'Eval ipsum, ca s\'est bien passé', 'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 7),
-       (3, '2023-05-20 07:12:01', 'PLutot Bien', 'Eval ipsum, ca s\'est plutot bien passé', 'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 8),
-       (4, '2023-08-21 14:34:01', 'Assez Bien', 'Eval ipsum, ca s\'est assez bien passé', 'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 9),
-       (4, '2023-12-17 01:01:01', 'Quand meme Bien', 'Eval ipsum, ca s\'est quand meme bien passé', 'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 6),
-
-       (4, '2023-03-17 12:30:00', 'Bien', 'Eval ipsum, ca s\'est bien passé', 'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 12),
-       (4, '2023-05-20 07:12:01', 'PLutot Bien', 'Eval ipsum, ca s\'est plutot bien passé', 'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 10),
-       (3, '2023-08-21 14:34:01', 'Assez Bien', 'Eval ipsum, ca s\'est assez bien passé', 'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 11),
-       (3, '2023-12-17 01:01:01', 'Quand meme Bien', 'Eval ipsum, ca s\'est quand meme bien passé', 'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 13);
+INSERT IGNORE INTO LaisserTrace (id_personnel, horodatage, intitule, eval_texte, commentaire_texte, eval_audio,
+                                 commentaire_audio, apprenti, id_fiche)
+VALUES (2, '2023-03-17 12:30:00', 'Commentraire intervenant', 'Eval ipsum, ca s\'est bien passé',
+        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 0, 2),
+       (2, '2023-05-20 07:12:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est plutot bien passé',
+        'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 0, 3),
+       (2, '2023-08-21 14:34:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est assez bien passé',
+        'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 0, 4),
+       (2, '2023-12-17 01:01:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est quand meme bien passé',
+        'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 0, 5),
+       (2, '2023-03-17 12:30:00', 'Commentraire apprentis', 'Eval ipsum, ca s\'est bien passé',
+        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 1, 2),
+       (2, '2023-05-20 07:13:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est plutot bien passé',
+        'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 1, 3),
+       (2, '2023-08-21 14:35:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est assez bien passé',
+        'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 1, 4),
+       (2, '2023-12-17 01:02:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est quand meme bien passé',
+        'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 1, 5),
+       (3, '2023-03-17 12:30:00', 'Commentraire intervenant', 'Eval ipsum, ca s\'est bien passé',
+        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 0, 7),
+       (3, '2023-05-20 07:12:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est plutot bien passé',
+        'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 0, 8),
+       (4, '2023-08-21 14:34:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est assez bien passé',
+        'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 0, 9),
+       (4, '2023-12-17 01:01:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est quand meme bien passé',
+        'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 0, 6),
+       (3, '2023-03-17 12:31:00', 'Commentraire apprentis', 'Eval ipsum, ca s\'est bien passé',
+        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 1, 7),
+       (3, '2023-05-20 07:13:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est plutot bien passé',
+        'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 1, 8),
+       (4, '2023-08-21 14:35:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est assez bien passé',
+        'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 1, 9),
+       (4, '2023-12-17 01:02:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est quand meme bien passé',
+        'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 1, 6),
+       (4, '2023-03-17 12:31:00', 'Commentraire intervenant', 'Eval ipsum, ca s\'est bien passé',
+        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 0, 12),
+       (4, '2023-05-20 07:12:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est plutot bien passé',
+        'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 0, 10),
+       (3, '2023-08-21 14:34:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est assez bien passé',
+        'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 0, 11),
+       (3, '2023-12-17 01:01:01', 'Commentraire intervenant', 'Eval ipsum, ca s\'est quand meme bien passé',
+        'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 0, 13),
+       (4, '2023-03-17 12:31:00', 'Commentraire apprentis', 'Eval ipsum, ca s\'est bien passé',
+        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 1, 12),
+       (4, '2023-05-20 07:13:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est plutot bien passé',
+        'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 1, 10),
+       (3, '2023-08-21 14:35:01', 'Commentraire apprentis', 'Eval ipsum, ca s\'est assez bien passé',
+        'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 1, 11),
+       (3, '2023-12-17 01:02:03', 'Commentraire apprentis', 'Eval ipsum, ca s\'est quand meme bien passé',
+        'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 1, 13);

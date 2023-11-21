@@ -62,3 +62,14 @@ p {
     margin-right: auto;
     padding: 15px;
 }
+
+#bouton_retour {
+    border: none;
+    color: #000000;
+    padding: 25px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 30px;
+}

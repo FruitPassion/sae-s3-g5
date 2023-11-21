@@ -9,11 +9,16 @@
 
 {% block body %}
     <h1>Choix opération</h1>
-    <ul id="listeOperationsCIP">
-        <a href = "{{ url_for('cip.fiches_apprenti', apprenti=apprenti) }}"><li class="lignes" id="fichesTechniques">Fiches techniques</li></a>
-        <br><br>
-        <a href = "{{ url_for('cip.suivi_progression_apprenti', apprenti=apprenti) }}"><li class="lignes" id="suiviProg">Suivi de progression</li></a>
-        <br><br>
-        <a href = "{{ url_for('cip.adaptation_situation_examen', apprenti=apprenti) }}"><li class="lignes" id="situationExam">Adaptation situation d'examen</li></a>
-    </ul>
+    <ol id="listeOperationsCIP">
+        <li class="lignes" id="fichesTechniques"><a href="{{ url_for('cip.fiches_apprenti', apprenti=apprenti) }}">Fiches
+            techniques</a></li>
+
+        <li class="lignes" id="suiviProg"><a href="{{ url_for('cip.suivi_progression_apprenti', apprenti=apprenti) }}">Suivi
+            de progression</a></li>
+
+        <li class="lignes" id="situationExam"><a
+                href="{{ url_for('cip.adaptation_situation_examen', apprenti=apprenti) }}">Adaptation situation
+            d'examen</a></li>
+    </ol>
+    {% include "_partial/_retour_bouton.html" %}
 {% endblock %}

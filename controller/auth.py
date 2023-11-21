@@ -9,6 +9,7 @@ from flask import (
 )
 
 from custom_paquets.custom_form import LoginPersonnelForm
+from custom_paquets.file_getter import get_flat
 from model.apprenti import get_apprenti_by_login, check_password_apprenti
 from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
@@ -40,7 +41,7 @@ def connexion_personnel():
     code = 200
     if form.validate_on_submit():
         if not check_personnel(form.login.data) or not check_password(
-            form.login.data, form.password.data
+                form.login.data, form.password.data
         ):
             flash("Compte inconnu ou mot de passe invalide.", "error")
             code = 403
@@ -58,21 +59,22 @@ def connexion_personnel():
 @auth.route("/choix-formation-apprentis", methods=["GET", "POST"])
 def choix_formation_apprentis():
     """
-    Suit la page d'index, permet de charger la liste des toute les formations dans la page dédiée.
+    Suit la page d'index, permet de charger la liste des toutes les formations dans la page dédiée.
 
-    :return: rendu de la page choix_formation_apprentis.html avec la liste des formations.
+    :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
     formations = get_all_formation()
-    return render_template("auth/choix_formation_apprentis.html", formations=formations), 200
+    couleurs = get_flat()
+    return render_template("auth/choix_formation_apprentis.html", formations=formations, couleurs=couleurs), 200
 
 
 @auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET", "POST"])
 def choix_eleve_apprentis(nom_formation):
     """
-    Suite la page du choix de la formation pour les apprentis, affiche tout les apprentis associés à cette formation.
+    Suite la page du choix de la formation pour les apprentis, affiche tous les apprentis associés à cette formation.
 
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
-    :return: rendu de la page choix_apprentis.html avec la liste des eleves associés à la formation.
+    :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
     apprentis = get_apprentis_by_formation(nom_formation)
     return render_template("auth/choix_apprentis.html", apprentis=apprentis), 200
@@ -99,9 +101,9 @@ def connexion_apprentis(login_apprenti):
 @auth.route("/logout", methods=["GET", "POST"])
 def logout():
     """
-    Permet de se déconnecter de la session en cour.
+    Permet de se déconnecter de la session en cours.
 
-    :return: redirection vers la page d'index
+    :return: Redirection vers la page d'index
     """
     session.pop('role', None)
     session.pop('name', None)

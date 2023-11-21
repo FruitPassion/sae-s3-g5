@@ -14,7 +14,7 @@
         {% for apprenti in apprentis %}
             <div class="apprenti">
                 <a href="{{ url_for('personnel.redirection_fiches', apprenti=apprenti['login']) }}">
-                    <img class="photo_profil" src="{{ url_for('static', filename='images/defaut_profile.png') }}"
+                    <img class="photo_profil" src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
                          alt="profil picture">
                 </a>
                 <p class="libelle">{{ apprenti["prenom"] }} {{ apprenti["nom"] }}</p>

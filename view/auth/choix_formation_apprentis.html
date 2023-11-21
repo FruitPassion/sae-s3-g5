@@ -9,16 +9,19 @@
 
 {% block body %}
 
-    <h1>Choisissez votre formation</h1>
+    <h1>Choix formation en cours</h1>
 
     <div id="choix-milieux">
         {% for formation in formations %}
-            <a class="lien-formation" href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation["intitule"]) }}">
-                <button class="bouton-formation" id="formation-{{ loop.index }}">
-                    <span id="formation_txt-{{ loop.index }}" >{{ formation["intitule"] }}</span>
-                    <br>
-                        <img class="img_formation" src="{{ url_for('static', filename='images/'+formation["image"]) }}" alt="image fond">
-                </button>
+            <a class="lien-formation"
+               href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation["intitule"]) }}">
+                <div class="container">
+                    <img class="img_formation" src="{{ url_for('static', filename='images/'+formation["image"]) }}"
+                         alt="image fond">
+                    <img class="img_cover" src="{{ url_for('static', filename='images/flat/'+ couleurs[loop.index % 3]) }}"
+                         alt="image fond">
+                    <p class="formation-txt">{{ formation["intitule"] }}</p>
+                </div>
             </a>
         {% endfor %}
     </div>

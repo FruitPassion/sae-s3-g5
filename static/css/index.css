@@ -23,3 +23,8 @@ a{
     margin-left: 8%;
     font-size: 2em;
 }
+
+.text-link{
+    text-decoration: none;
+    color: black;
+}

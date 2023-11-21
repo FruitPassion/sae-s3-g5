@@ -11,7 +11,7 @@ from model_db.ficheintervention import FicheIntervention
 
 def get_apprenti_by_login(login: str):
     """
-    Recupere les informations d'un apprenti a partir de son Login
+    Recupere les informations d'un apprenti à partir de son Login
 
     :return: Les informations de l'apprenti
     """

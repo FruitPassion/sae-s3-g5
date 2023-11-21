@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for
+
+from custom_paquets.file_getter import get_flat
 from model.formation import get_all_formation
 from model.session import get_apprentis_by_formation
 from custom_paquets.decorateur import personnel_login_required
@@ -17,14 +19,15 @@ Préfixe d'URL : /personnel/ .
 @personnel_login_required
 def choix_formation():
     formations = get_all_formation()
-    return render_template("personnel/choix_formation.html", formations=formations)
+    couleurs = get_flat()
+    return render_template("personnel/choix_formation.html", formations=formations, couleurs=couleurs), 200
 
 
 @personnel.route("/choix-eleves/<nom_formation>", methods=["GET"])
 @personnel_login_required
 def choix_eleve(nom_formation):
     apprentis = get_apprentis_by_formation(nom_formation)
-    return render_template("personnel/choix_apprentis.html", apprentis=apprentis)
+    return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
 
 
 @personnel.route("/personnalisation", methods=["GET"])
@@ -33,13 +36,13 @@ def personnalisation():
     liste_police = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
                     "Lato", "Oswald", "Poppins"]
 
-    return render_template('personnel/personnaliser_fiche_texte_champs.html', polices=liste_police)
+    return render_template('personnel/personnaliser_fiche_texte_champs.html', polices=liste_police), 200
 
 
 @personnel.route("/personnalisation-bis", methods=["GET"])
 @personnel_login_required
 def personnalisation_bis():
-    return render_template('personnel/personnaliser_fiche_couleur_fond.html')
+    return render_template('personnel/personnaliser_fiche_couleur_fond.html'), 200
 
 
 @personnel.route("/redirection-fiches/<apprenti>", methods=["GET"])

@@ -15,8 +15,6 @@ class FicheIntervention(db.Model):
     couleur_intervention = db.Column(db.String(50))
     etat_fiche = db.Column(db.Boolean)
     date_creation = db.Column(db.DateTime)
-    commentaire_text_eleve = db.Column(db.Text)
-    commentaire_audio_eleve = db.Column(db.Text)
     id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
     id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
 

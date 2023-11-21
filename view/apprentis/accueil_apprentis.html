@@ -1,7 +1,30 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Choix formation{% endblock %}
+{% block title %}Fiches{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
+{% endblock %}
 
 {% block body %}
-    <p>panel apprentis</p>
+    <h1>Bienvenue {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+
+    <div id="blocFiches">
+
+        {% for fiche in fiches %}
+            <div class="parent">
+                <a>
+                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                         alt="fiche finie">
+                    {% if fiche['etat_fiche'] %}
+                        <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                    {% else %}
+                        <img id="pause" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
+
+                    {% endif %}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

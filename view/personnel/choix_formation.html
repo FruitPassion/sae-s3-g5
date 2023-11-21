@@ -15,12 +15,13 @@
         {% for formation in formations %}
             <a class="lien-formation"
                href="{{ url_for('personnel.choix_eleve', nom_formation=formation["intitule"]) }}">
-                <button class="bouton-formation" id="formation-{{ loop.index }}">
-                    <span id="formation_txt-{{ loop.index }}">{{ formation["intitule"] }}</span>
-                    <br>
+                <div class="container">
                     <img class="img_formation" src="{{ url_for('static', filename='images/'+formation["image"]) }}"
                          alt="image fond">
-                </button>
+                    <img class="img_cover" src="{{ url_for('static', filename='images/flat/'+ couleurs[loop.index % 3]) }}"
+                         alt="image fond">
+                    <p class="formation-txt">{{ formation["intitule"] }}</p>
+                </div>
             </a>
         {% endfor %}
     </div>

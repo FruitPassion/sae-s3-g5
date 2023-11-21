@@ -1,45 +1,41 @@
-h1 {
-    margin-top: 18%;
-}
-
 #choix-milieux {
     width: 85%;
-    margin-top: 23%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 5%;
+    margin: 23% auto 5%;
 }
 
-.bouton-formation {
+.lien-formation {
     font-size: 3.5em;
     margin-bottom: 200px;
     height: 285px;
     width: 100%;
+    text-align: center;
+    text-shadow: 1px 0 10px black;
+}
+
+.formation-txt {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+}
+
+
+.img_cover {
+    width: 100%;
+    height: 283px;
+    opacity: 0.6;
 }
 
 .img_formation {
+    position: absolute;
+    width: 100%;
+    height: 283px;
+    filter: blur(3px);
+}
+
+.container {
     position: relative;
-    width: 814px;
-    height: 283.5px;
-    object-fit: cover;
-    overflow: hidden;
-    margin-top: -8.4%;
-    margin-left: -0.8%;
-}
-
-#formation_txt-1 {
+    text-align: center;
     color: white;
-    position: absolute;
-    z-index: 1;
-    left: 30%;
-    margin-top: 8%;
-}
-
-#formation_txt-2 {
-    color: white;
-    position: absolute;
-    z-index: 1;
-    width: 50%;
-    left: 25%;
-    margin-top: 6%;
 }

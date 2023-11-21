@@ -7,7 +7,7 @@ from model_db.session import Session
 
 def get_apprentis_by_formation(nom_formation: str):
     """
-    Retourn la liste de tout les apprentis inscris à une formation
+    Retourn la liste de tous les apprentis inscrits à une formation
 
     :return: Une liste d'apprentis
     """
