@@ -11,4 +11,5 @@ class Personnel(db.Model):
     login = db.Column(db.String(50), nullable=False)
     mdp = db.Column(db.Text)
     role = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
 
