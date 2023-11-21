@@ -5,7 +5,7 @@ class Session(db.Model):
     __tablename__ = 'Session'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
-    id_session = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_session = db.Column(db.Integer, primary_key=True, autoincrement=True)
     theme = db.Column(db.String(50), nullable=False)
     cours = db.Column(db.String(50), nullable=False)
     duree = db.Column(db.Integer)

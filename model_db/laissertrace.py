@@ -14,7 +14,8 @@ class LaisserTrace(db.Model):
     commentaire_audio = db.Column(db.String(50))
     id_fiche = db.Column(db.ForeignKey('db_fiches_dev.FicheIntervention.id_fiche'), nullable=False, index=True)
 
-    FicheIntervention = db.relationship('FicheIntervention', primaryjoin='Trace.id_fiche == FicheIntervention.id_fiche', backref='traces')
-    Personnel = db.relationship('Personnel', primaryjoin='Trace.id_personnel == Personnel.id_personnel',
+    FicheIntervention = db.relationship('FicheIntervention',
+                                        primaryjoin='LaisserTrace.id_fiche == FicheIntervention.id_fiche',
+                                        backref='traces')
+    Personnel = db.relationship('Personnel', primaryjoin='LaisserTrace.id_personnel == Personnel.id_personnel',
                                 backref='traces')
-

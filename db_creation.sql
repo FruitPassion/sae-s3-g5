@@ -216,12 +216,30 @@ VALUES ('Probleme tuyauterie', 'Colmater fuite', 3, 1),
 
 INSERT INTO Assister (id_apprenti, id_session)
 VALUES (2, 1),
+       (2, 2),
+       (2, 3),
+       (2, 4),
        (3, 1),
+       (3, 2),
+       (3, 3),
+       (3, 4),
        (4, 1),
+       (4, 2),
+       (4, 3),
+       (4, 4),
        (5, 1),
-       (6, 2),
-       (7, 2),
-       (8, 2);
+       (5, 2),
+       (5, 3),
+       (5, 4),
+       (6, 5),
+       (6, 6),
+       (6, 7),
+       (7, 5),
+       (7, 6),
+       (7, 7),
+       (8, 5),
+       (8, 6),
+       (8, 7);
 
 INSERT INTO ElementDefaut (libelle, type, text, audio, id_personnel, id_pictogramme)
 VALUES ('Intervenant', 'categorie', NULL, NULL, 2, NULL),

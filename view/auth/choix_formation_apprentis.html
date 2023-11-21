@@ -17,11 +17,7 @@
                 <button class="bouton-formation" id="formation-{{ loop.index }}">
                     <span id="formation_txt-{{ loop.index }}" >{{ formation["intitule"] }}</span>
                     <br>
-                    {% if loop.index == 1 %}
-                        <img id="plomberie_img" src="{{ url_for('static', filename='images/plomberie.jpg') }}" alt="Plomberie">
-                    {% elif loop.index == 2 %}
-                        <img id="agent_maintenance_batiment_img" src="{{ url_for('static', filename='images/agent_maintenance_batiment.jpg') }}" alt="Agent de maintenance en bâtiment">
-                    {% endif %}
+                        <img class="img_formation" src="{{ url_for('static', filename='images/'+formation["image"]) }}" alt="image fond">
                 </button>
             </a>
         {% endfor %}

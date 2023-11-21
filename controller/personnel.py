@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 from model.formation import get_all_formation
-from model.assister import get_apprentis_by_formation
+from model.session import get_apprentis_by_formation
 from custom_paquets.decorateur import personnel_login_required
 from model.personnel import get_role
 

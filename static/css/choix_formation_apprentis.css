@@ -17,7 +17,7 @@ h1 {
     width: 100%;
 }
 
-#plomberie_img, #agent_maintenance_batiment_img {
+.img_formation {
     position: relative;
     width: 814px;
     height: 283.5px;
