@@ -7,63 +7,28 @@
 
 {% block title %}Fiches techniques{% endblock %}
 
-{% block body %}    
+{% block body %}
 
     <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
 
     <div id="blocFiches">
-        <div class = "parent">
-            <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = 0) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche en cours">
-                <img id="pause" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
-            </a>
-        </div>
 
-        <div class = "parent">
-            <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = 0) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche finie">
-                <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-            </a>
-        </div>
+        {% for fiche in fiches %}
+            <div class="parent">
+                <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche['id_fiche']) }}">
+                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                         alt="fiche finie">
+                    {% if fiche['etat_fiche'] %}
+                        <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                    {% else %}
+                        <img id="pause" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
 
-        <div class = "parent">
-            <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = 0) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche finie">
-                <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-            </a>
-        </div>
-
-        <div class = "parent">
-            <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = 0) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche finie">
-                <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-            </a>
-        </div>
-
-        <div class = "parent">
-            <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = 0) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche finie">
-                <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-            </a>
-        </div>
-
-        <div class = "parent">
-            <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = 0) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche finie">
-                <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-            </a>
-        </div>
+                    {% endif %}
+                </a>
+            </div>
+        {% endfor %}
     </div>
 
-    {% for fiche in fiches_techniques %}
-    <div class = "parent">
-        <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], id_fiche = fiche['id_fiche']) }}">
-            <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}" alt="fiche finie">
-            <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-        </a>
-    </div>
-    {%endfor%}
-
-{% include "_partial/_retour_bouton.html" %}
+    {% include "_partial/_retour_bouton.html" %}
 
 {% endblock %}

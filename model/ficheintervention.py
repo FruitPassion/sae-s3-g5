@@ -11,4 +11,4 @@ def get_fiches_techniques_par_login(login):
     """
     apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=apprenti["id_apprenti"]).with_entities(
-        FicheIntervention.id_fiche).all())
+        FicheIntervention.id_fiche, FicheIntervention.etat_fiche).all())
