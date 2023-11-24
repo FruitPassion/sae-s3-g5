@@ -13,7 +13,7 @@ Préfixe d'URL : /educ-admin/ .
 @educ_admin.route("/<apprenti>/choix-operations", methods=["GET"])
 @educadmin_login_required
 def affiche_choix(apprenti):
-    return render_template("personnel/choix_operations.html", apprenti=apprenti)
+    return render_template("personnel/choix_actions.html", apprenti=apprenti)
 
 
 @educ_admin.route("/<apprenti>/fiches", methods=["GET"])
