@@ -15,6 +15,11 @@ Préfixe d'URL : /educ-admin/ .
 @educ_admin.route("/<apprenti>/choix-operations", methods=["GET"])
 @educadmin_login_required
 def affiche_choix(apprenti):
+    """
+    Opérations de l'educateur admin
+
+    :return: rendu de la page choix_operations.html
+    """
     return render_template("personnel/choix_actions.html", apprenti=apprenti)
 
 
@@ -24,9 +29,9 @@ def fiches_apprenti(apprenti):
     """
     Récupère toutes les fiches techniques de l'élève sélectionné et les affiche.
 
-    Permet de consulter les commentaires laissés par les éducateurs et l'élève en question. 
+    Permet de sélectionner une fiche technique réalisée par un apprenti. 
 
-    :return: rendu de la page fiches_techniques.html
+    :return: rendu de la page choix_fiches_apprenti.html
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
