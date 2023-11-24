@@ -1,3 +1,4 @@
+
 from flask_wtf import CSRFProtect
 
 from controller.cip import cip

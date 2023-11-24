@@ -70,4 +70,3 @@ def get_role(login: str):
         ).first().role
     except AttributeError as e:
         logging.error("Erreur lors de la récupération du role")
-        raise e
