@@ -1,0 +1,26 @@
+.lignes{
+    line-height: 6em;
+    font-size: 3em;
+    text-indent: 10%;
+    margin-top: 2em;
+}
+
+.lignes a{
+    color: white;
+}
+
+#actions_educateuradmin {
+    list-style: none;
+}
+
+#commentaire {
+    background-color: #96DBF2;
+}
+
+#creation_fiche {
+    background-color: #FFAADD;
+}
+
+#modification_fiche {
+    background-color: #FFBF73;
+}

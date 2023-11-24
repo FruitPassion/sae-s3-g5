@@ -50,7 +50,7 @@ def personnalisation_bis():
 def redirection_fiches(apprenti):
     role = get_role(session.get("name"))
     if role == "Educateur Administrateur":
-        return redirect(url_for('educ_admin.fiches_apprenti', apprenti=apprenti))
+        return redirect(url_for('educ_admin.affiche_choix', apprenti=apprenti))
     elif role == "Educateur":
         return redirect(url_for('educ_simple.fiches_apprenti', apprenti=apprenti))
     else:

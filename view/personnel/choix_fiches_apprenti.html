@@ -13,19 +13,13 @@
 
         {% for fiche in fiches %}
             <div class="parent">
-                <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche['id_fiche']) }}">
+                <a href="{{  }}">
                     <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                         alt="fiche finie">
                     <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
                 </a>
             </div>
         {% endfor %}
-    </div>
-
-    <!-- Orde d'affichage -->
-    <div class="ordre">
-        <a href="{{ url_for('personnel.choix_fiches_apprenti', id=id, ordre='date') }}" alt="Date">Date</a>
-        <a href="{{ url_for('personnel.choix_fiches_apprenti', id=id, ordre='nom') }}" alt="Nom">Nom</a>
     </div>
 
     <!-- Bouton de retour -->
