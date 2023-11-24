@@ -37,6 +37,12 @@ def choix_connexion():
 
 @auth.route("/connexion-personnel", methods=["GET", "POST"])
 def connexion_personnel():
+    """
+    Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
+    aura accès à un panneau de possibilités différentes.
+
+    :return: en fonction du rôle de la personne, on est redirigé vers la page correspondante.
+    """
     form = LoginPersonnelForm()
     code = 200
     if form.validate_on_submit():
@@ -82,6 +88,12 @@ def choix_eleve_apprentis(nom_formation):
 
 @auth.route("/connexion-apprentis/<login_apprenti>", methods=["GET", "POST"])
 def connexion_apprentis(login_apprenti):
+    """
+    Page d'authentification des apprentis. Ils doivent résoudre le schéma pour accéder 
+    à la page de toutes les fiches techniques qu'ils ont réalisé
+
+    :return: connexion_apprentis.html
+    """
     apprenti = get_apprenti_by_login(login_apprenti)
     code = 200
     if request.method == "POST":
