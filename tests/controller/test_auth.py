@@ -1,7 +1,7 @@
 from flask import url_for, session
 
 from custom_paquets.tester_usages import connexion_personnel, deconnexion_personnel
-from model.assister import get_apprentis_by_formation
+from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
 
 

@@ -10,9 +10,13 @@ Blueprint pour toutes les routes relatives aux URL des pages des educs admin
 Préfixe d'URL : /educ-admin/ .
 '''
 
+@educ_admin.route("/<apprenti>/choix-operations", methods=["GET"])
+@educadmin_login_required
+def affiche_choix(apprenti):
+    return render_template("personnel/choix_operations.html", apprenti=apprenti)
 
-# ALED Raphael :')
+
 @educ_admin.route("/<apprenti>/fiches", methods=["GET"])
 @educadmin_login_required
 def fiches_apprenti(apprenti):
-    return "Connecté en tant que educ admin \n voici les fiches de " + apprenti
+    return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti)
