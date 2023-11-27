@@ -138,3 +138,124 @@ werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on 
 2023-11-27 09:59:21 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 09:59:21] "GET /dfftft HTTP/1.1" 200 -
 2023-11-27 09:59:21 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 09:59:21] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
 2023-11-27 09:59:21 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 09:59:21] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:16:55 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2023-11-27 10:16:55 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2023-11-27 10:16:55 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:16:55 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:16:55 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 10:17:03 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:03] "GET / HTTP/1.1" 200 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "GET /choix-formation-apprentis HTTP/1.1" 200 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/css/choix_formation_apprentis.css?q=1700952853 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/images/formation_image/plomberie.jpg?q=1700497788 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/images/flat/vert.jpg?q=1700590924 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/images/formation_image/maintenance_batiment.jpg?q=1700497788 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/images/flat/jaune.jpg?q=1700590888 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:05 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:05] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "GET /choix-eleve-apprentis/Parcours%20plomberie HTTP/1.1" 200 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/css/choix_apprentis.css?q=1700034969 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/images/photo_profile/hippie.png?q=1700497788 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/images/photo_profile/chanteur.png?q=1700591894 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/images/photo_profile/marin.png?q=1700592081 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/images/photo_profile/chirurgien.png?q=1700592020 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:06 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:06] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:09 - root - ERROR - Exception occurred : 'NoneType' object has no attribute 'id_formation'
+Traceback (most recent call last):
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/venv/lib/python3.11/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/venv/lib/python3.11/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/controller/auth.py", line 95, in choix_eleve_apprentis
+    apprentis = get_apprentis_by_formation(nom_formation)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/model/session.py", line 14, in get_apprentis_by_formation
+    return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/model/formation.py", line 24, in get_formation_id
+    return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'id_formation'
+2023-11-27 10:17:09 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:09] "GET /choix-eleve-apprentis/oui HTTP/1.1" 200 -
+2023-11-27 10:17:09 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:09] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:09 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:09] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:50 - werkzeug - INFO -  * Detected change in '/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/model/session.py', reloading
+2023-11-27 10:17:50 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:17:50 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:17:50 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 10:17:52 - root - ERROR - Exception occurred : 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+Traceback (most recent call last):
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/model/session.py", line 17, in get_apprentis_by_formation
+    return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/model/formation.py", line 24, in get_formation_id
+    return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'id_formation'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/venv/lib/python3.11/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/venv/lib/python3.11/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/controller/auth.py", line 95, in choix_eleve_apprentis
+    apprentis = get_apprentis_by_formation(nom_formation)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/model/session.py", line 20, in get_apprentis_by_formation
+    abort(404)
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/venv/lib/python3.11/site-packages/flask/helpers.py", line 277, in abort
+    current_app.aborter(code, *args, **kwargs)
+  File "/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/venv/lib/python3.11/site-packages/werkzeug/exceptions.py", line 861, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2023-11-27 10:17:52 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:52] "GET /choix-eleve-apprentis/oui HTTP/1.1" 200 -
+2023-11-27 10:17:52 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:52] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:17:52 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:17:52] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:18:33 - werkzeug - INFO -  * Detected change in '/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/tests/controller/test_auth.py', reloading
+2023-11-27 10:18:33 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:18:34 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:18:34 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 10:18:36 - werkzeug - INFO -  * Detected change in '/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/tests/controller/test_auth.py', reloading
+2023-11-27 10:18:36 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:18:36 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:18:36 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 10:28:42 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2023-11-27 10:28:42 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2023-11-27 10:28:42 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:28:42 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:28:42 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 10:28:48 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:48] "GET / HTTP/1.1" 200 -
+2023-11-27 10:28:48 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:48] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:48 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:48] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:48 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:48] "[36mGET /static/images/prof.png?q=1698416767 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:48 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:48] "[36mGET /static/images/eleve.png?q=1698416767 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:50 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:50] "GET /connexion-personnel HTTP/1.1" 200 -
+2023-11-27 10:28:50 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:50] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:50 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:50] "[36mGET /static/css/connexion_personnel.css?q=1699280695 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:50 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:50] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:55 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:55] "[31m[1mPOST /connexion-personnel HTTP/1.1[0m" 403 -
+2023-11-27 10:28:55 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:55] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:55 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:55] "[36mGET /static/css/connexion_personnel.css?q=1699280695 HTTP/1.1[0m" 304 -
+2023-11-27 10:28:55 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:28:55] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:29:01 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:29:01] "[31m[1mPOST /connexion-personnel HTTP/1.1[0m" 403 -
+2023-11-27 10:29:01 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:29:01] "[36mGET /static/css/base.css?q=1700951523 HTTP/1.1[0m" 304 -
+2023-11-27 10:29:01 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:29:01] "[36mGET /static/css/connexion_personnel.css?q=1699280695 HTTP/1.1[0m" 304 -
+2023-11-27 10:29:01 - werkzeug - INFO - 127.0.0.1 - - [27/Nov/2023 10:29:01] "[36mGET /static/images/logo.png?q=1697364050 HTTP/1.1[0m" 304 -
+2023-11-27 10:29:34 - werkzeug - INFO -  * Detected change in '/home/raphael/Documents/Programmation/BUT/S3/SAE/sae-s3-g5/tests/controller/test_auth.py', reloading
+2023-11-27 10:29:34 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:29:35 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:29:35 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 10:29:37 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2023-11-27 10:29:37 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2023-11-27 10:29:37 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 10:29:38 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 10:29:38 - werkzeug - INFO -  * Debugger PIN: 108-540-483

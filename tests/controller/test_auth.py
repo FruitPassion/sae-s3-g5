@@ -62,11 +62,11 @@ def test_connexion_deconnexion(client):
     deconnexion_personnel(client)
 
     # Test connexion educateur
-    username = "JEO12"
+    username = "MAC10"
     passw = "educ"
     response = connexion_personnel(client, username, passw)
     with client.session_transaction() as sess:
-        assert sess['name'] == 'JEO12'
+        assert sess['name'] == 'MAC10'
         assert sess['role'] == 'Educateur'
     assert message_reussi in response.data
     deconnexion_personnel(client)
@@ -107,7 +107,7 @@ def test_choix_formation_apprentis(client):
 
 # Test de la route affichant la liste des apprentis en fonction d'une formation
 def test_choix_eleve_apprentis(client):
-    nom_formation = "Agent de maintenance en bâtiment"
+    nom_formation = "Parcours maintenance batiment"
     response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=nom_formation))
 
     # Test d'accès à la route
@@ -121,4 +121,10 @@ def test_choix_eleve_apprentis(client):
     html = response.get_data(as_text=True)
     for apprenti in apprentis:
         assert 'class="libelle">'+apprenti["prenom"]+' '+apprenti["nom"] in html
+
+    nom_formation = "Page erreur"
+    response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=nom_formation))
+
+    # Test d'accès à la route
+    assert response.status_code == 404
 

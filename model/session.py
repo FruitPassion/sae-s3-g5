@@ -1,3 +1,5 @@
+from flask import abort
+
 from custom_paquets.converter import convert_to_dict
 from model.formation import get_formation_id
 from model_db.apprenti import Apprenti
@@ -11,5 +13,8 @@ def get_apprentis_by_formation(nom_formation: str):
 
     :return: Une liste d'apprentis
     """
-    return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
-        Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo).all())
+    try:
+        return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
+            Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo).all())
+    except:
+        abort(404)

@@ -83,7 +83,7 @@ def create_app(config=None):
                     description = errors[f"{code}"]["description"]
             except:
                 pass
-        return render_template("common/erreur.html", titre='erreur', erreur=f"Erreur {code}", description=description)
+        return render_template("common/erreur.html", titre='erreur', erreur=f"Erreur {code}", description=description), e.code
 
     @app.context_processor
     def override_url_for():

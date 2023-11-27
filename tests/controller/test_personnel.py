@@ -9,8 +9,9 @@ Test des controller du fichier personnel.py
 # identifiants de connexion pour les tests
 username = "ALL11"
 passw = "educadmin"
-nom_formation = "Agent de maintenance en bâtiment"
+nom_formation = "Parcours maintenance batiment"
 apprenti = "ANG12"
+
 
 # Test de la route de redirection de connexion
 def test_redirection_connexion(client):
@@ -27,7 +28,7 @@ def test_redirection_connexion(client):
 
 # Test de la route de choix des élèves
 def test_choix_eleve(client):
-    connexion_personnel(client,username,passw)
+    connexion_personnel(client, username, passw)
     response = client.get(url_for("personnel.choix_eleve", nom_formation=nom_formation))
 
     # Test d'accès à la route
@@ -84,11 +85,12 @@ def test_personnalisation_bis(client):
     for name in listeids:
         assert 'id=' + name in html
 
+
 # Test de la route du choix de la formation
 def test_choix_formation(client):
     username = "JEO12"
     passw = "educ"
-    connexion_personnel(client,username, passw)
+    connexion_personnel(client, username, passw)
 
     nom_formation = "Parcours plomberie"
     response = client.get(url_for("personnel.choix_eleve", nom_formation=nom_formation))
@@ -98,6 +100,7 @@ def test_choix_formation(client):
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/choix-eleves/"+nom_formation
+
 
 # Test des routes de redirection de fiches apprentis
 def test_redirection_fiches_apprentis(client):
