@@ -20,7 +20,7 @@ def affiche_choix(apprenti):
 
     :return: rendu de la page choix_operations.html
     """
-    return render_template("personnel/choix_actions.html", apprenti=apprenti)
+    return render_template("educ_admin/choix_actions.html", apprenti=apprenti)
 
 
 @educ_admin.route("/<apprenti>/fiches", methods=["GET"])
@@ -35,4 +35,4 @@ def fiches_apprenti(apprenti):
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
-    return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
+    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
