@@ -1,0 +1,59 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Fiches techniques{% endblock %}
+
+
+{% block body %}
+
+    <h1>Préciser les détails</h1>
+
+    <div class="container">
+        <form class="fs-2" method="post">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label for="nominput" class="form-label">Nom du client :</label>
+                {{ form.nominput(class="form-control fs-3") }}
+            </div>
+            <div class="mb-3">
+                <label for="dateinput" class="form-label">Date de la demande</label>
+                {{ form.dateinput(class="form-control fs-3") }}
+            </div>
+            <div class="mb-3">
+                <label for="lieuinput" class="form-label">Lieu d'intervention :</label>
+                {{ form.lieuinput(class="form-control fs-3") }}
+            </div>
+
+            <div class="mb-3">
+                <label for="decriptioninput" class="form-label">Description de l'intervention :</label>
+                {{ form.decriptioninput(class="form-control fs-3") }}
+            </div>
+
+            <label class="form-label">Niveau d'urgence (Urgent ... Non-Urgent) :</label>
+            <div class="mb-3 text-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio1"
+                           value="rouge" checked>
+                    <label class="form-check-label" for="inlineRadio1">1</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio2"
+                           value="orange">
+                    <label class="form-check-label" for="inlineRadio2">2</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio3"
+                           value="jaune">
+                    <label class="form-check-label" for="inlineRadio3">3</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio4"
+                           value="vert">
+                    <label class="form-check-label" for="inlineRadio4">4</label>
+                </div>
+            </div>
+            {{ form.submit(class="form-control fs-3") }}
+        </form>
+    </div>
+    {% include "_partial/_retour_bouton.html" %}
+
+{% endblock %}

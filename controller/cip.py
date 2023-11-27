@@ -38,7 +38,7 @@ def fiches_apprenti(apprenti):
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
-    return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos[0], fiches=fiches)
+    return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos, fiches=fiches)
 
 
 @cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])

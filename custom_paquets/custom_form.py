@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, HiddenField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField
 from wtforms.validators import InputRequired, Length
+from wtforms.widgets import TextArea
 
 
 class LoginPersonnelForm(FlaskForm):
@@ -9,3 +10,11 @@ class LoginPersonnelForm(FlaskForm):
     password = PasswordField(validators=[InputRequired(), Length(min=2)], render_kw={"placeholder": "*********"})
 
     submit = SubmitField("Se connecter")
+
+
+class AjouterFiche(FlaskForm):
+    nominput = StringField(validators=[InputRequired()])
+    dateinput = DateField(validators=[InputRequired()])
+    lieuinput = StringField(validators=[InputRequired()])
+    decriptioninput = StringField(u'Text', widget=TextArea())
+    submit = SubmitField("Ajouter")

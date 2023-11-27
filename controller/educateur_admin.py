@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, session, flash
 
+from custom_paquets.custom_form import AjouterFiche
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_finies_par_login
+from model.ficheintervention import get_fiches_techniques_finies_par_login, assigner_fiche_dummy_eleve
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
@@ -26,3 +27,46 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
     return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
+
+
+@educ_admin.route("/<apprenti>/ajouter-fiche", methods=["GET", "POST"])
+@educadmin_login_required
+def ajouter_fiche(apprenti):
+    """
+    Page de personnalisation les textes d'une fiche technique.
+
+    :return: rendu de la page personnaliser_fiche_texte_champs.html
+    """
+    form = AjouterFiche()
+    degres = ["rouge", "orange", "jaune", "vert"]
+    if form.validate_on_submit():
+        degres = request.form.get('degres_urgence')
+        assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
+                                   form.lieuinput.data, form.decriptioninput.data, degres.index(degres)+1, degres)
+        flash("Fiche enregistrée avec succès")
+    return render_template('educ_admin/ajouter_fiche.html', form=form), 200
+
+
+@educ_admin.route("/personnalisation", methods=["GET"])
+@educadmin_login_required
+def personnalisation():
+    """
+    Page de personnalisation les textes d'une fiche technique.
+
+    :return: rendu de la page personnaliser_fiche_texte_champs.html
+    """
+    liste_police = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
+                    "Lato", "Oswald", "Poppins"]
+
+    return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_police), 200
+
+
+@educ_admin.route("/personnalisation-bis", methods=["GET"])
+@educadmin_login_required
+def personnalisation_bis():
+    """
+    Page de personnalisation les couleurs de fond des champs d'une fiche technique.
+
+    :return: rendu de la page personnaliser_fiche_couleur_fond.html
+    """
+    return render_template('educ_admin/personnaliser_fiche_couleur_fond.html'), 200

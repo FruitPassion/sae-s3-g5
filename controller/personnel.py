@@ -42,31 +42,6 @@ def choix_eleve(nom_formation):
     return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
 
 
-@personnel.route("/personnalisation", methods=["GET"])
-@personnel_login_required
-def personnalisation():
-    """
-    Page de personnalisation les textes d'une fiche technique.
-    
-    :return: rendu de la page personnaliser_fiche_texte_champs.html
-    """
-    liste_police = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
-                    "Lato", "Oswald", "Poppins"]
-
-    return render_template('personnel/personnaliser_fiche_texte_champs.html', polices=liste_police), 200
-
-
-@personnel.route("/personnalisation-bis", methods=["GET"])
-@personnel_login_required
-def personnalisation_bis():
-    """
-    Page de personnalisation les couleurs de fond des champs d'une fiche technique.
-    
-    :return: rendu de la page personnaliser_fiche_couleur_fond.html
-    """
-    return render_template('personnel/personnaliser_fiche_couleur_fond.html'), 200
-
-
 @personnel.route("/redirection-fiches/<apprenti>", methods=["GET"])
 @personnel_login_required
 def redirection_fiches(apprenti):

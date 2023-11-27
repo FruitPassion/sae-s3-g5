@@ -24,5 +24,5 @@ def redirection_connexion():
     """
     apprenti_infos = get_apprenti_by_login(session["name"])
     fiches = get_fiches_techniques_par_login(session['name'])
-    return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos[0])
+    return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos)
 

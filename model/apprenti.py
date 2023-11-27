@@ -28,7 +28,7 @@ def get_apprenti_by_login(login: str):
     :return: Les informations de l'apprenti
     """
     return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
-                                                                               Apprenti.login).all())
+                                                                               Apprenti.login).all())[0]
 
 
 def get_id_apprenti_by_login(login: str):

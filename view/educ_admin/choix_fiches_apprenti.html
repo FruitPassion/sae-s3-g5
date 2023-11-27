@@ -2,12 +2,17 @@
 
 {% block title %}Fiches techniques{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
+{% endblock %}
+
+
 {% block body %}
     <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
 
     <div id="blocFiches">
         <div class="parent">
-            <a href="{{ url_for() }}">
+            <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti["login"]) }}">
                 <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                     alt="fiche finie">
                 <img id="check" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
@@ -15,7 +20,7 @@
         </div>
         {% for fiche in fiches %}
             <div class="parent">
-                <a href="{{  }}">
+                <a href="">
                     <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                         alt="fiche finie">
                     <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
