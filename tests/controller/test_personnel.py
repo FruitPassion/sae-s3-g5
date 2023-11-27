@@ -9,6 +9,7 @@ Test des controller du fichier personnel.py
 username = "ALL11"
 passw = "educadmin"
 nom_formation = "Agent de maintenance en bâtiment"
+apprenti = "ANG12"
 
 # Test de la route de redirection de connexion
 def test_redirection_connexion(client):
@@ -81,3 +82,20 @@ def test_personnalisation_bis(client):
     listeids = ['"couleur"', '"color_picker"', '"couleur_fond"']
     for name in listeids:
         assert 'id=' + name in html
+
+# Test des routes de redirection de fiches apprentis
+def test_redirection_fiches_apprentis(client):
+    # Liste des identifiants de connexion
+    liste_personnel = ["ALL11", "JEO12", "FAR16"]
+    liste_mdp = ["educadmin", "educ", "cip"]
+
+    # Test pour chaque personnel
+    for i in range(3):
+        connexion_personnel(client,liste_personnel[i],liste_mdp[i])
+        response = client.get(url_for("personnel.redirection_fiches", apprenti=apprenti))
+
+        # Test d'accès à la route
+        assert response.status_code == 302
+
+        # Test de vérification de la route
+        assert response.request.path == f"/personnel/redirection-fiches/{apprenti}"
