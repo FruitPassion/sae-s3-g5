@@ -38,14 +38,29 @@ def get_id_apprenti_by_login(login: str):
     return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first())
 
 
+def check_apprenti(login: str):
+    """
+    À partir d'un login, verifie si un compte existe
+
+    :return: Un booleen vrai si le compte existe
+    """
+    return Apprenti.query.filter_by(login=login).count() == 1
+
+
 def check_password_apprenti(login: str, password: str):
     """
     À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
+    Si le mot de passe est invalide, augmmente le nombre d'essaie de l'apprenti de 1
 
     :return: Ub booleen vrai si le mot de passe est valide
     """
     passwd = Apprenti.query.with_entities(Apprenti.mdp).filter_by(login=login).first().mdp
-    return compare_digest(encrypt_password(password, login), passwd)
+    digest = compare_digest(encrypt_password(password, login), passwd)
+    if digest  and get_nbr_essaie_connexion_apprenti(login) < 5:
+        reset_nbr_essaies_connexion(login)
+    elif not digest and get_nbr_essaie_connexion_apprenti(login) < 5:
+        update_nbr_essaies_connexion(login)
+    return digest
 
 
 def get_nbr_essaie_connexion_apprenti(login: str):
@@ -56,3 +71,34 @@ def get_nbr_essaie_connexion_apprenti(login: str):
     :return: UN nombre allant de 0 à 5
     """
     return Apprenti.query.filter_by(login=login).first().essaies
+
+
+def update_nbr_essaies_connexion(login: str):
+    """
+    Augmente le nombre d'essaies de connexion d'un apprenti de 1
+    Limité à 5
+
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    apprenti = Apprenti.query.filter_by(login=login).first()
+    apprenti.essaies = apprenti.essaies + 1
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+def reset_nbr_essaies_connexion(login: str):
+    """
+    Reset le nombre d'essaies de connexion d'un apprenti a 0
+
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    apprenti = Apprenti.query.filter_by(login=login).first()
+    apprenti.essaies = 0
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False

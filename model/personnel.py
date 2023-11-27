@@ -43,21 +43,6 @@ def check_personnel(login: str):
     return Personnel.query.filter_by(login=login).count() == 1
 
 
-def check_password(login: str, password: str):
-    """
-    À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
-
-    :return: Un booleen vrai si le mot de passe est valide
-    """
-    passwd = (
-        Personnel.query.with_entities(Personnel.mdp)
-        .filter_by(login=login)
-        .first()
-        .mdp
-    )
-    return compare_digest(encrypt_password(password, login), passwd)
-
-
 def get_role(login: str):
     """
     À partir d'un login recupere le role
@@ -71,3 +56,64 @@ def get_role(login: str):
     except AttributeError as e:
         logging.error("Erreur lors de la récupération du role")
         return None
+
+
+def check_password(login: str, password: str):
+    """
+    À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
+
+    :return: Un booleen vrai si le mot de passe est valide
+    """
+    passwd = (
+        Personnel.query.with_entities(Personnel.mdp)
+        .filter_by(login=login)
+        .first()
+        .mdp
+    )
+    digest = compare_digest(encrypt_password(password, login), passwd)
+    if digest and get_nbr_essaie_connexion_personnel(login) < 3:
+        reset_nbr_essaies_connexion(login)
+    elif not digest and get_nbr_essaie_connexion_personnel(login) < 3:
+        update_nbr_essaies_connexion(login)
+    return digest
+
+
+def get_nbr_essaie_connexion_personnel(login: str):
+    """
+    A partir d'un login, recupère le nombre d'essaie de connexion d'un personnel
+
+    :param login: LOGIN (ABC12) d'un personnel
+    :return: UN nombre allant de 0 à 3
+    """
+    return Personnel.query.filter_by(login=login).first().essaies
+
+
+def update_nbr_essaies_connexion(login: str):
+    """
+    Augmente le nombre d'essaies de connexion d'un personnel de 1
+    Limité à 3
+
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    personnel = Personnel.query.filter_by(login=login).first()
+    personnel.essaies = personnel.essaies + 1
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+def reset_nbr_essaies_connexion(login: str):
+    """
+    Reset le nombre d'essaies de connexion d'un personnel a 0
+
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    personnel = Personnel.query.filter_by(login=login).first()
+    personnel.essaies = 0
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
