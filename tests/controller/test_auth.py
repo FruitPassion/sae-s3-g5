@@ -49,7 +49,6 @@ def test_connexion_deconnexion(client):
     response = deconnexion_personnel(client)
     with client.session_transaction() as sess:
         assert sess.get('name') is None
-        assert sess.get('name') is None
     assert b'Deconnection reussie.' in response.data
 
     # Test connexion educateur admin
