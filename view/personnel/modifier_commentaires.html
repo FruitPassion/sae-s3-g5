@@ -12,11 +12,13 @@
     <div id="bloc">
        
         <p>Commentaire de l'éducateur :</p>
-        <textarea class="modifiable">{{ commentaire_texte }}</textarea>
+        <textarea class="modifiable" maxlength="500">{{ commentaire_texte }}</textarea>
 
         <p>Evaluation de l'éducateur </p>
-        <textarea class="modifiable">{{ eval_texte }} :</textarea>
+        <textarea class="modifiable" maxlength="500">{{ eval_texte }} :</textarea>
 
-        {% include "_partial/_retour_bouton.html" %} <input type="button" value="Enregistrer" id="enregistrer">
+        {% include "_partial/_retour_bouton.html" %} 
+        <!-- Gestion de la modification du commentaire/évaluation... ? -->
+        <input type="button" value="Enregistrer" id="enregistrer">
     </div>
 {% endblock %}
