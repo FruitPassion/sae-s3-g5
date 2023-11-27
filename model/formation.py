@@ -2,7 +2,6 @@ from custom_paquets.converter import convert_to_dict
 
 from model_db.shared_model import db
 from model_db.formation import Formation
-from model_db.session import Session
 
 
 def get_all_formation():
@@ -11,8 +10,8 @@ def get_all_formation():
 
     :return: Une liste des formations
     """
-    return convert_to_dict(Formation.query.with_entities(Formation.id_formation, Formation.intitule, Formation.image
-                                                         ).all())
+    return convert_to_dict(Formation.query.with_entities(Formation.id_formation,
+                                                         Formation.intitule, Formation.image).all())
 
 
 def get_formation_id(nom_formation: str):

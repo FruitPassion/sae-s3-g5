@@ -12,16 +12,6 @@ Blueprint pour toutes les routes relatives aux URL des pages des educs admin
 Préfixe d'URL : /educ-admin/ .
 '''
 
-@educ_admin.route("/<apprenti>/choix-operations", methods=["GET"])
-@educadmin_login_required
-def affiche_choix(apprenti):
-    """
-    Opérations de l'educateur admin
-
-    :return: rendu de la page choix_operations.html
-    """
-    return render_template("educ_admin/choix_actions.html", apprenti=apprenti)
-
 
 @educ_admin.route("/<apprenti>/fiches", methods=["GET"])
 @educadmin_login_required

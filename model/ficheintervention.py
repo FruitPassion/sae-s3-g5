@@ -5,8 +5,9 @@ from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login
 from model.composer import get_composer_presentation_dummy
 from model.personnel import get_id_personnel_by_login
-from model_db.composer import Composer
+from model_db.composer import ComposerPresentation
 from model_db.ficheintervention import FicheIntervention
+from model_db.formation import Formation
 from model_db.shared_model import db
 
 
@@ -68,9 +69,8 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     composer_dummy = get_composer_presentation_dummy()
     for element in composer_dummy:
         element["id_fiche"] = nouvelle_fiche.id_fiche
-        composer = Composer(element["id_element"], element["id_fiche"], element["picto"],
+        composer = ComposerPresentation(element["id_element"], element["id_fiche"], element["picto"],
                                                   element["text"], element["taille_texte"], element["audio"],
                                                   element["police"], element["couleur"], element["couleur_fond"])
         db.session.add(composer)
     db.session.commit()
-

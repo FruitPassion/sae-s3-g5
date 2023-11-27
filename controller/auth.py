@@ -79,8 +79,8 @@ def choix_formation_apprentis():
 
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
-    formations = get_all_formation()
     couleurs = get_flat()
+    formations = get_all_formation()
     return render_template("auth/choix_formation_apprentis.html", formations=formations, couleurs=couleurs), 200
 
 
