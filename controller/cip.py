@@ -45,15 +45,15 @@ def fiches_apprenti(apprenti):
 @cip_login_required
 def visualiser_commentaires(apprenti, fiche):
     """
-    Page de visualisation des commentaires.
-    En fonction de l'élève et de la fiche sélectionnés, affiche les commentaires des éducateurs et 
-    de l'apprenti. 
+    Page de visualisation des commentaires de la CIP.
+    En fonction de l'identifiant de l'élève et de la fiche sélectionnés, affiche les commentaires 
+    des éducateurs et de l'apprenti. 
     
     :return: rendu de la page commentaires.html
     """
 
     commentaires = get_commentaires_par_fiche(fiche)
-    return render_template("cip/commentaires.html", commentaires=commentaires)
+    return render_template("cip/commentaires.html", commentaires=commentaires), 200
 
 
 @cip.route("/<apprenti>/suivi-progression", methods=["GET"])

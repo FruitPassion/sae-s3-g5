@@ -21,4 +21,4 @@ def get_formation_id(nom_formation: str):
 
     :return: Un id de formation
     """
-    return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
+    return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first()
