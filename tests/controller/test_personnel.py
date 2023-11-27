@@ -1,5 +1,6 @@
 from flask import url_for
 from custom_paquets.tester_usages import connexion_personnel
+from model.formation import get_formation_id
 
 '''
 Test des controller du fichier personnel.py
@@ -68,3 +69,19 @@ def test_personnalisation_bis(client):
     listeids = ['"couleur"', '"color_picker"', '"couleur_fond"']
     for name in listeids:
         assert 'id=' + name in html
+
+
+# Test de la route du choix de la formation
+def test_choix_formation(client):
+    username = "JEO12"
+    passw = "educ"
+    connexion_personnel(client,username, passw)
+
+    nom_formation = "Parcours plomberie"
+    response = client.get(url_for("personnel.choix_eleve", nom_formation=nom_formation))
+
+    # Test d'accès à la route
+    assert response.status_code == 200
+
+    # Test de vérification de la route
+    assert response.request.path == "/personnel/choix-eleves/"+nom_formation
