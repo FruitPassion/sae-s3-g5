@@ -259,3 +259,9 @@ werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on 
 2023-11-27 10:29:37 - werkzeug - INFO -  * Restarting with stat
 2023-11-27 10:29:38 - werkzeug - WARNING -  * Debugger is active!
 2023-11-27 10:29:38 - werkzeug - INFO -  * Debugger PIN: 108-540-483
+2023-11-27 11:59:38 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2023-11-27 11:59:38 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2023-11-27 11:59:38 - werkzeug - INFO -  * Restarting with stat
+2023-11-27 11:59:39 - werkzeug - WARNING -  * Debugger is active!
+2023-11-27 11:59:39 - werkzeug - INFO -  * Debugger PIN: 108-540-483

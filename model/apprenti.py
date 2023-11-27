@@ -35,7 +35,7 @@ def get_id_apprenti_by_login(login: str):
     """
     Renvoie l'id_apprenti à partir du login
     """
-    return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first())
+    return Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first().id_apprenti
 
 
 def check_apprenti(login: str):

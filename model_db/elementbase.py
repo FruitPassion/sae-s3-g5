@@ -5,7 +5,7 @@ class ElementBase(db.Model):
     __tablename__ = 'ElementBase'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
-    id_element = db.Columndb.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_element = db.Column(db.Integer, primary_key=True, autoincrement=True)
     libelle = db.Column(db.String(50), nullable=False)
     type = db.Column(db.String(50), nullable=False)
     text = db.Column(db.String(50))

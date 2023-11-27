@@ -17,7 +17,8 @@ CREATE TABLE Personnel
     email        VARCHAR(100),
     essaies      INT         NOT NULL DEFAULT (0),
     PRIMARY KEY (id_personnel),
-    CONSTRAINT ch_personnel_role CHECK (role IN ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP')),
+    CONSTRAINT ch_personnel_role CHECK (role IN
+                                        ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP')),
     CONSTRAINT ch_personnel_essaies CHECK (Personnel.essaies >= 0 AND Personnel.essaies <= 3)
 );
 
@@ -29,7 +30,7 @@ CREATE TABLE Apprenti
     login       VARCHAR(50) NOT NULL,
     mdp         TEXT        NOT NULL,
     photo       VARCHAR(100),
-    essaies      INT         NOT NULL DEFAULT (0),
+    essaies     INT         NOT NULL DEFAULT (0),
     PRIMARY KEY (id_apprenti),
     CONSTRAINT ch_apprenti_essaies CHECK (Apprenti.essaies >= 0 AND Apprenti.essaies <= 5)
 );
@@ -95,13 +96,16 @@ CREATE TABLE FicheIntervention
     description_demande  TEXT,
     degre_urgence        TINYINT,
     couleur_intervention VARCHAR(50),
-    etat_fiche           BOOLEAN,
+    etat_fiche           TINYINT,
     date_creation        DATETIME,
+    photo_avant         VARCHAR(150),
+    photo_apres         VARCHAR(150),
     id_personnel         INT NOT NULL,
     id_apprenti          INT NOT NULL,
     PRIMARY KEY (id_fiche),
     FOREIGN KEY (id_personnel) REFERENCES EducAdmin (id_personnel),
     FOREIGN KEY (id_apprenti) REFERENCES Apprenti (id_apprenti),
+    CONSTRAINT ch_fiche_etat CHECK (FicheIntervention.etat_fiche >= 0 AND FicheIntervention.etat_fiche <= 2),
     CONSTRAINT ch_fiche_degre CHECK (FicheIntervention.degre_urgence >= 1 AND FicheIntervention.degre_urgence <= 4)
 );
 
@@ -287,7 +291,7 @@ VALUES (1, 0, 'dummy', '1990-01-01', 'dummy', 'dummy', 4, 'vert', 0, '1999-01-01
        (3, 1, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 0, '2023-10-05 07:12:01', 2, 3),
        (4, 1, 'La Region', '2023-05-08', 'Ecole ST Maurice', 'Lorem Ipsum 3', 1, 'rouge', 0, '2023-05-08 14:34:01', 3,
         4),
-       (5, 1, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 0, '2023-05-24 01:01:01', 3, 5),
+       (5, 1, 'Epicier', '2023-05-26', 'Arriere boutique', 'Lorem Ipsum 4', 3, 'jaune', 2, '2023-05-24 01:01:01', 3, 5),
        (6, 2, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 1, '2023-11-03 12:30:00', 2,
         5),
        (7, 2, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 1, '2023-10-05 07:12:01', 2, 2),

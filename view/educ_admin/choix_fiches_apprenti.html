@@ -1,0 +1,29 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Fiches techniques{% endblock %}
+
+{% block body %}
+    <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+
+    <div id="blocFiches">
+        <div class="parent">
+            <a href="{{ url_for() }}">
+                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                    alt="fiche finie">
+                <img id="check" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
+            </a>
+        </div>
+        {% for fiche in fiches %}
+            <div class="parent">
+                <a href="{{  }}">
+                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                        alt="fiche finie">
+                    <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Bouton de retour -->
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}

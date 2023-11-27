@@ -20,6 +20,13 @@ def get_all_personnel():
     return convert_to_dict(personnel)
 
 
+def get_id_personnel_by_login(login: str):
+    """
+    Renvoie l'id_personnel à partir du login
+    """
+    return Personnel.query.filter_by(login=login).with_entities(Personnel.id_personnel).first().id_personnel
+
+
 def check_super_admin(login: str):
     """
     À partir d'un login, verifie si un compte possède le role superadmin.

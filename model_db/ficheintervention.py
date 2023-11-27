@@ -13,8 +13,10 @@ class FicheIntervention(db.Model):
     description_demande = db.Column(db.Text)
     degre_urgence = db.Column(db.Integer)
     couleur_intervention = db.Column(db.String(50))
-    etat_fiche = db.Column(db.Boolean)
+    etat_fiche = db.Column(db.Integer)
     date_creation = db.Column(db.DateTime)
+    photo_avant = db.Column(db.String(150))
+    photo_apres = db.Column(db.String(150))
     id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
     id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
 
