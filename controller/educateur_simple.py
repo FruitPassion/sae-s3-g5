@@ -36,8 +36,22 @@ def visualiser_commentaires(apprenti, fiche):
     """
     Page d'affichage des commentaires de la fiche d'identifiant fiche de l'apprenti au login apprenti
     
-    :return: les commentaires de la fiche de l'élève sélectionné.
+    :return: les commentaires de la fiche de l'élève sélectionnée.
     """
 
     commentaires = get_commentaires_par_fiche(fiche)
-    return render_template("personnel/commentaires.html", commentaires = commentaires), 200
+    return render_template("personnel/commentaires.html", apprenti = apprenti, fiche=fiche, commentaires = commentaires), 200
+
+
+@educ_simple.route("/<apprenti>/<fiche>/modifier-commentaires/<commentaire_texte>/<eval_texte>", methods=["GET"])
+@educsimple_login_required
+def modifier_commentaires(apprenti, fiche, commentaire_texte, eval_texte):
+    """
+    Page de modification des commentaires éducateur de la fiche d'identifiant fiche de l'apprenti 
+    au login apprenti
+    
+    :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
+    """
+
+    commentaires = get_commentaires_par_fiche(fiche)
+    return render_template("personnel/modifier_commentaires.html", apprenti = apprenti, fiche=fiche, commentaire_texte = commentaire_texte, eval_texte = eval_texte), 200

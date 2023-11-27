@@ -11,10 +11,7 @@
     {% for commentaire in commentaires %}
         <h2 class="commentaireTitre">{{ commentaire["intitule"] }}</h2>
         {% if commentaire["intitule"] == "Commentaire intervenant" %}
-            <!--le lien ci-dessous sera à modifier :
-            href="{{ url_for(educ_simple.modifier_commentaire, param1 = param1, param2 = param2 etc.)}}"
-            -->
-            <a href="#">
+            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche, commentaire_texte=commentaire['commentaire_texte'], eval_texte=commentaire['eval_texte']) }}">
                 <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' )}}">
             </a>
         {% endif %}

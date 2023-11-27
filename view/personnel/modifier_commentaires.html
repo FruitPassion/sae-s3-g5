@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/modifier_commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Modification commentaire{% endblock %}
+
+{% block body %}
+    <h1>Modification commentaire éducateur de la fiche n°{{ fiche }} de {{ apprenti }} </h1>
+
+    <div id="bloc">
+       
+        <p>Commentaire de l'éducateur :</p>
+        <textarea class="modifiable">{{ commentaire_texte }}</textarea>
+
+        <p>Evaluation de l'éducateur </p>
+        <textarea class="modifiable">{{ eval_texte }} :</textarea>
+
+        {% include "_partial/_retour_bouton.html" %} <input type="button" value="Enregistrer" id="enregistrer">
+    </div>
+{% endblock %}

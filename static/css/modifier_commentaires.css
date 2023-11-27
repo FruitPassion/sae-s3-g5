@@ -1,0 +1,22 @@
+.modifiable {
+    margin:2%;
+    margin-top:-5px;
+    display: block;
+    max-width: 80%;
+    resize: both;
+    font-size: 2.5em;
+    min-width : 70%;
+    min-height : 100px;
+    max-height : 200px;
+}
+
+#bloc {
+    margin-left: 1%;
+    margin-top:3%;
+}
+
+#enregistrer {
+    font-size:2.5em;
+    margin-top:1%;
+    padding:0.2%;
+}
