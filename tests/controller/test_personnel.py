@@ -32,7 +32,7 @@ def test_choix_eleve(client):
     assert response.status_code == 200
 
     # Test de vérification de la route
-    assert response.request.path == "/personnel/choix-eleves/<nom_formation>"
+    assert response.request.path == f"/personnel/choix-eleves/{nom_formation}"
 
 
 # Test de la route de personnalisation de la première page
