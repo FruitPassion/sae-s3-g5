@@ -1,15 +1,17 @@
 {% extends 'common/base.html' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
 {% block title %}Afficher commentaires{% endblock %}
 
 {% block body %}
-    <h1>Commentaires</h1>
+    <h1>Commentaires</h1><br><br>
     {% for commentaire in commentaires %}
-        <h2 class="commentaire">{{ commentaire["intitule"] }}</h2>
+        <h2 class="commentaireTitre">{{ commentaire["intitule"] }}</h2>
         <p class="commentaire">Commentaire : {{ commentaire["commentaire_texte"] }}</p>
         <p class="commentaire">Evaluation : {{ commentaire["eval_texte"] }}</p>
     {% endfor %}
     {% include "_partial/_retour_bouton.html" %}
-
-    <!-- insertion commentaire audio ? -->
 {% endblock %}
