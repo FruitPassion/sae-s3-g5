@@ -1,0 +1,30 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Suivi de Progression{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/suivi_progression_apprenti.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Suivie de progression</h1>
+    <div class="haut">
+        <label>Nb fiches</label>
+        <label>Niveau moyen</label>
+        <label>Temps moyen</label>
+    </div>
+    <div class="millieu">
+        <div class="diagramme">
+            <table class="colonne">
+                <caption> Temps en fonction d'une fiche</caption>
+                
+            </table>
+            
+            <ul class="legend">
+    
+            </ul>
+
+        </div>
+    </div>
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}

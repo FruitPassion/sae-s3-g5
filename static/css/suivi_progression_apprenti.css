@@ -1,0 +1,59 @@
+h1 {
+    position: absolute;
+    top: 220px;
+    width: 800px;
+    left: 190px;
+}
+
+.haut {
+    background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 1);
+	width:160%;
+	height:15%;
+	position:absolute;
+	left:24.5px;
+	top:400px;
+    border-radius: 10px;
+}
+
+.millieu { 
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 1);
+	width:160%;
+	height:85%;
+	position:absolute;
+	left:24.5px;
+	top:600px;
+    border-radius: 10px;
+}
+
+.diagramme {
+    background-color: white;
+    width:95%;
+	height:95%;
+    position: absolute;
+    left: 30px;
+    top: 25px;
+}
+
+.colonne {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    font-size: 2em;
+}
+
+caption {
+    width: 20em;
+    text-align: center;
+}
+
+label {
+    font-size: 3em;
+    padding: 0.75em;
+    padding-top: 1em;
+
+}
+
+.btn {
+    position: absolute;
+    top: 30em;
+}
