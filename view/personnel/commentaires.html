@@ -1,0 +1,26 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Commentaires de la fiche technique</h1>
+    {% for commentaire in commentaires %}
+        <h2 class="commentaireTitre">{{ commentaire["intitule"] }}</h2>
+        {% if commentaire["intitule"] == "Commentaire intervenant" %}
+            <!--le lien ci-dessous sera à modifier :
+            href="{{ url_for(educ_simple.modifier_commentaire, param1 = param1, param2 = param2 etc.)}}"
+            -->
+            <a href="#">
+                <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' )}}">
+            </a>
+        {% endif %}
+        
+        <p class="commentaire">Commentaire : {{ commentaire["commentaire_texte"] }}</p>
+        <p class="commentaire">Evaluation : {{ commentaire["eval_texte"] }}</p>
+    {% endfor %}
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}
