@@ -1,15 +1,18 @@
+import json
 
 from flask_wtf import CSRFProtect
+from werkzeug.exceptions import HTTPException
 
 from controller.cip import cip
 from controller.educateur_admin import educ_admin
 from controller.educateur_simple import educ_simple
 from custom_paquets import check_requirements
+from custom_paquets.gestions_erreur import logging_erreur
 
 check_requirements.checking()
 
 import os
-from flask import Flask, url_for
+from flask import Flask, url_for, render_template
 
 from controller.admin import admin
 from controller.api import api
@@ -60,6 +63,27 @@ def create_app(config=None):
     csrf.init_app(app)
 
     db.init_app(app)
+
+    """
+    ERROR HANDLER
+    """
+
+    @app.errorhandler(Exception)
+    def handle_error(e):
+        logging_erreur(e)
+        code = 500
+        description = "Quelque chose s'est mal passé"
+        gif = "sad_cat4.webp"
+        author = "Santiago"
+        if isinstance(e, HTTPException):
+            code = e.code
+            try:
+                with open('static/error.json') as json_file:
+                    errors = json.load(json_file)
+                    description = errors[f"{code}"]["description"]
+            except:
+                pass
+        return render_template("common/erreur.html", titre='erreur', erreur=f"Erreur {code}", description=description)
 
     @app.context_processor
     def override_url_for():

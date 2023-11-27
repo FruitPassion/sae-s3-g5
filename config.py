@@ -1,8 +1,15 @@
 import os
+import logging
 
 import pymysql
 
 pymysql.install_as_MySQLdb()
+
+logging.basicConfig(level=logging.ERROR,
+                    filename='app.log',
+                    filemode='a',
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 
 class DevConfig:

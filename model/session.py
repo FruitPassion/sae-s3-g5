@@ -11,6 +11,5 @@ def get_apprentis_by_formation(nom_formation: str):
 
     :return: Une liste d'apprentis
     """
-
     return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
         Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo).all())
