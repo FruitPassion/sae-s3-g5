@@ -1,8 +1,10 @@
 .lignes{
-    line-height: 6em;
+    line-height: 3em;
     font-size: 3em;
-    text-indent: 5%;
     margin-top: 2em;
+    text-align: center;
+    width: 97%;
+    border-radius: 30px;
 }
 
 .lignes a{

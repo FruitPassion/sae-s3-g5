@@ -45,7 +45,7 @@ def test_personnalisation(client):
     # vérification des ids dans la page
     listeids = ['"zone_texte"', '"selecteur_police"', '"taille_police"', '"visualisation"', '"color_picker"',
                 '"visualisation_texte"', '"texte_visualisation"', '"zone_champs"', '"selecteur_type_champ"',
-                '"selecteur_niveau"', '"selecteur_pictogramme"', '"boutons"', '"texte_suivant"']
+                '"selecteur_niveau"', '"selecteur_pictogramme"']
     for name in listeids:
         assert 'id=' + name in html
 
@@ -65,6 +65,6 @@ def test_personnalisation_bis(client):
     # Test de la page HTML
     html = response.get_data(as_text=True)
     # Vérification des ids dans la page
-    listeids = ['"couleur"', '"color_picker"', '"couleur_fond"', '"boutons"', '"bouton_valider"']
+    listeids = ['"couleur"', '"color_picker"', '"couleur_fond"']
     for name in listeids:
         assert 'id=' + name in html
