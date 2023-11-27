@@ -151,55 +151,55 @@ CREATE TABLE ComposerPresentation
 
 
 
-INSERT INTO Apprenti (nom, prenom, mdp, login, photo)
-VALUES ('dummy', 'dummy', 'dummy', 'dummy', 'dummy'),
+INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essaies)
+VALUES ('dummy', 'dummy', 'dummy', 'dummy', 'dummy', 0),
        ('Jacquard', 'Davy',
         '9d1e4686b284d51662885140bb6698c4df76b74120f4ac3321e0873a7024760c9a9b9a153111f4c015817af91aa7d071eb66eb003233e59d108d5d876b83f2b3',
-        'DAJ12', 'photo_profile/chanteur.png'),
+        'DAJ12', 'photo_profile/chanteur.png', 0),
        ('Guilbert', 'Ange',
         '1cd2acb238967581ee76d7505ab6c7dd88a743069a8f3d246d2ea4a2568e8506842b5316a61f191faae7fa1132f329b1e36f06947a9e7584e05d4411e884daa3',
-        'ANG12', 'photo_profile/chirurgien.png'),
+        'ANG12', 'photo_profile/chirurgien.png', 0),
        ('Poussin', 'Christian',
         'b4b925b7d4ff1c3635db8f866900ecd331466d03c8d4652e3f79b1246ebbd176d64dba022075bd261033c1e8bceb052afed0c1be78bea36f2d9e46c5dbde645d',
-        'CHP14', 'photo_profile/hippie.png'),
+        'CHP14', 'photo_profile/hippie.png', 0),
        ('Trouvé', 'Éloi',
         'b6d2385e4e07960fed0536d888e38ddb2ddb435e5c714cc065ee809f30b29bcfe1414997ed9467b97a5691afc947a20031b11362ed9ca18d06b90c73d77ad8dd',
-        'ELT10', 'photo_profile/marin.png'),
+        'ELT10', 'photo_profile/marin.png', 5),
        ('Cordonnier', 'Danny',
         '2b4428f21d701980a10e295871e8a2c7297272b5ec29c29672f05a18e6624e7629a8bba35a6e36457b1dc54daea6879449c13733bc948e827b129329103169dd',
-        'DAC15', 'photo_profile/medecin.png'),
+        'DAC15', 'photo_profile/medecin.png', 5),
        ('Massé', 'Xavier',
         'f2749305122d0f0a305cf1ad6f1f1110ee899c72661dea86ace3c0b215abf9f2c963a2325129f5163aa5e9a04f0eb2662b4b4ec921e8d747ebe3e0d007b2f7b7',
-        'XAM11', 'photo_profile/pilote.png'),
+        'XAM11', 'photo_profile/pilote.png', 0),
        ('Meissa', 'Abdelkhader',
         '406a7ce132f622af2dc675e178fd5121729380183111f1b1d585b4e7937ae60de6f3d76c691ef71adb15ee32fd58d4379c2c3924e29715a3b6c2def9840df3aa',
-        'ABM17', 'photo_profile/plongueur.png');
+        'ABM17', 'photo_profile/plongueur.png', 0);
 
-INSERT INTO Personnel (nom, prenom, login, mdp, role, email)
+INSERT INTO Personnel (nom, prenom, login, mdp, role, email, essaies)
 VALUES ('Dupont', 'Jean', 'JED10',
         'd044ba79445b0cb09cf67529817f8cfc5ff6fa651ea83e4464d83b1135e93f1d6e03ca1adb8e780ad0325840da21cf66047bce904882c75a3b1873b15baede42',
-        'SuperAdministrateur', 'mail@mail.com'),
+        'SuperAdministrateur', 'mail@mail.com', 0),
        ('Lamar', 'Allain', 'ALL11',
         '1ce50cf1c0c3f55c946489aba6f878b62004a2846756236f16bde59420582fb78c43afcadf056ca59dcda94c2201bd0da9a13c7e6282759f42fa7aa417897f72',
-        'Educateur Administrateur', 'mail@mail.com'),
+        'Educateur Administrateur', 'mail@mail.com', 0),
        ('DitCharo', 'Mathieu', 'MAD14',
         'a421ce666367afb774b41cbccf0d08fd31d1f7785a355ffa96fd69d7354eecd0b890cfae8f7c838b726dea4558df9f06d5055177c69dc5524d45c63d3a33649b',
-        'Educateur Administrateur', 'mail@mail.com'),
+        'Educateur Administrateur', 'mail@mail.com', 0),
        ('Oskour', 'Jeanne', 'JEO12',
         'df7b278456c003766887e042c3264dcdef24b1ea7dac8944039c22445062762bc8db57636e4f1fc37dabddd69e64487ee1f2e8e9b8ab621503c6008ff118ca89',
-        'Educateur', 'mail@mail.com'),
+        'Educateur', 'mail@mail.com', 3),
        ('Curry', 'Marie', 'MAC10',
         '86c76f9b58836f546e3c1d6a81cc06ba8cba1167714ebc257302a65c2dc7630732be3c91d3ab8230186df077d782080052e48a68ae0a1e659c7ff46b08889e2a',
-        'Educateur', 'mail@mail.com'),
+        'Educateur', 'mail@mail.com', 0),
        ('Barre', 'Lenny', 'LEB08',
         'd825d45a695b82828f9925960a2300c393146df1d65cc54d45b2fa094ebce4c35a9dc7decda4ee5ed4f281506d4ec1f1e13676cefeaf24a6be6dbaf6a8ba994d',
-        'Educateur', 'mail@mail.com'),
+        'Educateur', 'mail@mail.com', 0),
        ('Zirot', 'Benoit', 'BEZ11',
         '0e3fd69106a65064a44d40c9ea4dcf3117ef3e94b033a2c280dd124c9042af56379f15bc7e8ab67031409694f01cca5e5bd5f0a19b133da5a027e0cd57b1ab88',
-        'Educateur', 'mail@mail.com'),
+        'Educateur', 'mail@mail.com', 0),
        ('Rouselle', 'Fabienne', 'FAR16',
         '783dfa2a9aae67aa236a5bb7644c982d5f41ec2939b478ec400a73b1c071a0d59171c0703edede13d800cd4ea39bfc0f22e583a13312f7af16b6f4d8d94f054a',
-        'CIP', 'mail@mail.com');
+        'CIP', 'mail@mail.com', 0);
 
 INSERT INTO EducAdmin (id_personnel)
 VALUES (2),
