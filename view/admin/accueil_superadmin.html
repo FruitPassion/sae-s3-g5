@@ -7,14 +7,15 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Choix actions</h1>
-    <div>
-        <button class="boutton-choix">Gérer les comptes</button>
-    </div>
-    <div>
-        <button class="boutton-choix">Gérer les formations</button>
-    </div>
-    <div>
-        <button class="boutton-choix">Visualisation élèves</button>
-    </div>
+    <h1 class="mt-5 mb-5 pt-5 text-black">Choix actions</h1>
+
+    <a href="{{ url_for("admin.gestion_apprenti") }}">
+        <button class="boutton-choix">Gérer comptes élève</button>
+    </a>
+    <a>
+        <button class="boutton-choix">Gérer formations</button>
+    </a>
+    <a href="{{ url_for("admin.gestion_personnel") }}">
+        <button class="boutton-choix">Gérer comptes personnel</button>
+    </a>
 {% endblock %}

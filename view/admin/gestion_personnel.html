@@ -1,0 +1,62 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des comptes{% endblock %}
+
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste du personnel</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="text-center">
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Mail</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Actif</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for personnel in liste_personnel %}
+                        <tr class="text-center {% if personnel["essaies"] == 3 %}table-danger{% endif %}"
+                        id="pers-{{ personnel["id_personnel"] }}">
+                            <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
+                            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
+                            <td>{{ personnel["login"] }}</td>
+                            <td>{{ personnel["nom"] }}</td>
+                            <td>{{ personnel["prenom"] }}</td>
+                            <td>{{ personnel["email"] }}</td>
+                            <td class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
+                            <td>
+                                {% if personnel["essaies"] == 3 %}
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <p>Oui</p>
+            </div>
+        </div>
+    </div>
+
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}

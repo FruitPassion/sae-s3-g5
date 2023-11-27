@@ -15,8 +15,8 @@ def get_all_personnel():
     :return: La liste des membres du personnel
     """
     personnel = Personnel.query.with_entities(
-        Personnel.id_personnel, Personnel.nom, Personnel.prenom, Personnel.role
-    ).all()
+        Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
+        Personnel.essaies).order_by(Personnel.login).all()
     return convert_to_dict(personnel)
 
 
@@ -31,7 +31,7 @@ def check_super_admin(login: str):
             login=login).first().role == "SuperAdministrateur"
     except AttributeError as e:
         logging.error("Erreur lors de la vérification du superadmin")
-        raise e
+        return False
 
 
 def check_personnel(login: str):
@@ -70,3 +70,4 @@ def get_role(login: str):
         ).first().role
     except AttributeError as e:
         logging.error("Erreur lors de la récupération du role")
+        return None

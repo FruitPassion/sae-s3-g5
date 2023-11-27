@@ -1,13 +1,11 @@
-<header>
-    <div id="box_nav"
-         style="background-color:{% if session['role'] == 'apprentis' %} #96DBF2;{% else %} #90E3BE;{% endif %}">
-        <div id="logo_nav">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" id="logo_nav_img">
-        </div>
-        <div id="deco_nav">
-            <a href="{{ url_for('auth.logout') }}">
-                <img src="{{ url_for('static', filename='images/deconnexion.png') }}" alt="deco" id="deco_nav_img">
-            </a>
-        </div>
+<nav class="navbar p-4" style="background-color:{% if session['role'] == 'apprentis' %} #96DBF2;{% else %} #90E3BE;{% endif %}">
+    <div class="container-fluid">
+        <a class="navbar-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="80"
+                 class="d-inline-block align-text-top">
+        </a>
+        <a class="d-flex" role="search" href="{{ url_for('auth.logout') }}">
+            <img src="{{ url_for('static', filename='images/deconnexion.png') }}" alt="deco" height="80">
+        </a>
     </div>
-</header>
+</nav>

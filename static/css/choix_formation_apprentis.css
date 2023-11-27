@@ -1,35 +1,31 @@
-#choix-milieux {
-    width: 85%;
-    margin: 23% auto 5%;
-}
 
 .lien-formation {
     font-size: 3.5em;
     margin-bottom: 200px;
     height: 285px;
-    width: 100%;
     text-align: center;
     text-shadow: 1px 0 10px black;
 }
 
 .formation-txt {
     position: absolute;
-    top: 30%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 50px;
+    font-size: 45px;
 }
 
-
 .img_cover {
-    width: 100%;
+    padding-top: 30px;
+    width: 1070px;
     height: 283px;
     opacity: 0.6;
 }
 
 .img_formation {
+    padding-top: 30px;
     position: absolute;
-    width: 100%;
+    width: 1070px;
     height: 283px;
     filter: blur(3px);
 }

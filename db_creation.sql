@@ -15,8 +15,10 @@ CREATE TABLE Personnel
     mdp          TEXT        NOT NULL,
     role         VARCHAR(50) NOT NULL,
     email        VARCHAR(100),
+    essaies      INT         NOT NULL DEFAULT (0),
     PRIMARY KEY (id_personnel),
-    CONSTRAINT ch_personnel_role CHECK (role IN ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP'))
+    CONSTRAINT ch_personnel_role CHECK (role IN ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP')),
+    CONSTRAINT ch_personnel_essaies CHECK (Personnel.essaies >= 0 AND Personnel.essaies <= 3)
 );
 
 CREATE TABLE Apprenti
@@ -27,7 +29,9 @@ CREATE TABLE Apprenti
     login       VARCHAR(50) NOT NULL,
     mdp         TEXT        NOT NULL,
     photo       VARCHAR(100),
-    PRIMARY KEY (id_apprenti)
+    essaies      INT         NOT NULL DEFAULT (0),
+    PRIMARY KEY (id_apprenti),
+    CONSTRAINT ch_apprenti_essaies CHECK (Apprenti.essaies >= 0 AND Apprenti.essaies <= 5)
 );
 
 CREATE TABLE Formation

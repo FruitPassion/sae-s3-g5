@@ -11,13 +11,11 @@
 
 {% block stylesheets %}
     <link href=" https://cdn.jsdelivr.net/npm/@garyliao/pattern-lock-js-advanced@1.0.1/patternlock.min.css "
-          rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style_connexion_apprentis.css') }}">
-{% endblock %}
+          rel="stylesheet">{% endblock %}
 
 {% block body %}
     <h1>Saisissez votre code</h1>
-    <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="300px">
+    <svg class="patternlock w-100" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="800px">
         <g class="lock-actives"></g>
         <g class="lock-lines"></g>
         <g class="lock-dots">

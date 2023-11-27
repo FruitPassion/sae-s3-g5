@@ -1,13 +1,8 @@
 .boutton-choix {
     width: 100%;
-    border: none;
-    color: #000000;
     padding: 40px;
     margin-bottom: 1em;
     margin-top: 1em;
-    text-align: center;
-    text-decoration: none;
     display: inline-block;
     font-size: 3em;
-    border-radius: 30px;
 }

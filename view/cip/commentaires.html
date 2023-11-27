@@ -2,10 +2,6 @@
 
 {% block title %}Afficher commentaires{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
-{% endblock %}
-
 {% block body %}
     <h1>Commentaires</h1>
     {% for commentaire in commentaires %}
