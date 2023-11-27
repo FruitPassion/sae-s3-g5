@@ -10,10 +10,11 @@ from flask import (
 
 from custom_paquets.custom_form import LoginPersonnelForm
 from custom_paquets.file_getter import get_flat
-from model.apprenti import get_apprenti_by_login, check_password_apprenti
+from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
+    check_apprenti
 from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
-from model.personnel import check_personnel, check_password, get_role
+from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel
 
 auth = Blueprint("auth", __name__)
 
@@ -46,19 +47,28 @@ def connexion_personnel():
     form = LoginPersonnelForm()
     code = 200
     if form.validate_on_submit():
-        if not check_personnel(form.login.data) or not check_password(
-                form.login.data, form.password.data
-        ):
+        if not check_personnel(form.login.data):
             flash("Compte inconnu ou mot de passe invalide.", "error")
             code = 403
-        else:
-            session["name"] = form.login.data
-            session["role"] = get_role(form.login.data)
-            flash("Connexion reussie.")
-            if session["role"] == 'SuperAdministrateur':
-                return redirect(url_for("admin.accueil_admin"))
+        elif not check_password(form.login.data, form.password.data):
+            if get_nbr_essaie_connexion_personnel(form.login.data) == 3:
+                flash("Compte bloqué, contacter un admin", "error")
+                code = 403
             else:
-                return redirect(url_for("personnel.choix_formation"))
+                flash("Compte inconnu ou mot de passe invalide.", "error")
+                code = 403
+        else:
+            if get_nbr_essaie_connexion_personnel(form.login.data) == 3:
+                flash("Compte bloqué, contacter un admin", "error")
+                code = 403
+            else:
+                session["name"] = form.login.data
+                session["role"] = get_role(form.login.data)
+                flash("Connexion reussie.")
+                if session["role"] == 'SuperAdministrateur':
+                    return redirect(url_for("admin.accueil_admin"))
+                else:
+                    return redirect(url_for("personnel.choix_formation"))
     return render_template("auth/connexion_personnel.html", form=form), code
 
 
@@ -99,14 +109,18 @@ def connexion_apprentis(login_apprenti):
     if request.method == "POST":
         login = request.form.get("login")
         password = request.form.get("pass")
-        if check_password_apprenti(login, password):
+        if check_apprenti(login) and check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
             flash("Connexion reussie.")
             return redirect(url_for("apprenti.redirection_connexion"))
         else:
-            flash("Compte inconnu ou mot de passe invalide.", "error")
-            code = 403
+            if get_nbr_essaie_connexion_apprenti(login) == 5:
+                flash("Compte bloqué, contacter un admin", "error")
+                code = 403
+            else:
+                flash("Compte inconnu ou mot de passe invalide.", "error")
+                code = 403
     return render_template("auth/connexion_apprentis.html", apprenti=apprenti), code
 
 

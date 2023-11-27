@@ -14,6 +14,11 @@
           rel="stylesheet">{% endblock %}
 
 {% block body %}
+    <div id="flashing" style="background-color: #e83c55; color: black; font-size : 35px" hidden="true">
+        <ul class="flashes" style="margin-top: revert">
+            <li>Compte bloqué, contacter un admin</li>
+        </ul>
+    </div>
     <h1>Saisissez votre code</h1>
     <svg class="patternlock w-100" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="800px">
         <g class="lock-actives"></g>
@@ -57,6 +62,9 @@
                     document.forms["form_hidden"].submit();
                     document.getElementById("form_hidden").submit();
                 } else {
+                    if (data["blocage"]){
+                        document.getElementById("flashing").removeAttribute("hidden");
+                    }
                     lock.error();
                 }
             })

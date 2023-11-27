@@ -18,23 +18,21 @@
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
                 <table class="table table-bordered">
                     <thead>
-                    <tr class="text-center">
-                        <th scope="col"></th>
-                        <th scope="col"></th>
+                    <tr class="text-center fs-1">
                         <th scope="col">Login</th>
                         <th scope="col">Nom</th>
                         <th scope="col">Prénom</th>
                         <th scope="col">Mail</th>
                         <th scope="col">Role</th>
                         <th scope="col">Actif</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel %}
                         <tr class="text-center {% if personnel["essaies"] == 3 %}table-danger{% endif %}"
                         id="pers-{{ personnel["id_personnel"] }}">
-                            <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
-                            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
                             <td>{{ personnel["login"] }}</td>
                             <td>{{ personnel["nom"] }}</td>
                             <td>{{ personnel["prenom"] }}</td>
@@ -47,6 +45,8 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
+                            <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
+                            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
                         </tr>
                     {% endfor %}
                     </tbody>
