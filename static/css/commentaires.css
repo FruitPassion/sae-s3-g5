@@ -1,8 +1,17 @@
 .commentaireTitre {
     font-size: 4em;
     margin-left:1%;
+    margin-top:4%;
+    margin-bottom:1%;
 }
 
-.commentaire{
+.commentaire {
     margin-left:2%;
+}
+
+#modifier {
+    height:5em;
+    float:right;
+    margin-right:78%;
+    margin-top:-3%;
 }
