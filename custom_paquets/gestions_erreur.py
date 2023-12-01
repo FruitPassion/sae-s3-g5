@@ -16,3 +16,15 @@ def logging_erreur(e, message='Exception occurred : '):
             mess = mess + line.strip() + '<br>'
     f.close()
 
+
+class ProjectError(Exception):
+    pass
+
+
+class GitBranchError(ProjectError):
+    pass
+
+
+class ConfigurationError(ProjectError):
+    pass
+

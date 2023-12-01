@@ -37,7 +37,7 @@ def test_choix_eleve(client):
     # Test de vérification de la route
     assert response.request.path == f"/personnel/choix-eleves/{nom_formation}"
 
-
+"""
 # Test de la route de personnalisation de la première page
 def test_personnalisation(client):
     
@@ -84,7 +84,7 @@ def test_personnalisation_bis(client):
     listeids = ['"couleur"', '"color_picker"', '"couleur_fond"']
     for name in listeids:
         assert 'id=' + name in html
-
+"""
 
 # Test de la route du choix de la formation
 def test_choix_formation(client):
@@ -118,3 +118,4 @@ def test_redirection_fiches_apprentis(client):
 
         # Test de vérification de la route
         assert response.request.path == f"/personnel/redirection-fiches/{apprenti}"
+

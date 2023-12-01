@@ -19,15 +19,19 @@ function mettre_a_jour_texte() {
     let police = document.getElementById("selecteur_police").value;
     let couleur = document.getElementById("color_picker").value;
 
+    if (couleur.toLowerCase() === "#ffffff"){
+        visualisation_texte.style.textShadow = "2px 2px 4px #000000";
+    } else {
+        visualisation_texte.style.textShadow = "";
+    }
+
     // Applique les valeurs à la visualisation du texte
     visualisation_texte.style.fontSize = taille_police;
     visualisation_texte.style.fontFamily = police;
     visualisation_texte.style.color = couleur;
 }
 
-// Clic sur le bouton "Suivant" de la page "personnaliser_fiche_texte_champs.html"
-document.getElementById("bouton_suivant").addEventListener("click", function() {
-    window.location.href = "personnel/personnaliser_fiche_couleur_fond.html"; });
+
 
 // Visualisation de la couleur de fond
 function mettre_a_jour_couleur_fond() {

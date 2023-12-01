@@ -3,7 +3,7 @@ from time import strftime, localtime
 
 from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login
-from model.composer import get_composer_presentation_dummy, get_last_composer_presentation_by_login
+from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
 from model_db.composer import ComposerPresentation
 from model_db.ficheintervention import FicheIntervention
@@ -77,9 +77,9 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     db.session.add(nouvelle_fiche)
     db.session.commit()
     if get_fiche_apprentis_existe(login_apprenti):
-        composer_fiche = get_last_composer_presentation_by_login(dernier_fiche_id)
+        composer_fiche = get_composer_presentation(dernier_fiche_id)
     else:
-        composer_fiche = get_composer_presentation_dummy()
+        composer_fiche = get_composer_presentation()
     for element in composer_fiche:
         element["id_fiche"] = nouvelle_fiche.id_fiche
         composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"], picto=None,

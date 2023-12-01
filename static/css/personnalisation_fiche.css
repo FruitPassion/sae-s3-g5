@@ -1,10 +1,15 @@
 /* Main divs (zone_texte and zone_champs) styling */
-#zone_texte, #zone_champs {
+#zone_personnalisation, #zone_preview {
     background-color: #fff;
     padding: 15px;
     margin: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    width: 50%;
+}
+
+#container-principal {
+    display: flex;
 }
 
 /* Styles for labels */
@@ -12,6 +17,10 @@ label {
     display: block;
     margin-top: 10px;
     font-weight: bold;
+}
+
+h3, #actions_finales {
+    margin-top: 20px;
 }
 
 /* Styles for the select dropdowns */
@@ -32,12 +41,6 @@ input[type="number"], input[type="text"] {
     border: 1px solid #ccc;
 }
 
-/* Specific styling for the RVB section */
-#RVB {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 10px;
-}
 
 #visualisation {
     display: flex;
@@ -45,39 +48,43 @@ input[type="number"], input[type="text"] {
     margin-top: 20px;
 }
 
-#texte_visualisation{
+#texte_visualisation {
     padding-left: 20px;
 }
 
-#boutons{
-    margin-top: 10%;
-    margin-left: 10%;
-    margin-right: auto;
-    display: flex;
-    justify-content:space-between;
-    align-items:flex-start;
+.btn-secondary {
+    font-size: 20px;
+    background-color: #c4c4c4;
 }
 
-#bouton_retour{
-    margin-left: -10%;
+
+.btn-primary {
+    font-size: 20px;
+    background-color: #51a3f6;
+    color: white;
 }
 
-#couleur_fond{
+.btn-primary:disabled, .btn-secondary:disabled {
+    background-color: #cecece;
+    color: #818181;
+}
+
+
+#couleur_fond {
     height: 150px;
     width: 500px;
     border-radius: 5px;
     margin-left: 25%;
 }
 
-#bouton_valider{
-    margin-top: 10px;
-    margin-left: 45%;
-    margin-bottom: 5%;
-    border-radius: 8px;
-    display: flex;
-}
 
-#texte_valider {
-    font-size: 3.5em;
-    flex: 1;
+@media screen and (max-width: 1200px) {
+
+    #container-principal {
+        display: block;
+    }
+
+    #zone_personnalisation, #zone_preview {
+        width: auto;
+    }
 }

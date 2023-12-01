@@ -7,7 +7,6 @@ from model.trace import get_commentaires_par_fiche
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
-
 '''
 Blueprint pour toutes les routes relatives aux URL des pages des éducateurs simples
 
@@ -27,7 +26,7 @@ def fiches_apprenti(apprenti):
 
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
-    return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos[0], fiches=fiches)
+    return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
 
 
 @educ_simple.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
@@ -40,7 +39,8 @@ def visualiser_commentaires(apprenti, fiche):
     """
 
     commentaires = get_commentaires_par_fiche(fiche)
-    return render_template("personnel/commentaires.html", apprenti = apprenti, fiche=fiche, commentaires = commentaires), 200
+    return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
+                           commentaires=commentaires), 200
 
 
 @educ_simple.route("/<apprenti>/<fiche>/modifier-commentaires/<commentaire_texte>/<eval_texte>", methods=["GET"])
@@ -54,4 +54,5 @@ def modifier_commentaires(apprenti, fiche, commentaire_texte, eval_texte):
     """
 
     commentaires = get_commentaires_par_fiche(fiche)
-    return render_template("personnel/modifier_commentaires.html", apprenti = apprenti, fiche=fiche, commentaire_texte = commentaire_texte, eval_texte = eval_texte), 200
+    return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
+                           commentaire_texte=commentaire_texte, eval_texte=eval_texte), 200

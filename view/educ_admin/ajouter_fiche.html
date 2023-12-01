@@ -1,14 +1,17 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Fiches techniques{% endblock %}
+{% block title %}Ajouter fiche technique{% endblock %}
 
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/ajouter_fiche.js') }}"></script>
+{% endblock %}
 
 {% block body %}
 
     <h1>Préciser les détails</h1>
 
     <div class="container">
-        <form class="fs-2" method="post">
+        <form class="fs-2" method="post" name="ajouter">
             {{ form.hidden_tag() }}
             <div class="mb-3">
                 <label for="nominput" class="form-label">Nom du client :</label>
@@ -51,7 +54,7 @@
                     <label class="form-check-label" for="inlineRadio4">4</label>
                 </div>
             </div>
-            {{ form.submit(class="form-control fs-3") }}
+            {{ form.submit(class="btn btn-primary form-control fs-3") }}
         </form>
     </div>
     {% include "_partial/_retour_bouton.html" %}

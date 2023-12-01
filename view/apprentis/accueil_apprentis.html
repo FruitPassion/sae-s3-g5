@@ -16,11 +16,12 @@
                 <a>
                     <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                          alt="fiche finie">
-                    {% if fiche['etat_fiche'] %}
+                    {% if fiche['etat_fiche'] == 1 %}
                         <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                    {% elif fiche['etat_fiche'] == 2 %}
+                        <img id="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
                     {% else %}
                         <img id="pause" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
-
                     {% endif %}
                 </a>
             </div>

@@ -19,7 +19,6 @@ def admin_login_required(func):
 def apprenti_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        print(session.get("name"))
         if not session.get("name") or session.get("role") != "apprentis":
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)

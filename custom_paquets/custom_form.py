@@ -13,8 +13,8 @@ class LoginPersonnelForm(FlaskForm):
 
 
 class AjouterFiche(FlaskForm):
-    nominput = StringField(validators=[InputRequired()])
-    dateinput = DateField(validators=[InputRequired()])
-    lieuinput = StringField(validators=[InputRequired()])
-    decriptioninput = StringField(u'Text', widget=TextArea())
-    submit = SubmitField("Ajouter")
+    nominput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    dateinput = DateField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    decriptioninput = StringField(u'Text', widget=TextArea(), render_kw={"onchange": "validateForm()"})
+    submit = SubmitField("Ajouter", render_kw={"disabled": "true"})
