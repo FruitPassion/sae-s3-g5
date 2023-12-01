@@ -4,6 +4,10 @@ body {
     overflow: auto;
 }
 
+.center-div {
+    height: 1200px;
+}
+
 h1 {
     font-family: 'Oswald', serif;
     font-size: 5em;
@@ -34,15 +38,15 @@ button {
     font-size: 3.5em;
 }
 
-a{
+a {
     text-decoration: none;
     color: black;
 }
 
-@media screen and (max-width: 1201px) {
+@media screen and (max-width: 801px) {
     body {
-        width: 1200px;
-        height: 1920px;
+        width: 800px;
+        height: 1280px;
     }
 
     #master-center {
@@ -50,6 +54,11 @@ a{
         margin-left: auto;
         margin-right: auto;
         padding: 15px;
+    }
+
+
+    .center-div {
+        height: 1000px;
     }
 
 }
