@@ -2,7 +2,7 @@ import logging
 from hmac import compare_digest
 
 from custom_paquets.converter import convert_to_dict
-from custom_paquets.security import encrypt_password
+from custom_paquets.security import compare_passwords
 
 from model_db.shared_model import db
 from model_db.personnel import Personnel
@@ -65,19 +65,19 @@ def get_role(login: str):
         return None
 
 
-def check_password(login: str, password: str):
+def check_password(login: str, new_password: str):
     """
     À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
 
     :return: Un booleen vrai si le mot de passe est valide
     """
-    passwd = (
+    old_password = (
         Personnel.query.with_entities(Personnel.mdp)
         .filter_by(login=login)
         .first()
         .mdp
     )
-    digest = compare_digest(encrypt_password(password, login), passwd)
+    digest = compare_passwords(new_password, old_password)
     if digest and get_nbr_essaie_connexion_personnel(login) < 3:
         reset_nbr_essaies_connexion(login)
     elif not digest and get_nbr_essaie_connexion_personnel(login) < 3:

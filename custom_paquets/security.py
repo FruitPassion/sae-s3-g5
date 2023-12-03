@@ -1,8 +1,17 @@
+import base64
 import hashlib
-import re
+import bcrypt
 
 
-# Encrypt password with SHA512 and return it
-def encrypt_password(password, pseudo):
-    return hashlib.sha512((''.join(str(ord(c)) for c in pseudo)).encode('utf-8') + password.encode('utf-8')).hexdigest()
+def encrypt_password(password):
+    return bcrypt.hashpw(get_b64(password), bcrypt.gensalt(15))
+
+
+def compare_passwords(new_passw, old_passwd):
+    old_passwd = bytes(old_passwd, 'utf-8')
+    return bcrypt.checkpw(get_b64(new_passw), old_passwd)
+
+
+def get_b64(password):
+    return base64.b64encode(hashlib.sha256(password.encode('utf_8')).digest())
 

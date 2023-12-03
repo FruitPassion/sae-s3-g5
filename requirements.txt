@@ -1,6 +1,7 @@
 Flask==2.3.3
 Flask-SQLAlchemy
 Flask-WTF
+bcrypt
 pytest
 pytest-flask
 pygit2
@@ -16,3 +17,4 @@ itsdangerous
 MarkupSafe
 xmlrunner
 flask-unittest
+flask-security-too[fsqla,common]
