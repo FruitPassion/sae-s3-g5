@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Choisissez votre profil</h1>
+    <h1>Choisissez votre profil {% include "_partial/_tts.html" %}</h1>
 
     <div id="liste_appprentis">
         {% for apprenti in apprentis %}
@@ -16,7 +16,7 @@
                     <img class="photo_profil" src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
                          alt="profil picture">
                 </a>
-                <p class="libelle">{{ apprenti["prenom"] }} {{ apprenti["nom"] }}</p>
+                <p class="libelle">{{ apprenti["prenom"] }} {{ apprenti["nom"] }} {% include "_partial/_tts.html" %}</p>
             </div>
         {% endfor %}
     </div>

@@ -3,19 +3,23 @@
 
 {% block body %}
 
-    <h1 class="mb-5">Choisir votre connexion</h1>
+    <h1 class="mb-5">Choisir votre connexion {% include "_partial/_tts.html" %}</h1>
 
     <div class="d-flex justify-content-center text-center pt-5">
-        <a href="{{ url_for('auth.connexion_personnel') }}" class="p-5">
-            <img src="{{ url_for('static', filename='images/prof.png') }}" class="rounded" alt="icone prof"
-                 height="200px"><br>
-            <p id="labelProf" class="text-link">Educateur</p>
-        </a>
-        <a href="{{ url_for('auth.choix_formation_apprentis') }}" class="p-5">
-            <img src="{{ url_for('static', filename='images/eleve.png') }}" class="rounded" alt="icone eleve"
-                 height="200px">
-            <p id="labelProf" class="text-link">Eleve</p>
-        </a>
+        <div class="px-5">
+            <a href="{{ url_for('auth.connexion_personnel') }}" class="p-5">
+                <img src="{{ url_for('static', filename='images/prof.png') }}" class="rounded" alt="icone prof"
+                     height="200px">
+            </a>
+            <p class="text-link">Personnel {% include "_partial/_tts.html" %}</p>
+        </div>
+        <div class="px-5">
+            <a href="{{ url_for('auth.choix_formation_apprentis') }}" class="p-5">
+                <img src="{{ url_for('static', filename='images/eleve.png') }}" class="rounded" alt="icone eleve"
+                     height="200px">
+            </a>
+            <p class="text-link">Apprentis {% include "_partial/_tts.html" %}</p>
+        </div>
     </div>
 
 

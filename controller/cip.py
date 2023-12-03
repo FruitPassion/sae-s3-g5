@@ -78,4 +78,4 @@ def adaptation_situation_examen(apprenti):
     
     :return: rendu de la page adaptation-situation-examen.html ?
     """
-    return "Adaptation en situation d'examen de " + apprenti
+    return render_template("cip/test.html"), 200

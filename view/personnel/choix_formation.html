@@ -8,20 +8,25 @@
 
 {% block body %}
 
-    <h1>Choisissez une formation</h1>
+    <h1>Choisissez une formation {% include "_partial/_tts.html" %}</h1>
 
     <div>
         {% for formation in formations %}
-            <a class="lien-formation"
-               href="{{ url_for('personnel.choix_eleve', nom_formation=formation["intitule"]) }}">
-                <div class="container">
-                    <img class="img_formation" src="{{ url_for('static', filename='images/'+formation["image"]) }}"
-                         alt="image fond">
-                    <img class="img_cover" src="{{ url_for('static', filename='images/flat/'+ couleurs[loop.index % 3]) }}"
-                         alt="image fond">
-                    <p class="formation-txt">{{ formation["intitule"] }}</p>
+            <div class="container d-flex form-card mt-5">
+                <div class="lien-formation">
+                    <a  href="{{ url_for('personnel.choix_eleve', nom_formation=formation["intitule"]) }}">
+                        <div class="container">
+                            <img class="img-formation" alt="image fond"
+                                 src="{{ url_for('static', filename='images/'+formation["image"]) }}">
+                            <p class="formation-txt">{{ formation["intitule"] }}</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
+                <div class="button-speak">
+                    <img src="{{ url_for('static',filename='images/speak.png') }}"
+                        alt="Nom parcour" class="speak-img" onclick="lireTexte('{{ formation["intitule"] }}')">
+                </div>
+            </div>
         {% endfor %}
     </div>
 

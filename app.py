@@ -109,4 +109,4 @@ def create_app(config=None):
 
 # Appel principal pour lancer l'application
 if __name__ == "__main__":
-    create_app().run(host="172.20.10.2")
+    create_app().run()

@@ -211,7 +211,7 @@ VALUES (2),
 
 INSERT INTO Formation (intitule, niveau_qualif, groupe, image)
 VALUES ('Parcours plomberie', 3, 1, 'formation_image/plomberie.jpg'),
-       ('Parcours maintenance batiment', 3, 2, 'formation_image/maintenance_batiment.jpg');
+       ('Parcours maintenance bâtiment', 3, 2, 'formation_image/maintenance_batiment.jpg');
 
 INSERT INTO Session (theme, cours, duree, id_formation)
 VALUES ('Probleme tuyauterie', 'Colmater fuite', 3, 1),

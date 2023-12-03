@@ -64,7 +64,7 @@ def connexion_personnel():
             else:
                 session["name"] = form.login.data
                 session["role"] = get_role(form.login.data)
-                flash("Connexion reussie.")
+                flash("Connexion réussie.")
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"))
                 else:
@@ -79,9 +79,8 @@ def choix_formation_apprentis():
 
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
-    couleurs = get_flat()
     formations = get_all_formation()
-    return render_template("auth/choix_formation_apprentis.html", formations=formations, couleurs=couleurs), 200
+    return render_template("auth/choix_formation_apprentis.html", formations=formations), 200
 
 
 @auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET", "POST"])
@@ -112,7 +111,7 @@ def connexion_apprentis(login_apprenti):
         if check_apprenti(login) and check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
-            flash("Connexion reussie.")
+            flash("Connexion réussie.")
             return redirect(url_for("apprenti.redirection_connexion"))
         else:
             if get_nbr_essaie_connexion_apprenti(login) == 5:
@@ -133,5 +132,5 @@ def logout():
     """
     session.pop('role', None)
     session.pop('name', None)
-    flash("Deconnection reussie.")
+    flash("Déconnexion réussie.")
     return redirect(url_for("auth.choix_connexion"))

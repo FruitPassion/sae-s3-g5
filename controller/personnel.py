@@ -25,8 +25,7 @@ def choix_formation():
     :return: rendu de la page choix_formation.html
     """
     formations = get_all_formation()
-    couleurs = get_flat()
-    return render_template("personnel/choix_formation.html", formations=formations, couleurs=couleurs), 200
+    return render_template("personnel/choix_formation.html", formations=formations), 200
 
 
 @personnel.route("/choix-eleves/<nom_formation>", methods=["GET"])

@@ -1,10 +1,36 @@
+.form-card {
+    height: 283px;
+    width: 80%;
+    border: black 1px solid;
+    border-radius: 30px;
+}
+
+.container {
+    overflow: hidden;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
 .lien-formation {
     font-size: 3.5em;
     margin-bottom: 200px;
-    height: 285px;
+    height: 100%;
+    width: 80%;
     text-align: center;
     text-shadow: 1px 0 10px black;
+}
+
+.button-speak {
+    width: 20%;
+    height: 100%;
+    background-color: #868686;
+}
+
+.speak-img {
+    height: 90%;
+    object-fit: contain;
+    width: 100%;
+    filter: invert(100%);
 }
 
 .formation-txt {
@@ -15,19 +41,10 @@
     font-size: 45px;
 }
 
-.img_cover {
-    padding-top: 30px;
-    width: 1070px;
-    height: 283px;
-    opacity: 0.6;
-}
-
-.img_formation {
-    padding-top: 30px;
-    position: absolute;
-    width: 1070px;
-    height: 283px;
-    filter: blur(3px);
+.img-formation {
+    width: 100%;
+    height: 285px;
+    object-fit: cover;
 }
 
 .container {
@@ -44,7 +61,7 @@
         opacity: 0.6;
     }
 
-    .img_formation {
+    .img-formation {
         padding-top: 30px;
         position: absolute;
         width: 700px;
