@@ -32,7 +32,7 @@ from controller.personnel import personnel
 from controller.auth import auth
 
 
-# Fonction pour creer une aapplication et la parametrer
+# Fonction pour creer une application et la parametrer
 def create_app(config=None):
     # Vérification de la configuration demandée.
     if config not in [None, "Developpement"]:
@@ -42,8 +42,8 @@ def create_app(config=None):
     # Changement du chemin d'accès des templates
     app = Flask(__name__, template_folder="view")
 
-    # Vérification de la branche du git
-    # Utilisable uniquement dans branche main ou dev
+    # Vérification de la branche du Git
+    # Utilisable uniquement dans la branche main ou dev
     if Repository('.').head.shorthand == "dev" or config == "Developpement":
         app.config.from_object('config.DevConfig')
     elif Repository('.').head.shorthand == "main":
@@ -73,7 +73,7 @@ def create_app(config=None):
     """
 
     # Gestion personnalisée des erreurs
-    # 500 est l'erreur par défaut si il n'y à pas de code disponible
+    # 500 est l'erreur par défaut s'il n'y a pas de code disponible
     @app.errorhandler(Exception)
     def handle_error(e):
         logging_erreur(e)
