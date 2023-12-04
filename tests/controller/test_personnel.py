@@ -21,7 +21,7 @@ def test_redirection_connexion(client):
     response = client.get(url_for("personnel.choix_formation"))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/choix-formation-personnel"
@@ -33,7 +33,7 @@ def test_choix_eleve(client):
     response = client.get(url_for("personnel.choix_eleve", nom_formation=nom_formation))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == f"/personnel/choix-eleves/{nom_formation}"
@@ -107,7 +107,7 @@ def test_choix_formation(client):
 def test_redirection_fiches_apprentis(client):
     # Liste des identifiants de connexion
     liste_personnel = ["ALL11", "JEO12", "FAR16"]
-    liste_mdp = ["educadmin", "educ", "cip"]
+    liste_mdp = ["111111", "121212", "161616"]
 
     # Test pour chaque personnel
     for i in range(3):
