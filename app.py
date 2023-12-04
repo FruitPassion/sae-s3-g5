@@ -45,6 +45,11 @@ def create_app(config=None):
     # Vérification de la branche du Git
     # Utilisable uniquement dans la branche main ou dev
     if Repository('.').head.shorthand == "dev" or config == "Developpement":
+        # Effacer fichier de logs
+        try:
+            open('app.log', 'w').close()
+        except:
+            pass
         app.config.from_object('config.DevConfig')
     elif Repository('.').head.shorthand == "main":
         app.config.from_object('config.ProdConfig')
