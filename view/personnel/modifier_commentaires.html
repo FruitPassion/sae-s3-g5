@@ -11,14 +11,18 @@
 
     <div id="bloc">
        
-        <p>Commentaire de l'éducateur :</p>
-        <textarea class="modifiable" maxlength="500">{{ commentaire_texte }}</textarea>
+        <form name = "modifier_commentaires" method="post">
 
-        <p>Evaluation de l'éducateur </p>
-        <textarea class="modifiable" maxlength="500">{{ eval_texte }} :</textarea>
+            <p>Commentaire de l'éducateur :</p>
+            <textarea class="modifiable" maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
 
-        {% include "_partial/_retour_bouton.html" %} 
-        <!-- Gestion de la modification du commentaire/évaluation... ? -->
-        <input type="button" value="Enregistrer" id="enregistrer">
+            <p>Evaluation de l'éducateur :</p>
+            <textarea class="modifiable" maxlength="500">{{ commentaires["eval_texte"] }} :</textarea>
+
+            {% include "_partial/_retour_bouton.html" %} 
+            <!-- Gestion de la modification du commentaire/évaluation... ? -->
+            <input type="submit" value="Enregistrer" id="enregistrer">
+
+        </form>
     </div>
 {% endblock %}

@@ -14,7 +14,10 @@ def get_commentaires_par_fiche(id_fiche):
     return convert_to_dict(
         LaisserTrace.query.filter_by(id_fiche=id_fiche).with_entities(LaisserTrace.commentaire_texte,
                                                                       LaisserTrace.intitule,
-                                                                      LaisserTrace.eval_texte).all())
+                                                                      LaisserTrace.eval_texte, 
+                                                                      LaisserTrace.horodatage, 
+                                                                      LaisserTrace.commentaire_audio,
+                                                                      LaisserTrace.eval_audio).all())
 
 
 def modifier_commentaire_texte(id_personnel, horodatage, commentaire_texte):
@@ -29,6 +32,18 @@ def modifier_commentaire_texte(id_personnel, horodatage, commentaire_texte):
     db.session.commit()
 
 
+def modifier_commentaire_audio(id_personnel, horodatage, commentaire_audio):
+    """
+    Récupère le commentaire texte d'une fiche à partir de l'id du personnel et de son horodatage
+    Modifie en DB la valeur du commentaire avec la nouvelle qui a été saisie par l'éducateur.
+    
+    :return: None
+    """
+    trace = LaisserTrace.query.filter_by(id_personnel = id_personnel, horodatage = horodatage).first()
+    trace.commentaire_audio = commentaire_audio
+    db.session.commit()
+    
+
 def modifier_evaluation_texte(id_personnel, horodatage, evaluation_texte):
     """
     Récupère l'évaluation texte d'une fiche à partir de l'id du personnel et de son horodatage
@@ -38,4 +53,16 @@ def modifier_evaluation_texte(id_personnel, horodatage, evaluation_texte):
     """
     trace = LaisserTrace.query.filter_by(id_personnel = id_personnel, horodatage = horodatage).first()
     trace.eval_texte = evaluation_texte
+    db.session.commit()
+
+
+def modifier_eval_audio(id_personnel, horodatage, eval_audio):
+    """
+    Récupère le commentaire texte d'une fiche à partir de l'id du personnel et de son horodatage
+    Modifie en DB la valeur du commentaire avec la nouvelle qui a été saisie par l'éducateur.
+    
+    :return: None
+    """
+    trace = LaisserTrace.query.filter_by(id_personnel = id_personnel, horodatage = horodatage).first()
+    trace.eval_audio = eval_audio
     db.session.commit()

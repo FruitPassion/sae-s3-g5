@@ -18,3 +18,4 @@ class AjouterFiche(FlaskForm):
     lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
     decriptioninput = StringField(u'Text', widget=TextArea(), render_kw={"onchange": "validateForm()"})
     submit = SubmitField("Ajouter", render_kw={"disabled": "true"})
+

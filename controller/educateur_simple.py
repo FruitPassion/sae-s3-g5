@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session, request
 
 from custom_paquets.decorateur import educsimple_login_required
 from model.apprenti import get_apprenti_by_login
@@ -43,9 +43,9 @@ def visualiser_commentaires(apprenti, fiche):
                            commentaires=commentaires), 200
 
 
-@educ_simple.route("/<apprenti>/<fiche>/modifier-commentaires/<commentaire_texte>/<eval_texte>", methods=["GET"])
+@educ_simple.route("/<apprenti>/<fiche>/modifier-commentaires", methods=["GET", "POST"])
 @educsimple_login_required
-def modifier_commentaires(apprenti, fiche, commentaire_texte, eval_texte):
+def modifier_commentaires(apprenti, fiche):
     """
     Page de modification des commentaires éducateur de la fiche d'identifiant fiche de l'apprenti 
     au login apprenti
@@ -54,5 +54,10 @@ def modifier_commentaires(apprenti, fiche, commentaire_texte, eval_texte):
     """
 
     commentaires = get_commentaires_par_fiche(fiche)
+    print(request.form)
+    if request.form.get("modifier_commentaires"):
+        # modifier_commentaires(session.get("name"), commentaires)
+        print("ok")
+
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
-                           commentaire_texte=commentaire_texte, eval_texte=eval_texte), 200
+                           commentaires= commentaires), 200
