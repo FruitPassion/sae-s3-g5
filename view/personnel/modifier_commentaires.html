@@ -7,19 +7,20 @@
 {% block title %}Modification commentaire{% endblock %}
 
 {% block body %}
-    <h1>Modification commentaire éducateur de la fiche n°{{ fiche }} de {{ apprenti }} </h1>
+    <h1>Modification commentaire éducateur de la fiche n°{{ fiche["numero"] }} de {{ apprenti }} </h1>
 
     <div id="bloc">
-       
-        <form name = "modifier_commentaires" method="post">
 
+        <form name="modifier" id="modifier" method="POST">
             <p>Commentaire de l'éducateur :</p>
-            <textarea class="modifiable" maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
+            <textarea type="text" class="modifiable" id="commentaire_texte" name="commentaire_texte"
+                      maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
 
             <p>Evaluation de l'éducateur :</p>
-            <textarea class="modifiable" maxlength="500">{{ commentaires["eval_texte"] }} :</textarea>
+            <textarea type="text" class="modifiable" id="eval_texte" name="eval_texte"
+                      maxlength="500">{{ commentaires["eval_texte"] }}</textarea>
 
-            {% include "_partial/_retour_bouton.html" %} 
+            {% include "_partial/_retour_bouton.html" %}
             <!-- Gestion de la modification du commentaire/évaluation... ? -->
             <input type="submit" value="Enregistrer" id="enregistrer">
 
