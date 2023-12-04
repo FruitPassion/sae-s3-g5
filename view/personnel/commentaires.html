@@ -9,12 +9,16 @@
 {% block body %}
     <h1>Commentaires de la fiche technique</h1>
     {% for commentaire in commentaires %}
-        <h2 class="commentaireTitre">{{ commentaire["intitule"] }}</h2>
-        {% if commentaire["intitule"] == "Commentaire intervenant" %}
+        <h2 class="commentaireTitre">{{ commentaire["intitule"] }}
+
+            {% if commentaire["intitule"] == "Commentaire intervenant" %}
             <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche) }}">
                 <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' )}}">
             </a>
         {% endif %}
+
+        </h2>
+       
 
         <p class="commentaire">Commentaire : {{ commentaire["commentaire_texte"] }}</p>
         <p class="commentaire">Commentaire audio : {{ commentaire["commentaire_audio"] }}</p>
