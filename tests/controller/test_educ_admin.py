@@ -41,4 +41,4 @@ def test_route_personnalisation(client):
     assert response.status_code == 200
     
     # Test de vérification de la route
-    assert response.request.path == f"/educ-admin/personnalisation"
+    assert response.request.path == "/educ-admin/personnalisation"
