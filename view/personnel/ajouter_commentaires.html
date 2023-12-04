@@ -10,14 +10,12 @@
     <h1>Ajout commentaire éducateur de la fiche n°{{ fiche }} de {{ apprenti }} </h1>
     <div id="bloc">
        
-        <p>Commentaire de l'éducateur : </p> <!--changer l'id par son prénom nom éventuellement mais jsp guys-->
         <form action="{{ url_for('educ_simple.ajouter_commentaires', apprenti=apprenti, fiche=fiche) }}" method="post">
+            <p>Commentaire de l'éducateur : </p> <!--changer l'id par son prénom nom éventuellement mais jsp guys-->
             <textarea id="commentaire" name="commentaire" maxlength="500" rows="4" cols="30" class="ajout"></textarea><br><br>
             <input type="submit" value="Valider">
-        </form>
 
-        <p>Evaluation de l'éducateur : </p>
-        <form action="{{ url_for('educ_simple.ajouter_commentaires', apprenti=apprenti, fiche=fiche) }}" method="post">
+            <p>Evaluation de l'éducateur : </p>
             <textarea id="evaluation" name="evaluation" maxlength="500" rows="4" cols="30" class="ajout"></textarea><br><br>
             <input type="submit" value="Valider">
         </form>
