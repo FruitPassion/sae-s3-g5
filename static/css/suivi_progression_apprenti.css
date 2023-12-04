@@ -2,13 +2,12 @@ h1 {
     position: absolute;
     top: 220px;
     width: 800px;
-    left: 190px;
+    left: 90px;
 }
 
 .haut {
     background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 1);
-	width:160%;
-	height:15%;
+	width:95%;
 	position:absolute;
 	left:24.5px;
 	top:400px;
@@ -17,7 +16,7 @@ h1 {
 
 .millieu { 
 	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 1);
-	width:160%;
+	width:95%;
 	height:85%;
 	position:absolute;
 	left:24.5px;
@@ -28,7 +27,7 @@ h1 {
 .diagramme {
     background-color: white;
     width:95%;
-	height:95%;
+	height:90%;
     position: absolute;
     left: 30px;
     top: 25px;
@@ -47,13 +46,89 @@ caption {
 }
 
 label {
-    font-size: 3em;
-    padding: 0.75em;
+    font-size: 2em;
+    padding: 1.45em;
     padding-top: 1em;
-
+    padding-bottom: 1em;
 }
 
 .btn {
     position: absolute;
     top: 30em;
+}
+
+.temps_fiche {
+    background-color: #004586;    
+    border-radius: 19px;
+    position: absolute;
+    height: 112px;
+    width: 355px;
+    text-align: center;
+    top: 1300px;
+    left: 55%
+}
+
+.valeur_moy {
+    background-color: #FF420E ;    
+    border-radius: 19px;
+    position: absolute;
+    height: 112px;
+    width: 355px;
+    text-align: center;
+    top: 1300px;
+    left: 20%;
+}
+
+@media screen and (min-width: 1280px ) {
+
+    h1 {
+        left: 20%;
+    }
+    
+    .haut label {
+        font-size: 2em;
+        padding: 3em;
+        padding-top: 1em;
+        padding-bottom: 1em;
+
+    }
+
+    .millieu {
+	    height:50%;
+    }
+
+    .diagramme{
+        height: 95%;
+    }
+
+    .valeur_moy, .temps_fiche {
+        top: 1700px;
+    }
+
+    .btn {
+        top: 34em;
+    }
+
+}
+
+@media screen and (width > 1290px ) {
+
+    .haut label {
+        font-size: 2em;
+        padding: 4.25em;
+        padding-top: 1em;
+        padding-bottom: 1em;
+
+    }
+    
+    .millieu {
+	    height:95%;
+    }
+
+    .diagramme{
+        height: 85%;
+    }
+   
+   
+
 }
