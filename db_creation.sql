@@ -122,8 +122,12 @@ CREATE TABLE LaisserTrace
     id_fiche          INT         NOT NULL,
     PRIMARY KEY (id_personnel, horodatage),
     FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel),
-    FOREIGN KEY (id_fiche) REFERENCES FicheIntervention (id_fiche)
+    FOREIGN KEY (id_fiche) REFERENCES FicheIntervention (id_fiche),
+    CONSTRAINT uc_commentaire_fiche UNIQUE (id_fiche, apprenti)
+
 );
+
+
 
 CREATE TABLE Assister
 (

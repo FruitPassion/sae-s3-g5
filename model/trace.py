@@ -83,16 +83,16 @@ def modifier_eval_audio(id_fiche, horodatage, eval_audio):
     db.session.commit()
 
 # jsp si ça marche malheureusement
-def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio):
+def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login, intitule):
     """
     Ajoute les commentaires et évaluations d'une fiche technique d'un apprenti
 
     :return: None
     """
-    id_personnel = get_id_personnel_by_login()
-    fiche = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
+    id_personnel = get_id_personnel_by_login(login)
     horodatage = datetime.now()
-    trace = LaisserTrace(id_fiche=fiche.id_fiche, id_personnel=id_personnel, horodatage=horodatage,
-                         commentaire_texte=commentaire_texte, eval_texte=eval_texte, commentaire_audio=commentaire_audio,eval_audio=eval_audio, intitule=fiche.intitule)
+    trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
+                         commentaire_texte=commentaire_texte, eval_texte=eval_texte, commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti="0", intitule=intitule)
     db.session.add(trace)
     db.session.commit()
+    
