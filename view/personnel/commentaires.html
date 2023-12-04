@@ -16,7 +16,7 @@
     </a>
     {% else %}
     <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche) }}">
-            <img id="modifier" src="{{ url_for('static', filename='images/cross.png' ) }}" alt="modifier">
+            <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' ) }}" alt="modifier">
         </a>
     {% endif %}
 
@@ -37,18 +37,6 @@
     {% else %}
     Pas encore de commentaire de l'apprenti
     {% endif %}
-    {% for commentaire in commentaires %}
-        <h2 class="commentaireTitre">{{ commentaire["intitule"] }}</h2>
-        {% if commentaire["intitule"] == "Commentaire intervenant" %}
-            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche) }}">
-                <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' )}}">
-            </a>
-        {% endif %}
-
-        <p class="commentaire">Commentaire : {{ commentaire["commentaire_texte"] }}</p>
-        <p class="commentaire">Commentaire audio : {{ commentaire["commentaire_audio"] }}</p>
-        <p class="commentaire">Evaluation : {{ commentaire["eval_texte"] }}</p>
-        <p class="commentaire">Evaluation audio : {{ commentaire["eval_audio"] }}</p>
-    {% endfor %}
+    
     {% include "_partial/_retour_bouton.html" %}
 {% endblock %}
