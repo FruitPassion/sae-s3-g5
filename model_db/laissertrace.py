@@ -12,6 +12,7 @@ class LaisserTrace(db.Model):
     commentaire_texte = db.Column(db.Text, nullable=False)
     eval_audio = db.Column(db.String(255))
     commentaire_audio = db.Column(db.String(50))
+    apprenti = db.Column(db.Integer, nullable=True)
     id_fiche = db.Column(db.ForeignKey('db_fiches_dev.FicheIntervention.id_fiche'), nullable=False, index=True)
 
     FicheIntervention = db.relationship('FicheIntervention',

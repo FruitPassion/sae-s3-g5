@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, redirect, url_for
 
 from custom_paquets.decorateur import educsimple_login_required
 from model.apprenti import get_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiches_par_id_fiche
-from model.trace import ajouter_commentaires_evaluation, get_commentaires_par_fiche, modifier_commentaire_texte, modifier_evaluation_texte
-
+from model.trace import get_commentaires_par_fiche, modifier_commentaire_texte, modifier_evaluation_texte, \
+    get_commentaires_educ_par_fiche, ajouter_commentaires_evaluation
+    
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
 '''
@@ -53,13 +54,14 @@ def modifier_commentaires(apprenti, fiche):
     :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
 
-    commentaires = get_commentaires_par_fiche(fiche)
+    commentaires = get_commentaires_educ_par_fiche(fiche)
     fiche = get_fiches_par_id_fiche(fiche)
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
         modifier_commentaire_texte(fiche["id_fiche"], commentaires["horodatage"], commentaire_texte)
         modifier_evaluation_texte(fiche["id_fiche"], commentaires["horodatage"], eval_texte)
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]))
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
 
