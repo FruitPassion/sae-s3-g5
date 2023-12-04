@@ -8,9 +8,10 @@ from model_db.shared_model import db
 
 def get_commentaires_par_fiche(id_fiche):
     """
-    Recupere les commentaires d'une trace d'une fiche technique d'un apprenti à partir de son Login
+    Récupère les commentaires de la fiche id_fiche d'un apprenti
 
-    :return: Les informations de l'apprenti
+    :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
+    et l'identifiant de l'éducateur ayant créé la trace
     """
     return convert_to_dict(
         LaisserTrace.query.filter_by(
@@ -22,9 +23,10 @@ def get_commentaires_par_fiche(id_fiche):
 
 def get_commentaires_educ_par_fiche(id_fiche):
     """
-    Recupere les commentaires d'une trace d'une fiche technique d'un apprenti à partir de son Login
+    Récupère les commentaires (de l'éducateur) de la fiche id_fiche d'un apprenti
 
-    :return: Les informations de l'apprenti
+    :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
+    et l'identifiant de l'éducateur ayant créé la trace
     """
     return convert_to_dict(
         LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti="0"
@@ -36,9 +38,9 @@ def get_commentaires_educ_par_fiche(id_fiche):
 
 def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
     """
-    Récupère le commentaire texte d'une fiche à partir de l'id du personnel et de son horodatage
-    Modifie en DB la valeur du commentaire avec la nouvelle qui a été saisie par l'éducateur.
-    
+    Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
+    Modifie le commentaire textuel avec commentaire_texte
+
     :return: None
     """
 
@@ -49,9 +51,8 @@ def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
 
 def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio):
     """
-    Récupère le commentaire texte d'une fiche à partir de l'id du personnel et de son horodatage
-    Modifie en DB la valeur du commentaire avec la nouvelle qui a été saisie par l'éducateur.
-    
+    Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
+    Modifie le (chemin ?) commentaire audio  avec commentaire_audio
     :return: None
     """
     trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
@@ -61,9 +62,9 @@ def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio):
 
 def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
     """
-    Récupère l'évaluation texte d'une fiche à partir de l'id du personnel et de son horodatage
-    Modifie en DB la valeur de l'éval avec la nouvelle qui a été saisie par l'éducateur.
-    
+    Récupère l'évaluation textuelle du horodatage (date/heure) de la fiche id_fiche
+    Modifie l'évaluation textuelle evaluation_texte avec evaluation_texte
+
     :return: None
     """
     trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
@@ -73,9 +74,9 @@ def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
 
 def modifier_eval_audio(id_fiche, horodatage, eval_audio):
     """
-    Récupère le commentaire texte d'une fiche à partir de l'id du personnel et de son horodatage
-    Modifie en DB la valeur du commentaire avec la nouvelle qui a été saisie par l'éducateur.
-    
+    Récupère l'évaluation audio du horodatage (date/heure) de la fiche id_fiche
+    Modifie (le chemin ?) l'évaluation audio eval_audio avec eval_audio
+
     :return: None
     """
     trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
