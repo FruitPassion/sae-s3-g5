@@ -4,8 +4,8 @@ from custom_paquets.decorateur import educsimple_login_required
 from model.apprenti import get_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiches_par_id_fiche
 from model.trace import get_commentaires_par_fiche, modifier_commentaire_texte, modifier_evaluation_texte, \
-    get_commentaires_educ_par_fiche
-
+    get_commentaires_educ_par_fiche, ajouter_commentaires_evaluation
+    
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
 '''
@@ -64,3 +64,17 @@ def modifier_commentaires(apprenti, fiche):
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]))
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
+
+@educ_simple.route("/<apprenti>/<fiche>/ajouter-commentaires", methods=["POST"])
+@educsimple_login_required
+def ajouter_commentaires(apprenti, fiche):
+    """
+    Page d'ajout des commentaires éducateur de la fiche d'identifiant fiche de l'apprenti
+    
+    :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
+    """
+    fiche = get_fiches_par_id_fiche(fiche)
+    commentaire_texte = request.form["commentaire"]
+    eval_texte = request.form["evaluation"]
+    ajouter_commentaires_evaluation(fiche["id_fiche"], commentaire_texte, eval_texte)
+    return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200
