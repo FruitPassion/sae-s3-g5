@@ -6,6 +6,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/suivi_progression_apprenti.css') }}">
 {% endblock %}
 
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+{% endblock %}
+
 {% block body %}
     <h1>Suivi de progression</h1>
     <div class="haut">
@@ -15,16 +19,9 @@
     </div>
     <div class="millieu">
         <div class="diagramme">
-            <table class="colonne">
-                <caption> Temps en fonction d'une fiche</caption>
-                
-            </table>
-            
+            <label> Temps en fonction d'une fiche</label>
             <canvas id="suivi_progression_cip"></canvas>
-            {% block javascripts %}
-                <script type="module" src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
-            {% endblock %}
-
+            <script src="{{ url_for('static', filename='js/suivi_progression_cip.js') }}"></script>
         </div>
     </div>
     <div class="temps_fiche">

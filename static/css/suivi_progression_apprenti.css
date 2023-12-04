@@ -33,16 +33,19 @@ h1 {
     top: 25px;
 }
 
-.colonne {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+
+.diagramme label {
+    width: 20em;
+    position: absolute;
     font-size: 2em;
+    text-align: center;
+    margin-left: 10em;
 }
 
-caption {
-    width: 20em;
-    text-align: center;
+.diagramme canvas {
+    position: absolute;
+    top: 5em;
+    left: 5em;
 }
 
 label {
