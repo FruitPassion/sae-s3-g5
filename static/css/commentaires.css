@@ -10,8 +10,6 @@
 }
 
 #modifier {
-    height:5em;
-    float:right;
-    margin-right:78%;
-    margin-top:-3%;
+    height:1em;
+    float:inline-end;
 }

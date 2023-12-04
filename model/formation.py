@@ -11,7 +11,7 @@ def get_all_formation():
     :return: Une liste des formations
     """
     return convert_to_dict(Formation.query.with_entities(Formation.id_formation,
-                                                         Formation.intitule, Formation.image).all())
+                                                         Formation.intitule, Formation.niveau_qualif, Formation.groupe, Formation.image).all())
 
 
 def get_formation_id(nom_formation: str):

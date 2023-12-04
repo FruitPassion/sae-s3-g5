@@ -1,0 +1,52 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des formations{% endblock %}
+
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des formations</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Intitulé</th>
+                        <th scope="col">Niveau qualification</th>
+                        <th scope="col">Groupe</th>
+                        <th scope="col">Image</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for formation in liste_formation %}
+                        <tr class="text-center"
+                        id="pers-{{ formation["id_formation"] }}">
+                            <td class="align-middle">{{ formation["intitule"] }}</td>
+                            <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
+                            <td class="align-middle">{{ formation["groupe"] }}</td>
+                            <td><img style="width:180px; height:100px;"  src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
+                            <th class="align-middle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
+                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true"></i></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <p>Oui</p>
+            </div>
+        </div>
+    </div>
+
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}

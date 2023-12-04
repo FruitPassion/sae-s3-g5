@@ -3,6 +3,7 @@ from flask import Blueprint, render_template
 from custom_paquets.decorateur import admin_login_required
 from model.apprenti import get_all_apprenti
 from model.personnel import get_all_personnel
+from model.formation import get_all_formation
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -45,3 +46,14 @@ def gestion_apprenti():
     """
     apprenti = get_all_apprenti()
     return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti)
+
+
+@admin.route("/gestion-formation", methods=["GET"])
+@admin_login_required
+def gestion_formation():
+    """
+    Page listant toutes les formations et permettant de supprimer ou modifier leurs informations
+    On peut aussi y rajouter une formation
+    """
+    formation = get_all_formation()
+    return render_template("admin/gestion_formations.html", liste_formation=formation)
