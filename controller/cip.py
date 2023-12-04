@@ -23,7 +23,7 @@ def affiche_choix(apprenti):
 
     :return: rendu de la page choix_operations.html
     """
-    return render_template("cip/choix_operations.html", apprenti=apprenti)
+    return render_template("cip/choix_operations.html", apprenti=apprenti), 200
 
 
 @cip.route("/<apprenti>/fiches", methods=["GET"])

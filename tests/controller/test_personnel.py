@@ -9,6 +9,7 @@ Test des controller du fichier personnel.py
 # identifiants de connexion pour les tests
 username = "ALL11"
 passw = "educadmin"
+# passw = "111111" ?
 nom_formation = "Parcours maintenance batiment"
 apprenti = "ANG12"
 
