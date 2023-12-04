@@ -15,36 +15,17 @@
             integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
             crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='js/cryxpad.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/tts.js') }}"></script>
 
-    <style>
-        body {
-            background-color: #fafafa;
-        }
-
-        .container {
-            margin: 150px auto;
-        }
-    </style>
 </head>
 <body>
-
-
-<p>Demander de l'aide à un formateur
-    <img src="{{ url_for('static',filename='images/speak.png') }}"
-         alt="Lire le nom" onclick="lireTexte(this.parentElement.innerText)" style="width: 20px;">
-</p>
 <div class="container">
-    <h1 class="text-center">Secure Virtual Numeric Keyboard Example</h1>
     <div id="cryxpad-clavier" style="position: absolute;left: 50%;">
         <div class="row" style="left: -50%;position: relative;">
             <div class="col">
                 <div class="form-group">
                     <label for="cryxpad-input-field">Code :</label>
-                    <input type="password" class="form-control" id="cryxpad-input-field"
-                           aria-describedby="cryxpad-input-field-help" placeholder="Enter your code" disabled>
-                    <small id="cryxpad-input-field-help" class="form-text text-muted">the inserted value can be remove
-                        by the remove button.</small>
+                    <input type="password" class="form-control text-center" id="cryxpad-input-field" maxlength="6"
+                           aria-describedby="cryxpad-input-field-help" placeholder="Tapez votre code" disabled>
                 </div>
             </div>
         </div>
@@ -53,8 +34,8 @@
         <!-- <div id="clavier" align="center" ></div> -->
         <div class="row" style="left: -50%;position: relative;margin-top: 20px;">
             <div class="col">
-                <button id="cryxpad-validate-btn" class="btn btn-primary" type="button">Validate</button>
-                <button id="cryxpad-remove-btn" type="button" class="btn btn-danger"> Remove</button>
+                <button id="cryxpad-validate-btn" class="btn btn-primary" type="button">Valider</button>
+                <button id="cryxpad-remove-btn" type="button" class="btn btn-danger">Effacer</button>
             </div>
         </div>
     </div>

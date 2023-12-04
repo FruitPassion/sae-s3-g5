@@ -4,6 +4,14 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/connexion_personnel.css') }}">
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+            integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/cryxpad.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -22,5 +30,42 @@
             {{ form.submit(class="boutton-formation") }}
         </div>
     </form>
+
+    <div class="container">
+        <div id="cryxpad-clavier" style="position: absolute;left: 50%;">
+            <div class="row" style="left: -50%;position: relative;">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="cryxpad-input-field">Code :</label>
+                        <input type="password" class="form-control text-center" id="cryxpad-input-field" maxlength="6"
+                               aria-describedby="cryxpad-input-field-help" placeholder="Tapez votre code" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cryxpad-container"></div>
+            <!-- <div id="clavier" align="center" ></div> -->
+            <div class="row" style="left: -50%;position: relative;margin-top: 20px;">
+                <div class="col">
+                    <button id="cryxpad-validate-btn" class="btn btn-primary" type="button">Valider</button>
+                    <button id="cryxpad-remove-btn" type="button" class="btn btn-danger">Effacer</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% include "_partial/_retour_bouton.html" %}
+    <script type="text/javascript">
+        $(function () {
+            //Appel par défaut du plug-in
+            $('.cryxpad-container').cryxpad({
+                'inputFormId': 'cryxpad-input-field',
+                'removeButtonId': 'cryxpad-remove-btn',
+                'validateButtonId': 'cryxpad-validate-btn',
+                'carreaux': 4, // nombre de carreaux sur une ligne du clavier
+                'width': 50, // longeur d'un bouton
+                'height': 50, // hauteur d'un bouton
+                /*'buttonClass':"btn btn-primary",*/
+            });
+        });
+    </script>
 {% endblock %}

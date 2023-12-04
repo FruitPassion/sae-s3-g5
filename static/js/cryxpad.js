@@ -36,7 +36,6 @@
         //On fusionne nos deux objets ! =D
         var parametres=$.extend(defauts, options);
         var $inputcodeElement = $('input#'+parametres.inputFormId+'');
-        $inputcodeElement.prop('readonly', true);
 
         var $removeBtnElement = $('input#'+parametres.removeButtonId+'');
 
@@ -121,7 +120,6 @@
             });
 
             $(document).on("click",'.'+parametres.containerClass+' .code-btn',function(e) {
-                debugger;
                 e.preventDefault();
                 e.stopPropagation();
                 buttonClik($(this));
@@ -130,14 +128,12 @@
             * remove bnt click
             */
             $(document).on("click",'#'+parametres.removeButtonId+'',function(e) {
-                debugger;
                 e.preventDefault();
                 e.stopPropagation();
                 removeButtonClick($(this))
             });
 
             $(document).on("click",'#'+parametres.validateButtonId+'',function(e) {
-                debugger;
                 e.preventDefault();
                 e.stopPropagation();
                 validaterButtonClick($(this))
@@ -145,27 +141,20 @@
         });
 
         function buttonClik($el){
-            debugger;
-            if($el.data("number") !== undefined){
-                debugger;
-                var data = $el.data("number");
+            if($el.data("number") !== undefined && $inputcodeElement.val().toString().length < 6){
+                let data = $el.data("number");
                 selectednumber = $inputcodeElement.val().toString()+data.toString();
-                if(true){
-                    $inputcodeElement.val(selectednumber);
-                }
+                $inputcodeElement.val(selectednumber);
             }
-        };
+        }
 
         function removeButtonClick($el){
-            var inputCode = $inputcodeElement.val(
-                function(index, value){
-                    return value.substr(0, value.length - 1);
-            });
-        };
+            let inputCode = $inputcodeElement.val("");
+        }
 
         function validaterButtonClick($el){
             alert($inputcodeElement.val());
-        };
+        }
 
     };
     /*
