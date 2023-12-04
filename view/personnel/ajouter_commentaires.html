@@ -10,7 +10,7 @@
     <h1>Ajout commentaire éducateur de la fiche n°{{ fiche }} de {{ apprenti }} </h1>
     <div id="bloc">
        
-        <form action="{{ url_for('educ_simple.ajouter_commentaires', apprenti=apprenti, fiche=fiche) }}" method="post">
+        <form action="#" method="post"> <!--changer l'action par le chemin vers la bdd-->
             <p>Commentaire de l'éducateur : </p> <!--changer l'id par son prénom nom éventuellement mais jsp guys-->
             <textarea id="commentaire" name="commentaire" maxlength="500" rows="4" cols="30" class="ajout"></textarea><br><br>
             <input type="submit" value="Valider">
