@@ -4,6 +4,7 @@ from custom_paquets.decorateur import admin_login_required
 from model.apprenti import get_all_apprenti
 from model.personnel import get_all_personnel
 from model.formation import get_all_formation
+from model.session import get_all_sessions
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -57,3 +58,14 @@ def gestion_formation():
     """
     formation = get_all_formation()
     return render_template("admin/gestion_formations.html", liste_formation=formation)
+
+
+@admin.route("/gestion-session", methods=["GET"])
+@admin_login_required
+def gestion_session():
+    """
+    Page listant toutes les formations et permettant de supprimer ou modifier leurs informations
+    On peut aussi y rajouter une formation
+    """
+    sessions = get_all_sessions()
+    return render_template("admin/gestion_sessions.html", liste_sessions=sessions)

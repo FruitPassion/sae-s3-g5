@@ -1,0 +1,28 @@
+#container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 60px;
+    background-color: #ccc;
+    padding: 10px;
+
+}
+
+.grid-container > div {
+    background-color: #666;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+}
+
+.label-file {
+    cursor: pointer;
+    font-weight: bold;
+}
+.label-file:hover {
+    /*color: #25a5c4;*/
+    coloe: #00b1ca;
+}
+
+.input-file {
+    display: none;
+}

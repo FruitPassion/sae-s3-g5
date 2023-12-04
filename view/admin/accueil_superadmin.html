@@ -9,16 +9,16 @@
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Choix actions</h1>
 
-    <a href="{{ url_for("admin.gestion_apprenti") }}">
-        <button class="boutton-choix">Gérer comptes élève</button>
+    <a href="{{ url_for('admin.gestion_apprenti') }}">
+        <button class="boutton-choix">Comptes apprentis</button>
     </a>
-    <a href="{{ url_for("admin.gestion_personnel") }}">
-        <button class="boutton-choix">Gérer comptes personnel</button>
+    <a href="{{ url_for('admin.gestion_personnel') }}">
+        <button class="boutton-choix">Comptes personnel</button>
     </a>
-    <a href="{{ url_for("admin.gestion_formation") }}">
-        <button class="boutton-choix">Gérer formations</button>
+    <a href="{{ url_for('admin.gestion_formation') }}">
+        <button class="boutton-choix">Formations</button>
     </a>
     <a>
-        <button class="boutton-choix">Gérer sessions</button>
+        <button class="boutton-choix">Sessions</button>
     </a>
 {% endblock %}
