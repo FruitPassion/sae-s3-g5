@@ -6,7 +6,7 @@ from model_db.formation import Formation
 
 def get_all_formation():
     """
-    Retourn la liste de toute les formations
+    Retourne la liste de toutes les formations
 
     :return: Une liste des formations
     """
@@ -16,8 +16,18 @@ def get_all_formation():
 
 def get_formation_id(nom_formation: str):
     """
-    Retourn l'id d'une formation a partir de son nom
+    Retourne l'id d'une formation à partir de son nom
 
     :return: Un id de formation
     """
     return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
+
+
+
+def get_nom_formation(id_formation):
+    """
+    Retourne l'intitulé d'une formation à partir de son id
+
+    :return: Un intitulé de formation
+    """
+    return Formation.query.with_entities(Formation.intitule).filter_by(id_formation = id_formation).first().intitule

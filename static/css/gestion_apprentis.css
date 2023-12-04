@@ -18,11 +18,12 @@
     cursor: pointer;
     font-weight: bold;
 }
-.label-file:hover {
-    /*color: #25a5c4;*/
-    coloe: #00b1ca;
-}
 
 .input-file {
     display: none;
+}
+
+#enregistrer {
+    margin-left:50%;
+    margin-right:-50%;
 }
