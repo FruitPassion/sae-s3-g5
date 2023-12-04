@@ -20,6 +20,11 @@ def get_all_personnel():
     return convert_to_dict(personnel)
 
 
+def get_liste_personnel_non_super():
+    return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
+        Personnel.role != "SuperAdministrateur").all())
+
+
 def get_id_personnel_by_login(login: str):
     """
     Renvoie l'id_personnel à partir du login
@@ -71,12 +76,7 @@ def check_password(login: str, new_password: str):
 
     :return: Un booleen vrai si le mot de passe est valide
     """
-    old_password = (
-        Personnel.query.with_entities(Personnel.mdp)
-        .filter_by(login=login)
-        .first()
-        .mdp
-    )
+    old_password = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
     digest = compare_passwords(new_password, old_password)
     if digest and get_nbr_essaie_connexion_personnel(login) < 3:
         reset_nbr_essaies_connexion(login)

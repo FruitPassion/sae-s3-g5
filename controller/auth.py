@@ -14,7 +14,8 @@ from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_n
     check_apprenti
 from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
-from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel
+from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel, \
+    get_liste_personnel_non_super
 
 auth = Blueprint("auth", __name__)
 
@@ -36,8 +37,41 @@ def choix_connexion():
     return render_template("auth/index.html")
 
 
-@auth.route("/connexion-personnel", methods=["GET", "POST"])
-def connexion_personnel():
+@auth.route("/choix-type-connexion")
+def choix_type_connexion():
+    return render_template("auth/choix_personnel.html")
+
+
+@auth.route("/connexion-personnel-pin", methods=["GET", "POST"])
+def connexion_personnel_pin():
+    personnels = get_liste_personnel_non_super()
+    if request.method == "POST":
+        passwd = request.form["code"]
+        login = request.form.get('login-select')
+        if not check_password(login, passwd):
+            if get_nbr_essaie_connexion_personnel(login) == 3:
+                flash("Compte bloqué, contacter un admin", "error")
+                code = 403
+            else:
+                flash("Compte inconnu ou mot de passe invalide.", "error")
+                code = 403
+        else:
+            if get_nbr_essaie_connexion_personnel(login) == 3:
+                flash("Compte bloqué, contacter un admin", "error")
+                code = 403
+            else:
+                session["name"] = login
+                session["role"] = get_role(login)
+                flash("Connexion réussie.")
+                if session["role"] == 'SuperAdministrateur':
+                    return redirect(url_for("admin.accueil_admin"))
+                else:
+                    return redirect(url_for("personnel.choix_formation"))
+    return render_template("auth/connexion_personnel_pin.html", personnels=personnels)
+
+
+@auth.route("/connexion-personnel-mdp", methods=["GET", "POST"])
+def connexion_personnel_mdp():
     """
     Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
     aura accès à un panneau de possibilités différentes.
@@ -69,7 +103,7 @@ def connexion_personnel():
                     return redirect(url_for("admin.accueil_admin"))
                 else:
                     return redirect(url_for("personnel.choix_formation"))
-    return render_template("auth/connexion_personnel.html", form=form), code
+    return render_template("auth/connexion_personnel_code.html", form=form), code
 
 
 @auth.route("/choix-formation-apprentis", methods=["GET", "POST"])
