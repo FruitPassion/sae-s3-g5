@@ -15,6 +15,7 @@ def logging_erreur(e, message='Exception occurred : '):
         if ligne_depart <= i <= ligne_fin:
             mess = mess + line.strip() + '<br>'
     f.close()
+    return mess
 
 
 class ProjectError(Exception):

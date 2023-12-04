@@ -81,7 +81,7 @@ def create_app(config=None):
     # 500 est l'erreur par défaut s'il n'y a pas de code disponible
     @app.errorhandler(Exception)
     def handle_error(e):
-        logging_erreur(e)
+        description_plus = logging_erreur(e)
         code = 500
         description = "Quelque chose s'est mal passé"
         if isinstance(e, HTTPException):
@@ -93,7 +93,7 @@ def create_app(config=None):
             except:
                 pass
         return render_template("common/erreur.html", titre='erreur', erreur=f"Erreur {code}",
-                               description=description), e.code
+                               description=description, description_plus=description_plus), code
 
     # Permet d'horodater les fichiers utilisés dans le navigateur et d'éviter les problèmes de cache
     @app.context_processor
