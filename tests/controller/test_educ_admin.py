@@ -4,3 +4,41 @@ from custom_paquets.tester_usages import connexion_personnel
 '''
 Test des controller du fichier educateur_admin.py
 '''
+
+# création d'identifiants pour les tests
+login = "ALL11"
+mdp = "111111"
+apprenti = "ANG12"
+
+# test de la route de direction vers fiches apprenti
+def test_route_fiches_apprenti(client):
+    connexion_personnel(client, login, mdp)
+    response = client.get(url_for("educ_admin.fiches_apprenti", apprenti=apprenti))
+
+    # Test d'accès à la route
+    assert response.status_code == 200
+
+    # Test de vérification de la route
+    assert response.request.path == f"/educ-admin/{apprenti}/fiches"
+    
+# test de la route de direction vers ajouter fiche
+def test_route_ajouter_fiches(client):
+    connexion_personnel(client, login, mdp)
+    response = client.get(url_for("educ_admin.ajouter_fiche", apprenti=apprenti))
+    
+    # Test d'accès à la route
+    assert response.status_code == 200
+    
+    # Test de vérification de la route
+    assert response.request.path == f"/educ-admin/{apprenti}/ajouter-fiche"
+    
+# test de la route de direction vers personnalisation
+def test_route_personnalisation(client):
+    connexion_personnel(client, login, mdp)
+    response = client.get(url_for("educ_admin.personnalisation"))
+    
+    # Test d'accès à la route
+    assert response.status_code == 200
+    
+    # Test de vérification de la route
+    assert response.request.path == f"/educ-admin/personnalisation"
