@@ -65,7 +65,7 @@ def modifier_commentaires(apprenti, fiche):
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
 
-@educ_simple.route("/<apprenti>/<fiche>/ajouter-commentaires", methods=["POST"])
+@educ_simple.route("/<apprenti>/<fiche>/ajouter-commentaires", methods=["POST", "GET"])
 @educsimple_login_required
 def ajouter_commentaires(apprenti, fiche):
     """
@@ -74,7 +74,10 @@ def ajouter_commentaires(apprenti, fiche):
     :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
     fiche = get_fiches_par_id_fiche(fiche)
-    commentaire_texte = request.form["commentaire"]
-    eval_texte = request.form["evaluation"]
-    ajouter_commentaires_evaluation(fiche["id_fiche"], commentaire_texte, eval_texte)
+    if request.method == 'POST':
+        commentaire_texte = request.form["commentaire"]
+        eval_texte = request.form["evaluation"]
+        intitule = request.form["intitule"]
+        ajouter_commentaires_evaluation(fiche["id_fiche"], commentaire_texte, eval_texte, None, None, session.get("name"), intitule)
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]))
     return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200
