@@ -1,3 +1,4 @@
+from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField
 from wtforms.validators import InputRequired, Length
@@ -18,4 +19,12 @@ class AjouterFiche(FlaskForm):
     lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
     decriptioninput = StringField(u'Text', widget=TextArea(), render_kw={"onchange": "validateForm()"})
     submit = SubmitField("Ajouter", render_kw={"disabled": "true"})
+
+
+class AjouterApprenti(FlaskForm):
+    nominput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    prenominput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    logininput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    # imageinput = ????
+    submit = SubmitField("Enregistrer", render_kw={"disabled": "true"})
 

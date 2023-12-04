@@ -2,6 +2,9 @@
 
 {% block title %}Gestion des apprentis{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_apprentis.css') }}">
+{% endblock %}
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des apprentis</h1>
@@ -51,7 +54,28 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
-                <p>Oui</p>
+                <br>
+                <form method="post" id="container">
+                    <div>
+                        <label for="nom">Nom :</label>
+                        <input type="text" id="nom" name="nom" placeholder="Dupont" size="23px" required><br><br>
+                
+                        <label for="prenom">Prénom :</label>
+                        <input type="text" id="prenom" name="prenom" placeholder="Jean" required>
+                    </div>
+                    <div>
+                        <label for="login" title="Exemple : 2 premières lettres du nom puis première lettre du prénom et somme des lettres">Login :</label>
+                        <input type="text" id="login" name="login" placeholder="DUJ10" class="info" required><br><br>
+
+                        <div class="parent-div">
+                            <label>Choisissez une image</label>
+                            
+                            <label for="avatar" class="label-file"><img src="{{ url_for('static', filename='images/defaut_profile.png') }}" height="50px"></label>
+                            <input type="file" class="input-file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg" required/>
+                          </div>
+                    </div>
+                    <input type="submit" value="Enregistrer" id="enregistrer">
+                </form>
             </div>
         </div>
     </div>

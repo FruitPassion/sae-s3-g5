@@ -9,7 +9,6 @@ from flask import (
 )
 
 from custom_paquets.custom_form import LoginPersonnelForm
-from custom_paquets.file_getter import get_flat
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
     check_apprenti
 from model.session import get_apprentis_by_formation

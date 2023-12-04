@@ -14,4 +14,3 @@ def compare_passwords(new_passw, old_passwd):
 
 def get_b64(password):
     return base64.b64encode(hashlib.sha256(password.encode('utf_8')).digest())
-

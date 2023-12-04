@@ -7,6 +7,7 @@ from model_db.shared_model import db
 from model_db.apprenti import Apprenti
 
 from model_db.ficheintervention import FicheIntervention
+from model.formation import get_nom_formation
 
 
 def get_all_apprenti():
