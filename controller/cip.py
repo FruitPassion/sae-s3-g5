@@ -65,7 +65,7 @@ def suivi_progression_apprenti(apprenti):
     
     :return: rendu de la page suivi-progression.html ?
     """
-    return render_template("cip/suivi_progression_apprenti.html"), 200
+    return render_template("cip/suivi_progression_cip.html"), 200
 
 
 @cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])

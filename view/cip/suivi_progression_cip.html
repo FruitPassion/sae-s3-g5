@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Suivie de progression</h1>
+    <h1>Suivi de progression</h1>
     <div class="haut">
         <label>Nb fiches</label>
         <label>Niveau moyen</label>
@@ -20,9 +20,10 @@
                 
             </table>
             
-            <ul>
-    
-            </ul>
+            <canvas id="suivi_progression_cip"></canvas>
+            {% block javascripts %}
+                <script type="module" src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
+            {% endblock %}
 
         </div>
     </div>
