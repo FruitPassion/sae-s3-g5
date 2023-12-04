@@ -19,6 +19,20 @@ def get_commentaires_par_fiche(id_fiche):
                                              LaisserTrace.id_personnel).all())
 
 
+def get_commentaires_educ_par_fiche(id_fiche):
+    """
+    Recupere les commentaires d'une trace d'une fiche technique d'un apprenti à partir de son Login
+
+    :return: Les informations de l'apprenti
+    """
+    return convert_to_dict(
+        LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti="0"
+                                     ).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
+                                                     LaisserTrace.eval_texte, LaisserTrace.horodatage,
+                                                     LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
+                                                     LaisserTrace.id_personnel).first())
+
+
 def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
     """
     Récupère le commentaire texte d'une fiche à partir de l'id du personnel et de son horodatage
