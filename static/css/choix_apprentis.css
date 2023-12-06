@@ -2,7 +2,6 @@
     display: flex;
     text-align: center;
     justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
 }
 
@@ -20,4 +19,5 @@
 
 .photo_profil {
     height: 10em;
+    width: 100%;
 }
