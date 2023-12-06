@@ -52,7 +52,8 @@ def gestion_apprenti():
     Page listant tous les comptes des apprentis et permettant de supprimer ou modifier leurs informations
     On peut aussi y rajouter du personnel
     """
-    sessions = get_all_sessions()
+    
+    formations = get_all_formation()
     apprenti = get_all_apprenti()
     form = AjouterApprenti()
     if form.validate_on_submit() and request.method == "POST":
@@ -65,10 +66,10 @@ def gestion_apprenti():
         else:
             chemin_avatar = "photo_profile/"+"default_profile.png"
         id_apprenti = add_apprenti(form.nom.data, form.prenom.data, login, chemin_avatar)
-        add_apprenti_assister(id_apprenti, sessions[int(request.form.get("select_session"))-1]["id_session"])
+        add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation"))-1]["id_formation"])
         return redirect(url_for("admin.gestion_apprenti"))
     
-    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form = form, sessions = sessions)
+    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form = form, formations = formations)
 
 
 @admin.route("/gestion-formation", methods=["GET"])

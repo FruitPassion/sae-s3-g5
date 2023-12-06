@@ -6,6 +6,7 @@ from model.formation import get_formation_id
 from model_db.apprenti import Apprenti
 from model_db.assister import Assister
 from model_db.session import Session
+from model_db.formation import Formation
 
 def get_all_sessions():
     """
@@ -30,13 +31,21 @@ def get_apprentis_by_formation(nom_formation: str):
         abort(404)
 
 
-def add_apprenti_assister(id_apprenti, id_session):
+def add_apprenti_assister(id_apprenti, id_formation):
     """
     Associe un apprenti à une session en BD
 
     :return: None
     """
-
-    assister = Assister(id_apprenti = id_apprenti, id_session = id_session)
-    db.session.add(assister)
+    sessions = get_sessions_par_formation(id_formation)
+    for session in sessions :
+        assister = Assister(id_apprenti = id_apprenti, id_session = session.id_session)
+        db.session.add(assister)
     db.session.commit()
+
+
+def get_sessions_par_formation(id_formation):
+    """
+    :return: toutes les sessions de la formation id_formation
+    """
+    return Session.query.join(Formation).filter_by(id_formation = id_formation).all()

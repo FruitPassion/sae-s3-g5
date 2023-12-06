@@ -73,14 +73,14 @@
                             
                         </div>
                         <div>
-                            <label>Choisissez la session correspondante :</label>
-                            <select name="select_session" id="select_session">
-                                {% for session in sessions %}
-                                    <option value="{{ session['id_session'] }}"
+                            <label>Choisissez la formation correspondante :</label>
+                            <select name="select_formation" id="select_formation">
+                                {% for formation in formations %}
+                                    <option value="{{ formation['id_formation'] }}"
                                     {% if loop.index0 == 0 %}
                                         selected
                                     {% endif %}
-                                    >{{ session["cours"] }}</option>
+                                    >{{ formation["intitule"] }}</option>
                                 {% endfor %}
                             </select>
                         </div>
