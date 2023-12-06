@@ -18,3 +18,4 @@ MarkupSafe
 xmlrunner
 flask-unittest
 flask-security-too[fsqla,common]
+Unidecode

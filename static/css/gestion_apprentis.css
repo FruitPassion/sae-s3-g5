@@ -20,7 +20,7 @@
 }
 
 .input-file {
-    display: none;
+    visibility: hidden;
 }
 
 #enregistrer {

@@ -103,3 +103,15 @@ def reset_nbr_essaies_connexion(login: str):
         return True
     except:
         return False
+    
+
+def add_apprenti(nom, prenom, login, photo) :
+    """
+    Ajoute un apprenti en BD
+
+    :return: id_apprenti
+    """
+    apprenti = Apprenti(nom = nom, prenom = prenom, login = login, photo = photo)
+    db.session.add(apprenti)
+    db.session.commit()
+    return apprenti.id_apprenti

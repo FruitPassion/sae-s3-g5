@@ -55,26 +55,37 @@
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <br>
-                <form method="post" id="container">
+                <form method="post" id="container" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
                     <div>
                         <label for="nom">Nom :</label>
-                        <input type="text" id="nom" name="nom" placeholder="Dupont" size="23px" required><br><br>
+                        {{ form.nom() }}
                 
                         <label for="prenom">Prénom :</label>
-                        <input type="text" id="prenom" name="prenom" placeholder="Jean" required>
+                        {{ form.prenom() }}
                     </div>
                     <div>
-                        <label for="login" title="Exemple : 2 premières lettres du nom puis première lettre du prénom et somme des lettres">Login :</label>
-                        <input type="text" id="login" name="login" placeholder="DUJ10" class="info" required><br><br>
-
                         <div class="parent-div">
                             <label>Choisissez une image</label>
                             
-                            <label for="avatar" class="label-file"><img src="{{ url_for('static', filename='images/defaut_profile.png') }}" height="50px"></label>
-                            <input type="file" class="input-file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg" required/>
-                          </div>
+                            <label for="avatar" class="label-file"><img src="{{ url_for('static', filename='images/photo_profile/defaut_profile.png') }}" height="50px"></label>
+                            <input type="file" class="input-file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg"/>
+                            
+                        </div>
+                        <div>
+                            <label>Choisissez la formation correspondante :</label>
+                            <select name="select_formation" id="select_formation">
+                                {% for formation in formations %}
+                                    <option value="{{ formation['id_formation'] }}"
+                                    {% if loop.index0 == 0 %}
+                                        selected
+                                    {% endif %}
+                                    >{{ formation["intitule"] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                    <input type="submit" value="Enregistrer" id="enregistrer">
+                    {{ form.submit() }}
                 </form>
             </div>
         </div>

@@ -22,9 +22,7 @@ class AjouterFiche(FlaskForm):
 
 
 class AjouterApprenti(FlaskForm):
-    nominput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    prenominput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    logininput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    # imageinput = ????
-    submit = SubmitField("Enregistrer", render_kw={"disabled": "true"})
+    nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Dupont"})
+    prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Jean"})
+    submit = SubmitField("Enregistrer")
 
