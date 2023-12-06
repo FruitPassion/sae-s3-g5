@@ -1,10 +1,27 @@
+ul {
+    list-style-type: none;
+    background-color: #d9d9d9;
+    height: 100px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+li {
+    display: inline;
+    font-size: 2em;
+    padding: 1.45em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
 .haut {
-    background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 1);
 	width:95%;
+    height: 20%;
 	position:absolute;
 	left:24.5px;
 	top:400px;
-    border-radius: 10px;
 }
 
 .milieu { 
@@ -31,6 +48,11 @@ label {
     padding: 1.45em;
     padding-top: 1em;
     padding-bottom: 1em;
+}
+
+label:hover {
+    color: white;
+    border-radius: 10px;
 }
 
 .btn {
@@ -62,10 +84,6 @@ label {
 
 @media screen and (min-width: 1280px ) {
 
-    h1 {
-        left: 20%;
-    }
-    
     .haut label {
         font-size: 2em;
         padding: 3em;
@@ -94,7 +112,7 @@ label {
 
 @media screen and (width > 1290px ) {
 
-    .haut label {
+    .haut li {
         font-size: 2em;
         padding: 4.25em;
         padding-top: 1em;
@@ -109,7 +127,4 @@ label {
     .diagramme{
         height: 85%;
     }
-   
-   
-
 }

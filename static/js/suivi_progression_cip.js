@@ -8,7 +8,7 @@ function creation_graphique_suivi_progression_cip() {
       labels: ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"],
       datasets: [{
         label: 'Nombre de fiches créées',
-        // jeu de données random
+        // jeu de données random - à remplacer par les données de la BDD
         data: [3, 10, 5, 2, 7],
         backgroundColor: ["#ffcd56", "#ff6384", "#36a2eb", "#fd6b19", "#4bc0c0"],
       }]
@@ -17,14 +17,6 @@ function creation_graphique_suivi_progression_cip() {
       title: {
         display: true,
         text: 'Nombre de fiches créées par jour'
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            size: 25
-          }
-        }]
       }
     }
   });

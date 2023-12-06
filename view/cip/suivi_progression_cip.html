@@ -3,15 +3,18 @@
 {% block title %}Suivi de Progression{% endblock %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/suivi_progression_apprenti.css') }}">
 {% endblock %}
 
 {% block body %}
     <h1>Suivi de progression</h1>
     <div class="haut">
-        <label>Nombre de fiches</label>
-        <label>Niveau moyen</label>
-        <label>Temps moyen</label>
+        <ul>
+            <li>Nombre de fiches</li>
+            <li>Niveau moyen</li>
+            <li>Temps moyen</li>
+        </ul>
     </div>
     <div class="milieu">
         <div class="diagramme">
