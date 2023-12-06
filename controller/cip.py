@@ -3,7 +3,8 @@ from flask import Blueprint, render_template
 from custom_paquets.decorateur import cip_login_required
 from model.trace import get_commentaires_par_fiche
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_finies_par_login
+from model.ficheintervention import get_fiches_techniques_finies_par_login, get_niveau_fiches_par_login
+import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
 
@@ -63,9 +64,14 @@ def suivi_progression_apprenti(apprenti):
     Page de suivi de progression de l'apprenti sélectionné. 
     Pour le moment ne fait que valider que l'on consulte le suivi de progression de l'apprenti sélectionné.
     
-    :return: rendu de la page suivi-progression.html ?
+    :return: rendu de la page suivi-progression.html
     """
-    return render_template("cip/suivi_progression_cip.html"), 200
+    
+    niv_fiche = get_niveau_fiches_par_login(apprenti)
+    for niv in niv_fiche:
+        niv["total_niveau"] = str(niv["total_niveau"])
+    
+    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche)), 200
 
 
 @cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])

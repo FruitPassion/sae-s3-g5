@@ -36,11 +36,10 @@ li {
 
 .diagramme {
     background-color: white;
-    width:95%;
-	height:90%;
-    position: absolute;
     left: 30px;
     top: 25px;
+    padding: 100px;
+    height: 50%;
 }
 
 label {

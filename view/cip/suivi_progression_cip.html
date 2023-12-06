@@ -22,6 +22,11 @@
             {% block javascripts %}
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.min.js"></script>
                 <script src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
+                <script>
+                    window.onload = function() {
+                        creation_graphique_suivi_progression_cip({{ niv_fiche|safe }});
+                    }
+                </script>
             {% endblock %}
         </div>
     </div>

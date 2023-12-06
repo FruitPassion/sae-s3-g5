@@ -1,10 +1,12 @@
 from datetime import date
+from sqlalchemy import func
 from time import strftime, localtime
 
 from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
+from model_db.apprenti import Apprenti
 from model_db.composer import ComposerPresentation
 from model_db.ficheintervention import FicheIntervention
 from model_db.shared_model import db
@@ -30,6 +32,24 @@ def get_fiches_par_id_fiche(id_fiche):
     return convert_to_dict(FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.numero).first())
 
+  
+def get_niveau_fiches_par_login(login):
+    """
+    Récupère le total des niveaux de chaque fiche technique associées à un apprenti à partir de son Login
+
+    :return: Les fiches techniques de l'apprenti
+    """
+    id_apprenti = get_id_apprenti_by_login(login)
+    fiche_niveau = (
+        db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'))
+        .join(ComposerPresentation)
+        .join(Apprenti)
+        .filter(FicheIntervention.id_apprenti == id_apprenti)
+        .filter(~ComposerPresentation.position_elem.like('%0%'))
+        .group_by(FicheIntervention.id_fiche)
+        .all()
+    )
+    return convert_to_dict(fiche_niveau)
 
 
 def get_fiches_techniques_finies_par_login(login):
