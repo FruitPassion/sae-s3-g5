@@ -13,15 +13,16 @@
 
     <div id="container-principal">
         <div id="zone_preview">
-            <select id="selecteur_categorie">
+            <h3>Prévisualisation</h3>
+            <select id="selecteur_categorie" onchange="changer_preview(this)" class="my-3">
                 {% for categorie in composition %}
                     <option value="{{ categorie["position_elem"] }}">{{ categorie["libelle_elem"] }}</option>
                 {% endfor %}
             </select>
-            <h3>Prévisualisation</h3>
             {% for categorie in composition %}
-                <fieldset  {% if loop.index0 != 0 %}hidden="" {% endif %}>
-                    <legend>{{ categorie["libelle_elem"] }}</legend>
+                <fieldset id="field-{{ categorie["position_elem"] }}" class="scheduler-border p-2 mr-auto ml-2"
+                          {% if loop.index0 != 0 %}hidden="" {% endif %}>
+                    <legend >{{ categorie["libelle_elem"] }}</legend>
                     {% for element in categorie["elements"] %}
                         {% if element["type_elem"] == "select-time" %}
                             <label>
@@ -62,7 +63,8 @@
         </div>
         <div id="zone_personnalisation">
             {% for categorie in composition %}
-                <div {% if loop.index0 != 0 %}hidden="" {% endif %}>
+                <div class="set-hidde" id="set-{{ categorie["position_elem"] }}"
+                     {% if loop.index0 != 0 %}hidden="" {% endif %}>
                     <select id="selecteur_element">
                         <option value="{{ categorie["position_elem"] }}" selected>Catégorie
                             - {{ categorie["libelle_elem"] }}</option>

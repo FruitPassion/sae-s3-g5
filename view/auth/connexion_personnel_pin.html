@@ -51,9 +51,11 @@
             </div>
         </form>
     </div>
-    <div class="fixed-bottom">
-        {% include "_partial/_retour_bouton.html" %}
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_type_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
+
     <script type="text/javascript">
         $(function () {
             //Appel par défaut du plug-in

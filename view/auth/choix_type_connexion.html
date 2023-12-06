@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    {% include "_partial/_retour_bouton.html" %}
-
-
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}

@@ -7,6 +7,15 @@ from model.personnel import check_super_admin, get_role
 ACTION_INDEX = "auth.choix_connexion"
 
 
+def logout_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if session.get("name"):
+            return redirect(url_for('auth.logout'))
+        return func(*args, **kwargs)
+    return decorated_function
+
+
 def admin_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):

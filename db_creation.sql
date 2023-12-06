@@ -28,7 +28,7 @@ CREATE TABLE Apprenti
     nom         VARCHAR(50) NOT NULL,
     prenom      VARCHAR(50) NOT NULL,
     login       VARCHAR(50) NOT NULL,
-    mdp         TEXT        NOT NULL,
+    mdp         TEXT,
     photo       VARCHAR(100),
     essaies     INT         NOT NULL DEFAULT (0),
     PRIMARY KEY (id_apprenti),

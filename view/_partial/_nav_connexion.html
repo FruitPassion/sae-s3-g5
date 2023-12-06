@@ -1,6 +1,6 @@
 <nav class="navbar p-4" style="background-color:{% if session['role'] == 'apprentis' %} #96DBF2;{% else %} #90E3BE;{% endif %}">
     <div class="container-fluid">
-        <a class="navbar-brand">
+        <a class="navbar-brand" href="{{ url_for('auth.choix_connexion') }}">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="80"
                  class="d-inline-block align-text-top">
         </a>

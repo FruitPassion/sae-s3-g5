@@ -58,5 +58,7 @@
         </div>
     </div>
 
-    {% include "_partial/_retour_bouton.html" %}
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}

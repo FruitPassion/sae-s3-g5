@@ -34,11 +34,12 @@
                     <tbody>
                     {% for apprenti in liste_apprenti %}
                         <tr class="text-center {% if apprenti["essaies"] == 5 %}table-danger{% endif %}"
-                        id="pers-{{ apprenti["id_apprenti"] }}">
+                            id="pers-{{ apprenti["id_apprenti"] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
                             <td class="align-middle">{{ apprenti["prenom"] }}</td>
-                            <td><img style="width:80px"  src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
+                            <td><img style="width:80px"
+                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
                             <td class="align-middle">
                                 {% if apprenti["essaies"] == 5 %}
                                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -54,42 +55,52 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
-                <br>
-                <form method="post" id="container" enctype="multipart/form-data">
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
-                    <div>
-                        <label for="nom">Nom :</label>
-                        {{ form.nom() }}
-                
-                        <label for="prenom">Prénom :</label>
-                        {{ form.prenom() }}
-                    </div>
-                    <div>
-                        <div class="parent-div">
-                            <label>Choisissez une image</label>
-                            
-                            <label for="avatar" class="label-file"><img src="{{ url_for('static', filename='images/photo_profile/defaut_profile.png') }}" height="50px"></label>
-                            <input type="file" class="input-file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg"/>
-                            
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Nom :</h3>
+                            </div>
+                            <div>
+                                {{ form.nom(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Prenom :</h3>
+                            </div>
+                            <div>
+                                {{ form.prenom(class="form-control fs-1 my-3") }}
+                            </div>
                         </div>
-                        <div>
-                            <label>Choisissez la formation correspondante :</label>
-                            <select name="select_formation" id="select_formation">
-                                {% for formation in formations %}
-                                    <option value="{{ formation['id_formation'] }}"
-                                    {% if loop.index0 == 0 %}
-                                        selected
-                                    {% endif %}
-                                    >{{ formation["intitule"] }}</option>
-                                {% endfor %}
-                            </select>
+                        <div class="m-4 w-50">
+                            <div class="parent-div">
+                                <div class="mb-3">
+                                    <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                    <input class="form-control fs-1 my-3" type="file" id="avatar" name="avatar"
+                                       accept="image/png, image/jpeg, image/jpg"/>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Choisissez la formation correspondante :</h3>
+                                <select name="select_formation" class="fs-1 my-3 form-select" required>
+                                <option  value="" selected disabled="disabled">--- Sélectionnez une formation ---</option>
+                                    {% for formation in formations %}
+                                        <option value="{{ formation['id_formation'] }}"
+                                        >{{ formation["intitule"] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    {{ form.submit() }}
+                    <div class="w-50 mx-auto my-5">
+                        {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-    {% include "_partial/_retour_bouton.html" %}
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}

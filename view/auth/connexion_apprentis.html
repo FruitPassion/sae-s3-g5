@@ -41,7 +41,10 @@
         <input type="hidden" name="login" id="login" value="{{ apprenti['login'] }}">
         <input type="hidden" name="pass" id="pass" value="">
     </form>
-    {% include "_partial/_retour_bouton.html" %}
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=nom_formation) }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}
 
 {% block javascripts2 %}

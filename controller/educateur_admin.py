@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, flash
+from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 
 from custom_paquets.builder import build_categories
 from custom_paquets.custom_form import AjouterFiche
@@ -45,6 +45,7 @@ def ajouter_fiche(apprenti):
         assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
                                    form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1, degres)
         flash("Fiche enregistrée avec succès")
+        return redirect(url_for("educ_admin.personnalisation"))
     return render_template('educ_admin/ajouter_fiche.html', form=form), 200
 
 

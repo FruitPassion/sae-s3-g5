@@ -9,6 +9,7 @@ from flask import (
 )
 
 from custom_paquets.custom_form import LoginPersonnelForm
+from custom_paquets.decorateur import logout_required
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
     check_apprenti
 from model.session import get_apprentis_by_formation
@@ -26,6 +27,7 @@ Pas de préfice d'URL.
 
 
 @auth.route("/")
+@logout_required
 def choix_connexion():
     """
     Page par défaut du site. Permet de se diriger vers les pages de connexion en tant qu'apprenti ou en tant que
@@ -37,11 +39,13 @@ def choix_connexion():
 
 
 @auth.route("/choix-type-connexion")
+@logout_required
 def choix_type_connexion():
-    return render_template("auth/choix_personnel.html")
+    return render_template("auth/choix_type_connexion.html")
 
 
 @auth.route("/connexion-personnel-pin", methods=["GET", "POST"])
+@logout_required
 def connexion_personnel_pin():
     personnels = get_liste_personnel_non_super()
     if request.method == "POST":
@@ -70,6 +74,7 @@ def connexion_personnel_pin():
 
 
 @auth.route("/connexion-personnel-mdp", methods=["GET", "POST"])
+@logout_required
 def connexion_personnel_mdp():
     """
     Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
@@ -106,6 +111,7 @@ def connexion_personnel_mdp():
 
 
 @auth.route("/choix-formation-apprentis", methods=["GET", "POST"])
+@logout_required
 def choix_formation_apprentis():
     """
     Suit la page d'index, permet de charger la liste des toutes les formations dans la page dédiée.
@@ -117,6 +123,7 @@ def choix_formation_apprentis():
 
 
 @auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET", "POST"])
+@logout_required
 def choix_eleve_apprentis(nom_formation):
     """
     Suite la page du choix de la formation pour les apprentis, affiche tous les apprentis associés à cette formation.
@@ -125,11 +132,12 @@ def choix_eleve_apprentis(nom_formation):
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
     apprentis = get_apprentis_by_formation(nom_formation)
-    return render_template("auth/choix_apprentis.html", apprentis=apprentis), 200
+    return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200
 
 
-@auth.route("/connexion-apprentis/<login_apprenti>", methods=["GET", "POST"])
-def connexion_apprentis(login_apprenti):
+@auth.route("/connexion-apprentis/<nom_formation>/<login_apprenti>", methods=["GET", "POST"])
+@logout_required
+def connexion_apprentis(nom_formation, login_apprenti):
     """
     Page d'authentification des apprentis. Ils doivent résoudre le schéma pour accéder 
     à la page de toutes les fiches techniques qu'ils ont réalisé
@@ -153,7 +161,7 @@ def connexion_apprentis(login_apprenti):
             else:
                 flash("Compte inconnu ou mot de passe invalide.", "error")
                 code = 403
-    return render_template("auth/connexion_apprentis.html", apprenti=apprenti), code
+    return render_template("auth/connexion_apprentis.html", apprenti=apprenti, nom_formation=nom_formation), code
 
 
 @auth.route("/logout", methods=["GET", "POST"])

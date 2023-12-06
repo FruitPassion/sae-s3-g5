@@ -38,3 +38,17 @@ function mettre_a_jour_couleur_fond() {
     let visualisation_couleur = document.getElementById("couleur_fond");
     visualisation_couleur.style.backgroundColor = document.getElementById("color_picker").value;
 }
+
+function changer_preview(element){
+    let fields = document.getElementsByTagName("fieldset");
+    for (const f of fields){
+        f.setAttribute("hidden", "true");
+    }
+    document.getElementById("field-"+element.value).removeAttribute("hidden");
+    let sets = document.getElementsByClassName("set-hidde");
+    for (const s of sets){
+        s.setAttribute("hidden", "");
+    }
+    document.getElementById("set-"+element.value).removeAttribute("hidden");
+
+}
