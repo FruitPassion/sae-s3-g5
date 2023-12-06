@@ -1,10 +1,16 @@
-from flask import Blueprint, render_template
+import os
+import platform
+from unidecode import unidecode
+
+from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
-from model.apprenti import get_all_apprenti
+from model.apprenti import get_all_apprenti, add_apprenti
 from model.personnel import get_all_personnel
 from model.formation import get_all_formation
-from model.session import get_all_sessions
+from model.session import get_all_sessions, add_apprenti_assister
+from custom_paquets.custom_form import AjouterApprenti
+from werkzeug.utils import secure_filename
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -35,18 +41,34 @@ def gestion_personnel():
     couleurs = {"SuperAdministrateur": "text-primary", "Educateur Administrateur": "text-warning",
                 "Educateur": "text-success", "CIP": "text-info"}
     personnel = get_all_personnel()
+
     return render_template("admin/gestion_personnel.html", liste_personnel=personnel, couleurs=couleurs)
 
 
-@admin.route("/gestion-apprenti", methods=["GET"])
+@admin.route("/gestion-apprenti", methods=["GET", "POST"])
 @admin_login_required
 def gestion_apprenti():
     """
     Page listant tous les comptes des apprentis et permettant de supprimer ou modifier leurs informations
     On peut aussi y rajouter du personnel
     """
+    sessions = get_all_sessions()
     apprenti = get_all_apprenti()
-    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti)
+    form = AjouterApprenti()
+    if form.validate_on_submit() and request.method == "POST":
+        login = unidecode(form.nom.data[0:2].upper()) + unidecode(form.prenom.data[0].upper()) + str(len(form.nom.data+form.prenom.data)).zfill(2)
+        f = request.files.get("avatar")
+        if f :
+            chemin_avatar = "./static/images/photo_profile/"+secure_filename(f.filename)
+            f.save(chemin_avatar)
+            chemin_avatar = "photo_profile/"+secure_filename(f.filename)
+        else:
+            chemin_avatar = "photo_profile/"+"default_profile.png"
+        id_apprenti = add_apprenti(form.nom.data, form.prenom.data, login, chemin_avatar)
+        add_apprenti_assister(id_apprenti, sessions[int(request.form.get("select_session"))-1]["id_session"])
+        return redirect(url_for("admin.gestion_apprenti"))
+    
+    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form = form, sessions = sessions)
 
 
 @admin.route("/gestion-formation", methods=["GET"])
