@@ -1,10 +1,13 @@
 import os
 import platform
+
+from PIL import Image
 from unidecode import unidecode
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
+from custom_paquets.gestion_image import resize_image
 from model.apprenti import get_all_apprenti, add_apprenti
 from model.personnel import get_all_personnel
 from model.formation import get_all_formation
@@ -52,24 +55,27 @@ def gestion_apprenti():
     Page listant tous les comptes des apprentis et permettant de supprimer ou modifier leurs informations
     On peut aussi y rajouter du personnel
     """
-    
+
     formations = get_all_formation()
     apprenti = get_all_apprenti()
     form = AjouterApprenti()
     if form.validate_on_submit() and request.method == "POST":
-        login = unidecode(form.nom.data[0:2].upper()) + unidecode(form.prenom.data[0].upper()) + str(len(form.nom.data+form.prenom.data)).zfill(2)
+        login = unidecode(form.nom.data[0:2].upper().strip()) + unidecode(form.prenom.data[0].upper().strip()) + str(
+            len(form.nom.data.strip() + form.prenom.data.strip())).zfill(2)
         f = request.files.get("avatar")
-        if f :
-            chemin_avatar = "./static/images/photo_profile/"+secure_filename(f.filename)
+        if f:
+            chemin_avatar = "./static/images/photo_profile/" + secure_filename(f.filename)
             f.save(chemin_avatar)
-            chemin_avatar = "photo_profile/"+secure_filename(f.filename)
+            chemin_avatar = "photo_profile/" + secure_filename(f.filename)
         else:
-            chemin_avatar = "photo_profile/"+"default_profile.png"
+            chemin_avatar = "photo_profile/" + "default_profile.png"
+        img = Image.open(f.stream)
+        resize_image(img, "./static/images/"+chemin_avatar)
         id_apprenti = add_apprenti(form.nom.data, form.prenom.data, login, chemin_avatar)
-        add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation"))-1]["id_formation"])
+        add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
         return redirect(url_for("admin.gestion_apprenti"))
-    
-    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form = form, formations = formations)
+
+    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form=form, formations=formations)
 
 
 @admin.route("/gestion-formation", methods=["GET"])
