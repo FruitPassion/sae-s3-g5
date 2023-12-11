@@ -1,0 +1,24 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Suivi de Progression{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Suivi de progression</h1>
+    <div id="suivi">
+        <canvas id="camembert"></canvas>
+        {% block javascripts %}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.min.js"></script>
+            <script src="{{ url_for('static',filename='js/suivi_progression_apprenti.js') }}"></script>
+            <script>
+                window.onload = function() {
+                    creation_graphique_suivi_progression_apprenti({{ etat_fiches|safe }});
+                }
+            </script>
+        {% endblock %}
+    </div>
+    {% include "_partial/_retour_bouton.html" %}
+{% endblock %}

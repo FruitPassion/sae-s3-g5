@@ -37,7 +37,7 @@ def get_niveau_fiches_par_login(login):
     """
     Récupère le total des niveaux de chaque fiche technique associées à un apprenti à partir de son Login
 
-    :return: Les fiches techniques de l'apprenti
+    :return: Les niveaux des fiches techniques de l'apprenti
     """
     id_apprenti = get_id_apprenti_by_login(login)
     fiche_niveau = (
@@ -55,7 +55,7 @@ def get_niveau_moyen_champs_par_login(login):
     """
     Récupère le niveau moyen des champs de chaque fiche technique associée à un apprenti à partir de son Login
 
-    :return: Les fiches techniques de l'apprenti
+    :return: Le niveau moyen des champs de chaque fiche technique de l'apprenti
     """
     id_apprenti = get_id_apprenti_by_login(login)
     niveau_champ = (
@@ -81,8 +81,15 @@ def get_nombre_fiches_finies_par_login(login):
     """
     id_apprenti = get_id_apprenti_by_login(login)
     return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).filter_by(etat_fiche=True).count()
-    
 
+def get_etat_fiche_par_id_fiche(id_fiche):
+    """
+    Récupère l'état d'une fiche à partir de son id
+
+    :return: L'état de la fiche
+    """
+    return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(FicheIntervention.etat_fiche).first().etat_fiche
+    
 def get_fiches_techniques_finies_par_login(login):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
