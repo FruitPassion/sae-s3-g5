@@ -11,9 +11,8 @@
     <h1>Suivi de progression</h1>
     <div class="haut">
         <ul>
-            <li>Nombre de fiches</li>
-            <li>Niveau moyen</li>
-            <li>Temps moyen</li>
+            <li>Nombre de fiches finies : {{ nb_fiches_finies }}</li>
+            <li>Niveau moyen de chaque champ : {{ niveau_moyen }}</li>
         </ul>
     </div>
     <div class="milieu">
@@ -29,12 +28,6 @@
                 </script>
             {% endblock %}
         </div>
-    </div>
-    <div class="temps_fiche">
-        <label>temps fiche</label>
-    </div>
-    <div class="valeur_moy">
-        <label>valeur moyenne</label>
     </div>
     {% include "_partial/_retour_bouton.html" %}
 {% endblock %}
