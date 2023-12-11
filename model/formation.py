@@ -41,6 +41,6 @@ def add_formation(intitule, niveau_qualif, groupe, image) :
     :return: id_formation
     """
     formation = Formation(intitule = intitule, niveau_qualif = niveau_qualif, groupe = groupe, image = image)
-    db.formation.add(formation)
-    db.formation.commit()
+    db.session.add(formation)
+    db.session.commit()
     return formation.id_formation

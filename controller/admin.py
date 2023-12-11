@@ -108,7 +108,7 @@ def gestion_formation():
             chemin_image = "formation_image/"+secure_filename(f.filename)
         else:
             chemin_image = "formation_image/"+"defaut_formation.jpg"
-        id_formation = add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
+        add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
     
     return render_template("admin/gestion_formations.html", liste_formation=formation, form = form)
