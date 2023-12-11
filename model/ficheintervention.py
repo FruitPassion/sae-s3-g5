@@ -51,6 +51,37 @@ def get_niveau_fiches_par_login(login):
     )
     return convert_to_dict(fiche_niveau)
 
+def get_niveau_moyen_champs_par_login(login):
+    """
+    Récupère le niveau moyen des champs de chaque fiche technique associée à un apprenti à partir de son Login
+
+    :return: Les fiches techniques de l'apprenti
+    """
+    id_apprenti = get_id_apprenti_by_login(login)
+    niveau_champ = (
+        db.session.query(FicheIntervention.numero, func.avg(ComposerPresentation.niveau).label('moyenne_niveau'))
+        .join(ComposerPresentation)
+        .join(Apprenti)
+        .filter(FicheIntervention.id_apprenti == id_apprenti)
+        .filter(~ComposerPresentation.position_elem.like('%0%'))
+        .group_by(FicheIntervention.id_fiche)
+        .all()
+    )
+    liste_niveau_champ = convert_to_dict(niveau_champ)
+    total_niveau_champ = 0
+    for niveau in liste_niveau_champ:
+        total_niveau_champ += niveau["moyenne_niveau"]
+    return int(total_niveau_champ / len(liste_niveau_champ))
+
+def get_nombre_fiches_finies_par_login(login):
+    """
+    Récupère le nombre de fiches finies par un apprenti à partir de son Login
+
+    :return: Les fiches techniques de l'apprenti
+    """
+    id_apprenti = get_id_apprenti_by_login(login)
+    return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).filter_by(etat_fiche=True).count()
+    
 
 def get_fiches_techniques_finies_par_login(login):
     """
@@ -61,8 +92,7 @@ def get_fiches_techniques_finies_par_login(login):
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.etat_fiche).filter_by(etat_fiche=True).all())
-
-
+    
 def get_fiche_apprentis_existe(login: str):
     """
     Verifie si l'apprenti à deja une fiche

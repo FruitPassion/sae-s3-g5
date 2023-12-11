@@ -3,7 +3,7 @@ from flask import Blueprint, render_template
 from custom_paquets.decorateur import cip_login_required
 from model.trace import get_commentaires_par_fiche
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_finies_par_login, get_niveau_fiches_par_login
+from model.ficheintervention import get_fiches_techniques_finies_par_login, get_niveau_fiches_par_login, get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login
 import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
@@ -70,8 +70,9 @@ def suivi_progression_apprenti(apprenti):
     niv_fiche = get_niveau_fiches_par_login(apprenti)
     for niv in niv_fiche:
         niv["total_niveau"] = str(niv["total_niveau"])
-    
-    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche)), 200
+    niveau_moyen = get_niveau_moyen_champs_par_login(apprenti)
+    nb_fiches_finies = get_nombre_fiches_finies_par_login(apprenti)
+    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche), niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies), 200
 
 
 @cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
