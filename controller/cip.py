@@ -54,7 +54,7 @@ def visualiser_commentaires(apprenti, fiche):
     """
 
     commentaires = get_commentaires_par_fiche(fiche)
-    return render_template("cip/commentaires.html", commentaires=commentaires), 200
+    return render_template("cip/commentaires.html", commentaires=commentaires, apprenti=apprenti), 200
 
 
 @cip.route("/<apprenti>/suivi-progression", methods=["GET"])
