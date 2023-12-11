@@ -25,6 +25,7 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
             labels.splice(i, 1);
             data.splice(i, 1);
             colors.splice(i, 1);
+            i--;
         }
     }
     
