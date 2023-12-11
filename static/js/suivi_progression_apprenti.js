@@ -20,6 +20,15 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
     data = [fiches_terminees, fiches_en_cours, fiches_arretees];
     colors = ['#98FB98', '#FF8B28', '#C30010'];
 
+    for (let i=0; i<labels.length; i++) {
+        if (data[i] === 0) {
+            labels.splice(i, 1);
+            data.splice(i, 1);
+            colors.splice(i, 1);
+        }
+    }
+    
+    /*
     if (fiches_terminees === 0){
         labels.splice(0,1);
         data.splice(0,1);
@@ -36,7 +45,7 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
         labels.splice(2,1);
         data.splice(2,1);
         colors.splice(2,1);
-    }
+    } */
     
     Chart.register(ChartDataLabels);
     var chart = new Chart(context, {
