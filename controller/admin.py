@@ -10,7 +10,8 @@ from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import resize_image
 from model.apprenti import get_all_apprenti, add_apprenti
 from model.personnel import get_all_personnel
-from model.formation import get_all_formation
+from model.formation import get_all_formation, add_formation
+from custom_paquets.custom_form import AjouterFormation
 from model.session import get_all_sessions, add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti
 from werkzeug.utils import secure_filename
@@ -78,7 +79,7 @@ def gestion_apprenti():
     return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form=form, formations=formations)
 
 
-@admin.route("/gestion-formation", methods=["GET"])
+@admin.route("/gestion-formation", methods=["GET", "POST"])
 @admin_login_required
 def gestion_formation():
     """
@@ -86,8 +87,19 @@ def gestion_formation():
     On peut aussi y rajouter une formation
     """
     formation = get_all_formation()
-    return render_template("admin/gestion_formations.html", liste_formation=formation)
-
+    form = AjouterFormation()
+    if form.validate_on_submit() and request.method == "POST":
+        f = request.files.get("image")
+        if f :
+            chemin_image = "./static/images/formation_image/"+secure_filename(f.filename)
+            f.save(chemin_image)
+            chemin_image = "formation_image/"+secure_filename(f.filename)
+        else:
+            chemin_image = "formation_image/"+"defaut_formation.jpg"
+        id_formation = add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
+        return redirect(url_for("admin.gestion_formation"))
+    
+    return render_template("admin/gestion_formations.html", liste_formation=formation, form = form)
 
 @admin.route("/gestion-session", methods=["GET"])
 @admin_login_required
