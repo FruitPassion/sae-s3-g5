@@ -2,6 +2,9 @@
 
 {% block title %}Gestion des formations{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_formations.css') }}">
+{% endblock %}
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des formations</h1>
@@ -43,7 +46,44 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
-                <p>Oui</p>
+                <br>
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Intitulé :</h3>
+                            </div>
+                            <div>
+                                {{ form.intitule(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Niveau qualification :</h3>
+                            </div>
+                            <div>
+                                {{ form.niveau_qualif(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                        <div class="m-4 w-50">
+                            <div class="parent-div">
+                                <div class="mb-3">
+                                    <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                    <input class="form-control fs-1 my-3" type="file" id="image" name="image"
+                                       accept="image/png, image/jpeg, image/jpg"/>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Groupe :</h3>
+                            </div>
+                            <div>
+                                {{ form.groupe(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-50 mx-auto my-5">
+                        {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -31,3 +31,16 @@ def get_nom_formation(id_formation):
     :return: Un intitulé de formation
     """
     return Formation.query.with_entities(Formation.intitule).filter_by(id_formation = id_formation).first().intitule
+
+
+
+def add_formation(intitule, niveau_qualif, groupe, image) :
+    """
+    Ajoute une formation en BD
+
+    :return: id_formation
+    """
+    formation = Formation(intitule = intitule, niveau_qualif = niveau_qualif, groupe = groupe, image = image)
+    db.formation.add(formation)
+    db.formation.commit()
+    return formation.id_formation

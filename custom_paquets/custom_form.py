@@ -26,3 +26,8 @@ class AjouterApprenti(FlaskForm):
     prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Jean"})
     submit = SubmitField("Enregistrer")
 
+class AjouterFormation(FlaskForm):
+    intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours plomberie"})
+    niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
+    groupe = StringField(validators=[InputRequired()], render_kw={"placeholder": "1"})
+    submit = SubmitField("Ajouter")
