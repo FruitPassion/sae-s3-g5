@@ -59,28 +59,6 @@ label:hover {
     top: 30em;
 }
 
-.temps_fiche {
-    background-color: #004586;    
-    border-radius: 19px;
-    position: absolute;
-    height: 112px;
-    width: 355px;
-    text-align: center;
-    top: 1300px;
-    left: 55%
-}
-
-.valeur_moy {
-    background-color: #FF420E ;    
-    border-radius: 19px;
-    position: absolute;
-    height: 112px;
-    width: 355px;
-    text-align: center;
-    top: 1300px;
-    left: 20%;
-}
-
 @media screen and (min-width: 1280px ) {
 
     .haut label {

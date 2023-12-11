@@ -28,7 +28,7 @@
     z-index: 11;
 }
 
-button {
+#suivi_progression a {
     position: absolute;
     height: 8%;
     font-size: 30px;
@@ -37,13 +37,13 @@ button {
 }
 
 @media screen and (width < 1286px) {
-    button { 
+    #suivi_progression a {
         left: 65%;
     }
 }
 
 @media screen and (width <= 1084px) {
-    button { 
+    #suivi_progression a { 
         top:155%;
         left: 65%;
     }

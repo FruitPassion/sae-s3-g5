@@ -28,5 +28,9 @@
             </div>
         {% endfor %}
     </div>
-    <button type="button">Suivi de progression</button>
+    <div id="suivi_progression">
+        <a href="{{ url_for('apprenti.suivi_progression') }}">
+            Suivi de progression</a>
+    </div>
+    {% include "_partial/_retour_bouton.html" %}
 {% endblock %}

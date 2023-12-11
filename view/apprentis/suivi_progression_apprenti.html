@@ -4,14 +4,17 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/camembert.css') }}">
 {% endblock %}
 
 {% block body %}
     <h1>Suivi de progression</h1>
     <div id="suivi">
-        <canvas id="camembert"></canvas>
+        <canvas id="camembert" width="400" height="400"></canvas>
         {% block javascripts %}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
             <script src="{{ url_for('static',filename='js/suivi_progression_apprenti.js') }}"></script>
             <script>
                 window.onload = function() {
