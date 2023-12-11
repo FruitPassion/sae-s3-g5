@@ -46,7 +46,7 @@ def ajouter_fiche(apprenti):
                                    form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1, degres)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.personnalisation"))
-    return render_template('educ_admin/ajouter_fiche.html', form=form), 200
+    return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti), 200
 
 
 @educ_admin.route("/personnalisation", methods=["GET"])

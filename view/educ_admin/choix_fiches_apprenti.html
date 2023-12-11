@@ -29,6 +29,7 @@
         {% endfor %}
     </div>
 
-    <!-- Bouton de retour -->
-    {% include "_partial/_retour_bouton.html" %}
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}

@@ -21,5 +21,8 @@
         {% endfor %}
     </div>
 
-    {% include "_partial/_retour_bouton.html" %}
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('personnel.choix_formation') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}
