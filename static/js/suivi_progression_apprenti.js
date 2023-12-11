@@ -15,14 +15,29 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
             fiches_arretees++;
         }
     }
+
+    if (fiches_terminees === 0){
+        labels = ['Fiches en cours', 'Fiches arrêtées'];
+        data = [fiches_en_cours, fiches_arretees];
+    }else if (fiches_en_cours === 0){
+        labels = ['Fiches terminées', 'Fiches arrêtées'];
+        data = [fiches_terminees, fiches_arretees];
+    }else if (fiches_arretees === 0){
+        labels = ['Fiches terminées', 'Fiches en cours'];
+        data = [fiches_terminees, fiches_en_cours];
+    } else {
+        labels = ['Fiches terminées', 'Fiches en cours', 'Fiches arrêtées'];
+        data = [fiches_terminees, fiches_en_cours, fiches_arretees];
+    }
     
+    Chart.register(ChartDataLabels);
     var chart = new Chart(context, {
         type: 'pie',
         data: {
-            labels: ['Fiches terminées', 'Fiches en cours', 'Fiches arrêtées'],
+            labels: labels,
             datasets: [{
                 label: 'Fiches',
-                data: [fiches_terminees, fiches_en_cours, fiches_arretees],
+                data: data,
                 backgroundColor: [
                     '#98FB98',
                     '#FF8B28',
@@ -39,7 +54,7 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
                         font: {
                             fontFamily: 'Montserrat',
                             size: 30
-                        }
+                        },
                     }
                 },
                 datalabels: {
@@ -58,4 +73,5 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
             maintainAspectRatio: true,
         }
     });
+
 }
