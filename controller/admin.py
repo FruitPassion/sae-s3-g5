@@ -3,17 +3,18 @@ import platform
 
 from PIL import Image
 from unidecode import unidecode
+from custom_paquets.security import encrypt_password
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import resize_image
 from model.apprenti import get_all_apprenti, add_apprenti
-from model.personnel import get_all_personnel
-from model.formation import get_all_formation, add_formation
-from custom_paquets.custom_form import AjouterFormation
+from model.personnel import get_all_personnel, add_personnel
+from model.formation import get_all_formation
 from model.session import get_all_sessions, add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti
+from custom_paquets.custom_form import AjouterPersonnel
 from werkzeug.utils import secure_filename
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
@@ -35,7 +36,7 @@ def accueil_admin():
     return render_template("admin/accueil_superadmin.html")
 
 
-@admin.route("/gestion-personnel", methods=["GET"])
+@admin.route("/gestion-personnel", methods=["GET", "POST"])
 @admin_login_required
 def gestion_personnel():
     """
@@ -45,8 +46,18 @@ def gestion_personnel():
     couleurs = {"SuperAdministrateur": "text-primary", "Educateur Administrateur": "text-warning",
                 "Educateur": "text-success", "CIP": "text-info"}
     personnel = get_all_personnel()
+    form = AjouterPersonnel()
 
-    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, couleurs=couleurs)
+    if form.validate_on_submit() and request.method == "POST":
+        role = request.form.get("select_role")
+        password = encrypt_password(form.password.data)
+        login = unidecode(form.nom.data[0:2].upper().strip()) + unidecode(form.prenom.data[0].upper().strip()) + str(
+            len(form.nom.data.strip() + form.prenom.data.strip())).zfill(2)
+        add_personnel(login, form.nom.data, form.prenom.data, form.email.data, password, role)
+        return redirect(url_for("admin.gestion_personnel"))
+
+
+    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form=form, couleurs=couleurs)
 
 
 @admin.route("/gestion-apprenti", methods=["GET", "POST"])
@@ -79,7 +90,7 @@ def gestion_apprenti():
     return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form=form, formations=formations)
 
 
-@admin.route("/gestion-formation", methods=["GET", "POST"])
+@admin.route("/gestion-formation", methods=["GET"])
 @admin_login_required
 def gestion_formation():
     """
@@ -87,26 +98,5 @@ def gestion_formation():
     On peut aussi y rajouter une formation
     """
     formation = get_all_formation()
-    form = AjouterFormation()
-    if form.validate_on_submit() and request.method == "POST":
-        f = request.files.get("image")
-        if f :
-            chemin_image = "./static/images/formation_image/"+secure_filename(f.filename)
-            f.save(chemin_image)
-            chemin_image = "formation_image/"+secure_filename(f.filename)
-        else:
-            chemin_image = "formation_image/"+"defaut_formation.jpg"
-        id_formation = add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
-        return redirect(url_for("admin.gestion_formation"))
-    
-    return render_template("admin/gestion_formations.html", liste_formation=formation, form = form)
+    return render_template("admin/gestion_formations.html", liste_formation=formation)
 
-@admin.route("/gestion-session", methods=["GET"])
-@admin_login_required
-def gestion_session():
-    """
-    Page listant toutes les formations et permettant de supprimer ou modifier leurs informations
-    On peut aussi y rajouter une formation
-    """
-    sessions = get_all_sessions()
-    return render_template("admin/gestion_sessions.html", liste_sessions=sessions)

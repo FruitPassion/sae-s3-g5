@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel %}
-                        <tr class="text-center {% if personnel["essaies"] == 3 %}table-danger{% endif %}"
+                        <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
                         id="pers-{{ personnel["id_personnel"] }}">
                             <td>{{ personnel["login"] }}</td>
                             <td>{{ personnel["nom"] }}</td>
@@ -53,7 +53,49 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
-                <p>Oui</p>
+                <form method="post" id="container-ajout">
+                    
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Nom :</h3>
+                            </div>
+                            <div>
+                                {{ form.nom(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Prénom :</h3>
+                            </div>
+                            <div>
+                                {{ form.prenom(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Email :</h3>
+                            </div>
+                            <div>
+                                {{ form.email(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Choisissez un rôle :</h3>
+                                <select name="select_role" class="fs-1 my-3 form-select" required>
+                                    <option value="" selected disabled="disabled">--- Sélectionnez un rôle ---</option>
+                                    <option value="CIP">CIP</option>
+                                    <option value="Educateur">Educateur</option>
+                                    <option value="Educateur_Administrateur">Educateur Administrateur</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Mot de passe :</h3>
+                            </div>
+                            <div>
+                                {{ form.password(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-50 mx-auto my-5">
+                        {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -1,8 +1,8 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField
+from wtforms import StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import InputRequired, Length
-from wtforms.widgets import TextArea
+from wtforms.widgets import TextArea, NumberInput
 
 
 class LoginPersonnelForm(FlaskForm):
@@ -26,8 +26,10 @@ class AjouterApprenti(FlaskForm):
     prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Jean"})
     submit = SubmitField("Enregistrer")
 
-class AjouterFormation(FlaskForm):
-    intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours plomberie"})
-    niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
-    groupe = StringField(validators=[InputRequired()], render_kw={"placeholder": "1"})
-    submit = SubmitField("Ajouter")
+
+class AjouterPersonnel(FlaskForm):
+    password = PasswordField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput())
+    nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
+    prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
+    email = StringField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
+    submit = SubmitField("Enregistrer")
