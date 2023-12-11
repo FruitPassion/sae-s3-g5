@@ -4,7 +4,7 @@ import bcrypt
 
 
 def encrypt_password(password):
-    return bcrypt.hashpw(get_b64(password), bcrypt.gensalt(15))
+    return bcrypt.hashpw(get_b64(password), bcrypt.gensalt(13))
 
 
 def compare_passwords(new_passw, old_passwd):
