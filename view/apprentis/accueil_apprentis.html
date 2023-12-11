@@ -8,6 +8,7 @@
 
 {% block body %}
     <h1>Bienvenue {{ apprenti["prenom"] }} {{ apprenti["nom"] }} {% include "_partial/_tts.html" %}</h1>
+    
 
     <div id="blocFiches">
 
@@ -27,4 +28,5 @@
             </div>
         {% endfor %}
     </div>
+    <button type="button">Suivi de progression</button>
 {% endblock %}

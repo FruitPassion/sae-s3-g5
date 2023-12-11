@@ -28,4 +28,24 @@
     z-index: 11;
 }
 
+button {
+    position: absolute;
+    height: 8%;
+    font-size: 30px;
+    top: 100%;
+    left: 63%;
+}
+
+@media screen and (width < 1286px) {
+    button { 
+        left: 65%;
+    }
+}
+
+@media screen and (width <= 1084px) {
+    button { 
+        top:155%;
+        left: 65%;
+    }
+}
 
