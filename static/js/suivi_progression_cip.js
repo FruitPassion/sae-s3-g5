@@ -13,19 +13,27 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
     data: {
       labels: liste_num_fiche,
       datasets: [{
-        label: 'Nombre de fiches créées',
+        label: "Niveau total",
         // jeu de données random - à remplacer par les données de la BDD
         data: liste_niv_fiche,
-        backgroundColor: "#000",
-        borderColor: "#000"
+        backgroundColor: "#533C2B",
+        borderColor: "#533C2B"
       }]
     },
     options: {
-      responsive: true,
-      title: {
-        display: true,
-        text: 'Nombre de fiches créées par jour'
-      }
-    }
+      plugins: {
+          title: {
+              display: true,
+              text: 'Niveau total des fiches',
+              font: {
+                  size: 45,
+                  fontFamily: 'Montserrat',
+              },
+          }
+      },
+      layout: {
+          padding: 0,
+      },
+  },
   });
 }
