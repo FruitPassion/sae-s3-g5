@@ -16,22 +16,26 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
         }
     }
 
+    labels = ['Fiches terminées', 'Fiches en cours', 'Fiches arrêtées'];
+    data = [fiches_terminees, fiches_en_cours, fiches_arretees];
+    colors = ['#98FB98', '#FF8B28', '#C30010'];
+
     if (fiches_terminees === 0){
-        labels = ['Fiches en cours', 'Fiches arrêtées'];
-        data = [fiches_en_cours, fiches_arretees];
-        colors = ['#FF8B28', '#C30010'];
-    }else if (fiches_en_cours === 0){
-        labels = ['Fiches terminées', 'Fiches arrêtées'];
-        data = [fiches_terminees, fiches_arretees];
-        colors = ['#98FB98', '#C30010'];
-    }else if (fiches_arretees === 0){
-        labels = ['Fiches terminées', 'Fiches en cours'];
-        data = [fiches_terminees, fiches_en_cours];
-        colors = ['#98FB98', '#FF8B28'];
-    } else {
-        labels = ['Fiches terminées', 'Fiches en cours', 'Fiches arrêtées'];
-        data = [fiches_terminees, fiches_en_cours, fiches_arretees];
-        colors = ['#98FB98', '#FF8B28', '#C30010'];
+        labels.splice(0,1);
+        data.splice(0,1);
+        colors.splice(0,1);
+    }
+    
+    if (fiches_en_cours === 0){
+        labels.splice(1,1);
+        data.splice(1,1);
+        colors.splice(1,1);
+    }
+    
+    if (fiches_arretees === 0){
+        labels.splice(2,1);
+        data.splice(2,1);
+        colors.splice(2,1);
     }
     
     Chart.register(ChartDataLabels);
