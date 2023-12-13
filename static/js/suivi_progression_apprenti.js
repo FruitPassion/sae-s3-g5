@@ -29,25 +29,6 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
         }
     }
     
-    /*
-    if (fiches_terminees === 0){
-        labels.splice(0,1);
-        data.splice(0,1);
-        colors.splice(0,1);
-    }
-    
-    if (fiches_en_cours === 0){
-        labels.splice(1,1);
-        data.splice(1,1);
-        colors.splice(1,1);
-    }
-    
-    if (fiches_arretees === 0){
-        labels.splice(2,1);
-        data.splice(2,1);
-        colors.splice(2,1);
-    } */
-    
     Chart.register(ChartDataLabels);
     var chart = new Chart(context, {
         type: 'pie',

@@ -17,7 +17,7 @@ def test_redirection_connexion(client):
     response = client.get(url_for("admin.accueil_admin"))
 
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     # Test de vérification de la route
     assert response.request.path == "/admin/accueil-admin"

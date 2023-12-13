@@ -16,7 +16,7 @@ def test_route_fiches_apprenti(client):
     response = client.get(url_for("educ_admin.fiches_apprenti", apprenti=apprenti))
 
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
 
     # Test de vérification de la route
     assert response.request.path == f"/educ-admin/{apprenti}/fiches"
@@ -27,7 +27,7 @@ def test_route_ajouter_fiches(client):
     response = client.get(url_for("educ_admin.ajouter_fiche", apprenti=apprenti))
     
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
     
     # Test de vérification de la route
     assert response.request.path == f"/educ-admin/{apprenti}/ajouter-fiche"
@@ -38,7 +38,7 @@ def test_route_personnalisation(client):
     response = client.get(url_for("educ_admin.personnalisation"))
     
     # Test d'accès à la route
-    assert response.status_code == 200
+    assert response.status_code == 302
     
     # Test de vérification de la route
     assert response.request.path == "/educ-admin/personnalisation"

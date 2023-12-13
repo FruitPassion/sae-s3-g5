@@ -61,9 +61,6 @@ def test_choix_fiche(client):
     # Test de vérification de la route
     assert response.request.path == f"/cip/{apprenti}/fiches"
 
-"""
-A VALIDER UNE FOIS QUE LE SUIVI DE PROGRESSION SERA FAIT
-
 # Test de la route suivi de progression de l'apprenti 
 def test_suivi_progression(client):
     # Test connexion CIP
@@ -75,7 +72,6 @@ def test_suivi_progression(client):
     
     # Test de vérification de la route
     assert response.request.path == f"/cip/{apprenti}/suivi-progression"
-"""
 
 """
 A VALIDER UNE FOIS QUE L'ADAPTATION EN SITUATION D'EXAMEN SERA FAIT
