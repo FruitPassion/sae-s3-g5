@@ -28,13 +28,6 @@
     z-index: 11;
 }
 
-#suivi_progression a {
-    height: 8%;
-    font-size: 30px;
-    top: 100%;
-    left: 63%;
-}
-
 #suivi_progression{
     border: 1px solid black;
     border-radius: 10px;
@@ -42,4 +35,14 @@
     left: 63%;
     position: relative;
     padding: 10px;
+}
+
+#suivi_progression a {
+    height: 8%;
+    font-size: 30px;
+    top: 100%;
+}
+
+#suivi_progression a img {
+    width: 50px;
 }
