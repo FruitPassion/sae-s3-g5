@@ -22,7 +22,9 @@ def test_redirection_connexion(client):
     # Test de vérification de la route
     assert response.request.path == "/admin/accueil-admin"
 
-def test_ajout_de_formation(client):
+
+# Test de la route de redirection de la gestion des formations
+def test_redirection_gestion_formation(client):
     response = client.get(url_for("admin.gestion_formation"))
 
     # Test d'accès à la route
@@ -30,4 +32,26 @@ def test_ajout_de_formation(client):
 
     # Test de vérification de la route
     assert response.request.path == "/admin/gestion_formation"
+
+
+# Test de la route de redirection de la gestion des apprentis
+def test_redirection_gestion_apprentis(client):
+    response = client.get(url_for("admin.gestion_apprentis"))
+
+    # Test d'accès à la route
+    assert response.status_code == 302
+
+    # Test de vérification de la route
+    assert response.request.path == "/admin/gestion_apprentis"
+
+
+# Test de la route de redirection de la gestion du personnel
+def test_redirection_gestion_personnel(client):
+    response = client.get(url_for("admin.gestion_personnel"))
+
+    # Test d'accès à la route
+    assert response.status_code == 302
+
+    # Test de vérification de la route
+    assert response.request.path == "/admin/gestion_personnel"
 
