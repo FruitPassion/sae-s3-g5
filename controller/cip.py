@@ -66,13 +66,13 @@ def suivi_progression_apprenti(apprenti):
     
     :return: rendu de la page suivi-progression.html
     """
-    
+    apprenti_infos = get_apprenti_by_login(apprenti)
     niv_fiche = get_niveau_fiches_par_login(apprenti)
     for niv in niv_fiche:
         niv["total_niveau"] = str(niv["total_niveau"])
     niveau_moyen = get_niveau_moyen_champs_par_login(apprenti)
     nb_fiches_finies = get_nombre_fiches_finies_par_login(apprenti)
-    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche), niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies), 200
+    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche), niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
 
 
 @cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])

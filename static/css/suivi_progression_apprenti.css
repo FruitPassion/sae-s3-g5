@@ -24,9 +24,9 @@ li {
 	top:400px;
 }
 
-.milieu { 
-	/* background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 1); */
-	width:95%;
+.diagramme {
+    background-color: white;
+    width:95%;
 	height:85%;
 	position:absolute;
 	left:24.5px;
@@ -34,8 +34,8 @@ li {
     border-radius: 10px;
 }
 
-.diagramme {
-    background-color: white;
+#suivi_progression_apprenti {
+    display: flex;
     left: 30px;
     top: 25px;
     padding: 100px;
@@ -69,16 +69,8 @@ label:hover {
 
     }
 
-    .milieu {
-	    height:50%;
-    }
-
     .diagramme{
         height: 95%;
-    }
-
-    .valeur_moy, .temps_fiche {
-        top: 1700px;
     }
 
     .btn {
@@ -95,10 +87,6 @@ label:hover {
         padding-top: 1em;
         padding-bottom: 1em;
 
-    }
-    
-    .milieu {
-	    height:95%;
     }
 
     .diagramme{

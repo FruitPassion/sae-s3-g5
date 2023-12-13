@@ -22,5 +22,7 @@
             </script>
         {% endblock %}
     </div>
-    {% include "_partial/_retour_bouton.html" %}
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('apprenti.redirection_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}
