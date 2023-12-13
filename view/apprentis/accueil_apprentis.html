@@ -31,9 +31,8 @@
     </div>
     <div id="suivi_progression">
         <a href="{{ url_for('apprenti.suivi_progression') }}">
-            <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
-            Suivi de progression</a>
-            {% include "_partial/_tts.html" %}
+        <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
+        Suivi de progression {% include "_partial/_tts.html" %}</a>
     </div>
     {% include "_partial/_retour_bouton.html" %}
 {% endblock %}

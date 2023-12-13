@@ -43,6 +43,6 @@
     top: 100%;
 }
 
-#suivi_progression a img {
+#suivi_progression img[alt*="progression"] {
     width: 50px;
 }
