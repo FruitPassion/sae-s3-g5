@@ -6,6 +6,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_formations.css') }}">
 {% endblock %}
 
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/gestion_formations.js') }}"></script>
+{% endblock %}
+
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des formations</h1>
     <div class="px-3 fs-2 h-50">
@@ -39,7 +43,7 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img style="width:180px; height:100px;"  src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
                             <th class="align-middle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
-                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true"></i></td>
+                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true" onclick="confirmationSuppression(this, '{{ formation['intitule'] }}', '{{ formation['id_formation'] }}')"></i></td>
                         </tr>
                     {% endfor %}
                     </tbody>

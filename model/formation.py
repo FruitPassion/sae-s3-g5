@@ -44,3 +44,15 @@ def add_formation(intitule, niveau_qualif, groupe, image) :
     db.session.add(formation)
     db.session.commit()
     return formation.id_formation
+
+
+
+def delete_formation(id_formation):
+    """
+    Supprime une formation en BD à partir de son id
+
+    :param id_formation
+    """
+    formation = Formation.query.get(id_formation)
+    db.session.delete(formation)
+    db.session.commit()
