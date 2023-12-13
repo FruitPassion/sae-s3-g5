@@ -29,23 +29,17 @@
 }
 
 #suivi_progression a {
-    position: absolute;
     height: 8%;
     font-size: 30px;
     top: 100%;
     left: 63%;
 }
 
-@media screen and (width < 1286px) {
-    #suivi_progression a {
-        left: 65%;
-    }
+#suivi_progression{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: fit-content;
+    left: 63%;
+    position: relative;
+    padding: 10px;
 }
-
-@media screen and (width <= 1084px) {
-    #suivi_progression a { 
-        top:155%;
-        left: 65%;
-    }
-}
-
