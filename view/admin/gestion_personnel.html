@@ -2,6 +2,9 @@
 
 {% block title %}Gestion des comptes{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_personne.css') }}">
+{% endblock %}
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste du personnel</h1>
@@ -32,7 +35,7 @@
                     <tbody>
                     {% for personnel in liste_personnel %}
                         <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
-                        id="pers-{{ personnel["id_personnel"] }}">
+                        id="pers-{{ personnel['id_personnel'] }}">
                             <td>{{ personnel["login"] }}</td>
                             <td>{{ personnel["nom"] }}</td>
                             <td>{{ personnel["prenom"] }}</td>
@@ -55,41 +58,46 @@
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout">
                     
-                    <div class="d-flex w-75 test">
-                        <div class="m-4 w-50">
-                            <div>
-                                <h3 class="fs-1 my-3">Nom :</h3>
+                    <div class="w-75 test">
+                        <div class="d-flex">
+                            <div class="m-4 w-50">
+                                <div>
+                                    <h3 class="fs-1 my-3">Nom :</h3>
+                                </div>
+                                <div>
+                                    {{ form.nom(class="form-control fs-1 my-3") }}
+                                </div>
+                                <div>
+                                    <h3 class="fs-1 my-3">Prénom :</h3>
+                                </div>
+                                <div>
+                                    {{ form.prenom(class="form-control fs-1 my-3") }}
+                                </div>
                             </div>
-                            <div>
-                                {{ form.nom(class="form-control fs-1 my-3") }}
+                            <div class="m-4 w-50">
+                                <div>
+                                    <h3 class="fs-1 my-3">Email :</h3>
+                                </div>
+                                <div>
+                                    {{ form.email(class="form-control fs-1 my-3") }}
+                                </div>
+                                <div>
+                                    <h3 class="fs-1 my-3">Mot de passe :</h3>
+                                </div>
+                                <div id="bloc_password">
+                                    <input name ="password" class='form-control fs-1 my-3' type="password" id="password" minlength="6" maxlength="6" required/>
+                                    <img alt="eye" id="icone_visibilite" src="{{ url_for('static', filename='images/hide.png') }}" onclick="visibilite()">
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="fs-1 my-3">Prénom :</h3>
-                            </div>
-                            <div>
-                                {{ form.prenom(class="form-control fs-1 my-3") }}
-                            </div>
-                            <div>
-                                <h3 class="fs-1 my-3">Email :</h3>
-                            </div>
-                            <div>
-                                {{ form.email(class="form-control fs-1 my-3") }}
-                            </div>
-                            <div>
-                                <h3 class="fs-1 my-3">Choisissez un rôle :</h3>
-                                <select name="select_role" class="fs-1 my-3 form-select" required>
-                                    <option value="" selected disabled="disabled">--- Sélectionnez un rôle ---</option>
-                                    <option value="CIP">CIP</option>
-                                    <option value="Educateur">Educateur</option>
-                                    <option value="Educateur_Administrateur">Educateur Administrateur</option>
-                                </select>
-                            </div>
-                            <div>
-                                <h3 class="fs-1 my-3">Mot de passe :</h3>
-                            </div>
-                            <div>
-                                {{ form.password(class="form-control fs-1 my-3") }}
-                            </div>
+                        </div>
+                        <div class="m-4">
+                            <h3 class="fs-1 my-3">Choisissez un rôle :</h3>
+                            <select name="select_role" class="fs-1 my-3 form-select" required>
+                                <option value="" selected disabled="disabled">--- Sélectionnez un rôle ---</option>
+                                <option value="CIP">CIP</option>
+                                <option value="Educateur">Educateur</option>
+                                <option value="Educateur_Administrateur">Educateur Administrateur</option>
+                            </select>
                         </div>
                     </div>
                     <div class="w-50 mx-auto my-5">
@@ -103,4 +111,20 @@
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
+
+    <script>
+        visible = true;
+        function visibilite(){
+            if (visible){
+                document.getElementById('password').setAttribute("type", "text");
+                document.getElementById('icone_visibilite').src="{{ url_for('static', filename='images/show.png') }}";
+                visible = false;
+            }
+            else{
+                document.getElementById('password').setAttribute("type", "password");
+                document.getElementById('icone_visibilite').src="{{ url_for('static', filename='images/hide.png') }}";
+                visible = true;
+            }
+        }
+    </script>
 {% endblock %}

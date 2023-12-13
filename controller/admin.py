@@ -48,10 +48,10 @@ def gestion_personnel():
                 "Educateur": "text-success", "CIP": "text-info"}
     personnel = get_all_personnel()
     form = AjouterPersonnel()
-
+    
     if form.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
-        password = encrypt_password(form.password.data)
+        password = encrypt_password(request.form.get('password'))
         login = unidecode(form.nom.data[0:2].upper().strip()) + unidecode(form.prenom.data[0].upper().strip()) + str(
             len(form.nom.data.strip() + form.prenom.data.strip())).zfill(2)
         add_personnel(login, form.nom.data, form.prenom.data, form.email.data, password, role)

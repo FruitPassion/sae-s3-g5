@@ -21,6 +21,18 @@
 }
 
 #enregistrer {
-    margin-left:50%;
-    margin-right:-50%;
+    margin-left: 50%;
+    margin-right: -50%;
+}
+
+#bloc_password {
+    display: flex;
+    align-items: center;
+}
+
+#bloc_password img {
+    display:flex;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
 }
