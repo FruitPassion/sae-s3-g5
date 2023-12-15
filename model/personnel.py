@@ -16,13 +16,13 @@ def get_all_personnel():
     """
     personnel = Personnel.query.with_entities(
         Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
-        Personnel.essaies).order_by(Personnel.login).all()
+        Personnel.essaies).order_by(Personnel.login).filter(Personnel.archive is not True).all()
     return convert_to_dict(personnel)
 
 
 def get_liste_personnel_non_super():
     return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
-        Personnel.role != "SuperAdministrateur").all())
+        Personnel.role != "SuperAdministrateur").filter(Personnel.archive is not True).all())
 
 
 def get_id_personnel_by_login(login: str):
@@ -126,16 +126,15 @@ def reset_nbr_essaies_connexion(login: str):
         return False
 
 
-def add_personnel(login, nom, prenom, email, password, role) :
+def add_personnel(login, nom, prenom, email, password, role):
     """
     Ajoute un membre du personnel en BD
 
     :return: id_personnel
     """
     try:
-        personnel = Personnel(login = login, nom = nom, prenom = prenom, email = email, mdp = password, role = role)
+        personnel = Personnel(login=login, nom=nom, prenom=prenom, email=email, mdp=password, role=role)
         db.session.add(personnel)
         db.session.commit()
     except AttributeError as e:
         logging.error("Erreur lors de l'ajout d'un membre du personnel")
-

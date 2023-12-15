@@ -12,5 +12,5 @@ class Personnel(db.Model):
     mdp = db.Column(db.Text)
     role = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    essaies = db.Column(db.Integer, nullable=False, default = 0)
-
+    essaies = db.Column(db.Integer, nullable=False, default=False)
+    archive = db.Column(db.Boolean, nullable=False, default=False)

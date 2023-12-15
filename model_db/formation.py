@@ -11,4 +11,5 @@ class Formation(db.Model):
     niveau_qualif = db.Column(db.Integer)
     groupe = db.Column(db.String(50))
     image = db.Column(db.String(100))
+    archive = db.Column(db.Boolean, nullable=False, default=False)
 

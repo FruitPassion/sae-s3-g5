@@ -10,8 +10,10 @@ def get_all_formation():
 
     :return: Une liste des formations
     """
-    return convert_to_dict(Formation.query.with_entities(Formation.id_formation,
-                                                         Formation.intitule, Formation.niveau_qualif, Formation.groupe, Formation.image).all())
+    return convert_to_dict(
+        Formation.query.with_entities(Formation.id_formation, Formation.intitule, Formation.niveau_qualif,
+                                      Formation.groupe, Formation.image).filter(
+            Formation.archive is not True).all())
 
 
 def get_formation_id(nom_formation: str):
@@ -23,28 +25,25 @@ def get_formation_id(nom_formation: str):
     return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
 
 
-
 def get_nom_formation(id_formation):
     """
     Retourne l'intitulé d'une formation à partir de son id
 
     :return: Un intitulé de formation
     """
-    return Formation.query.with_entities(Formation.intitule).filter_by(id_formation = id_formation).first().intitule
+    return Formation.query.with_entities(Formation.intitule).filter_by(id_formation=id_formation).first().intitule
 
 
-
-def add_formation(intitule, niveau_qualif, groupe, image) :
+def add_formation(intitule, niveau_qualif, groupe, image):
     """
     Ajoute une formation en BD
 
     :return: id_formation
     """
-    formation = Formation(intitule = intitule, niveau_qualif = niveau_qualif, groupe = groupe, image = image)
+    formation = Formation(intitule=intitule, niveau_qualif=niveau_qualif, groupe=groupe, image=image)
     db.session.add(formation)
     db.session.commit()
     return formation.id_formation
-
 
 
 def delete_formation(id_formation):

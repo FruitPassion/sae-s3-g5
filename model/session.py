@@ -8,14 +8,16 @@ from model_db.assister import Assister
 from model_db.session import Session
 from model_db.formation import Formation
 
+
 def get_all_sessions():
     """
     Retourne la liste de toutes les sessions
 
     :return: Une liste des sessions
     """
-    return convert_to_dict(Session.query.with_entities(Session.theme, Session.cours, Session.id_session, 
-                                                       Session.duree, Session.id_formation).all())
+    return convert_to_dict(Session.query.with_entities(Session.theme, Session.cours, Session.id_session,
+                                                       Session.duree, Session.id_formation).filter(
+        Session.archive is not True).all())
 
 
 def get_apprentis_by_formation(nom_formation: str):
@@ -38,8 +40,8 @@ def add_apprenti_assister(id_apprenti, id_formation):
     :return: None
     """
     sessions = get_sessions_par_formation(id_formation)
-    for session in sessions :
-        assister = Assister(id_apprenti = id_apprenti, id_session = session.id_session)
+    for session in sessions:
+        assister = Assister(id_apprenti=id_apprenti, id_session=session.id_session)
         db.session.add(assister)
     db.session.commit()
 
@@ -48,4 +50,4 @@ def get_sessions_par_formation(id_formation):
     """
     :return: toutes les sessions de la formation id_formation
     """
-    return Session.query.join(Formation).filter_by(id_formation = id_formation).all()
+    return Session.query.join(Formation).filter_by(id_formation=id_formation).all()

@@ -16,6 +16,7 @@ CREATE TABLE Personnel
     role         VARCHAR(50) NOT NULL,
     email        VARCHAR(100),
     essaies      INT         NOT NULL DEFAULT (0),
+    archive     BOOLEAN     NOT NULL DEFAULT (0),
     PRIMARY KEY (id_personnel),
     CONSTRAINT ch_personnel_role CHECK (role IN
                                         ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP')),
@@ -31,6 +32,7 @@ CREATE TABLE Apprenti
     mdp         TEXT,
     photo       VARCHAR(100),
     essaies     INT         NOT NULL DEFAULT (0),
+    archive     BOOLEAN     NOT NULL DEFAULT (0),
     PRIMARY KEY (id_apprenti),
     CONSTRAINT ch_apprenti_essaies CHECK (Apprenti.essaies >= 0 AND Apprenti.essaies <= 5)
 );
@@ -42,6 +44,7 @@ CREATE TABLE Formation
     niveau_qualif SMALLINT    NOT NULL,
     groupe        VARCHAR(50),
     image         VARCHAR(100),
+    archive     BOOLEAN     NOT NULL DEFAULT (0),
     PRIMARY KEY (id_formation)
 );
 
@@ -52,6 +55,7 @@ CREATE TABLE Session
     cours        VARCHAR(50) NOT NULL,
     duree        INT,
     id_formation INT         NOT NULL,
+    archive     BOOLEAN     NOT NULL DEFAULT (0),
     PRIMARY KEY (id_session),
     FOREIGN KEY (id_formation) REFERENCES Formation (id_formation)
 );
