@@ -1,17 +1,19 @@
 {% extends 'common/base.html' %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/css/dd.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/personnalisation_fiche.css') }}">
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ url_for('static',filename='js/personnalisation_fiche.js') }}"></script>
-{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/js/dd.min.js"></script>{% endblock %}
 
 {% block body %}
     <h1>Personnalisation de la fiche</h1>
 
-    <div id="container-principal">
+    <div id="container-principal" class="px-4">
         <div id="zone_preview">
             <h3>Prévisualisation</h3>
             <select id="selecteur_categorie" onchange="changer_preview(this)" class="my-3">
@@ -22,11 +24,18 @@
             {% for categorie in composition %}
                 <fieldset id="field-{{ categorie["position_elem"] }}" class="scheduler-border p-2 mr-auto ml-2"
                           {% if loop.index0 != 0 %}hidden="" {% endif %}>
-                    <legend >{{ categorie["libelle_elem"] }}</legend>
+                    <legend>{{ categorie["libelle_elem"] }}</legend>
                     {% for element in categorie["elements"] %}
-                        {% if element["type_elem"] == "select-time" %}
-                            <label>
-                                {{ element["libelle_elem"] }}
+                        <label class="mb-2">
+                            {% if element["pictogramme"] != None %}
+                                <img src="{{ url_for('static', filename='images/icone_fiches/'+element["pictogramme"]) }}"
+                                     class="rounded"
+                                     alt="icone element"
+                                     onload="changeSize(this, ajout=10)">
+                            {% endif %}
+                            {{ element["libelle_elem"] }}
+                            {% if element["type_elem"] == "select-time" %}
+                                </label>
                                 <select class="selecteur_temps">
                                     <option value="">0:30</option>
                                     {% for h in range(1, 10) %}
@@ -35,37 +44,38 @@
                                         {% endfor %}
                                     {% endfor %}
                                 </select>
-                            </label>
-                        {% elif element["type_elem"] == "select-materiel" %}
-                            <label>
-                                {{ element["libelle_elem"] }}
+                            {% elif element["type_elem"] == "select-materiel" %}
+                                </label>
                                 <select class="selecteur_temps">
                                     <option value="mat-1">materiel 1</option>
                                     <option value="mat-2">materiel 2</option>
                                 </select>
-                            </label>
-                        {% elif element["type_elem"] == "textarea" %}
-                            <label>
-                                {{ element["libelle_elem"] }}
-                                <textarea></textarea>
-                            </label>
-                        {% else %}
-                            <div>
-                                <label>
-                                    {{ element["libelle_elem"] }}
-                                    <input type="{{ element["type_elem"] }}">
+                            {% elif element["type_elem"] == "textarea" %}
                                 </label>
-                            </div>
-                        {% endif %}
+                                <textarea class="form-control"></textarea>
+                            {% elif element["type_elem"] in ["radio","checkbox"]%}
+                                <input type="{{ element["type_elem"] }}" name="radio-{{ categorie['position_elem'] }}">
+                                </label>
+                            {% else %}
+                                </label>
+                                <div>
+                                    <input type="{{ element["type_elem"] }}"
+                                            {% if element["type_elem"] != "checkbox" %}
+                                           class="form-control"
+                                            {% endif %}>
+                                </div>
+                            {% endif %}
                     {% endfor %}
                 </fieldset>
             {% endfor %}
         </div>
+
         <div id="zone_personnalisation">
             {% for categorie in composition %}
                 <div class="set-hidde" id="set-{{ categorie["position_elem"] }}"
                      {% if loop.index0 != 0 %}hidden="" {% endif %}>
-                    <select id="selecteur_element">
+                    <h3>Choix de l'élement ou de la catégorie</h3>
+                    <select id="selecteur_element" onchange="changer_element(this)">
                         <option value="{{ categorie["position_elem"] }}" selected>Catégorie
                             - {{ categorie["libelle_elem"] }}</option>
                         {% for element in categorie["elements"] %}
@@ -75,164 +85,189 @@
                     </select>
 
                     <!-- Iteration pour la version de la categorie-->
-                    <div>
+                    <div id="element-{{ categorie["position_elem"] }}" class="element-hidde">
+                        <div>
+                            <h3>Champs</h3>
+                            <div class="form-control">
+                                <!-- Sélection du Niveau -->
+                                <label for="selecteur_niveau">Niveau</label>
+                                <select id="selecteur_niveau">
+                                    <option value="0" {% if categorie["niveau"] == None %}selected{% endif %}>
+                                        # - Niveau individuel pour chaque élément de la fiche
+                                    </option>
+                                    <option value="1" {% if categorie["niveau"] == 1 %}selected{% endif %}>1 - Facile -
+                                        Pictogrammes (appliquer à tout les éléments)
+                                    </option>
+                                    <option value="2" {% if categorie["niveau"] == 2 %}selected{% endif %}>2 - Aidé -
+                                        Pictogrammes
+                                        et Texte (appliquer à tout les éléments)
+                                    </option>
+                                    <option value="3" {% if categorie["niveau"] == 3 %}selected{% endif %}>3 - Pro -
+                                        Version d'examen (appliquer à tout les éléments)
+                                    </option>
+                                </select>
+                            </div>
+                            <br>
+                        </div>
+
                         <div>
                             <h3>Texte</h3>
-                            <!-- Sélection d'une police d'écriture -->
-                            <label for="selecteur_police">Police</label>
-                            <select id="selecteur_police" onchange="changer_police()">
-                                {% for police in polices %}
-                                    <option value="{{ police }}" style="font-family: {{ police }}"
-                                            {% if police == categorie["police"] %} selected {% endif %}>
-                                        {{ police }}
-                                    </option>
-                                {% endfor %}
-                                <!-- Autres polices à rajouter éventuellement -->
-                            </select>
+                            <div class="d-flex form-control modify-text">
+                                <div>
+                                    <!-- Sélection d'une police d'écriture -->
+                                    <label>Police</label>
+                                    <select onchange="changer_police()">
+                                        {% for police in polices %}
+                                            <option value="{{ police }}" style="font-family: {{ police }}"
+                                                    {% if police == categorie["police"] %} selected {% endif %}>
+                                                {{ police }}
+                                            </option>
+                                        {% endfor %}
+                                        <!-- Autres polices à rajouter éventuellement -->
+                                    </select>
+                                </div>
 
-                            <!-- Sélection de la taille de la police d'écriture -->
-                            <label for="taille_police">Taille</label>
-                            <input type="number" id="taille_police" min="15" max="100"
-                                   value="{{ categorie["taille_texte"] }}"
-                                   onchange="mettre_a_jour_texte()"><br>
-
-
-                            <!-- Sélection de la couleur de la police d'écriture -->
-                            <!-- Partie hexadéciamle -->
-                            <label> Changer la couleur</label>
-
-                            <!--Visualisation-->
-                            <div id="visualisation">
-                                <input type="color" id="color_picker" value="{{ categorie["couleur"] }}"
-                                       oninput="mettre_a_jour_texte()">
-
-                                <!--Visualisation du texte et de sa couleur-->
-                                <div id="visualisation_texte">
-                                    <span id="texte_visualisation">Ceci est le texte de visualisation de votre choix</span>
+                                <div>
+                                    <!-- Sélection de la taille de la police d'écriture -->
+                                    <label>Taille</label>
+                                    <input type="number" min="15" max="100"
+                                           value="{{ categorie["taille_texte"] }}"
+                                           onchange="mettre_a_jour_texte()"><br>
+                                </div>
+                                <div>
+                                    <!-- Sélection de la couleur de la police d'écriture -->
+                                    <label> Couleur</label>
+                                    <input type="color" class="form-control form-control-color w-100" id="color_picker"
+                                           value="{{ categorie["couleur"] }}"
+                                           oninput="mettre_a_jour_texte()">
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <h3>Champs</h3>
 
-                            <!-- Sélection du Niveau -->
-                            <label for="selecteur_niveau">Niveau</label>
-                            <select id="selecteur_niveau">
-                                <option value="0" {% if categorie["niveau"] == None %}selected{% endif %}>
-                                    0 - Niveau individuel pour chaque élément de la fiche
-                                </option>
-                                <option value="1" {% if categorie["niveau"] == 1 %}selected{% endif %}>1 - Pas
-                                    d'affichage
-                                    - Elements cachés (appliquer à tout les éléments)
-                                </option>
-                                <option value="2" {% if categorie["niveau"] == 2 %}selected{% endif %}>2 - Facile -
-                                    Pictogrammes (appliquer à tout les éléments)
-                                </option>
-                                <option value="2" {% if categorie["niveau"] == 3 %}selected{% endif %}>3 - Aidé -
-                                    Pictogrammes
-                                    et Texte (appliquer à tout les éléments)
-                                </option>
-                                <option value="2" {% if categorie["niveau"] == 4 %}selected{% endif %}>4 - Pro -
-                                    Version d'examen (appliquer à tout les éléments)
-                                </option>
-                            </select>
-                            <br>
-
-                            <!-- Sélection du pictogramme à associer -->
-                            <label for="selecteur_pictogramme">Pictogramme</label>
-                            <select id="selecteur_pictogramme">
-                                <!-- Pictos de la BD -->
-                            </select>
-                        </div>
                         <div>
                             <h3>Couleur de fond</h3>
-                            <input type="color" id="color_picker" value="{{ categorie["couleur_fond"] }}"
-                                   oninput="mettre_a_jour_couleur_fond()">
-                        </div>
-                        <div class="d-flex" id="actions_finales">
-                            <button class="btn-secondary form-control">Reinitialiser (Par Défaut)</button>
-                            <button class="btn-secondary form-control" disabled>Reinitialiser (Derniere Fiche)</button>
-                            <button class="btn-primary form-control" disabled>Appliquer</button>
+                            <div class="form-control">
+                                <!-- Sélection de la couleur du fond -->
+                                <label> Couleur</label>
+                                <input type="color" class="form-control form-control-color w-100"
+                                       value="{{ categorie["couleur_fond"] }}"
+                                       oninput="mettre_a_jour_couleur_fond()">
+                            </div>
                         </div>
                     </div>
 
 
                     <!-- Iteration par elements dans la categorie-->
                     {% for element in categorie["elements"] %}
-                        <div hidden="">
+                        <div hidden="" id="element-{{ element["position_elem"] }}" class="element-hidde">
+
                             <div>
-                                <h3>Texte</h3>
-                                <!-- Sélection d'une police d'écriture -->
-                                <label for="selecteur_police">Police</label>
-                                <select id="selecteur_police" onchange="changer_police()">
-                                    {% for police in polices %}
-                                        <option value="{{ police }}" style="font-family: {{ police }}"
-                                                {% if police == element["police"] %} selected {% endif %}>
-                                            {{ police }}
-                                        </option>
-                                    {% endfor %}
-                                    <!-- Autres polices à rajouter éventuellement -->
-                                </select>
-
-                                <!-- Sélection de la taille de la police d'écriture -->
-                                <label for="taille_police">Taille</label>
-                                <input type="number" id="taille_police" min="1" max="100"
-                                       value="{{ element["taille_texte"] }}"
-                                       onchange="mettre_a_jour_texte()"><br>
+                                <h3>Champ</h3>
 
 
-                                <!-- Sélection de la couleur de la police d'écriture -->
-                                <!-- Partie hexadéciamle -->
-                                <label> Changer la couleur</label>
-
-                                <!--Visualisation-->
-                                <div id="visualisation">
-                                    <input type="color" id="color_picker" value="{{ element["couleur"] }}"
-                                           oninput="mettre_a_jour_texte()">
-
-                                    <!--Visualisation du texte et de sa couleur-->
-                                    <div id="visualisation_texte">
-                                        <span id="texte_visualisation">Ceci est le texte de visualisation de votre choix</span>
+                                <div class="form-control">
+                                    <div>
+                                        <!-- Sélection du Niveau -->
+                                        <label for="selecteur_niveau">Niveau</label>
+                                        <select id="selecteur_niveau">
+                                            <option value="1" {% if categorie["niveau"] == 1 %}selected{% endif %}>1 -
+                                                Facile -
+                                                Pictogrammes (appliquer à tout les éléments)
+                                            </option>
+                                            <option value="2" {% if categorie["niveau"] == 2 %}selected{% endif %}>2 -
+                                                Aidé -
+                                                Pictogrammes
+                                                et Texte (appliquer à tout les éléments)
+                                            </option>
+                                            <option value="3" {% if categorie["niveau"] == 3 %}selected{% endif %}>3 -
+                                                Pro -
+                                                Version d'examen (appliquer à tout les éléments)
+                                            </option>
+                                        </select>
+                                        <br>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="w-50 mx-1">
+                                            <!-- Sélection du pictogramme à associer -->
+                                            <label>Pictogramme</label>
+                                            <select class="selecteur_pictogramme" is="ms-dropdown">
+                                                <option value="aucun" {% if element["pictogramme"] == None %}
+                                                        selected {% endif %}>
+                                                    Pas de pictogramme
+                                                </option>
+                                                {% for categorie in liste_pictogrammes %}
+                                                    <optgroup label="{{ categorie }}">
+                                                        {% for souscategorie in liste_pictogrammes[categorie] %}
+                                                            <optgroup
+                                                                    label="&nbsp;&nbsp;&nbsp;&nbsp;{{ souscategorie }}">
+                                                                {% for souselement in liste_pictogrammes[categorie][souscategorie] %}
+                                                                    <option value="{{ souselement["label"] }}"
+                                                                            data-image="{{ url_for('static', filename='images/icone_fiches/'+souselement['url']) }}"
+                                                                            {% if element["pictogramme"] == souselement["url"] %}
+                                                                            selected {% endif %}>
+                                                                        {{ souselement["label"] }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </optgroup>
+                                                        {% endfor %}
+                                                    </optgroup>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="w-50 mx-1">
+                                            <!-- Sélection de la taille du pictogramme -->
+                                            <label>Taille</label>
+                                            <input type="number" min="15" max="100"
+                                                   value="{{ element["taille_pictogramme"] }}"
+                                                   onchange="mettre_a_jour_pictogramme()"><br>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <h3>Champ</h3>
+                                <h3>Texte</h3>
+                                <div class="d-flex form-control modify-text">
+                                    <div>
+                                        <!-- Sélection d'une police d'écriture -->
+                                        <label>Police</label>
+                                        <select onchange="changer_police()">
+                                            {% for police in polices %}
+                                                <option value="{{ police }}" style="font-family: {{ police }}"
+                                                        {% if police == categorie["police"] %} selected {% endif %}>
+                                                    {{ police }}
+                                                </option>
+                                            {% endfor %}
+                                            <!-- Autres polices à rajouter éventuellement -->
+                                        </select>
+                                    </div>
 
-                                <!-- Sélection du Niveau -->
-                                <label for="selecteur_niveau">Niveau</label>
-                                <select id="selecteur_niveau">
-                                    <option value="1" {% if element["niveau"] == 1 %}selected{% endif %}>1 - Pas
-                                        d'affichage - Elements cachés
-                                    </option>
-                                    <option value="2" {% if element["niveau"] == 2 %}selected{% endif %}>2 - Facile -
-                                        Pictogrammes
-                                    </option>
-                                    <option value="2" {% if element["niveau"] == 3 %}selected{% endif %}>3 - Aidé -
-                                        Pictogrammes et Texte
-                                    </option>
-                                    <option value="2" {% if element["niveau"] == 4 %}selected{% endif %}>4 - Pro -
-                                        Version d'examen
-                                    </option>
-                                </select>
-                                <br>
-
-                                <!-- Sélection du pictogramme à associer -->
-                                <label for="selecteur_pictogramme">Pictogramme</label>
-                                <select id="selecteur_pictogramme">
-                                    <!-- Pictos de la BD -->
-                                </select>
+                                    <div>
+                                        <!-- Sélection de la taille de la police d'écriture -->
+                                        <label>Taille</label>
+                                        <input type="number" min="15" max="100"
+                                               value="{{ categorie["taille_texte"] }}"
+                                               onchange="mettre_a_jour_texte()"><br>
+                                    </div>
+                                    <div>
+                                        <!-- Sélection de la couleur de la police d'écriture -->
+                                        <label> Couleur</label>
+                                        <input type="color" class="form-control form-control-color w-100"
+                                               id="color_picker"
+                                               value="{{ categorie["couleur"] }}"
+                                               oninput="mettre_a_jour_texte()">
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <h3>Couleur de fond</h3>
-                                <input type="color" id="color_picker" value="{{ element["couleur_fond"] }}"
-                                       oninput="mettre_a_jour_couleur_fond()">
-                            </div>
-                            <div class="d-flex" id="actions_finales">
-                                <button class="btn-secondary form-control">Reinitialiser (Par Défaut)</button>
-                                <button class="btn-secondary form-control" disabled>Reinitialiser (Derniere Fiche)
-                                </button>
-                                <button class="btn-primary form-control" disabled>Appliquer</button>
+
+                                <div class="form-control">
+                                    <!-- Sélection de la couleur du fond -->
+                                    <label> Couleur</label>
+                                    <input type="color" class="form-control form-control-color w-100"
+                                           value="{{ categorie["couleur_fond"] }}"
+                                           oninput="mettre_a_jour_couleur_fond()">
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
@@ -240,8 +275,15 @@
             {% endfor %}
         </div>
     </div>
+    <div class="d-flex px-5" id="actions_finales">
+        <button class="btn-secondary form-control">Reinitialiser (Par Défaut)</button>
+        <button class="btn-secondary form-control" disabled>Reinitialiser (Derniere Fiche)
+        </button>
+        <button class="btn-primary form-control" disabled>Appliquer</button>
+    </div>
 
     <script defer>
-        mettre_a_jour_texte()
+
     </script>
+
 {% endblock %}

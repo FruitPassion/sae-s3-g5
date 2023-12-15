@@ -9,6 +9,7 @@ class Session(db.Model):
     theme = db.Column(db.String(50), nullable=False)
     cours = db.Column(db.String(50), nullable=False)
     duree = db.Column(db.Integer)
+    archive = db.Column(db.Boolean, nullable=False, default=False)
     id_formation = db.Column(db.ForeignKey('db_fiches_dev.Formation.id_formation'), nullable=False, index=True)
 
     Formation = db.relationship('Formation', primaryjoin='Session.id_formation == Formation.id_formation',

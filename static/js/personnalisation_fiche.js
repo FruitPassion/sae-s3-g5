@@ -42,7 +42,7 @@ function mettre_a_jour_couleur_fond() {
 function changer_preview(element){
     let fields = document.getElementsByTagName("fieldset");
     for (const f of fields){
-        f.setAttribute("hidden", "true");
+        f.setAttribute("hidden", "");
     }
     document.getElementById("field-"+element.value).removeAttribute("hidden");
     let sets = document.getElementsByClassName("set-hidde");
@@ -50,5 +50,14 @@ function changer_preview(element){
         s.setAttribute("hidden", "");
     }
     document.getElementById("set-"+element.value).removeAttribute("hidden");
-
+    document.getElementById("element-"+element.value).removeAttribute("hidden");
 }
+
+function changer_element(element){
+    let sets = document.getElementsByClassName("element-hidde");
+    for (const s of sets){
+        s.setAttribute("hidden", "");
+    }
+    document.getElementById("element-"+element.value).removeAttribute("hidden");
+}
+

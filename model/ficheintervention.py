@@ -32,7 +32,7 @@ def get_fiches_par_id_fiche(id_fiche):
     return convert_to_dict(FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.numero).first())
 
-  
+
 def get_niveau_fiches_par_login(login):
     """
     Récupère le total des niveaux de chaque fiche technique associées à un apprenti à partir de son Login
@@ -50,6 +50,7 @@ def get_niveau_fiches_par_login(login):
         .all()
     )
     return convert_to_dict(fiche_niveau)
+
 
 def get_niveau_moyen_champs_par_login(login):
     """
@@ -73,6 +74,7 @@ def get_niveau_moyen_champs_par_login(login):
         total_niveau_champ += niveau["moyenne_niveau"]
     return int(total_niveau_champ / len(liste_niveau_champ))
 
+
 def get_nombre_fiches_finies_par_login(login):
     """
     Récupère le nombre de fiches finies par un apprenti à partir de son Login
@@ -82,14 +84,17 @@ def get_nombre_fiches_finies_par_login(login):
     id_apprenti = get_id_apprenti_by_login(login)
     return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).filter_by(etat_fiche=True).count()
 
+
 def get_etat_fiche_par_id_fiche(id_fiche):
     """
     Récupère l'état d'une fiche à partir de son id
 
     :return: L'état de la fiche
     """
-    return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(FicheIntervention.etat_fiche).first().etat_fiche
-    
+    return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
+        FicheIntervention.etat_fiche).first().etat_fiche
+
+
 def get_fiches_techniques_finies_par_login(login):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
@@ -99,7 +104,8 @@ def get_fiches_techniques_finies_par_login(login):
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.etat_fiche).filter_by(etat_fiche=True).all())
-    
+
+
 def get_fiche_apprentis_existe(login: str):
     """
     Verifie si l'apprenti à deja une fiche
@@ -150,7 +156,9 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
         composer_fiche = get_composer_presentation()
     for element in composer_fiche:
         element["id_fiche"] = nouvelle_fiche.id_fiche
-        composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"], picto=None,
+        composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
+                                        id_pictogramme=element["id_pictogramme"],
+                                        taille_pictogramme=element["taille_pictogramme"],
                                         text=None, taille_texte=element["taille_texte"], audio=None,
                                         police=element["police"], couleur=element["couleur"],
                                         couleur_fond=element["couleur_fond"], niveau=element["niveau"],

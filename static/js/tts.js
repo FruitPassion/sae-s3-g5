@@ -1,7 +1,7 @@
-function changeSize(element){
+function changeSize(element, ajout=0){
     let style = window.getComputedStyle(element.parentElement, null).getPropertyValue('font-size');
     let fontSize = parseFloat(style);
-    element.style.width = fontSize+"px";
+    element.style.width = fontSize+ajout+"px";
 }
 function lireTexte(texte) {
     const syntheseVocale = window.speechSynthesis;

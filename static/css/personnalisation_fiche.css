@@ -53,7 +53,7 @@ input[type="number"], input[type="text"] {
 }
 
 .btn-secondary {
-    font-size: 20px;
+    font-size: 30px;
     background-color: #c4c4c4;
 }
 
@@ -81,6 +81,49 @@ fieldset.scheduler-border {
     border: 1px solid #a2a2a2 !important;
 }
 
+.modify-text div {
+    width: 33%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+.ms-dd {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+.ms-dd .ms-dd-header{
+    border: none;
+}
+
+.ms-dd-header {
+    border-radius: 5px;
+}
+
+.ms-dd .ms-list-option.option-selected, .ms-dd .ms-optgroup ul .ms-list-option.option-selected{
+    background: #e9e9ed;
+}
+
+.ms-dd .ms-dd-option-image, .ms-dd .ms-dd-selected-img {
+    max-width: 31px;
+}
+
+.ms-dd .ms-options {
+    height: 300px;
+}
+
+.ms-dd .ms-value-input{
+    display: none;
+}
+
+.ms-dd-option-content {
+    padding-top: 3px;
+    padding-left: 10px;
+}
+
+.ms-dd .ms-dd-header .option-selected{
+    font-weight: initial;
+}
 
 @media screen and (max-width: 1200px) {
 

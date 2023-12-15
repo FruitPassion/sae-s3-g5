@@ -52,4 +52,4 @@ def test_redirection_gestion_personnel(client):
     assert response.status_code == 302
 
     # Test de vérification de la route
-    assert response.request.path == "/admin/gestion-personnel" 
+    assert response.request.path == "/admin/gestion-personnel"

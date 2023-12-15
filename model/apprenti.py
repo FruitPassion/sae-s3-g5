@@ -10,7 +10,7 @@ from model_db.ficheintervention import FicheIntervention
 from model.formation import get_nom_formation
 
 
-def get_all_apprenti():
+def get_all_apprenti(archive=False):
     """
     Récupère l'id, nom, prenom et photo de chaque apprenti
 
@@ -18,7 +18,7 @@ def get_all_apprenti():
     """
     apprenti = Apprenti.query.with_entities(
         Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essaies
-    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").all()
+    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive is archive).all()
     return convert_to_dict(apprenti)
 
 
@@ -57,7 +57,7 @@ def check_password_apprenti(login: str, new_password: str):
     """
     old_password = Apprenti.query.with_entities(Apprenti.mdp).filter_by(login=login).first().mdp
     digest = compare_passwords(new_password, old_password)
-    if digest  and get_nbr_essaie_connexion_apprenti(login) < 5:
+    if digest and get_nbr_essaie_connexion_apprenti(login) < 5:
         reset_nbr_essaies_connexion(login)
     elif not digest and get_nbr_essaie_connexion_apprenti(login) < 5:
         update_nbr_essaies_connexion(login)
@@ -103,15 +103,15 @@ def reset_nbr_essaies_connexion(login: str):
         return True
     except:
         return False
-    
 
-def add_apprenti(nom, prenom, login, photo) :
+
+def add_apprenti(nom, prenom, login, photo):
     """
     Ajoute un apprenti en BD
 
     :return: id_apprenti
     """
-    apprenti = Apprenti(nom = nom, prenom = prenom, login = login, photo = photo)
+    apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo)
     db.session.add(apprenti)
     db.session.commit()
     return apprenti.id_apprenti

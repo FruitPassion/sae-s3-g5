@@ -9,4 +9,5 @@ class Pictogramme(db.Model):
     label = db.Column(db.String(50), nullable=False)
     url = db.Column(db.String(100), nullable=False)
     categorie = db.Column(db.String(50), nullable=False)
+    souscategorie = db.Column(db.String(50), nullable=False)
 

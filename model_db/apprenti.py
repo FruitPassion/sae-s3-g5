@@ -11,4 +11,5 @@ class Apprenti(db.Model):
     login = db.Column(db.String(50), nullable=False)
     mdp = db.Column(db.Text)
     photo = db.Column(db.String(100))
-    essaies = db.Column(db.Integer, nullable=False, default = 0)
+    essaies = db.Column(db.Integer, nullable=False, default=0)
+    archive = db.Column(db.Boolean, nullable=False, default=False)

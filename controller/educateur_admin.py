@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 
-from custom_paquets.builder import build_categories
+from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.custom_form import AjouterFiche
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login
@@ -59,6 +59,7 @@ def personnalisation():
     """
     liste_police = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
                     "Lato", "Oswald", "Poppins"]
+    liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(14)
     return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_police,
-                           composition=composer_fiche), 200
+                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes), 200
