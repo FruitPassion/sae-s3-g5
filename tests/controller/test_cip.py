@@ -1,6 +1,6 @@
 from flask import url_for
 
-from custom_paquets.tester_usages import connexion_personnel
+from custom_paquets.tester_usages import connexion_personnel_pin
 
 '''
 Test des controller du fichier cip.py
@@ -13,7 +13,7 @@ apprenti = "DAJ12"
 
 # Test de la route de redirection de connexion de la CIP
 def test_redirection_connexion(client):
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("personnel.choix_formation"))
     
     # Test d'accès à la route
@@ -26,7 +26,7 @@ def test_redirection_connexion(client):
 # Test de la route choix formation (affichage liste apprentis de cette formation)
 def test_affichage_apprentis_formation(client):
     # Test connexion CIP
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("personnel.choix_eleve", nom_formation = formation))
 
     # Test d'accès à la route
@@ -39,7 +39,7 @@ def test_affichage_apprentis_formation(client):
 # Test de la route choix apprenti (affichage des opérations possibles pour la CIP)
 def test_choix_apprenti(client):
     # Test connexion CIP
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("cip.affiche_choix", apprenti = apprenti))
 
     # Test d'accès à la route
@@ -52,7 +52,7 @@ def test_choix_apprenti(client):
 # Test de la route choix fiche apprenti (affichage des fiches techniques de DAJ12)
 def test_choix_fiche(client):
     # Test connexion CIP
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("cip.fiches_apprenti", apprenti = apprenti))
 
     # Test d'accès à la route
@@ -64,7 +64,7 @@ def test_choix_fiche(client):
 # Test de la route suivi de progression de l'apprenti 
 def test_suivi_progression(client):
     # Test connexion CIP
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("cip.suivi_progression_apprenti", apprenti = apprenti))
 
     # Test d'accès à la route
@@ -79,7 +79,7 @@ A VALIDER UNE FOIS QUE L'ADAPTATION EN SITUATION D'EXAMEN SERA FAIT
 # Test de la route de l'adaptation en situation d'examen de l'apprenti 
 def test_adaptation_situation_exam(client):
     # Test connexion CIP
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("cip.suivi_progression_apprenti", apprenti = apprenti))
 
     # Test d'accès à la route
@@ -92,7 +92,7 @@ def test_adaptation_situation_exam(client):
 # Test de la route de redirection d'affichage des commentaires
 def test_redirection_commentaires(client):
     # Test connexion CIP
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
 
     # identifiant de la fiche 1 d'apprenti
     id_fiche = 7

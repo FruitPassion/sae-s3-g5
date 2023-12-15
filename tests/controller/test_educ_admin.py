@@ -1,5 +1,5 @@
 from flask import url_for
-from custom_paquets.tester_usages import connexion_personnel
+from custom_paquets.tester_usages import connexion_personnel_pin
 
 '''
 Test des controller du fichier educateur_admin.py
@@ -12,7 +12,7 @@ apprenti = "ANG12"
 
 # test de la route de direction vers fiches apprenti
 def test_route_fiches_apprenti(client):
-    connexion_personnel(client, login, mdp)
+    connexion_personnel_pin(client, login, mdp)
     response = client.get(url_for("educ_admin.fiches_apprenti", apprenti=apprenti))
 
     # Test d'accès à la route
@@ -23,7 +23,7 @@ def test_route_fiches_apprenti(client):
     
 # test de la route de direction vers ajouter fiche
 def test_route_ajouter_fiches(client):
-    connexion_personnel(client, login, mdp)
+    connexion_personnel_pin(client, login, mdp)
     response = client.get(url_for("educ_admin.ajouter_fiche", apprenti=apprenti))
     
     # Test d'accès à la route
@@ -34,7 +34,7 @@ def test_route_ajouter_fiches(client):
     
 # test de la route de direction vers personnalisation
 def test_route_personnalisation(client):
-    connexion_personnel(client, login, mdp)
+    connexion_personnel_pin(client, login, mdp)
     response = client.get(url_for("educ_admin.personnalisation"))
     
     # Test d'accès à la route

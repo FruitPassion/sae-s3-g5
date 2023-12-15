@@ -1,5 +1,5 @@
 from flask import url_for
-from custom_paquets.tester_usages import connexion_personnel
+from custom_paquets.tester_usages import connexion_personnel_pin
 from model.formation import get_formation_id
 
 '''
@@ -16,7 +16,7 @@ apprenti = "ANG12"
 
 # Test de la route de redirection de connexion
 def test_redirection_connexion(client):
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
 
     response = client.get(url_for("personnel.choix_formation"))
 
@@ -29,7 +29,7 @@ def test_redirection_connexion(client):
 
 # Test de la route de choix des élèves
 def test_choix_eleve(client):
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
     response = client.get(url_for("personnel.choix_eleve", nom_formation=nom_formation))
 
     # Test d'accès à la route
@@ -42,7 +42,7 @@ def test_choix_eleve(client):
 # Test de la route de personnalisation de la première page
 def test_personnalisation(client):
     
-    connexion_personnel(client,username,passw)
+    connexion_personnel_pin(client,username,passw)
     response = client.get(url_for("personnel.personnalisation"))
 
     # Test d'accès à la route
@@ -69,7 +69,7 @@ def test_personnalisation(client):
 
 # Test de la route de personnalisation de la deuxième page
 def test_personnalisation_bis(client):
-    connexion_personnel(client,username,passw)
+    connexion_personnel_pin(client,username,passw)
 
     response = client.get(url_for("personnel.personnalisation_bis"))
 
@@ -91,7 +91,7 @@ def test_personnalisation_bis(client):
 def test_choix_formation(client):
     username = "JEO12"
     passw = "educ"
-    connexion_personnel(client, username, passw)
+    connexion_personnel_pin(client, username, passw)
 
     nom_formation = "Parcours plomberie"
     response = client.get(url_for("personnel.choix_eleve", nom_formation=nom_formation))
@@ -111,7 +111,7 @@ def test_redirection_fiches_apprentis(client):
 
     # Test pour chaque personnel
     for i in range(3):
-        connexion_personnel(client,liste_personnel[i],liste_mdp[i])
+        connexion_personnel_pin(client,liste_personnel[i],liste_mdp[i])
         response = client.get(url_for("personnel.redirection_fiches", apprenti=apprenti))
 
         # Test d'accès à la route

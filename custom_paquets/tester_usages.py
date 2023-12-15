@@ -2,14 +2,19 @@
 Fonctions utilitaires
 """
 
-
-# Fonction de connexion
-def connexion_personnel(client, username, password):
-    return client.post("/connexion-personnel", data=dict(
+# Fonction de connexion avec un code pin
+def connexion_personnel_pin(client, username, password):
+    return client.post("/connexion-personnel-pin", data=dict(
         login=username,
         password=password
     ), follow_redirects=True)
 
+# Fonction de connexion avec un mot de passe
+def connexion_personnel_mdp(client, username, password):
+    return client.post("/connexion-personnel-mdp", data=dict(
+        login=username,
+        password=password
+    ), follow_redirects=True)
 
 # Fonction de deconnexion
 def deconnexion_personnel(client):

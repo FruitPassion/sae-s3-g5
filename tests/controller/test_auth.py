@@ -1,6 +1,6 @@
 from flask import url_for, session
 
-from custom_paquets.tester_usages import connexion_personnel, deconnexion_personnel
+from custom_paquets.tester_usages import connexion_personnel_pin, connexion_personnel_mdp, deconnexion_personnel
 from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
 
@@ -23,13 +23,19 @@ def test_choix_connexion(client):
 
 # Tests de la route de connexion pour le personnel avant l'identification
 def test_connexion_personnel_chargement(client):
-    response = client.get(url_for("auth.connexion_personnel"))
+    # Version PIN
+    response = client.get(url_for("auth.connexion_personnel_pin"))
 
     # Test d'accès à la route
     assert response.status_code == 200
 
     # Test de vérification de la route
-    assert response.request.path == "/connexion-personnel"
+    assert response.request.path == "/connexion-personnel-pin"
+    
+    # Version MDP
+    response = client.get(url_for("auth.connexion_personnel_mdp"))
+    assert response.status_code == 200
+    assert response.request.path == "/connexion-personnel-mdp"
 
 
 def test_connexion_deconnexion(client):
@@ -39,7 +45,7 @@ def test_connexion_deconnexion(client):
     # Test connexion superadministrateur
     username = "JED10"
     passw = "superadmin"
-    response = connexion_personnel(client, username, passw)
+    response = connexion_personnel_mdp(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'JED10'
         assert sess['role'] == 'SuperAdministrateur'
@@ -54,7 +60,7 @@ def test_connexion_deconnexion(client):
     # Test connexion educateur admin
     username = "ALL11"
     passw = "educadmin"
-    response = connexion_personnel(client, username, passw)
+    response = connexion_personnel_pin(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'ALL11'
         assert sess['role'] == 'Educateur Administrateur'
@@ -64,7 +70,7 @@ def test_connexion_deconnexion(client):
     # Test connexion educateur
     username = "MAC10"
     passw = "educ"
-    response = connexion_personnel(client, username, passw)
+    response = connexion_personnel_pin(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'MAC10'
         assert sess['role'] == 'Educateur'
@@ -74,17 +80,17 @@ def test_connexion_deconnexion(client):
     # Test connexion cip
     username = "FAR16"
     passw = "cip"
-    response = connexion_personnel(client, username, passw)
+    response = connexion_personnel_mdp(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'FAR16'
         assert sess['role'] == 'CIP'
     assert message_reussi in response.data
     deconnexion_personnel(client)
 
-    response = connexion_personnel(client, "12345", passw)
+    response = connexion_personnel_pin(client, "12345", passw)
     assert b'Compte inconnu ou mot de passe invalide' in response.data
 
-    response = connexion_personnel(client, username, f'{passw}x')
+    response = connexion_personnel_mdp(client, username, f'{passw}x')
     assert b'Compte inconnu ou mot de passe invalide' in response.data
 
 

@@ -1,5 +1,5 @@
 from flask import url_for
-from custom_paquets.tester_usages import connexion_personnel
+from custom_paquets.tester_usages import connexion_personnel_mdp
 
 '''
 Test des controller du fichier admin.py
@@ -11,12 +11,12 @@ def test_redirection_connexion(client):
     # Test connexion superadministrateur
     username = "JED10"
     passw = "superadmin"
-    connexion_personnel(client, username, passw)
+    connexion_personnel_mdp(client, username, passw)
 
     response = client.get(url_for("admin.accueil_admin"))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == "/admin/accueil-admin"
