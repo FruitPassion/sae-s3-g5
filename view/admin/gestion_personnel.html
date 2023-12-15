@@ -36,11 +36,11 @@
                     {% for personnel in liste_personnel %}
                         <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
                         id="pers-{{ personnel['id_personnel'] }}">
-                            <td>{{ personnel["login"] }}</td>
-                            <td>{{ personnel["nom"] }}</td>
-                            <td>{{ personnel["prenom"] }}</td>
-                            <td>{{ personnel["email"] }}</td>
-                            <td class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
+                            <td id="login">{{ personnel["login"] }}</td>
+                            <td id="nom">{{ personnel["nom"] }}</td>
+                            <td id="prenom">{{ personnel["prenom"] }}</td>
+                            <td id="email">{{ personnel["email"] }}</td>
+                            <td id="role" class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
                             <td>
                                 {% if personnel["essaies"] == 3 %}
                                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -48,7 +48,7 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
+                            <th><button onclick="modifierLigne(this)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></th>
                             <td><i class="fa fa-trash" aria-hidden="true"></i></td>
                         </tr>
                     {% endfor %}
@@ -56,7 +56,7 @@
                 </table>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
-                <form method="post" id="container-ajout">
+                <form method="post" id="container-ajout" name="ajout_personnel">
                     
                     <div class="w-75 test">
                         <div class="d-flex">
@@ -126,5 +126,106 @@
                 visible = true;
             }
         }
+
+        editionEnCours = false;
+        function modifierLigne(button) {
+
+            if (!editionEnCours){
+                editionEnCours = true; // Passe en mode édition
+                var ligne = button.parentNode.parentNode;
+                var colonnes = ligne.getElementsByTagName('td');
+            
+                for (var i = 0; i < colonnes.length - 1; i++) {
+
+                    switch(i) {
+                        case 0: break;
+                        case 4:
+                            var valeurActuelle = colonnes[i].innerText;
+                        
+                            // Crée une liste déroulante avec des options
+                            var select = document.createElement('select');
+                            var option1 = document.createElement('option');
+                            option1.value = 'Educateur';
+                            option1.text = 'Educateur';
+                            var option2 = document.createElement('option');
+                            option2.value = 'Educateur Administrateur';
+                            option2.text = 'Educateur Administrateur';
+                        
+                            // Sélectionne l'option correspondant à la valeur actuelle
+                            if (valeurActuelle === 'Educateur') {
+                                option1.selected = true;
+                            } else {
+                                option2.selected = true;
+                            }
+                    
+                            // Ajoute les options à la liste déroulante
+                            select.appendChild(option1);
+                            select.appendChild(option2);
+                        
+                            // Remplace le contenu de la colonne par la liste déroulante
+                            colonnes[i].innerHTML = '';
+                            colonnes[i].appendChild(select);
+                            break;
+                        case 5:
+                            // Crée une checkbox pour l'état "Actif"
+                            var checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.checked = valeurActuelle;
+                
+                            // Remplacer le contenu de la colonne par la case à cocher
+                            colonnes[5].innerHTML = '';
+                            colonnes[5].appendChild(checkbox);
+                            break;
+                        default:
+                            var valeurActuelle = colonnes[i].innerText;
+                            colonnes[i].innerHTML = `<input type="text" value=" ${valeurActuelle} " id=" ${colonnes[i]} ">`;
+                    }
+                }
+                var bouton = ligne.getElementsByTagName('button')[0];
+                bouton.innerText = 'Enregistrer';
+                bouton.setAttribute('onclick', 'enregistrerLigne(this)');
+            }
+
+        }
+        
+        function enregistrerLigne(button) {
+            if (editionEnCours) {
+                editionEnCours = false; 
+                var ligne = button.parentNode.parentNode;
+                var colonnes = ligne.getElementsByTagName('td');
+                
+                // Après avoir sauvegardé les modifications, remplacement des champs modifiables par des éléments HTML
+                for (var i = 0; i < colonnes.length - 1; i++) {
+                    switch (i) {
+                        case 0:
+                            // Ne fait rien pour la première colonne (index 0)
+                            break;
+                        case 4: // Colonne "Role"
+                            var nouvelleValeur = colonnes[i].getElementsByTagName('select')[0].value; // Récupère la nouvelle valeur après la modification
+        
+                            // Remplace le select par le texte
+                            colonnes[i].innerText = nouvelleValeur;
+                            break;
+                        case 5: // Colonne "Actif"
+                            var nouvelleValeur = colonnes[i].getElementsByTagName('input')[0].checked; 
+        
+                            // Remplacez la checkbox par l'image corrspondante
+                            colonnes[i].innerHTML = nouvelleValeur ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
+                            break;
+                        default: // Pour les autres colonnes
+                            var nouvelleValeur = colonnes[i].getElementsByTagName('input')[0].value;
+        
+                            colonnes[i].innerText = nouvelleValeur;
+                            break;
+                    }
+                }
+        
+                var bouton = ligne.getElementsByTagName('button')[0];
+                bouton.innerHTML = `<i class="fa fa-pencil-square-o" aria-hidden="true"></i>`;
+                bouton.setAttribute('onclick', 'modifierLigne(this)');
+            }
+        }
+        
+
     </script>
 {% endblock %}

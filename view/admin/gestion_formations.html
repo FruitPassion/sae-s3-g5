@@ -20,7 +20,7 @@
             <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
                     type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
             </button>
-            <button class="nav-link" id="nav-archiber-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+            <button class="nav-link" id="nav-archiver-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
                     type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
             </button>
         </div>
@@ -93,7 +93,29 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <p>Archiver</p>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Intitulé</th>
+                        <th scope="col">Niveau qualification</th>
+                        <th scope="col">Groupe</th>
+                        <th scope="col">Image</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for formation in liste_formation_archivee %}
+                        <tr class="text-center"
+                        id="pers-{{ formation["id_formation"] }}">
+                            <td class="align-middle">{{ formation["intitule"] }}</td>
+                            <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
+                            <td class="align-middle">{{ formation["groupe"] }}</td>
+                            <td><img style="width:180px; height:100px;"  src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
+                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true" onclick="confirmationSuppression(this, '{{ formation['intitule'] }}', '{{ formation['id_formation'] }}')"></i>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -36,3 +36,7 @@
     height: 50px;
     cursor: pointer;
 }
+
+#enregistrer {
+    display: none;
+}
