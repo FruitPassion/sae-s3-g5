@@ -46,11 +46,8 @@ def test_ajouter_formation():
     groupe = "1"
     image = "formation_image/elec.jpg"
     archive = "0"
-    identifiant_formation = unidecode(intitule[0:2].upper().strip()) + unidecode(groupe[0].upper().strip()) + str(
-        len(intitule.strip() + groupe.strip())).zfill(2)
 
     formation = Formation(
-        identifiant_formation=identifiant_formation,
         intitule=intitule,
         niveau_qualification=niveau_qualification,
         groupe=groupe,
@@ -60,6 +57,6 @@ def test_ajouter_formation():
 
     db.session.add(formation)
 
-    assert db.session.query(Formation).filter(Formation.identifiant_unique == identifiant_formation).first() is not None
+    assert db.session.query(Formation).filter(Formation.intitule == "Parcours élètricité").first() is not None
     db.session.rollback()
-    assert db.session.query(Formation).filter(Formation.identifiant_unique == identifiant_formation).first() is None
+    assert db.session.query(Formation).filter(Formation.intitule == "Parcours élètricité").first() is None
