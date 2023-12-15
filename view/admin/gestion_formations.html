@@ -20,6 +20,9 @@
             <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
                     type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
             </button>
+            <button class="nav-link" id="nav-archiber-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+                    type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
+            </button>
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
@@ -43,7 +46,7 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img style="width:180px; height:100px;"  src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
                             <th class="align-middle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
-                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true" onclick="confirmationSuppression(this, '{{ formation['intitule'] }}', '{{ formation['id_formation'] }}')"></i></td>
+                            <td class="align-middle"><i class="fa fa-archive" aria-hidden="true" onclick="confirmationArchiver(this, '{{ formation['intitule'] }}', '{{ formation['id_formation'] }}')"></i></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -88,6 +91,9 @@
                         {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
                     </div>
                 </form>
+            </div>
+            <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
+                <p>Archiver</p>
             </div>
         </div>
     </div>
