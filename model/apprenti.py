@@ -10,7 +10,7 @@ from model_db.ficheintervention import FicheIntervention
 from model.formation import get_nom_formation
 
 
-def get_all_apprenti():
+def get_all_apprenti(archive=False):
     """
     Récupère l'id, nom, prenom et photo de chaque apprenti
 
@@ -18,7 +18,7 @@ def get_all_apprenti():
     """
     apprenti = Apprenti.query.with_entities(
         Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essaies
-    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive is not True).all()
+    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive is archive).all()
     return convert_to_dict(apprenti)
 
 

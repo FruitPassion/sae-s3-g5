@@ -4,7 +4,7 @@ from model_db.shared_model import db
 from model_db.formation import Formation
 
 
-def get_all_formation():
+def get_all_formation(archive=False):
     """
     Retourne la liste de toutes les formations
 
@@ -13,7 +13,7 @@ def get_all_formation():
     return convert_to_dict(
         Formation.query.with_entities(Formation.id_formation, Formation.intitule, Formation.niveau_qualif,
                                       Formation.groupe, Formation.image).filter(
-            Formation.archive is not True).all())
+            Formation.archive is archive).all())
 
 
 def get_formation_id(nom_formation: str):

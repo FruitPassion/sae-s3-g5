@@ -9,7 +9,7 @@ from model_db.session import Session
 from model_db.formation import Formation
 
 
-def get_all_sessions():
+def get_all_sessions(archive=False):
     """
     Retourne la liste de toutes les sessions
 
@@ -17,7 +17,7 @@ def get_all_sessions():
     """
     return convert_to_dict(Session.query.with_entities(Session.theme, Session.cours, Session.id_session,
                                                        Session.duree, Session.id_formation).filter(
-        Session.archive is not True).all())
+        Session.archive is archive).all())
 
 
 def get_apprentis_by_formation(nom_formation: str):
