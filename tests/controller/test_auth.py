@@ -39,8 +39,8 @@ def test_connexion_personnel_chargement(client):
 
 
 def test_connexion_deconnexion(client):
-
-    message_reussi = b'Connexion reussie'
+    
+    #message_reussi = b'Connexion reussie'
 
     # Test connexion superadministrateur
     username = "JED10"
@@ -49,13 +49,17 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'JED10'
         assert sess['role'] == 'SuperAdministrateur'
-    assert message_reussi in response.data
+    #assert message_reussi in response.data
+    assert response.status_code == 200
+    assert response.request.path == "/admin/accueil-admin"
 
     # Test deconnexion
     response = deconnexion_personnel(client)
     with client.session_transaction() as sess:
         assert sess.get('name') is None
-    assert b'Deconnection reussie.' in response.data
+    #assert b'Deconnexion reussie.' in response.data
+    assert response.status_code == 200
+    assert response.request.path == "/"
 
     # Test connexion educateur admin
     username = "ALL11"
@@ -64,7 +68,9 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'ALL11'
         assert sess['role'] == 'Educateur Administrateur'
-    assert message_reussi in response.data
+    #assert message_reussi in response.data
+    assert response.status_code == 200
+    assert response.request.path == "/personnel/choix-formation-personnel"
     deconnexion_personnel(client)
 
     # Test connexion educateur
@@ -74,7 +80,9 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'MAC10'
         assert sess['role'] == 'Educateur'
-    assert message_reussi in response.data
+    #assert message_reussi in response.data
+    assert response.status_code == 200
+    assert response.request.path == "/personnel/choix-formation-personnel"
     deconnexion_personnel(client)
 
     # Test connexion cip
@@ -84,7 +92,9 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'FAR16'
         assert sess['role'] == 'CIP'
-    assert message_reussi in response.data
+    #assert message_reussi in response.data
+    assert response.status_code == 200
+    assert response.request.path == "/personnel/choix-formation-personnel"
     deconnexion_personnel(client)
 
     response = connexion_personnel_pin(client, "12345", passw)
