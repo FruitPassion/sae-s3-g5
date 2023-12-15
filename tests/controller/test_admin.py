@@ -91,7 +91,8 @@ def test_ajouter_formation(client):
             "intitule": "Parcours élèctricité",
             "niveau_qualif": "3",
             "groupe": "1",
-            "image": "/chemin/vers/votre/image.jpg",
+            "image": "formation_image/electricite.jpg",
+            "archive" :"0"
         }
 
         response = client.post(url_for("admin.gestion_formations"), data=data)
