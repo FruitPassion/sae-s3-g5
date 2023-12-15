@@ -41,7 +41,7 @@ def test_ajouter_apprenti(client):
 
 
 def test_ajouter_formation():
-    intitule = "Parcours élèctricité"
+    intitule = "Parcours électricité"
     niveau_qualification = "3"
     groupe = "1"
     image = "formation_image/elec.jpg"
@@ -57,6 +57,6 @@ def test_ajouter_formation():
 
     db.session.add(formation)
 
-    assert db.session.query(Formation).filter(Formation.intitule == "Parcours élètricité").first() is not None
+    assert db.session.query(Formation).filter(Formation.intitule == intitule).first() is not None
     db.session.rollback()
-    assert db.session.query(Formation).filter(Formation.intitule == "Parcours élètricité").first() is None
+    assert db.session.query(Formation).filter(Formation.intitule == intitule).first() is None
