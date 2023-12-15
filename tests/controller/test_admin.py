@@ -81,3 +81,28 @@ def test_ajouter_personnel(client):
         assert db.session.query(Personnel).filter(Personnel.login == "LES13").first() is not None
         db.rollback()
 """
+"""
+A VERIFIER AUSSI
+
+def test_ajouter_formation(client):
+    try:
+        form = AjouterFormation()
+        data = {
+            "intitule": "Parcours élèctricité",
+            "niveau_qualif": "3",
+            "groupe": "1",
+            "image": "/chemin/vers/votre/image.jpg",
+        }
+
+        response = client.post(url_for("admin.gestion_formations"), data=data)
+        assert response.status_code == 302 
+
+        formation_ajoutee = db.session.query(Formation).filter(Formation.intitule == data["intitule"]).first()
+        assert formation_ajoutee is not None
+
+    finally:
+        response = client.get(url_for("admin.gestion_formation"))
+        assert response.status_code == 302 
+
+        db.session.rollback()
+"""
