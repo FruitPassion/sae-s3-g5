@@ -16,13 +16,13 @@ def get_all_personnel(archive=False):
     """
     personnel = Personnel.query.with_entities(
         Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
-        Personnel.essaies).order_by(Personnel.login).filter(Personnel.archive is archive).all()
+        Personnel.essaies).order_by(Personnel.login).filter(Personnel.archive == archive).all()
     return convert_to_dict(personnel)
 
 
 def get_liste_personnel_non_super(archive=False):
     return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
-        Personnel.role != "SuperAdministrateur").filter(Personnel.archive is archive).all())
+        Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).all())
 
 
 def get_id_personnel_by_login(login: str):

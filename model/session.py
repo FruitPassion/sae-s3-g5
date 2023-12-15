@@ -17,7 +17,7 @@ def get_all_sessions(archive=False):
     """
     return convert_to_dict(Session.query.with_entities(Session.theme, Session.cours, Session.id_session,
                                                        Session.duree, Session.id_formation).filter(
-        Session.archive is archive).all())
+        Session.archive == archive).all())
 
 
 def get_apprentis_by_formation(nom_formation: str):

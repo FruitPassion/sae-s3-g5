@@ -13,7 +13,7 @@ def get_all_formation(archive=False):
     return convert_to_dict(
         Formation.query.with_entities(Formation.id_formation, Formation.intitule, Formation.niveau_qualif,
                                       Formation.groupe, Formation.image).filter(
-            Formation.archive is archive).all())
+            Formation.archive == archive).all())
 
 
 def get_formation_id(nom_formation: str):

@@ -18,7 +18,7 @@ def get_all_apprenti(archive=False):
     """
     apprenti = Apprenti.query.with_entities(
         Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essaies
-    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive is archive).all()
+    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
     return convert_to_dict(apprenti)
 
 
