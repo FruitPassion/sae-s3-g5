@@ -7,7 +7,6 @@ class ComposerPresentation(db.Model):
 
     id_element = db.Column(db.ForeignKey('db_fiches_dev.ElementBase.id_element'), primary_key=True)
     id_fiche = db.Column(db.ForeignKey('db_fiches_dev.FicheIntervention.id_fiche'), primary_key=True)
-    picto = db.Column(db.String(50))
     text = db.Column(db.String(50))
     taille_texte = db.Column(db.String(50))
     audio = db.Column(db.String(50))
@@ -17,10 +16,15 @@ class ComposerPresentation(db.Model):
     niveau = db.Column(db.Integer)
     position_elem = db.Column(db.String(50))
     ordre_saisie_focus = db.Column(db.String(50))
+    id_pictogramme = db.Column(db.ForeignKey('db_fiches_dev.Pictogramme.id_pictogramme'), index=True)
+    taille_pictogramme = db.Column(db.Integer)
 
     ElementBase = db.relationship('ElementBase',
-                                    primaryjoin='ComposerPresentation.id_element == ElementBase.id_element',
-                                    backref='composerpresentations')
+                                  primaryjoin='ComposerPresentation.id_element == ElementBase.id_element',
+                                  backref='composerpresentations')
     FicheIntervention = db.relationship('FicheIntervention',
                                         primaryjoin='ComposerPresentation.id_fiche == FicheIntervention.id_fiche',
                                         backref='composerpresentations')
+    Pictogramme = db.relationship('Pictogramme',
+                                  primaryjoin='ComposerPresentation.id_pictogramme == Pictogramme.id_pictogramme',
+                                  backref='composerpresentations')
