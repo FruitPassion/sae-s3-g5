@@ -4,10 +4,15 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_formations.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ url_for('static',filename='js/gestion_formations.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+            integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/archiver_admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -39,18 +44,25 @@
                     </thead>
                     <tbody>
                     {% for formation in liste_formation %}
-                        <tr class="text-center"
-                        id="pers-{{ formation["id_formation"] }}">
+                        <tr class="text-center" id="ele-{{ formation["id_formation"] }}">
                             <td class="align-middle">{{ formation["intitule"] }}</td>
                             <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
                             <td class="align-middle">{{ formation["groupe"] }}</td>
-                            <td><img style="width:180px; height:100px;"  src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th class="align-middle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
-                            <td class="align-middle"><i class="fa fa-archive" aria-hidden="true" onclick="confirmationArchiver(this, '{{ formation['intitule'] }}', '{{ formation['id_formation'] }}')"></i></td>
+                            <td><img style="width:180px; height:100px;"
+                                     src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
+                            <th class="align-middle">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </th>
+                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal" data-bs-target="#modal-archiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="recharger-1" hidden="" >
+                    {% include "_partial/_mise_a_jour.html" %}
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <br>
@@ -76,7 +88,7 @@
                                 <div class="mb-3">
                                     <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
                                     <input class="form-control fs-1 my-3" type="file" id="image" name="image"
-                                       accept="image/png, image/jpeg, image/jpg"/>
+                                           accept="image/png, image/jpeg, image/jpg"/>
                                 </div>
                             </div>
                             <div>
@@ -101,21 +113,70 @@
                         <th scope="col">Groupe</th>
                         <th scope="col">Image</th>
                         <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for formation in liste_formation_archivee %}
-                        <tr class="text-center"
-                        id="pers-{{ formation["id_formation"] }}">
+                        <tr class="text-center" id="arch-ele-{{ formation["id_formation"] }}">
                             <td class="align-middle">{{ formation["intitule"] }}</td>
                             <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
                             <td class="align-middle">{{ formation["groupe"] }}</td>
-                            <td><img style="width:180px; height:100px;"  src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true" onclick="confirmationSuppression(this, '{{ formation['intitule'] }}', '{{ formation['id_formation'] }}')"></i>
+                            <td><img style="width:180px; height:100px;"
+                                     src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
+                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal" data-bs-target="#modal-desarchiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th class="align-middle">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </th>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="recharger-2" hidden="" >
+                    {% include "_partial/_mise_a_jour.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-archiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir archiver la formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="archiver_formation()">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-desarchiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Desarchiver la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="desarchiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir désarchiver la formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="desarchiver_formation()">Valider</button>
+                </div>
             </div>
         </div>
     </div>
@@ -123,4 +184,8 @@
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
 {% endblock %}

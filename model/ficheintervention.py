@@ -1,5 +1,5 @@
 from datetime import date
-from sqlalchemy import func
+from sqlalchemy import func, asc
 from time import strftime, localtime
 
 from custom_paquets.converter import convert_to_dict
@@ -20,7 +20,7 @@ def get_fiches_techniques_par_login(login):
     """
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-        FicheIntervention.id_fiche, FicheIntervention.etat_fiche).all())
+        FicheIntervention.id_fiche, FicheIntervention.etat_fiche).order_by(asc(FicheIntervention.etat_fiche)).all())
 
 
 def get_proprietaire_fiche_par_id_fiche(id_fiche):

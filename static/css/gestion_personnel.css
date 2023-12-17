@@ -1,0 +1,42 @@
+#container-ajout {
+    background-color: #ececec;
+    padding: 10px;
+    margin: auto;
+}
+
+.test{
+    margin: auto;
+}
+
+.grid-container > div {
+    background-color: #666;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+}
+
+.label-file {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#enregistrer {
+    margin-left: 50%;
+    margin-right: -50%;
+}
+
+#bloc_password {
+    display: flex;
+    align-items: center;
+}
+
+#bloc_password img {
+    display:flex;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+}
+
+#enregistrer {
+    display: none;
+}

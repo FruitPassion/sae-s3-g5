@@ -138,3 +138,21 @@ def add_personnel(login, nom, prenom, email, password, role):
         db.session.commit()
     except AttributeError as e:
         logging.error("Erreur lors de l'ajout d'un membre du personnel")
+
+
+def archiver_personnel(id_personnel: int, archiver=True):
+    """
+    Archive un membre du personnel
+
+    :param id_personnel: id du membre du personnel à archiver
+    :param archiver: True pour archiver, False pour désarchiver
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    try:
+        personnel = Personnel.query.filter_by(id_personnel=id_personnel).first()
+        personnel.archive = archiver
+        db.session.commit()
+        return True
+    except AttributeError as e:
+        logging.error("Erreur lors de l'archivage d'un membre du personnel")
+        return False

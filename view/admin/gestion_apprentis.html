@@ -3,7 +3,16 @@
 {% block title %}Gestion des apprentis{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_personne.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_personnel.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+            integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/archiver_admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -15,6 +24,9 @@
             </button>
             <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
                     type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+            <button class="nav-link" id="nav-archiver-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+                    type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
             </button>
         </div>
         <div class="tab-content" id="nav-tabContent">
@@ -34,7 +46,7 @@
                     <tbody>
                     {% for apprenti in liste_apprenti %}
                         <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
-                            id="pers-{{ apprenti['id_apprenti'] }}">
+                            id="ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
                             <td class="align-middle">{{ apprenti["prenom"] }}</td>
@@ -47,12 +59,19 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th class="align-middle"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></th>
-                            <td class="align-middle"><i class="fa fa-trash" aria-hidden="true"></i></td>
+                            <th class="align-middle">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </th>
+                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal" data-bs-target="#modal-archiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="recharger-1" hidden="" >
+                    {% include "_partial/_mise_a_jour.html" %}
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">
@@ -77,13 +96,14 @@
                                 <div class="mb-3">
                                     <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
                                     <input class="form-control fs-1 my-3" type="file" id="avatar" name="avatar"
-                                       accept="image/png, image/jpeg, image/jpg"/>
+                                           accept="image/png, image/jpeg, image/jpg"/>
                                 </div>
                             </div>
                             <div>
-                                <h3 class="fs-1 my-3">Choisissez la formation correspondante :</h3>
+                                <h3 class="fs-1 my-3">Choisissez une formation :</h3>
                                 <select name="select_formation" class="fs-1 my-3 form-select" required>
-                                <option  value="" selected disabled="disabled">--- Sélectionnez une formation ---</option>
+                                    <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
+                                    </option>
                                     {% for formation in formations %}
                                         <option value="{{ formation['id_formation'] }}"
                                         >{{ formation["intitule"] }}</option>
@@ -97,10 +117,95 @@
                     </div>
                 </form>
             </div>
+            <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Photo</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for apprenti in liste_apprenti_archivee %}
+                        <tr class="text-center" id="arch-ele-{{ apprenti["id_apprenti"] }}">
+                            <td class="align-middle">{{ apprenti["login"] }}</td>
+                            <td class="align-middle">{{ apprenti["nom"] }}</td>
+                            <td class="align-middle">{{ apprenti["prenom"] }}</td>
+                            <td><img style="width:80px; border-radius: 60px;"
+                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
+                            <td class="align-middle">
+                                {% if apprenti["essaies"] == 5 %}
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal" data-bs-target="#modal-desarchiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th class="align-middle">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div id="recharger-2" hidden="" >
+                    {% include "_partial/_mise_a_jour.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-archiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir archiver l'apprenti ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="archiver_apprenti()">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-desarchiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Desarchiver l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="desarchiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir désarchiver l'apprenti ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="desarchiver_apprenti()">Valider</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
 {% endblock %}
