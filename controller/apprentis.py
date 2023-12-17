@@ -26,6 +26,7 @@ def redirection_connexion():
     fiches = get_fiches_techniques_par_login(session['name'])
     return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos)
 
+
 @apprenti.route("/redirection-connexion/suivi", methods=["GET"])
 @apprenti_login_required
 def suivi_progression():

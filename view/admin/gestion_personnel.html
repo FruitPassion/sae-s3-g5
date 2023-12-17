@@ -3,7 +3,16 @@
 {% block title %}Gestion des comptes{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_personne.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_personnel.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+            integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/archiver_admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -15,6 +24,9 @@
             </button>
             <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
                     type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+            <button class="nav-link" id="nav-archiver-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+                    type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
             </button>
         </div>
         <div class="tab-content" id="nav-tabContent">
@@ -35,7 +47,7 @@
                     <tbody>
                     {% for personnel in liste_personnel %}
                         <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
-                        id="pers-{{ personnel['id_personnel'] }}">
+                            id="ele-{{ personnel['id_personnel'] }}">
                             <td id="login">{{ personnel["login"] }}</td>
                             <td id="nom">{{ personnel["nom"] }}</td>
                             <td id="prenom">{{ personnel["prenom"] }}</td>
@@ -48,16 +60,23 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th><button onclick="modifierLigne(this)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></th>
-                            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
+                            <th class="align-middle">
+                                <button onclick="modifierLigne(this)"><i class="fa fa-pencil-square-o"
+                                                                         aria-hidden="true"></i></button>
+                            </th>
+                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal" data-bs-target="#modal-archiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="recharger-1" hidden="" >
+                    {% include "_partial/_mise_a_jour.html" %}
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" name="ajout_personnel">
-                    
                     <div class="w-75 test">
                         <div class="d-flex">
                             <div class="m-4 w-50">
@@ -85,8 +104,11 @@
                                     <h3 class="fs-1 my-3">Mot de passe :</h3>
                                 </div>
                                 <div id="bloc_password">
-                                    <input name ="password" class='form-control fs-1 my-3' type="password" id="password" minlength="6" maxlength="6" required/>
-                                    <img alt="eye" id="icone_visibilite" src="{{ url_for('static', filename='images/hide.png') }}" onclick="visibilite()">
+                                    <input name="password" class='form-control fs-1 my-3' type="password" id="password"
+                                           minlength="6" maxlength="6" required/>
+                                    <img alt="eye" id="icone_visibilite"
+                                         src="{{ url_for('static', filename='images/hide.png') }}"
+                                         onclick="visibilite()">
                                 </div>
                             </div>
                         </div>
@@ -105,6 +127,90 @@
                     </div>
                 </form>
             </div>
+            <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Mail</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Actif</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for personnel in liste_personnel_archive %}
+                        <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
+                            id="arch-ele-{{ personnel['id_personnel'] }}">
+                            <td id="login">{{ personnel["login"] }}</td>
+                            <td id="nom">{{ personnel["nom"] }}</td>
+                            <td id="prenom">{{ personnel["prenom"] }}</td>
+                            <td id="email">{{ personnel["email"] }}</td>
+                            <td id="role" class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
+                            <td>
+                                {% if personnel["essaies"] == 3 %}
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal" data-bs-target="#modal-desarchiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th class="align-middle">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div id="recharger-2" hidden="" >
+                    {% include "_partial/_mise_a_jour.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-archiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver le membre du personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir archiver le membre du personnel ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="archiver_personnel()">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-desarchiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Desarchiver le membre du personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="desarchiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir désarchiver le membre du personnel ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="desarchiver_personnel()">Valider</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -112,120 +218,8 @@
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
 
-    <script>
-        visible = true;
-        function visibilite(){
-            if (visible){
-                document.getElementById('password').setAttribute("type", "text");
-                document.getElementById('icone_visibilite').src="{{ url_for('static', filename='images/show.png') }}";
-                visible = false;
-            }
-            else{
-                document.getElementById('password').setAttribute("type", "password");
-                document.getElementById('icone_visibilite').src="{{ url_for('static', filename='images/hide.png') }}";
-                visible = true;
-            }
-        }
+{% endblock %}
 
-        editionEnCours = false;
-        function modifierLigne(button) {
-
-            if (!editionEnCours){
-                editionEnCours = true; // Passe en mode édition
-                var ligne = button.parentNode.parentNode;
-                var colonnes = ligne.getElementsByTagName('td');
-            
-                for (var i = 0; i < colonnes.length - 1; i++) {
-
-                    switch(i) {
-                        case 0: break;
-                        case 4:
-                            var valeurActuelle = colonnes[i].innerText;
-                        
-                            // Crée une liste déroulante avec des options
-                            var select = document.createElement('select');
-                            var option1 = document.createElement('option');
-                            option1.value = 'Educateur';
-                            option1.text = 'Educateur';
-                            var option2 = document.createElement('option');
-                            option2.value = 'Educateur Administrateur';
-                            option2.text = 'Educateur Administrateur';
-                        
-                            // Sélectionne l'option correspondant à la valeur actuelle
-                            if (valeurActuelle === 'Educateur') {
-                                option1.selected = true;
-                            } else {
-                                option2.selected = true;
-                            }
-                    
-                            // Ajoute les options à la liste déroulante
-                            select.appendChild(option1);
-                            select.appendChild(option2);
-                        
-                            // Remplace le contenu de la colonne par la liste déroulante
-                            colonnes[i].innerHTML = '';
-                            colonnes[i].appendChild(select);
-                            break;
-                        case 5:
-                            // Crée une checkbox pour l'état "Actif"
-                            var checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.checked = valeurActuelle;
-                
-                            // Remplacer le contenu de la colonne par la case à cocher
-                            colonnes[5].innerHTML = '';
-                            colonnes[5].appendChild(checkbox);
-                            break;
-                        default:
-                            var valeurActuelle = colonnes[i].innerText;
-                            colonnes[i].innerHTML = `<input type="text" value=" ${valeurActuelle} " id=" ${colonnes[i]} ">`;
-                    }
-                }
-                var bouton = ligne.getElementsByTagName('button')[0];
-                bouton.innerText = 'Enregistrer';
-                bouton.setAttribute('onclick', 'enregistrerLigne(this)');
-            }
-
-        }
-        
-        function enregistrerLigne(button) {
-            if (editionEnCours) {
-                editionEnCours = false; 
-                var ligne = button.parentNode.parentNode;
-                var colonnes = ligne.getElementsByTagName('td');
-                
-                // Après avoir sauvegardé les modifications, remplacement des champs modifiables par des éléments HTML
-                for (var i = 0; i < colonnes.length - 1; i++) {
-                    switch (i) {
-                        case 0:
-                            // Ne fait rien pour la première colonne (index 0)
-                            break;
-                        case 4: // Colonne "Role"
-                            var nouvelleValeur = colonnes[i].getElementsByTagName('select')[0].value; // Récupère la nouvelle valeur après la modification
-        
-                            // Remplace le select par le texte
-                            colonnes[i].innerText = nouvelleValeur;
-                            break;
-                        case 5: // Colonne "Actif"
-                            var nouvelleValeur = colonnes[i].getElementsByTagName('input')[0].checked; 
-        
-                            // Remplacez la checkbox par l'image corrspondante
-                            colonnes[i].innerHTML = nouvelleValeur ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
-                            break;
-                        default: // Pour les autres colonnes
-                            var nouvelleValeur = colonnes[i].getElementsByTagName('input')[0].value;
-        
-                            colonnes[i].innerText = nouvelleValeur;
-                            break;
-                    }
-                }
-        
-                var bouton = ligne.getElementsByTagName('button')[0];
-                bouton.innerHTML = `<i class="fa fa-pencil-square-o" aria-hidden="true"></i>`;
-                bouton.setAttribute('onclick', 'modifierLigne(this)');
-            }
-        }
-        
-
-    </script>
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
 {% endblock %}

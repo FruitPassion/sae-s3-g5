@@ -3,6 +3,8 @@ import platform
 
 from PIL import Image
 from unidecode import unidecode
+
+from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 
 from flask import Blueprint, redirect, render_template, request, url_for
@@ -11,8 +13,8 @@ from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import resize_image
 from model.apprenti import get_all_apprenti, add_apprenti
 from model.personnel import get_all_personnel, add_personnel
-from model.formation import get_all_formation, add_formation, delete_formation
-from model.session import get_all_sessions, add_apprenti_assister
+from model.formation import get_all_formation, add_formation
+from model.session import add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti
 from custom_paquets.custom_form import AjouterPersonnel
 from custom_paquets.custom_form import AjouterFormation
@@ -47,18 +49,18 @@ def gestion_personnel():
     couleurs = {"SuperAdministrateur": "text-primary", "Educateur Administrateur": "text-warning",
                 "Educateur": "text-success", "CIP": "text-info"}
     personnel = get_all_personnel()
+    liste_personnel_archive = get_all_personnel(archive=True)
     form = AjouterPersonnel()
-    
+
     if form.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         password = encrypt_password(request.form.get('password'))
-        login = unidecode(form.prenom.data[0:2].upper().strip()) + unidecode(form.nom.data[0].upper().strip()) + str(
-            len(form.nom.data.strip() + form.prenom.data.strip())).zfill(2)
+        login = generate_login(form.nom.data, form.prenom.data)
         add_personnel(login, form.nom.data, form.prenom.data, form.email.data, password, role)
         return redirect(url_for("admin.gestion_personnel"))
 
-
-    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form=form, couleurs=couleurs)
+    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form=form,
+                           couleurs=couleurs, liste_personnel_archive=liste_personnel_archive)
 
 
 @admin.route("/gestion-apprenti", methods=["GET", "POST"])
@@ -71,10 +73,10 @@ def gestion_apprenti():
 
     formations = get_all_formation()
     apprenti = get_all_apprenti()
+    liste_apprenti_archivee = get_all_apprenti(archive=True)
     form = AjouterApprenti()
     if form.validate_on_submit() and request.method == "POST":
-        login = unidecode(form.nom.data[0:2].upper().strip()) + unidecode(form.prenom.data[0].upper().strip()) + str(
-            len(form.nom.data.strip() + form.prenom.data.strip())).zfill(2)
+        login = generate_login(form.nom.data, form.prenom.data)
         f = request.files.get("avatar")
         if f:
             chemin_avatar = "./static/images/photo_profile/" + secure_filename(f.filename)
@@ -83,12 +85,13 @@ def gestion_apprenti():
         else:
             chemin_avatar = "photo_profile/" + "default_profile.png"
         img = Image.open(f.stream)
-        resize_image(img, "./static/images/"+chemin_avatar)
+        resize_image(img, "./static/images/" + chemin_avatar)
         id_apprenti = add_apprenti(form.nom.data, form.prenom.data, login, chemin_avatar)
         add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
         return redirect(url_for("admin.gestion_apprenti"))
 
-    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form=form, formations=formations)
+    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form=form,
+                           formations=formations, liste_apprenti_archivee=liste_apprenti_archivee)
 
 
 @admin.route("/gestion-formation", methods=["GET", "POST", "DELETE"])
@@ -99,21 +102,18 @@ def gestion_formation():
     On peut aussi y rajouter une formation
     """
     formation = get_all_formation()
+    liste_formation_archivee = get_all_formation(archive=True)
     form = AjouterFormation()
     if form.validate_on_submit() and request.method == "POST":
         f = request.files.get("image")
-        if f :
-            chemin_image = "./static/images/formation_image/"+secure_filename(f.filename)
+        if f:
+            chemin_image = "./static/images/formation_image/" + secure_filename(f.filename)
             f.save(chemin_image)
-            chemin_image = "formation_image/"+secure_filename(f.filename)
+            chemin_image = "formation_image/" + secure_filename(f.filename)
         else:
-            chemin_image = "formation_image/"+"defaut_formation.jpg"
+            chemin_image = "formation_image/" + "defaut_formation.jpg"
         add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
-    
-    if request.method == "DELETE":
-        id_formation = int(request.json.get("id_formation"))
-        delete_formation(id_formation)
-        
-    return render_template("admin/gestion_formations.html", liste_formation=formation, form = form)
 
+    return render_template("admin/gestion_formations.html", liste_formation=formation, form=form,
+                           liste_formation_archivee=liste_formation_archivee)

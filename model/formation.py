@@ -1,3 +1,5 @@
+import logging
+
 from custom_paquets.converter import convert_to_dict
 
 from model_db.shared_model import db
@@ -8,6 +10,7 @@ def get_all_formation(archive=False):
     """
     Retourne la liste de toutes les formations
 
+    :param archive: Si True, retourne uniquement les formations archivées
     :return: Une liste des formations
     """
     return convert_to_dict(
@@ -46,12 +49,19 @@ def add_formation(intitule, niveau_qualif, groupe, image):
     return formation.id_formation
 
 
-def delete_formation(id_formation):
+def archiver_formation(id_formation, archiver=True):
     """
-    Supprime une formation en BD à partir de son id
+    Archive une formation en BD
 
-    :param id_formation
+    :param id_formation: id de la formation à archiver
+    :param archiver: True pour archiver, False pour désarchiver
+    :return: None
     """
-    formation = Formation.query.get(id_formation)
-    db.session.delete(formation)
-    db.session.commit()
+    try:
+        formation = Formation.query.filter_by(id_formation=id_formation).first()
+        formation.archive = archiver
+        db.session.commit()
+        return True
+    except AttributeError as e:
+        logging.error("Erreur lors de l'archivage d'une formation")
+        return False

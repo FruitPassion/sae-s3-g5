@@ -1,3 +1,4 @@
+import logging
 from hmac import compare_digest
 
 from custom_paquets.converter import convert_to_dict
@@ -115,3 +116,21 @@ def add_apprenti(nom, prenom, login, photo):
     db.session.add(apprenti)
     db.session.commit()
     return apprenti.id_apprenti
+
+
+def archiver_apprenti(id_apprenti, archiver=True):
+    """
+    Archive un apprenti en BD
+
+    :param id_apprenti: id de l'apprenti à archiver
+    :param archiver: True pour archiver, False pour désarchiver
+    :return: None
+    """
+    try:
+        apprenti = Apprenti.query.filter_by(id_apprenti=id_apprenti).first()
+        apprenti.archive = archiver
+        db.session.commit()
+        return True
+    except AttributeError as e:
+        logging.error("Erreur lors de l'archivage d'un apprenti")
+        return False

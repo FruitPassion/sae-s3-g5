@@ -20,7 +20,7 @@ def get_all_sessions(archive=False):
         Session.archive == archive).all())
 
 
-def get_apprentis_by_formation(nom_formation: str):
+def get_apprentis_by_formation(nom_formation: str, archive=False):
     """
     Retourne la liste de tous les apprentis inscrits à une formation
 
@@ -28,7 +28,8 @@ def get_apprentis_by_formation(nom_formation: str):
     """
     try:
         return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
-            Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo).all())
+            Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
+                                                   Apprenti.photo).filter(Apprenti.archive == archive).all())
     except:
         abort(404)
 
