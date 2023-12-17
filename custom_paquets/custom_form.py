@@ -18,6 +18,8 @@ class AjouterFiche(FlaskForm):
     dateinput = DateField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
     lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
     decriptioninput = StringField(u'Text', widget=TextArea(), render_kw={"onchange": "validateForm()"})
+    nomintervenant = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    prenomintervenant = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
     submit = SubmitField("Ajouter", render_kw={"disabled": "true"})
 
 

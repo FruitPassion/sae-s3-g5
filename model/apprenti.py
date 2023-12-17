@@ -66,7 +66,7 @@ def check_password_apprenti(login: str, new_password: str):
 
 def get_nbr_essaie_connexion_apprenti(login: str):
     """
-    A partir d'un login, recupère le nombre d'essaie de connexion d'un apprenti
+    À partir d'un login, recupère le nombre d'essayer de connexion d'un apprenti
 
     :param login: LOGIN (ABC12) d'un apprenti
     :return: UN nombre allant de 0 à 5
@@ -92,7 +92,7 @@ def update_nbr_essaies_connexion(login: str):
 
 def reset_nbr_essaies_connexion(login: str):
     """
-    Reset le nombre d'essaies de connexion d'un apprenti a 0
+    Reset le nombre d'essaie de connexion d'un apprenti a 0
 
     :return: Booleen en fonction de la réussite de l'opération
     """

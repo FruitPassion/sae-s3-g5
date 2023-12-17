@@ -11,13 +11,14 @@ class ComposerPresentation(db.Model):
     taille_texte = db.Column(db.String(50))
     audio = db.Column(db.String(50))
     police = db.Column(db.String(50))
-    couleur = db.Column(db.String(50))
-    couleur_fond = db.Column(db.String(50))
+    couleur = db.Column(db.String(7))
+    couleur_fond = db.Column(db.String(7))
     niveau = db.Column(db.Integer)
     position_elem = db.Column(db.String(50))
     ordre_saisie_focus = db.Column(db.String(50))
     id_pictogramme = db.Column(db.ForeignKey('db_fiches_dev.Pictogramme.id_pictogramme'), index=True)
     taille_pictogramme = db.Column(db.Integer)
+    couleur_pictogramme = db.Column(db.String(7))
 
     ElementBase = db.relationship('ElementBase',
                                   primaryjoin='ComposerPresentation.id_element == ElementBase.id_element',

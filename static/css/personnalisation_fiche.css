@@ -12,16 +12,26 @@
     display: flex;
 }
 
-/* Styles for labels */
-label {
+label{
     display: block;
-    margin-top: 10px;
+    margin-top: 20px;
+}
+
+/* Styles for labels */
+#zone_personnalisation label {
     font-weight: bold;
 }
 
 h3, #actions_finales {
     margin-top: 20px;
 }
+legend{
+    filter: invert(1);
+    text-shadow: 0 0 4px #FFF;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2em;
+}
+
 
 /* Styles for the select dropdowns */
 select {
@@ -82,48 +92,15 @@ fieldset.scheduler-border {
 }
 
 .modify-text div {
-    width: 33%;
-    margin-left: 10px;
+    width: 100%;
+    margin-left: 0px;
     margin-right: 10px;
 }
 
-
-.ms-dd {
-    width: 100%;
-    border: 1px solid #ccc;
-}
-.ms-dd .ms-dd-header{
-    border: none;
+.disabled-text label, .disabled-text input{
+    color: #7c7c7c;
 }
 
-.ms-dd-header {
-    border-radius: 5px;
-}
-
-.ms-dd .ms-list-option.option-selected, .ms-dd .ms-optgroup ul .ms-list-option.option-selected{
-    background: #e9e9ed;
-}
-
-.ms-dd .ms-dd-option-image, .ms-dd .ms-dd-selected-img {
-    max-width: 31px;
-}
-
-.ms-dd .ms-options {
-    height: 300px;
-}
-
-.ms-dd .ms-value-input{
-    display: none;
-}
-
-.ms-dd-option-content {
-    padding-top: 3px;
-    padding-left: 10px;
-}
-
-.ms-dd .ms-dd-header .option-selected{
-    font-weight: initial;
-}
 
 @media screen and (max-width: 1200px) {
 

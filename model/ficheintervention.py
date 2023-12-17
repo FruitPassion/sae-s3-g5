@@ -23,6 +23,16 @@ def get_fiches_techniques_par_login(login):
         FicheIntervention.id_fiche, FicheIntervention.etat_fiche).all())
 
 
+def get_proprietaire_fiche_par_id_fiche(id_fiche):
+    """
+    Récupère le propriétaire d'une fiche à partir de son id
+
+    :return: Le propriétaire de la fiche
+    """
+    return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Apprenti).with_entities(
+        Apprenti.login).first().login
+
+
 def get_fiches_par_id_fiche(id_fiche):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
@@ -133,7 +143,7 @@ def get_dernier_id_fiche_apprenti(login: str):
 
 def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_demande: date, nom_demandeur: str,
                                localisation: str, description_demande: str, degre_urgence: int,
-                               couleur_intervention: str):
+                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str):
     """
     A partir de la fiche par defaut, la duplique et l'assigne a un eleve
 
@@ -145,7 +155,8 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                        localisation=localisation, description_demande=description_demande,
                                        degre_urgence=degre_urgence, couleur_intervention=couleur_intervention,
                                        etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
-                                       photo_avant=None, photo_apres=None,
+                                       photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
+                                       prenom_intervenant=prenom_intervenant,
                                        id_personnel=get_id_personnel_by_login(login_personnel),
                                        id_apprenti=get_id_apprenti_by_login(login_apprenti))
     db.session.add(nouvelle_fiche)
@@ -159,6 +170,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
         composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
                                         id_pictogramme=element["id_pictogramme"],
                                         taille_pictogramme=element["taille_pictogramme"],
+                                        couleur_pictogramme=element["couleur_pictogramme"],
                                         text=None, taille_texte=element["taille_texte"], audio=None,
                                         police=element["police"], couleur=element["couleur"],
                                         couleur_fond=element["couleur_fond"], niveau=element["niveau"],
@@ -166,3 +178,4 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                         ordre_saisie_focus=element["ordre_saisie_focus"])
         db.session.add(composer)
     db.session.commit()
+    return nouvelle_fiche.id_fiche

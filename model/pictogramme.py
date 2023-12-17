@@ -16,5 +16,19 @@ def get_pictogramme(id_fiche=1):
 
 
 def get_all_pictogrammes():
+    """
+    Recupere tous les pictogrammes
+    :return:
+    """
     return convert_to_dict(pict.query.with_entities(pict.id_pictogramme, pict.url, pict.label, pict.categorie,
                            pict.souscategorie).all())
+
+
+def get_pictogramme_by_url(url):
+    """
+    Recupere un pictogramme par son url
+
+    :param url: url du pictogramme
+    :return: retourne un dictionnaire avec l'id du pictogramme
+    """
+    return convert_to_dict(pict.query.filter_by(url=url).with_entities(pict.id_pictogramme).first())

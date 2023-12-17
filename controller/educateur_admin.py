@@ -4,7 +4,9 @@ from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.custom_form import AjouterFiche
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_finies_par_login, assigner_fiche_dummy_eleve
+from model.composer import modifier_composition
+from model.ficheintervention import get_fiches_techniques_finies_par_login, assigner_fiche_dummy_eleve, \
+    get_fiches_par_id_fiche, get_proprietaire_fiche_par_id_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
@@ -39,19 +41,19 @@ def ajouter_fiche(apprenti):
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
     form = AjouterFiche()
-    degres = ["rouge", "orange", "jaune", "vert"]
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
-        assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
-                                   form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1, degres)
+        id_fiche = assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
+                                   form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1, degres,
+                                   form.nomintervenant.data, form.prenomintervenant.data)
         flash("Fiche enregistrée avec succès")
-        return redirect(url_for("educ_admin.personnalisation"))
+        return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
     return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti), 200
 
 
-@educ_admin.route("/personnalisation", methods=["GET"])
+@educ_admin.route("/personnalisation/<id_fiche>", methods=["GET", "POST"])
 @educadmin_login_required
-def personnalisation():
+def personnalisation(id_fiche):
     """
     Page de personnalisation les textes d'une fiche technique.
 
@@ -60,6 +62,11 @@ def personnalisation():
     liste_police = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
                     "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
-    composer_fiche = build_categories(14)
+    composer_fiche = build_categories(id_fiche)
+    fiche = get_fiches_par_id_fiche(id_fiche)
+    if request.method == 'POST':
+        modifier_composition(request.form, id_fiche)
+        flash("Fiche enregistrée avec succès")
+        return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)))
     return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_police,
-                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes), 200
+                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
