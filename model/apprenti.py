@@ -131,7 +131,7 @@ def update_apprenti(identifiant, login, nom, prenom, password, commit=True):
     :return: None
     """
     try:
-        apprenti = Apprenti.query.filter_by(id_personnel=identifiant).first()
+        apprenti = Apprenti.query.filter_by(id_apprenti=identifiant).first()
         apprenti.login = login
         apprenti.nom = nom
         apprenti.prenom = prenom

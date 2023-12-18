@@ -48,16 +48,16 @@
                     {% for apprenti in liste_apprenti %}
                         <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
                             id="ele-{{ apprenti['id_apprenti'] }}">
-                            <td class="align-middle">{{ apprenti["login"] }}</td>
-                            <td class="align-middle">{{ apprenti["nom"] }}</td>
-                            <td class="align-middle">{{ apprenti["prenom"] }}</td>
+                            <td id="login-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["login"] }}</td>
+                            <td id="nom-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["nom"] }}</td>
+                            <td  id="prenom-{{ apprenti['id_apprenti'] }}"class="align-middle">{{ apprenti["prenom"] }}</td>
                             <td><img style="width:80px; border-radius: 60px;"
                                      src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
                             <td class="align-middle">
                                 {% if apprenti["essaies"] == 5 %}
-                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
-                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
                             <th onclick="passer_parametre_form(this, 'apprenti')" class="align-middle" data-bs-toggle="modal"

@@ -90,6 +90,7 @@ def gestion_apprenti():
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
+        print("identifiant =", identifiant)
         password = encrypt_password(form_modifier.form_password.data)
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password)
