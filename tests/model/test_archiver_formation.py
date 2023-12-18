@@ -1,6 +1,6 @@
 from model_db.formation import Formation
 from model_db.shared_model import db
-from model.formation import archiver_formation, add_formation, get_nom_formation
+from model.formation import archiver_formation, add_formation, get_formation_id
 
 # Création d'une formation à archiver
 intitule = "Parcours électricité"
@@ -11,20 +11,9 @@ archive = 0
 
 def test_archiver_formation(client):
     
-    id_formation = 2
-
-    # Récupérer la formation existante
-    formation = Formation.query.filter_by(id_formation=id_formation).first()
-   
-    # Vérifier que la formation existe
-    if not formation:
-        raise ValueError(f"Aucune formation trouvée avec l'id {id_formation}")
-
-    # Archiver la formation
-    formation.archive = True
-
-    # Vérifier que la formation a bien été archivée de la base de données
-    assert db.session.query(Formation).get(id_formation).archive is True
-
-    # Effectuer d'autres vérifications si nécessaire   
+    add_formation(intitule, niveau_qualification, groupe, image, commit=False)
+    id_formation = get_formation_id(intitule)
+    archiver_formation(id_formation, archiver=True, commit=False)
+    assert db.session.query(Formation).filter(Formation.id_formation == id_formation, Formation.archive == 1).first() != None  
     db.session.rollback()
+    assert db.session.query(Formation).filter(Formation.id_formation == id_formation, Formation.archive == 1).first() == None

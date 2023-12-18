@@ -1,26 +1,25 @@
-from unidecode import unidecode
 from model_db.apprenti import Apprenti
 from model_db.personnel import Personnel
 from model_db.shared_model import db
 from model.apprenti import archiver_apprenti, add_apprenti, get_id_apprenti_by_login
 from model.personnel import archiver_personnel, add_personnel, get_id_personnel_by_login
+from custom_paquets.converter import generate_login
+from custom_paquets.security import encrypt_password
 
 # Création d'un personnel à ajouter puis archiver
 role="Educateur"
 nom_personnel="Supreme"
 prenom_personnel="Leader"
 email="mail@mail.com"
-pwd_personnel="000000".__hash__()
-login_personnel=unidecode(prenom_personnel[0:2].upper().strip()) + unidecode(nom_personnel[0].upper().strip()) + str(
-        len(nom_personnel.strip() + prenom_personnel.strip())).zfill(2)
+pwd_personnel=encrypt_password("000000")
+login_personnel=generate_login(nom_personnel, prenom_personnel)
 personnel = Personnel(login=login_personnel, nom=nom_personnel, prenom=prenom_personnel, email=email, mdp=pwd_personnel, role=role)
 
 # Création d'un apprenti à ajouter puis archiver
 nom_apprenti="SousFifre"
 prenom_apprenti="Malheureux"
 photo="/url/photo.jpg"
-login_apprenti=unidecode(prenom_apprenti[0:2].upper().strip()) + unidecode(nom_apprenti[0].upper().strip()) + str(
-        len(nom_apprenti.strip() + prenom_apprenti.strip())).zfill(2)
+login_apprenti=generate_login(nom_apprenti, prenom_apprenti)
 apprenti = Apprenti(nom=nom_apprenti, prenom=prenom_apprenti, login=login_apprenti, photo=photo)
 
 # Test d'archivage d'un apprenti

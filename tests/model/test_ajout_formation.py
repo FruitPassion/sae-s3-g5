@@ -8,9 +8,8 @@ def test_ajouter_formation(client):
     niveau_qualification = 3
     groupe = "1"
     image = "formation_image/elec.jpg"
-    archive = 1
     
-    add_formation(intitule, niveau_qualification, groupe, image, archive, commit=False)
+    add_formation(intitule, niveau_qualification, groupe, image, commit=False)
 
     assert db.session.query(Formation).filter(Formation.intitule == intitule).first() is not None
     db.session.rollback()
