@@ -25,7 +25,7 @@ function passer_parametre_form(element, nom_form){
         document.getElementById("form_actif").checked = false;
     }
 
-    
+
     if (nom_form === "personnel"){
         document.getElementById("form_email").value = document.getElementById("email-"+id_element).innerText;
 
@@ -41,7 +41,7 @@ function passer_parametre_form(element, nom_form){
     }
     
 }
-
+    
 
 function modifierLigneFormation(element) {
     // Obtenez les données de la ligne de formation
