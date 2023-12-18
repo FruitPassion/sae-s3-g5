@@ -15,7 +15,7 @@ from model.apprenti import get_all_apprenti, add_apprenti
 from model.personnel import get_all_personnel, add_personnel
 from model.formation import get_all_formation, add_formation
 from model.session import add_apprenti_assister
-from custom_paquets.custom_form import AjouterApprenti
+from custom_paquets.custom_form import AjouterApprenti, ModifierPersonnel
 from custom_paquets.custom_form import AjouterPersonnel
 from custom_paquets.custom_form import AjouterFormation
 from werkzeug.utils import secure_filename
@@ -50,17 +50,20 @@ def gestion_personnel():
                 "Educateur": "text-success", "CIP": "text-info"}
     personnel = get_all_personnel()
     liste_personnel_archive = get_all_personnel(archive=True)
-    form = AjouterPersonnel()
+    form_ajouter = AjouterPersonnel()
+    form_modifier = ModifierPersonnel()
 
-    if form.validate_on_submit() and request.method == "POST":
+    if form_modifier.validate_on_submit() and request.method == "POST":
+        print("ok form modifier")
+    elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         password = encrypt_password(request.form.get('password'))
-        login = generate_login(form.nom.data, form.prenom.data)
-        add_personnel(login, form.nom.data, form.prenom.data, form.email.data, password, role)
+        login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
+        add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
         return redirect(url_for("admin.gestion_personnel"))
 
-    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form=form,
-                           couleurs=couleurs, liste_personnel_archive=liste_personnel_archive)
+    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form_ajouter=form_ajouter,
+                           form_modifier=form_modifier, couleurs=couleurs, liste_personnel_archive=liste_personnel_archive)
 
 
 @admin.route("/gestion-apprenti", methods=["GET", "POST"])

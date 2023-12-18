@@ -37,6 +37,12 @@ class AjouterPersonnel(FlaskForm):
     submit = SubmitField("Enregistrer")
 
 
+class ModifierPersonnel(FlaskForm):
+    form_email = StringField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
+    form_password = PasswordField()
+    submit = SubmitField("Modifier")
+
+
 class AjouterFormation(FlaskForm):
     intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours plomberie"})
     niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})

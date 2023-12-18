@@ -49,21 +49,22 @@
                     {% for personnel in liste_personnel %}
                         <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
                             id="ele-{{ personnel['id_personnel'] }}">
-                            <td id="login">{{ personnel["login"] }}</td>
-                            <td id="nom">{{ personnel["nom"] }}</td>
-                            <td id="prenom">{{ personnel["prenom"] }}</td>
-                            <td id="email">{{ personnel["email"] }}</td>
-                            <td id="role" class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
+                            <td id="login-{{ personnel['id_personnel'] }}">{{ personnel["login"] }}</td>
+                            <td id="nom-{{ personnel['id_personnel'] }}">{{ personnel["nom"] }}</td>
+                            <td id="prenom-{{ personnel['id_personnel'] }}">{{ personnel["prenom"] }}</td>
+                            <td id="email-{{ personnel['id_personnel'] }}">{{ personnel["email"] }}</td>
+                            <td id="role-{{ personnel['id_personnel'] }}"
+                                class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
                             <td>
                                 {% if personnel["essaies"] == 3 %}
-                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
-                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th class="align-middle">
-                                <button onclick="modifierLignePersonnel(this)"><i class="fa fa-pencil-square-o"
-                                                                         aria-hidden="true"></i></button>
+                            <th onclick="passer_parametre_form(this)" class="align-middle" data-bs-toggle="modal"
+                                data-bs-target="#modal-modifier">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
                             <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
@@ -86,13 +87,13 @@
                                     <h3 class="fs-1 my-3">Nom :</h3>
                                 </div>
                                 <div>
-                                    {{ form.nom(class="form-control fs-1 my-3") }}
+                                    {{ form_ajouter.nom(class="form-control fs-1 my-3") }}
                                 </div>
                                 <div>
                                     <h3 class="fs-1 my-3">Prénom :</h3>
                                 </div>
                                 <div>
-                                    {{ form.prenom(class="form-control fs-1 my-3") }}
+                                    {{ form_ajouter.prenom(class="form-control fs-1 my-3") }}
                                 </div>
                             </div>
                             <div class="m-4 w-50">
@@ -100,7 +101,7 @@
                                     <h3 class="fs-1 my-3">Email :</h3>
                                 </div>
                                 <div>
-                                    {{ form.email(class="form-control fs-1 my-3") }}
+                                    {{ form_ajouter.email(class="form-control fs-1 my-3") }}
                                 </div>
                                 <div>
                                     <h3 class="fs-1 my-3">Mot de passe :</h3>
@@ -125,7 +126,7 @@
                         </div>
                     </div>
                     <div class="w-50 mx-auto my-5">
-                        {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
                     </div>
                 </form>
             </div>
@@ -139,7 +140,6 @@
                         <th scope="col">Mail</th>
                         <th scope="col">Role</th>
                         <th scope="col">Actif</th>
-                        <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -162,10 +162,6 @@
                             <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
-                            </th>
-                            <th class="align-middle" onclick="validation_suppression(this)" data-bs-toggle="modal"
-                                data-bs-target="#modal-supprimer">
-                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </th>
                         </tr>
                     {% endfor %}
@@ -222,24 +218,36 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-1" id="modal-title">Supprimer le membre du personnel</h5>
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier le membre du personnel</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" value="" id="supprimer-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir supprimer le membre du personnel ?
-                        Cette action est irréversible et entrainera la suppression des élèments associés à l'id de ce
-                        membre du personnel.</p>
+                    <form method="post" id="container-modifier">
+                        <input type="hidden" value="" id="id-element">
+                        <div class="w-75 test">
+                            {{ form_modifier.form_email(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <div class="form-check form-switch form-control my-3">
+                                <label class="form-check-label fs-1" for="form_actif">Utilisateur
+                                    actif</label>
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="form_actif">
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
-                            onclick="supprimer_personnel()">Supprimer
-                    </button>
+                    {{ form_modifier.submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
                 </div>
             </div>
         </div>
