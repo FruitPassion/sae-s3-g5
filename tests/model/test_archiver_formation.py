@@ -1,5 +1,13 @@
 from model_db.formation import Formation
 from model_db.shared_model import db
+from model.formation import archiver_formation, add_formation, get_nom_formation
+
+# Création d'une formation à archiver
+intitule = "Parcours électricité"
+niveau_qualification = 3
+groupe = "1"
+image = "formation_image/elec.jpg"
+archive = 0
 
 def test_archiver_formation(client):
     

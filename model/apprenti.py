@@ -111,7 +111,7 @@ def reset_nbr_essaies_connexion(login: str):
         return False
 
 
-def add_apprenti(nom, prenom, login, photo):
+def add_apprenti(nom, prenom, login, photo, commit=True):
     """
     Ajoute un apprenti en BD
 
@@ -119,11 +119,12 @@ def add_apprenti(nom, prenom, login, photo):
     """
     apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo)
     db.session.add(apprenti)
-    db.session.commit()
-    return apprenti.id_apprenti
+    if commit:
+        db.session.commit()
+    return get_id_apprenti_by_login(login)
 
 
-def archiver_apprenti(id_apprenti, archiver=True):
+def archiver_apprenti(id_apprenti, archiver=True, commit=True):
     """
     Archive un apprenti en BD
 
@@ -134,7 +135,8 @@ def archiver_apprenti(id_apprenti, archiver=True):
     try:
         apprenti = Apprenti.query.filter_by(id_apprenti=id_apprenti).first()
         apprenti.archive = archiver
-        db.session.commit()
+        if commit:
+            db.session.commit()
         return True
     except Exception as e:
         logging.error("Erreur lors de l'archivage d'un apprenti")
@@ -142,7 +144,7 @@ def archiver_apprenti(id_apprenti, archiver=True):
         return False
 
 
-def remove_apprenti(id_apprenti):
+def remove_apprenti(id_apprenti, commit=True):
     """
     Supprime un apprenti en BD
 
@@ -151,7 +153,8 @@ def remove_apprenti(id_apprenti):
     """
     try:
         Assister.query.filter_by(id_apprenti=id_apprenti).delete()
-        db.session.commit()
+        if commit:
+            db.session.commit()
         fiches = FicheIntervention.query.filter_by(id_apprenti=id_apprenti).all()
         if fiches:
             for fiche in fiches:
@@ -159,9 +162,11 @@ def remove_apprenti(id_apprenti):
                 LaisserTrace.query.filter_by(id_fiche=fiche.id_fiche).delete()
             for fiche in fiches:
                 db.session.delete(fiche)
-        db.session.commit()
+        if commit:
+            db.session.commit()
         db.session.delete(Apprenti.query.filter_by(id_apprenti=id_apprenti).first())
-        db.session.commit()
+        if commit:
+            db.session.commit()
         return True
     except Exception as e:
         logging.error("Erreur lors de la suppression d'un apprenti")

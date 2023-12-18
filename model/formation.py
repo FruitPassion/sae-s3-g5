@@ -37,7 +37,7 @@ def get_nom_formation(id_formation):
     return Formation.query.with_entities(Formation.intitule).filter_by(id_formation=id_formation).first().intitule
 
 
-def add_formation(intitule, niveau_qualif, groupe, image):
+def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
     """
     Ajoute une formation en BD
 
@@ -45,11 +45,12 @@ def add_formation(intitule, niveau_qualif, groupe, image):
     """
     formation = Formation(intitule=intitule, niveau_qualif=niveau_qualif, groupe=groupe, image=image)
     db.session.add(formation)
-    db.session.commit()
+    if commit:
+        db.session.commit()
     return formation.id_formation
 
 
-def archiver_formation(id_formation, archiver=True):
+def archiver_formation(id_formation, archiver=True, commit=True):
     """
     Archive une formation en BD
 
@@ -60,7 +61,8 @@ def archiver_formation(id_formation, archiver=True):
     try:
         formation = Formation.query.filter_by(id_formation=id_formation).first()
         formation.archive = archiver
-        db.session.commit()
+        if commit:
+            db.session.commit()
         return True
     except Exception as e:
         logging.error("Erreur lors de l'archivage d'une formation")
