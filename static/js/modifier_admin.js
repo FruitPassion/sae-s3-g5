@@ -61,3 +61,22 @@ function modifierLigneFormation(element) {
     // Affichez la fenêtre modale de modification
     $('#modalModifierFormation').modal('show');
 }
+
+function enregistrerModifFormation(id_formation) {
+    let nouvelIntitule = document.getElementById('modif_intitule').value;
+    let nouveauNiveauQualif = document.getElementById('modif_niveau_qualif').value;
+    let nouveauGroupe = document.getElementById('modif_groupe').value;
+
+    fetch('/admin/gestion-formation', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id_formation: id_formation, intitule: nouvelIntitule, niveauQualif: nouveauNiveauQualif, groupe: nouveauGroupe})
+    })    
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();
+        }
+    })
+}
