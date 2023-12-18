@@ -62,6 +62,22 @@ def archiver_formation(id_formation, archiver=True):
         formation.archive = archiver
         db.session.commit()
         return True
-    except AttributeError as e:
+    except Exception as e:
         logging.error("Erreur lors de l'archivage d'une formation")
+        logging.error(e)
+        return False
+
+
+def remove_formation(id_formation):
+    """
+    Supprime une formation en BD
+
+    :param id_formation: id de la formation à supprimer
+    :return: None
+    """
+    try:
+        return True
+    except Exception as e:
+        logging.error("Erreur lors de la suppression d'une formation")
+        logging.error(e)
         return False

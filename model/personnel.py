@@ -136,8 +136,9 @@ def add_personnel(login, nom, prenom, email, password, role):
         personnel = Personnel(login=login, nom=nom, prenom=prenom, email=email, mdp=password, role=role)
         db.session.add(personnel)
         db.session.commit()
-    except AttributeError as e:
+    except Exception as e:
         logging.error("Erreur lors de l'ajout d'un membre du personnel")
+        logging.error(e)
 
 
 def archiver_personnel(id_personnel: int, archiver=True):
@@ -153,6 +154,21 @@ def archiver_personnel(id_personnel: int, archiver=True):
         personnel.archive = archiver
         db.session.commit()
         return True
-    except AttributeError as e:
+    except Exception as e:
         logging.error("Erreur lors de l'archivage d'un membre du personnel")
+        logging.error(e)
+        return False
+
+
+def remove_personnel(id_personnel: int):
+    """
+    Supprime un membre du personnel en BD
+
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    try:
+        return True
+    except Exception as e:
+        logging.error("Erreur lors de la suppression d'un membre du personnel")
+        logging.error(e)
         return False

@@ -17,12 +17,12 @@ function archiver_personnel(){
 }
 
 function archiver(route){
-    let id_formation = document.getElementById("archiver-value").value;
-    let row = document.getElementById("ele-" + id_formation);
+    let id_element = document.getElementById("archiver-value").value;
+    let row = document.getElementById("ele-" + id_element);
 
     afficher_snack("Archivage en cours...", "info");
 
-    $.getJSON("/api/archiver-"+route+"/" + encodeURIComponent(id_formation), function (data) {
+    $.getJSON("/api/archiver-"+route+"/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
             afficher_snack("Archivage réussi !", "success");
             row.parentElement.removeChild(row);
@@ -52,12 +52,12 @@ function desarchiver_personnel(){
 }
 
 function desarchiver(route){
-    let id_formation = document.getElementById("desarchiver-value").value;
-    let row = document.getElementById("arch-ele-" + id_formation);
+    let id_element = document.getElementById("desarchiver-value").value;
+    let row = document.getElementById("arch-ele-" + id_element);
 
     afficher_snack("Desarchivage en cours...", "info");
 
-    $.getJSON("/api/desarchiver-"+route+"/" + encodeURIComponent(id_formation), function (data) {
+    $.getJSON("/api/desarchiver-"+route+"/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
             afficher_snack("Desarchivage réussi !", "success");
             row.parentElement.removeChild(row);

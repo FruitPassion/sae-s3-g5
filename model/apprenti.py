@@ -3,9 +3,14 @@ from hmac import compare_digest
 
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.security import encrypt_password, compare_passwords
+from model_db.assister import Assister
 
 from model_db.shared_model import db
 from model_db.apprenti import Apprenti
+from model_db.session import Session
+from model_db.laissertrace import LaisserTrace
+from model_db.personnel import Personnel
+from model_db.composer import ComposerPresentation as Composer
 
 from model_db.ficheintervention import FicheIntervention
 from model.formation import get_nom_formation
@@ -131,6 +136,34 @@ def archiver_apprenti(id_apprenti, archiver=True):
         apprenti.archive = archiver
         db.session.commit()
         return True
-    except AttributeError as e:
+    except Exception as e:
         logging.error("Erreur lors de l'archivage d'un apprenti")
+        logging.error(e)
+        return False
+
+
+def remove_apprenti(id_apprenti):
+    """
+    Supprime un apprenti en BD
+
+    :param id_apprenti: id de l'apprenti à supprimer
+    :return: None
+    """
+    try:
+        Assister.query.filter_by(id_apprenti=id_apprenti).delete()
+        db.session.commit()
+        fiches = FicheIntervention.query.filter_by(id_apprenti=id_apprenti).all()
+        if fiches:
+            for fiche in fiches:
+                Composer.query.filter_by(id_fiche=fiche.id_fiche).delete()
+                LaisserTrace.query.filter_by(id_fiche=fiche.id_fiche).delete()
+            for fiche in fiches:
+                db.session.delete(fiche)
+        db.session.commit()
+        db.session.delete(Apprenti.query.filter_by(id_apprenti=id_apprenti).first())
+        db.session.commit()
+        return True
+    except Exception as e:
+        logging.error("Erreur lors de la suppression d'un apprenti")
+        logging.error(e)
         return False

@@ -12,7 +12,8 @@
             integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
             crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
-    <script src="{{ url_for('static',filename='js/archiver_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -53,14 +54,15 @@
                             <th class="align-middle">
                                 <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal" data-bs-target="#modal-archiver">
+                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-archiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="recharger-1" hidden="" >
+                <div id="recharger-1" hidden="">
                     {% include "_partial/_mise_a_jour.html" %}
                 </div>
             </div>
@@ -124,17 +126,19 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img style="width:180px; height:100px;"
                                      src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal" data-bs-target="#modal-desarchiver">
+                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle">
+                            <th class="align-middle" onclick="validation_suppression(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-supprimer">
                                 <button><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </th>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="recharger-2" hidden="" >
+                <div id="recharger-2" hidden="">
                     {% include "_partial/_mise_a_jour.html" %}
                 </div>
             </div>
@@ -156,7 +160,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="archiver_formation()">Valider</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="archiver_formation()">Archiver
+                    </button>
                 </div>
             </div>
         </div>
@@ -175,7 +181,30 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal" onclick="desarchiver_formation()">Valider</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="desarchiver_formation()">Desarchiver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Supprimer la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="supprimer-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir supprimer la formation ? Cette action
+                        est irréversible et entrainera la suppression des élèments associés à l'id de cette formation.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
+                            onclick="supprimer_formation()">Supprimer
+                    </button>
                 </div>
             </div>
         </div>
