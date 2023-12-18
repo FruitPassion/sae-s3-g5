@@ -11,11 +11,11 @@ from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import resize_image
-from model.apprenti import get_all_apprenti, add_apprenti
+from model.apprenti import get_all_apprenti, add_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formation, add_formation
 from model.session import add_apprenti_assister
-from custom_paquets.custom_form import AjouterApprenti, ModifierPersonnel
+from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel
 from custom_paquets.custom_form import AjouterPersonnel
 from custom_paquets.custom_form import AjouterFormation
 from werkzeug.utils import secure_filename
@@ -57,9 +57,10 @@ def gestion_personnel():
         nouveau_role = request.form.get("nouveau_role")
         nouveau_role = nouveau_role.replace("_", " ")
         identifiant = request.form.get("id-element")
+        password = encrypt_password(form_modifier.form_password)
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
         update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data,
-                         form_modifier.form_password.data, nouveau_role)
+                         password, nouveau_role)
         return redirect(url_for("admin.gestion_personnel"))
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":
@@ -84,9 +85,19 @@ def gestion_apprenti():
     formations = get_all_formation()
     apprenti = get_all_apprenti()
     liste_apprenti_archivee = get_all_apprenti(archive=True)
-    form = AjouterApprenti()
-    if form.validate_on_submit() and request.method == "POST":
-        login = generate_login(form.nom.data, form.prenom.data)
+    form_ajouter = AjouterApprenti()
+    form_modifier = ModifierApprenti()
+
+    if form_modifier.validate_on_submit() and request.method == "POST":
+        identifiant = request.form.get("id-element")
+        password = encrypt_password(form_modifier.form_password.data)
+        login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
+        update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password)
+        return redirect(url_for("admin.gestion_apprenti"))
+    
+    
+    elif form_ajouter.validate_on_submit() and request.method == "POST":
+        login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         f = request.files.get("avatar")
         if f:
             chemin_avatar = "./static/images/photo_profile/" + secure_filename(f.filename)
@@ -96,12 +107,12 @@ def gestion_apprenti():
             chemin_avatar = "photo_profile/" + "default_profile.png"
         img = Image.open(f.stream)
         resize_image(img, "./static/images/" + chemin_avatar)
-        id_apprenti = add_apprenti(form.nom.data, form.prenom.data, login, chemin_avatar)
+        id_apprenti = add_apprenti(form_ajouter.nom.data, form_ajouter.prenom.data, login, chemin_avatar)
         add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
         return redirect(url_for("admin.gestion_apprenti"))
 
-    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form=form,
-                           formations=formations, liste_apprenti_archivee=liste_apprenti_archivee)
+    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form_ajouter=form_ajouter,
+                           form_modifier = form_modifier, formations=formations, liste_apprenti_archivee=liste_apprenti_archivee)
 
 
 @admin.route("/gestion-formation", methods=["GET", "POST", "DELETE"])

@@ -29,6 +29,14 @@ class AjouterApprenti(FlaskForm):
     submit = SubmitField("Enregistrer")
 
 
+class ModifierApprenti(FlaskForm):
+    form_identifiant = HiddenField()
+    form_password = PasswordField()
+    form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Dupont"})
+    form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Jean"})
+    form_submit = SubmitField("Modifier")
+
+
 class AjouterPersonnel(FlaskForm):
     password = PasswordField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput())
     nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})

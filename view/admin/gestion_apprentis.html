@@ -60,7 +60,8 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th class="align-middle">
+                            <th onclick="passer_parametre_form(this, 'apprenti')" class="align-middle" data-bs-toggle="modal"
+                                data-bs-target="#modal-modifier">
                                 <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
                             <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
@@ -77,20 +78,20 @@
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">
-                    {{ form.hidden_tag() }}
+                    {{ form_ajouter.hidden_tag() }}
                     <div class="d-flex w-75 test">
                         <div class="m-4 w-50">
                             <div>
                                 <h3 class="fs-1 my-3">Nom :</h3>
                             </div>
                             <div>
-                                {{ form.nom(class="form-control fs-1 my-3") }}
+                                {{ form_ajouter.nom(class="form-control fs-1 my-3") }}
                             </div>
                             <div>
                                 <h3 class="fs-1 my-3">Prénom :</h3>
                             </div>
                             <div>
-                                {{ form.prenom(class="form-control fs-1 my-3") }}
+                                {{ form_ajouter.prenom(class="form-control fs-1 my-3") }}
                             </div>
                         </div>
                         <div class="m-4 w-50">
@@ -115,7 +116,7 @@
                         </div>
                     </div>
                     <div class="w-50 mx-auto my-5">
-                        {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
                     </div>
                 </form>
             </div>
@@ -134,7 +135,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprenti_archivee %}
-                        <tr class="text-center" id="arch-ele-{{ apprenti["id_apprenti"] }}">
+                        <tr class="text-center" id="arch-ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
                             <td class="align-middle">{{ apprenti["prenom"] }}</td>
@@ -177,7 +178,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="archiver-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir archiver l'apprenti ?</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver l'apprenti ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
@@ -193,17 +194,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-1" id="modal-title">Desarchiver l'apprenti</h5>
+                    <h5 class="modal-title fs-1" id="modal-title">Désarchiver l'apprenti</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="desarchiver-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir désarchiver l'apprenti ?</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver l'apprenti ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
-                            onclick="desarchiver_apprenti()">Desarchiver
+                            onclick="desarchiver_apprenti()">Désarchiver
                     </button>
                 </div>
             </div>
@@ -219,8 +220,8 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="supprimer-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir supprimer l'apprenti ? Cette action
-                        est irréversible et entrainera la suppression des élèments associés à l'id de cet apprenti.</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer l'apprenti ? Cette action
+                        est irréversible et entraînera la suppression des élèments associés à l'id de cet apprenti.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
@@ -231,6 +232,48 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier">
+                        <input type="hidden" value="" id="id-element" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Nom :</h3>
+                            {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Prénom :</h3>
+                            {{ form_modifier.form_prenom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Mot de passe :</h3>
+                            {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
+                        </div>
+
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Utilisateur actif :</h3>
+                            <div class="form-check form-switch" for="form_actif">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="form_actif">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    {{ form_modifier.form_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
