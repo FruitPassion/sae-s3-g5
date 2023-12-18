@@ -23,6 +23,7 @@ def choix_formation():
     
     :return: rendu de la page choix_formation.html
     """
+    print(session.get("name"))
     formations = get_all_formation()
     return render_template("personnel/choix_formation.html", formations=formations), 200
 

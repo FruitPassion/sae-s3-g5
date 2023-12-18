@@ -24,3 +24,13 @@
     margin-left:50%;
     margin-right:-50%;
 }
+
+.modal{
+    --bs-modal-width: 75%;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}

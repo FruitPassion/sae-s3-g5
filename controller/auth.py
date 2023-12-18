@@ -50,7 +50,7 @@ def connexion_personnel_pin():
     personnels = get_liste_personnel_non_super()
     if request.method == "POST":
         passwd = request.form["code"]
-        login = request.form.get('login-select')
+        login = request.form.get('login_select')
         if not check_password(login, passwd):
             if get_nbr_essaie_connexion_personnel(login) == 3:
                 flash("Compte bloqué, contacter un admin", "error")

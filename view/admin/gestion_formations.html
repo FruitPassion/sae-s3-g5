@@ -14,6 +14,7 @@
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -51,8 +52,10 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img style="width:180px; height:100px;"
                                      src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th class="align-middle">
-                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            <th class="align-middle" data-bs-toggle="modal"
+                            data-bs-target="#modal-modifier">
+                                <button onclick="modifierLigneFormation(this)"><i class="fa fa-pencil-square-o"
+                                                                         aria-hidden="true"></i></button>
                             </th>
                             <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
@@ -126,7 +129,7 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img style="width:180px; height:100px;"
                                      src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                            <th class="align-middle" onclick="validation_modifier(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
@@ -163,6 +166,42 @@
                     <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
                             onclick="archiver_formation()">Archiver
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formModifierFormation" enctype="multipart/form-data">
+                        <input type="hidden" id="formationId" name="formationId" value="">
+                        <div class="mb-3">
+                            <label for="modif_intitule">Intitulé :</label>
+                            <input type="text" class="form-control" id="modif_intitule" name="intitule" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modif_niveau_qualif">Niveau qualification :</label>
+                            <input type="text" class="form-control" id="modif_niveau_qualif" name="niveau_qualif" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modif_groupe">Groupe :</label>
+                            <input type="text" class="form-control" id="modif_groupe" name="groupe" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modif_image">Image :</label>
+                            <input type="file" class="form-control" id="modif_image" name="image" accept="image/png, image/jpeg, image/jpg">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary flex-grow-1 fs-3">Modifier</button>
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
                 </div>
             </div>
         </div>
@@ -213,8 +252,4 @@
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
-{% endblock %}
-
-{% block javascripts2 %}
-    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
 {% endblock %}

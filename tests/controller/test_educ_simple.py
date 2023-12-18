@@ -11,14 +11,15 @@ formation = "Parcours plomberie"
 apprenti = "ANG12"
 fiche = 8
 
+
 # Test de la route de redirection de connexion de l'éducateur simple
 def test_redirection_connexion(client):
     connexion_personnel_pin(client, username, passw)
 
     response = client.get(url_for("personnel.choix_formation"))
-    
+
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == "/personnel/choix-formation-personnel"
@@ -28,11 +29,11 @@ def test_redirection_connexion(client):
 def test_affichage_apprentis_formation(client):
     # Test connexion educateur simple
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("personnel.choix_eleve", nom_formation = formation))
+    response = client.get(url_for("personnel.choix_eleve", nom_formation=formation))
 
     # Test d'accès à la route
-    assert response.status_code == 302
-    
+    assert response.status_code == 200
+
     # Test de vérification de la route
     assert response.request.path == f"/personnel/choix-eleves/{formation}"
 
@@ -41,11 +42,11 @@ def test_affichage_apprentis_formation(client):
 def test_choix_apprenti(client):
     # Test connexion éducateur simple
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("educ_simple.fiches_apprenti", apprenti = apprenti))
+    response = client.get(url_for("educ_simple.fiches_apprenti", apprenti=apprenti))
 
     # Test d'accès à la route
-    assert response.status_code == 302
-    
+    assert response.status_code == 200
+
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/fiches"
 
@@ -54,11 +55,11 @@ def test_choix_apprenti(client):
 def test_lecture_commentaires(client):
     # Test connexion éducateur simple
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("educ_simple.visualiser_commentaires", apprenti = apprenti, fiche = fiche))
+    response = client.get(url_for("educ_simple.visualiser_commentaires", apprenti=apprenti, fiche=fiche))
 
     # Test d'accès à la route
-    assert response.status_code == 302
-    
+    assert response.status_code == 200
+
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/{fiche}/commentaires"
 
@@ -67,22 +68,23 @@ def test_lecture_commentaires(client):
 def test_modification_commentaire(client):
     # Test connexion éducateur simple
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("educ_simple.modifier_commentaires", apprenti = apprenti, fiche = fiche))
+    response = client.get(url_for("educ_simple.modifier_commentaires", apprenti=apprenti, fiche=fiche))
 
     # Test d'accès à la route
-    assert response.status_code == 302
-    
+    assert response.status_code == 200
+
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/{fiche}/modifier-commentaires"
-    
+
+
 # Tes de la route ajout commentaire
 def test_ajouter_commentaire(client):
     # Test connexion éducateur simple
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("educ_simple.ajouter_commentaires", apprenti = apprenti, fiche = fiche))
+    response = client.get(url_for("educ_simple.ajouter_commentaires", apprenti=apprenti, fiche=fiche))
 
     # Test d'accès à la route
-    assert response.status_code == 302
-    
+    assert response.status_code == 200
+
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/{fiche}/ajouter-commentaires"
