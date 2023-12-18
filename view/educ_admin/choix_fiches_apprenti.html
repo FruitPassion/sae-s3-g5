@@ -11,20 +11,28 @@
     <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
 
     <div id="blocFiches">
-        <div class="parent">
-            <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti["login"]) }}">
-                <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
-                    alt="fiche finie">
-                <img id="check" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
-            </a>
+        <div class="d-block">
+            <div class="parent">
+                <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti["login"]) }}">
+                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                         alt="fiche finie">
+                    <img id="plus" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
+                </a>
+            </div>
+            <p class="text-center fs-1">Ajouter une fiche</p>
         </div>
         {% for fiche in fiches %}
-            <div class="parent">
-                <a href="">
-                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
-                        alt="fiche finie">
-                    <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-                </a>
+            <div class="d-block">
+                <div class="parent">
+                    <a class="modifier" href="{{ url_for('educ_admin.modifier_fiche', id_fiche=fiche["id_fiche"]) }}">
+                        <i class="fa fa-pencil-square" aria-hidden="true"></i></a>
+                    <a href="" class="bg-modifier">
+                        <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                             alt="fiche finie">
+                        <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                    </a>
+                </div>
+                <p class="text-center fs-1">Fiche n°{{ fiche["numero"] }}</p>
             </div>
         {% endfor %}
     </div>

@@ -37,6 +37,13 @@ def get_id_apprenti_by_login(login: str):
     return Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first().id_apprenti
 
 
+def get_login_apprenti_by_id(id_apprenti: str):
+    """
+    Renvoie l'id_apprenti à partir du login
+    """
+    return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.login).first().login
+
+
 def check_apprenti(login: str):
     """
     À partir d'un login, verifie si un compte existe

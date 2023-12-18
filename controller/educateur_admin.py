@@ -6,7 +6,7 @@ from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import get_fiches_techniques_finies_par_login, assigner_fiche_dummy_eleve, \
-    get_fiches_par_id_fiche, get_proprietaire_fiche_par_id_fiche
+    get_fiches_par_id_fiche, get_proprietaire_fiche_par_id_fiche, copier_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
@@ -30,6 +30,21 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
     return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
+
+
+@educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET"])
+@educadmin_login_required
+def modifier_fiche(id_fiche):
+    """
+    Récupère toutes les fiches techniques de l'élève sélectionné et les affiche.
+
+    Permet de sélectionner une fiche technique réalisée par un apprenti.
+
+    :return: rendu de la page choix_fiches_apprenti.html
+    """
+    id_fiche = copier_fiche(id_fiche, session["name"])
+    flash("Fiche copiée avec succès")
+    return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
 
 
 @educ_admin.route("/<apprenti>/ajouter-fiche", methods=["GET", "POST"])
