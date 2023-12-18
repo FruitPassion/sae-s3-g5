@@ -72,11 +72,7 @@ def get_nbr_essaie_connexion_apprenti(login: str):
     return Apprenti.query.filter_by(login=login).first().essaies
 
 
-<<<<<<< Updated upstream
-def update_nbr_essaies_connexion(login: str, nb_essais=0):
-=======
 def update_nbr_essaies_connexion(login: str, nombre_essais = 0):
->>>>>>> Stashed changes
     """
     Augmente le nombre d'essaies de connexion d'un apprenti de 1
     Limité à 5
@@ -85,11 +81,7 @@ def update_nbr_essaies_connexion(login: str, nombre_essais = 0):
     """
     apprenti = Apprenti.query.filter_by(login=login).first()
     apprenti.essaies = apprenti.essaies + 1
-<<<<<<< Updated upstream
-    apprenti.essaies = nb_essais
-=======
     apprenti.essaies = nombre_essais
->>>>>>> Stashed changes
     try:
         db.session.commit()
         return True
