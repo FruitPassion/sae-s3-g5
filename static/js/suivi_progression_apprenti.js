@@ -44,13 +44,7 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
         options: {
             plugins: {
                 legend: {
-                    position: 'right',
-                    labels: {
-                        font: {
-                            fontFamily: 'Montserrat',
-                            size: 30
-                        },
-                    }
+                    display: false
                 },
                 datalabels: {
                     color: 'black',

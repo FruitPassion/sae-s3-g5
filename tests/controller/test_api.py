@@ -45,7 +45,7 @@ def test_api_archiver_formation(client):
     intitule = "Parcours électricité"
     niveau_qualification = 3
     groupe = "1"
-    image = "formation_image/elec.jpg"
+    image = "null"
 
     add_formation(intitule, niveau_qualification, groupe, image, commit=False)
 

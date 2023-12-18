@@ -3,3 +3,24 @@
     align-content: center;
     margin: auto;
 }
+
+.box {
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    clear: both;
+  }
+  
+  .red {
+    background-color: #C30010;
+  }
+  
+  .green {
+    background-color: #98FB98;
+  }
+  
+  .orange {
+    background-color: #FF8B28;
+  }

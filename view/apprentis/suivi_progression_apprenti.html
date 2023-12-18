@@ -22,6 +22,9 @@
             </script>
         {% endblock %}
     </div>
+    <div><div class='box green'></div>Fiches terminées {% include "_partial/_tts.html" %}</div>
+    <div><div class='box orange'></div>Fiches en cours {% include "_partial/_tts.html" %}</div>
+    <div><div class='box red'></div>Fiches arrêtées {% include "_partial/_tts.html" %}</div>
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('apprenti.redirection_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
