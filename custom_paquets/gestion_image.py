@@ -27,3 +27,4 @@ def stocker_photo_profile(file):
         chemin_avatar = "photo_profile/" + "default_profile.png"
     img = Image.open(file.stream)
     resize_image(img, "./static/images/" + chemin_avatar)
+    return chemin_avatar

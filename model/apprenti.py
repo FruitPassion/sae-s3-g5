@@ -124,7 +124,7 @@ def add_apprenti(nom, prenom, login, photo, commit=True):
     return get_id_apprenti_by_login(login)
 
 
-def update_apprenti(identifiant, login, nom, prenom, password, commit=True):
+def update_apprenti(identifiant, login, nom, prenom, password, photo, commit=True):
     """
     Modifie un apprenti en BD
 
@@ -136,6 +136,7 @@ def update_apprenti(identifiant, login, nom, prenom, password, commit=True):
         apprenti.nom = nom
         apprenti.prenom = prenom
         apprenti.mdp = password
+        apprenti.photo = photo
         db.session.commit()
     except Exception as e:
         logging.error("Erreur lors de la modification de l'apprenti")
@@ -193,3 +194,7 @@ def remove_apprenti(id_apprenti, commit=True):
 
 def get_apprenti_by_formation(id_formation):
     return Apprenti.query.join(Assister).join(Session).filter_by(id_formation=id_formation).all()
+
+
+def get_photo_profil_apprenti(id_apprenti):
+    return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.photo).first().photo
