@@ -256,3 +256,21 @@ function enregistrerLigneApprenti(button) {
         bouton.setAttribute('onclick', 'modifierLigneApprenti(this)');
     }
 }
+
+
+
+function modifierLigneFormation(element) {
+    // Obtenez les données de la ligne de formation
+    let row = element.closest('tr');
+    let intitule = row.cells[0].innerText;
+    let niveauQualif = row.cells[1].innerText;
+    let groupe = row.cells[2].innerText;
+
+    // Remplissez les champs du formulaire de modification
+    document.getElementById('modif_intitule').value = intitule.trim();
+    document.getElementById('modif_niveau_qualif').value = niveauQualif.trim();
+    document.getElementById('modif_groupe').value = groupe.trim();
+
+    // Affichez la fenêtre modale de modification
+    $('#modalModifierFormation').modal('show');
+}
