@@ -46,11 +46,11 @@ function changer_niveau_categorie(position_element) {
 
             // Activer les options de personnalisation
             for (const r of ["selecteur-police-", "taille-police-", "couleur-police-", "taille-picto-",
-                "couleur-picto-", "couleur-fond-"]) {
+                "couleur-picto-"]) {
                 document.getElementById(r + position_element).removeAttribute("disabled");
             }
             // Activer les div de personnalisation
-            for (const r of ["div-text-", "div-fond-", "div-picto-"]) {
+            for (const r of ["div-text-", "div-picto-"]) {
                 document.getElementById(r + position_element).classList.remove("disabled-text");
             }
 
@@ -62,12 +62,12 @@ function changer_niveau_categorie(position_element) {
             selecteur_element[i].removeAttribute("disabled");
 
             // Désactiver les options de personnalisation
-            for (const r of ["selecteur-police-", "taille-police-", "couleur-police-", "taille-picto-", "couleur-picto-", "couleur-fond-"]) {
+            for (const r of ["selecteur-police-", "taille-police-", "couleur-police-", "taille-picto-", "couleur-picto-"]) {
                 document.getElementById(r + position_element).setAttribute("disabled", "");
             }
 
             // Désactiver les div de personnalisation
-            for (const r of ["div-text-", "div-fond-", "div-picto-"]) {
+            for (const r of ["div-text-", "div-picto-"]) {
                 document.getElementById(r + position_element).classList.add("disabled-text");
             }
         }
@@ -128,15 +128,17 @@ function changer_icone_categorie(position_element) {
     }
 }
 
+function changer_picto(position_element) {
+    let element = document.getElementById("selecteur-picto-" + position_element);
+    document.getElementById("icone-" + position_element).src = "/static/images/icone_fiches/" + element.value;
+    changer_icone_individuelle(position_element);
+}
+
+
 function changer_icone_individuelle(position_element) {
     let couleur = document.getElementById("couleur-picto-" + position_element).value;
     demarrer(couleur, position_element);
 
     let icone_element = document.getElementById("icone-" + position_element);
     changeSize(icone_element, parseInt(document.getElementById("taille-picto-" + position_element).value));
-}
-
-function changer_picto(position_element) {
-    let element = document.getElementById("selecteur-picto-" + position_element);
-    document.getElementById("icone-" + position_element).src = "/static/images/icone_fiches/" + element.value;
 }

@@ -199,14 +199,13 @@
                             <div>
                                 <h3>Couleur de fond</h3>
                                 <div id="div-fond-{{ categorie["position_elem"] }}"
-                                     class="form-control {% if categorie["niveau"] == None %}disabled-text{% endif %}">
+                                     class="form-control">
                                     <!-- Sélection de la couleur du fond -->
                                     <label>Couleur</label>
                                     <input type="color" class="form-control form-control-color w-100 mt-2"
                                            name="couleur-fond-{{ categorie["position_elem"] }}"
                                            id="couleur-fond-{{ categorie["position_elem"] }}"
                                            value="{{ categorie["couleur_fond"] }}"
-                                           {% if categorie["niveau"] == None %}disabled{% endif %}
                                            onchange="changer_fond_categorie({{ categorie["position_elem"] }})">
                                 </div>
                             </div>
