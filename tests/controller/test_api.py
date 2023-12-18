@@ -1,4 +1,5 @@
 from flask import url_for
+from custom_paquets.tester_usages import connexion_personnel_mdp
 from model.formation import add_formation, get_formation_id
 from model_db.shared_model import db, Apprenti
 from model.apprenti import update_nbr_essaies_connexion
@@ -37,6 +38,7 @@ def test_api_check_password_apprenti(client):
 
 # Test de l'archivage d'une formation
 def test_api_archiver_formation(client):
+    # Partie archivage
     # Création d'une formation à archiver
     intitule = "Parcours électricité"
     niveau_qualification = 3
@@ -47,13 +49,23 @@ def test_api_archiver_formation(client):
 
     # Set up d'une formation
     id_formation = get_formation_id(intitule)
+    
+    # Connexion en tant que superadmin
+    superadmin = "JED10"
+    mdp = "superadmin"
+    connexion_personnel_mdp(client, superadmin, mdp)
 
     # Test d'archivage d'une formation
     response = client.get(url_for("api.api_archiver_formation", id_formation=id_formation))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
     print(response.data)
     print(type(response))
+    
+    # Test de vérification de la route
+    assert response.request.path == "/api/archiver-formation/"+str(id_formation)
+    
     # Test de vérification de l'archivage
     assert response.json["valide"] == True
+    
