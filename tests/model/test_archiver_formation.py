@@ -16,7 +16,7 @@ def test_archiver_formation(client):
     formation.archive = True
 
     # Vérifier que la formation a bien été archivée de la base de données
-    assert db.session.query(Formation).get(id_formation).archive == True
+    assert db.session.query(Formation).get(id_formation).archive is True
 
     # Effectuer d'autres vérifications si nécessaire   
     db.session.rollback()
