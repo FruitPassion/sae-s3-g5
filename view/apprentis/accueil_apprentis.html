@@ -9,29 +9,32 @@
 
 {% block body %}
     <h1>Bienvenue {{ apprenti["prenom"] }} {{ apprenti["nom"] }} {% include "_partial/_tts.html" %}</h1>
-    
+
 
     <div id="blocFiches">
-
         {% for fiche in fiches %}
-            <div class="parent">
-                <a>
-                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
-                         alt="fiche finie">
-                    {% if fiche['etat_fiche'] == 1 %}
-                        <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-                    {% elif fiche['etat_fiche'] == 2 %}
-                        <img id="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
-                    {% else %}
-                        <img id="pause" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
-                    {% endif %}
-                </a>
+            <div class="d-block">
+                <div class="parent">
+                    <a href="" class="bg-modifier">
+                        <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                             alt="fiche finie">
+                        {% if fiche['etat_fiche'] == 1 %}
+                            <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                        {% elif fiche['etat_fiche'] == 2 %}
+                            <img class="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
+                        {% else %}
+                            <img class="check" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
+                        {% endif %}
+                    </a>
+                </div>
+                <p class="text-center fs-1">Fiche n°{{ fiche["numero"] }}</p>
+                <p class="text-center fs-3">{{ fiche["date_creation"] }}</p>
             </div>
         {% endfor %}
     </div>
     <div id="suivi_progression">
         <a href="{{ url_for('apprenti.suivi_progression') }}">
-        <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
-        Suivi de progression {% include "_partial/_tts.html" %}</a>
+            <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
+            Suivi de progression {% include "_partial/_tts.html" %}</a>
     </div>
 {% endblock %}

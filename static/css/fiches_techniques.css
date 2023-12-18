@@ -24,7 +24,7 @@
     height: 100px;
 }
 
-.parent #plus {
+.parent .plus {
     position: absolute;
     top: 36%;
     left: 31%;

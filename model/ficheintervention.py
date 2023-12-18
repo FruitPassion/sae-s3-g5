@@ -17,7 +17,8 @@ def get_fiches_techniques_par_login(login):
     """
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-        FicheIntervention.id_fiche, FicheIntervention.etat_fiche).order_by(asc(FicheIntervention.etat_fiche)).all())
+        FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero,
+        FicheIntervention.date_creation).order_by(asc(FicheIntervention.etat_fiche)).all())
 
 
 def get_proprietaire_fiche_par_id_fiche(id_fiche):
@@ -110,7 +111,8 @@ def get_fiches_techniques_finies_par_login(login):
     """
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-        FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero).filter_by(etat_fiche=True).all())
+        FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero,
+        FicheIntervention.date_creation).filter_by(etat_fiche=True).all())
 
 
 def get_fiche_apprentis_existe(login: str):
@@ -163,7 +165,8 @@ def copier_fiche(id_fiche: int, login_personnel: str):
                                        degre_urgence=fiche_a_copier.degre_urgence,
                                        couleur_intervention=fiche_a_copier.couleur_intervention,
                                        etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
-                                       photo_avant=None, photo_apres=None, nom_intervenant=fiche_a_copier.nom_intervenant,
+                                       photo_avant=None, photo_apres=None,
+                                       nom_intervenant=fiche_a_copier.nom_intervenant,
                                        prenom_intervenant=fiche_a_copier.prenom_intervenant,
                                        id_personnel=get_id_personnel_by_login(login_personnel),
                                        id_apprenti=get_id_apprenti_by_login(login_apprenti))
@@ -171,7 +174,6 @@ def copier_fiche(id_fiche: int, login_personnel: str):
     db.session.commit()
     composer_fiche = get_composer_presentation(id_fiche)
     for element in composer_fiche:
-        print(element)
         element["id_fiche"] = nouvelle_fiche.id_fiche
         composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
                                         id_pictogramme=element["id_pictogramme"],

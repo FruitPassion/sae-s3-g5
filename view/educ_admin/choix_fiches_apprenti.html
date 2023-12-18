@@ -16,7 +16,7 @@
                 <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti["login"]) }}">
                     <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                          alt="fiche finie">
-                    <img id="plus" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
+                    <img class="plus" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
                 </a>
             </div>
             <p class="text-center fs-1">Ajouter une fiche</p>
@@ -33,6 +33,7 @@
                     </a>
                 </div>
                 <p class="text-center fs-1">Fiche n°{{ fiche["numero"] }}</p>
+                <p class="text-center fs-3">{{ fiche["date_creation"] }}</p>
             </div>
         {% endfor %}
     </div>
