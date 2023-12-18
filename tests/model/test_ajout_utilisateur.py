@@ -1,7 +1,8 @@
-from unidecode import unidecode
-from model_db.apprenti import Apprenti
-from model_db.personnel import Personnel
-from model_db.shared_model import db
+from model_db.shared_model import db, Personnel, Apprenti
+from model.personnel import add_personnel
+from model.apprenti import add_apprenti
+from custom_paquets.converter import generate_login
+from custom_paquets.security import encrypt_password
 
 # Test de l'ajout d'un personnel
 def test_ajouter_personnel(client):
@@ -9,29 +10,24 @@ def test_ajouter_personnel(client):
     nom="Supreme"
     prenom="Leader"
     email="mail@mail.com"
-    password="000000".__hash__()
-    login=unidecode(prenom[0:2].upper().strip()) + unidecode(nom[0].upper().strip()) + str(
-            len(nom.strip() + prenom.strip())).zfill(2)
+    password=encrypt_password("000000")
+    login=generate_login(nom, prenom)
     
-    ## Copie du code dans add_personnel pour tester la fonction et éviter les commit() dans les tests
-    personnel = Personnel(login = login, nom = nom, prenom = prenom, email = email, mdp = password, role = role)
-    db.session.add(personnel)
+    add_personnel(login, nom, prenom, email, password, role, commit=False)
     
     assert db.session.query(Personnel).filter(Personnel.login == "LES13").first() is not None
     db.session.rollback()
     assert db.session.query(Personnel).filter(Personnel.login == "LES13").first() is None
-    
+
+
 #Test de l'ajout d'un apprenti
 def test_ajouter_apprenti(client):
     nom="SousFifre"
     prenom="Malheureux"
     photo="/url/photo.jpg"
-    login=unidecode(prenom[0:2].upper().strip()) + unidecode(nom[0].upper().strip()) + str(
-            len(nom.strip() + prenom.strip())).zfill(2)
+    login=generate_login(nom, prenom)
     
-    ## Copie du code dans add_apprenti pour tester la fonction et éviter les commit() dans les tests
-    apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo)
-    db.session.add(apprenti)
+    add_apprenti(nom, prenom, login, photo, commit=False)
     
     assert db.session.query(Apprenti).filter(Apprenti.login == "MAS19").first() is not None
     db.session.rollback()

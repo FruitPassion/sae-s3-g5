@@ -4,8 +4,7 @@ from hmac import compare_digest
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.security import compare_passwords
 
-from model_db.shared_model import db
-from model_db.personnel import Personnel
+from model_db.shared_model import db, Personnel
 
 
 def get_all_personnel(archive=False):
@@ -126,22 +125,23 @@ def reset_nbr_essaies_connexion(login: str):
         return False
 
 
-def add_personnel(login, nom, prenom, email, password, role):
+def add_personnel(login, nom, prenom, email, password, role, commit=True):
     """
     Ajoute un membre du personnel en BD
 
-    :return: id_personnel
+    :return: None
     """
     try:
         personnel = Personnel(login=login, nom=nom, prenom=prenom, email=email, mdp=password, role=role)
         db.session.add(personnel)
-        db.session.commit()
+        if commit:
+            db.session.commit()
     except Exception as e:
         logging.error("Erreur lors de l'ajout d'un membre du personnel")
         logging.error(e)
 
 
-def archiver_personnel(id_personnel: int, archiver=True):
+def archiver_personnel(id_personnel: int, archiver=True, commit=True):
     """
     Archive un membre du personnel
 
@@ -152,7 +152,8 @@ def archiver_personnel(id_personnel: int, archiver=True):
     try:
         personnel = Personnel.query.filter_by(id_personnel=id_personnel).first()
         personnel.archive = archiver
-        db.session.commit()
+        if commit:
+            db.session.commit()
         return True
     except Exception as e:
         logging.error("Erreur lors de l'archivage d'un membre du personnel")
@@ -160,7 +161,7 @@ def archiver_personnel(id_personnel: int, archiver=True):
         return False
 
 
-def remove_personnel(id_personnel: int):
+def remove_personnel(id_personnel: int, commit=True):
     """
     Supprime un membre du personnel en BD
 
