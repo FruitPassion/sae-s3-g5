@@ -72,7 +72,7 @@ def get_nbr_essaie_connexion_apprenti(login: str):
     return Apprenti.query.filter_by(login=login).first().essaies
 
 
-def update_nbr_essaies_connexion(login: str):
+def update_nbr_essaies_connexion(login: str, nb_essais=0):
     """
     Augmente le nombre d'essaies de connexion d'un apprenti de 1
     Limité à 5
@@ -81,6 +81,7 @@ def update_nbr_essaies_connexion(login: str):
     """
     apprenti = Apprenti.query.filter_by(login=login).first()
     apprenti.essaies = apprenti.essaies + 1
+    apprenti.essaies = nb_essais
     try:
         db.session.commit()
         return True
