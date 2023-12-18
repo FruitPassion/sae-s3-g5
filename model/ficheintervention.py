@@ -3,7 +3,7 @@ from sqlalchemy import func, asc
 from time import strftime, localtime
 
 from custom_paquets.converter import convert_to_dict
-from model.apprenti import get_id_apprenti_by_login
+from model.apprenti import get_id_apprenti_by_login, get_login_apprenti_by_id
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
 from model_db.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti
@@ -110,7 +110,7 @@ def get_fiches_techniques_finies_par_login(login):
     """
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-        FicheIntervention.id_fiche, FicheIntervention.etat_fiche).filter_by(etat_fiche=True).all())
+        FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero).filter_by(etat_fiche=True).all())
 
 
 def get_fiche_apprentis_existe(login: str):
@@ -131,11 +131,60 @@ def get_dernier_numero_fiche_apprenti(login: str):
 
 
 def get_dernier_id_fiche_apprenti(login: str):
+    """
+    Récupère le dernier id de la fiche d'un apprenti
+
+    :param login: login de l'apprenti
+    :return: id de la fiche
+    """
     if get_fiche_apprentis_existe(login):
         return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login)).with_entities(
             FicheIntervention.id_fiche).order_by(FicheIntervention.id_fiche.desc()).first().id_fiche
     else:
         return None
+
+
+def copier_fiche(id_fiche: int, login_personnel: str):
+    """
+    A partir d'une fiche existante, la duplique et l'assigne a un eleve
+
+    :param id_fiche: id de la fiche a copier
+    :param login_personnel: login du personnel
+    :return: Code de validation en fonction du résultat
+    """
+    fiche_a_copier = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
+    fiche_a_copier.etat_fiche = 2
+    login_apprenti = get_login_apprenti_by_id(fiche_a_copier.id_apprenti)
+    numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
+    nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=fiche_a_copier.nom_du_demandeur,
+                                       date_demande=fiche_a_copier.date_demande,
+                                       localisation=fiche_a_copier.localisation,
+                                       description_demande=fiche_a_copier.description_demande,
+                                       degre_urgence=fiche_a_copier.degre_urgence,
+                                       couleur_intervention=fiche_a_copier.couleur_intervention,
+                                       etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                                       photo_avant=None, photo_apres=None, nom_intervenant=fiche_a_copier.nom_intervenant,
+                                       prenom_intervenant=fiche_a_copier.prenom_intervenant,
+                                       id_personnel=get_id_personnel_by_login(login_personnel),
+                                       id_apprenti=get_id_apprenti_by_login(login_apprenti))
+    db.session.add(nouvelle_fiche)
+    db.session.commit()
+    composer_fiche = get_composer_presentation(id_fiche)
+    for element in composer_fiche:
+        print(element)
+        element["id_fiche"] = nouvelle_fiche.id_fiche
+        composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
+                                        id_pictogramme=element["id_pictogramme"],
+                                        taille_pictogramme=element["taille_pictogramme"],
+                                        couleur_pictogramme=element["couleur_pictogramme"],
+                                        text=None, taille_texte=element["taille_texte"], audio=None,
+                                        police=element["police"], couleur=element["couleur"],
+                                        couleur_fond=element["couleur_fond"], niveau=element["niveau"],
+                                        position_elem=element["position_elem"],
+                                        ordre_saisie_focus=element["ordre_saisie_focus"])
+        db.session.add(composer)
+    db.session.commit()
+    return nouvelle_fiche.id_fiche
 
 
 def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_demande: date, nom_demandeur: str,
@@ -144,6 +193,16 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     """
     A partir de la fiche par defaut, la duplique et l'assigne a un eleve
 
+    :param login_apprenti: login de l'apprenti
+    :param login_personnel: login du personnel
+    :param date_demande: date de la demande
+    :param nom_demandeur: nom du demandeur
+    :param localisation: localisation de la demande
+    :param description_demande: description de la demande
+    :param degre_urgence: degre d'urgence de la demande
+    :param couleur_intervention: couleur de l'intervention
+    :param nom_intervenant: nom de l'intervenant
+    :param prenom_intervenant: prenom de l'intervenant
     :return: Code de validation en fonction du résultat
     """
     dernier_fiche_id = get_dernier_id_fiche_apprenti(login_apprenti)
@@ -158,10 +217,13 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                        id_apprenti=get_id_apprenti_by_login(login_apprenti))
     db.session.add(nouvelle_fiche)
     db.session.commit()
+    # Si l'apprenti a deja une fiche, on copie les elements de la derniere fiche
     if get_fiche_apprentis_existe(login_apprenti):
         composer_fiche = get_composer_presentation(dernier_fiche_id)
+    # Sinon on copie les elements de la fiche par defaut
     else:
         composer_fiche = get_composer_presentation()
+    # On ajoute les elements de la fiche
     for element in composer_fiche:
         element["id_fiche"] = nouvelle_fiche.id_fiche
         composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
@@ -175,4 +237,5 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                         ordre_saisie_focus=element["ordre_saisie_focus"])
         db.session.add(composer)
     db.session.commit()
+
     return nouvelle_fiche.id_fiche

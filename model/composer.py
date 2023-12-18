@@ -5,7 +5,7 @@ from model_db.shared_model import db, ComposerPresentation as Compo, ElementBase
 
 def get_composer_presentation(id_fiche=1):
     """
-    Permet de recuperer toutes les catégories d'une fiche
+    Perrmet de recuperer tous les elements d'une fiche
 
     :return: liste de dictionnaires
     """
