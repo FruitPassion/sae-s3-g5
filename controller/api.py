@@ -6,7 +6,7 @@ from custom_paquets.decorateur import admin_login_required
 from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_apprenti, archiver_apprenti, \
     remove_apprenti
 from model.formation import archiver_formation, remove_formation
-from model.personnel import archiver_personnel, remove_personnel
+from model.personnel import archiver_personnel
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -31,11 +31,11 @@ def api_check_password_apprenti(user, password):
 
 @api.route("/archiver-formation/<id_formation>", methods=["GET", "POST"])
 @admin_login_required
-def api_archiver_formation(id_formation):
+def api_archiver_formation(id_formation, commit=True):
     """
     Archiver une formation à partir de son id
     """
-    return {"valide": archiver_formation(id_formation)}
+    return {"valide": archiver_formation(id_formation, commit=commit)}
 
 
 @api.route("/desarchiver-formation/<id_formation>", methods=["GET", "POST"])
@@ -99,12 +99,3 @@ def api_desarchiver_personnel(id_personnel):
     Désarchiver un personnel à partir de son id
     """
     return {"valide": archiver_personnel(id_personnel, archiver=False)}
-
-
-@api.route("/supprimer-personnel/<id_personnel>", methods=["GET", "POST"])
-@admin_login_required
-def api_supprimer_personnel(id_personnel):
-    """
-    Supprimer un personnel à partir de son id
-    """
-    return {"valide": remove_personnel(id_personnel)}

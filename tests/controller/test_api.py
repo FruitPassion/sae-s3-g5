@@ -29,7 +29,11 @@ def test_api_check_password_apprenti(client):
     
     # Test d'accès à la route
     assert response.status_code == 200
+<<<<<<< Updated upstream
     
+=======
+    print(response)
+>>>>>>> Stashed changes
     # Test de vérification que l'apprenti n'est pas bloqué
     assert response.json["valide"] == True
     
@@ -40,12 +44,19 @@ def test_api_archiver_formation(client):
     niveau_qualification = 3
     groupe = "1"
     image = "formation_image/elec.jpg"
+<<<<<<< Updated upstream
     add_formation(intitule, niveau_qualification, groupe, image)
     
+=======
+    
+    add_formation(intitule, niveau_qualification, groupe, image, commit=False)
+
+>>>>>>> Stashed changes
     # Set up d'une formation
     id_formation = get_formation_id(intitule)
     
     # Test d'archivage d'une formation
+<<<<<<< Updated upstream
     response = client.get(url_for("api.api_archiver_formation", id_formation=id_formation))
     
     # Test d'accès à la route
@@ -54,3 +65,15 @@ def test_api_archiver_formation(client):
     print(type(response))
     # Test de vérification de l'archivage
     assert response.json["valide"] == True
+=======
+    response = client.get(url_for("api.api_archiver_formation", id_formation=id_formation, commit=False))
+    
+    # Test d'accès à la route
+    assert response.status_code == 302
+
+    # Test de vérification de l'archivage
+    assert response.json["valide"] == True
+    
+    # Rollback
+    db.session.rollback()
+>>>>>>> Stashed changes

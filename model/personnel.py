@@ -179,17 +179,3 @@ def archiver_personnel(id_personnel: int, archiver=True, commit=True):
         logging.error("Erreur lors de l'archivage d'un membre du personnel")
         logging.error(e)
         return False
-
-
-def remove_personnel(id_personnel: int, commit=True):
-    """
-    Supprime un membre du personnel en BD
-
-    :return: Booleen en fonction de la réussite de l'opération
-    """
-    try:
-        return True
-    except Exception as e:
-        logging.error("Erreur lors de la suppression d'un membre du personnel")
-        logging.error(e)
-        return False
