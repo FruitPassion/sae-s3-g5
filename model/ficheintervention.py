@@ -6,10 +6,7 @@ from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
-from model_db.apprenti import Apprenti
-from model_db.composer import ComposerPresentation
-from model_db.ficheintervention import FicheIntervention
-from model_db.shared_model import db
+from model_db.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti
 
 
 def get_fiches_techniques_par_login(login):

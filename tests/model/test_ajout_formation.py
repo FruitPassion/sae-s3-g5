@@ -1,6 +1,4 @@
-from unidecode import unidecode
-from model_db.formation import Formation
-from model_db.shared_model import db
+from model_db.shared_model import db, Formation
 from model.formation import add_formation
 
 def test_ajouter_formation(client):

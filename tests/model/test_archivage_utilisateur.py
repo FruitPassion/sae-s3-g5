@@ -1,7 +1,5 @@
 from unidecode import unidecode
-from model_db.apprenti import Apprenti
-from model_db.personnel import Personnel
-from model_db.shared_model import db
+from model_db.shared_model import db, Apprenti, Personnel
 from model.apprenti import archiver_apprenti, add_apprenti, get_id_apprenti_by_login
 from model.personnel import archiver_personnel, add_personnel, get_id_personnel_by_login
 

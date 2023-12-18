@@ -2,18 +2,10 @@ import logging
 from hmac import compare_digest
 
 from custom_paquets.converter import convert_to_dict
-from custom_paquets.security import encrypt_password, compare_passwords
-from model_db.assister import Assister
+from custom_paquets.security import compare_passwords
 
-from model_db.shared_model import db
-from model_db.apprenti import Apprenti
-from model_db.session import Session
-from model_db.laissertrace import LaisserTrace
-from model_db.personnel import Personnel
-from model_db.composer import ComposerPresentation as Composer
-
-from model_db.ficheintervention import FicheIntervention
-from model.formation import get_nom_formation
+from model_db.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
+    FicheIntervention, Session
 
 
 def get_all_apprenti(archive=False):
@@ -172,3 +164,7 @@ def remove_apprenti(id_apprenti, commit=True):
         logging.error("Erreur lors de la suppression d'un apprenti")
         logging.error(e)
         return False
+
+
+def get_apprenti_by_formation(id_formation):
+    return Apprenti.query.join(Assister).join(Session).filter_by(id_formation=id_formation).all()

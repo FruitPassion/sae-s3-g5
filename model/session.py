@@ -1,12 +1,8 @@
 from flask import abort
 
-from model_db.shared_model import db
+from model_db.shared_model import db, Session, Apprenti, Assister
 from custom_paquets.converter import convert_to_dict
-from model.formation import get_formation_id
-from model_db.apprenti import Apprenti
-from model_db.assister import Assister
-from model_db.session import Session
-from model_db.formation import Formation
+from model.formation import get_formation_id, get_sessions_par_formation
 
 
 def get_all_sessions(archive=False):
@@ -45,10 +41,3 @@ def add_apprenti_assister(id_apprenti, id_formation):
         assister = Assister(id_apprenti=id_apprenti, id_session=session.id_session)
         db.session.add(assister)
     db.session.commit()
-
-
-def get_sessions_par_formation(id_formation):
-    """
-    :return: toutes les sessions de la formation id_formation
-    """
-    return Session.query.join(Formation).filter_by(id_formation=id_formation).all()
