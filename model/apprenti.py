@@ -116,6 +116,23 @@ def add_apprenti(nom, prenom, login, photo, commit=True):
     return get_id_apprenti_by_login(login)
 
 
+def update_apprenti(identifiant, login, nom, prenom, password, commit=True):
+    """
+    Modifie un apprenti en BD
+
+    :return: None
+    """
+    try:
+        apprenti = Apprenti.query.filter_by(id_personnel=identifiant).first()
+        apprenti.login = login
+        apprenti.nom = nom
+        apprenti.prenom = prenom
+        apprenti.mdp = password
+        db.session.commit()
+    except Exception as e:
+        logging.error("Erreur lors de la modification de l'apprenti")
+        logging.error(e)
+
 def archiver_apprenti(id_apprenti, archiver=True, commit=True):
     """
     Archive un apprenti en BD
