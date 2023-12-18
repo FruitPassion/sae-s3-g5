@@ -21,15 +21,21 @@ function passer_parametre_form(element){
     document.getElementById("form_nom").value = document.getElementById("nom-"+id_element).innerText;
     document.getElementById("form_prenom").value = document.getElementById("prenom-"+id_element).innerText;
     
-    var role = document.getElementById("select_role");
-    document.getElementById("select_role").options[document.getElementById("select_role").selectedIndex] = role;
-
     if (document.getElementById("actif-"+id_element).classList.contains("fa-check")){
         document.getElementById("form_actif").checked = true;
     } else {
         document.getElementById("form_actif").checked = false;
     }
 
+    var ancienRole = document.getElementById("role-" + id_element).innerText;
+    var roles = document.getElementById("select_role");
+
+    for (var i = 0; i < 4; i++) {
+        if (roles.options[i].text === ancienRole) {
+            roles.options[i].selected = true; // Sélection de l'option correspondante
+            break; // Sortie de la boucle une fois l'option trouvée
+        }
+    }   
 }
 
 
@@ -48,18 +54,3 @@ function modifierLigneFormation(element) {
     // Affichez la fenêtre modale de modification
     $('#modalModifierFormation').modal('show');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

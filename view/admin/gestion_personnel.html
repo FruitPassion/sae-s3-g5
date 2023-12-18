@@ -227,7 +227,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier">
-                        <input type="hidden" value="" id="id-element">
+                        <input type="hidden" value="" id="id-element" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
                             {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
@@ -243,7 +243,7 @@
 
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Choisissez un rôle :</h3>
-                            <select id="role" name="select_role" class="fs-1 my-3 form-select" required>
+                            <select id="nouveau_role" name="nouveau_role" class="fs-1 my-3 form-select" required>
                                 <option value="CIP">CIP</option>
                                 <option value="Educateur">Educateur</option>
                                 <option value="Educateur_Administrateur">Educateur Administrateur</option>
@@ -253,18 +253,12 @@
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Mot de passe :</h3>
                             {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
-                            <input name="password" class='form-control fs-1 my-3' type="password" id="password"
-                                    minlength="6" maxlength="6" required/>
-                            <img alt="eye" id="icone_visibilite"
-                                    src="{{ url_for('static', filename='images/hide.png') }}"
-                                    onclick="visibilite()">
                         </div>
                         <div class="w-75 test">
-                            <div class="form-check form-switch form-control my-3">
-                                <label class="form-check-label fs-1" for="form_actif">Utilisateur
-                                    actif</label>
+                            <h3 class="fs-1 my-3">Utilisateur actif :</h3>
+                            <div class="form-check form-switch" for="form_actif">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                       id="form_actif">
+                                    id="form_actif">
                             </div>
                         </div>
 

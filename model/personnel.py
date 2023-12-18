@@ -141,6 +141,26 @@ def add_personnel(login, nom, prenom, email, password, role, commit=True):
         logging.error(e)
 
 
+def update_personnel(identifiant, login, nom, prenom, email, password, role, commit=True):
+    """
+    Modifie un membre du personnel en BD
+
+    :return: None
+    """
+    try:
+        personnel = Personnel.query.filter_by(id_personnel=identifiant).first()
+        personnel.login = login
+        personnel.nom = nom
+        personnel.prenom = prenom
+        personnel.email = email
+        personnel.password = password
+        personnel.role = role
+        db.session.commit()
+    except Exception as e:
+        logging.error("Erreur lors de la modification d'un membre du personnel")
+        logging.error(e)
+
+
 def archiver_personnel(id_personnel: int, archiver=True, commit=True):
     """
     Archive un membre du personnel

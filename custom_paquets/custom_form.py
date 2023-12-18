@@ -1,6 +1,6 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, PasswordField, SubmitField, DateField
+from wtforms import EmailField, HiddenField, StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea, NumberInput
 
@@ -38,6 +38,7 @@ class AjouterPersonnel(FlaskForm):
 
 
 class ModifierPersonnel(FlaskForm):
+    form_identifiant = HiddenField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
     form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})

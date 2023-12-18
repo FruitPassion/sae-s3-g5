@@ -12,7 +12,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import resize_image
 from model.apprenti import get_all_apprenti, add_apprenti
-from model.personnel import get_all_personnel, add_personnel
+from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formation, add_formation
 from model.session import add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti, ModifierPersonnel
@@ -54,7 +54,14 @@ def gestion_personnel():
     form_modifier = ModifierPersonnel()
 
     if form_modifier.validate_on_submit() and request.method == "POST":
-        print("ok form modifier")
+        nouveau_role = request.form.get("nouveau_role")
+        nouveau_role = nouveau_role.replace("_", " ")
+        identifiant = request.form.get("id-element")
+        login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
+        update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data,
+                         form_modifier.form_password.data, nouveau_role)
+        return redirect(url_for("admin.gestion_personnel"))
+
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         password = encrypt_password(request.form.get('password'))
