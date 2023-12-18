@@ -1,6 +1,6 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField
+from wtforms import EmailField, StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea, NumberInput
 
@@ -33,12 +33,14 @@ class AjouterPersonnel(FlaskForm):
     password = PasswordField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput())
     nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
-    email = StringField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
+    email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
     submit = SubmitField("Enregistrer")
 
 
 class ModifierPersonnel(FlaskForm):
-    form_email = StringField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
+    form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
+    form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
+    form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
     form_password = PasswordField()
     submit = SubmitField("Modifier")
 
