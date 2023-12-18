@@ -4,14 +4,15 @@ from model_db.shared_model import db
 def test_archiver_formation(client):
     
     id_formation = 2
+    
     # Récupérer la formation existante
     formation = Formation.query.filter_by(id_formation=id_formation).first()
    
-
+    # Vérifier que la formation existe
     if not formation:
         raise ValueError(f"Aucune formation trouvée avec l'id {id_formation}")
 
-    # Envoi de la requête POST pour archiver la formation
+    # Archiver la formation
     formation.archive = True
 
     # N'oubliez pas de rouler (commit) les modifications dans la base de données 
