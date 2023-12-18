@@ -1,16 +1,10 @@
-import os
-import platform
-
-from PIL import Image
-from unidecode import unidecode
-
 from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
-from custom_paquets.gestion_image import resize_image
+from custom_paquets.gestion_image import stocker_photo_profile
 from model.apprenti import get_all_apprenti, add_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formation, add_formation
@@ -92,6 +86,11 @@ def gestion_apprenti():
         identifiant = request.form.get("id-element")
         password = encrypt_password(form_modifier.form_password.data)
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
+        f = request.files.get("avatar")
+
+        if f:
+            f = request.files.get("avatar")
+            stocker_photo_profile(f)
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password)
         return redirect(url_for("admin.gestion_apprenti"))
     
@@ -99,14 +98,7 @@ def gestion_apprenti():
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         f = request.files.get("avatar")
-        if f:
-            chemin_avatar = "./static/images/photo_profile/" + secure_filename(f.filename)
-            f.save(chemin_avatar)
-            chemin_avatar = "photo_profile/" + secure_filename(f.filename)
-        else:
-            chemin_avatar = "photo_profile/" + "default_profile.png"
-        img = Image.open(f.stream)
-        resize_image(img, "./static/images/" + chemin_avatar)
+        stocker_photo_profile(f)
         id_apprenti = add_apprenti(form_ajouter.nom.data, form_ajouter.prenom.data, login, chemin_avatar)
         add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
         return redirect(url_for("admin.gestion_apprenti"))

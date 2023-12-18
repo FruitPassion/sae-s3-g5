@@ -25,7 +25,7 @@ function passer_parametre_form(element, nom_form){
         document.getElementById("form_actif").checked = false;
     }
 
-    
+
     if (nom_form === "personnel"){
         document.getElementById("form_email").value = document.getElementById("email-"+id_element).innerText;
 
@@ -39,9 +39,12 @@ function passer_parametre_form(element, nom_form){
             }
         }   
     }
+    else if(nom_form === "apprenti"){
+        document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
+    }
     
 }
-
+    
 
 function modifierLigneFormation(element) {
     // Obtenez les données de la ligne de formation
@@ -57,4 +60,23 @@ function modifierLigneFormation(element) {
 
     // Affichez la fenêtre modale de modification
     $('#modalModifierFormation').modal('show');
+}
+
+function enregistrerModifFormation(id_formation) {
+    let nouvelIntitule = document.getElementById('modif_intitule').value;
+    let nouveauNiveauQualif = document.getElementById('modif_niveau_qualif').value;
+    let nouveauGroupe = document.getElementById('modif_groupe').value;
+
+    fetch('/admin/gestion-formation', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id_formation: id_formation, intitule: nouvelIntitule, niveauQualif: nouveauNiveauQualif, groupe: nouveauGroupe})
+    })    
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();
+        }
+    })
 }
