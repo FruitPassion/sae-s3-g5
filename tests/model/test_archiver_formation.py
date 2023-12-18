@@ -1,5 +1,4 @@
-from model_db.formation import Formation
-from model_db.shared_model import db
+from model_db.shared_model import db, Formation
 from model.formation import archiver_formation, add_formation, get_formation_id
 
 # Création d'une formation à archiver

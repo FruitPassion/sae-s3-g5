@@ -1,9 +1,7 @@
 from datetime import datetime
 from custom_paquets.converter import convert_to_dict
 from model.personnel import get_id_personnel_by_login
-from model_db.laissertrace import LaisserTrace
-from model_db.ficheintervention import FicheIntervention
-from model_db.shared_model import db
+from model_db.shared_model import db, LaisserTrace
 
 
 def get_commentaires_par_fiche(id_fiche):

@@ -1,6 +1,4 @@
-from model_db.apprenti import Apprenti
-from model_db.personnel import Personnel
-from model_db.shared_model import db
+from model_db.shared_model import db, Personnel, Apprenti
 from model.personnel import add_personnel
 from model.apprenti import add_apprenti
 from custom_paquets.converter import generate_login
@@ -20,7 +18,8 @@ def test_ajouter_personnel(client):
     assert db.session.query(Personnel).filter(Personnel.login == "LES13").first() is not None
     db.session.rollback()
     assert db.session.query(Personnel).filter(Personnel.login == "LES13").first() is None
-    
+
+
 #Test de l'ajout d'un apprenti
 def test_ajouter_apprenti(client):
     nom="SousFifre"
