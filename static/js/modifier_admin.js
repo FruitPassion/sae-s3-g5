@@ -39,6 +39,9 @@ function passer_parametre_form(element, nom_form){
             }
         }   
     }
+    else if(nom_form === "apprenti"){
+        document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
+    }
     
 }
     

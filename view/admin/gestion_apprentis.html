@@ -50,8 +50,8 @@
                             id="ele-{{ apprenti['id_apprenti'] }}">
                             <td id="login-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["login"] }}</td>
                             <td id="nom-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["nom"] }}</td>
-                            <td  id="prenom-{{ apprenti['id_apprenti'] }}"class="align-middle">{{ apprenti["prenom"] }}</td>
-                            <td><img style="width:80px; border-radius: 60px;"
+                            <td id="prenom-{{ apprenti['id_apprenti'] }}"class="align-middle">{{ apprenti["prenom"] }}</td>
+                            <td id="photo-{{ apprenti['id_apprenti'] }}" value="{{ apprenti['photo'] }}"><img style="width:80px; border-radius: 60px;"
                                      src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
                             <td class="align-middle">
                                 {% if apprenti["essaies"] == 5 %}
@@ -241,7 +241,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data">
                         <input type="hidden" value="" id="id-element" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
@@ -254,6 +254,14 @@
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Mot de passe :</h3>
                             {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
+                        </div>
+
+                        <div class="w-75 test">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="avatar" name="avatar"
+                                       accept="image/png, image/jpeg, image/jpg"/>
+                            </div>
                         </div>
 
                         <div class="w-75 test">
