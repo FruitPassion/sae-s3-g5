@@ -49,6 +49,7 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'JED10'
         assert sess['role'] == 'SuperAdministrateur'
+        
     #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/admin/accueil-admin"
@@ -63,12 +64,12 @@ def test_connexion_deconnexion(client):
 
     # Test connexion educateur admin
     username = "ALL11"
-    passw = "educadmin"
+    passw = "111111"
     response = connexion_personnel_pin(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'ALL11'
         assert sess['role'] == 'Educateur Administrateur'
-        
+         
     #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"
@@ -76,7 +77,7 @@ def test_connexion_deconnexion(client):
 
     # Test connexion educateur
     username = "MAC10"
-    passw = "educ"
+    passw = "101010"
     response = connexion_personnel_pin(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'MAC10'
@@ -88,7 +89,7 @@ def test_connexion_deconnexion(client):
 
     # Test connexion cip
     username = "FAR16"
-    passw = "cip"
+    passw = "161616"
     response = connexion_personnel_mdp(client, username, passw)
     with client.session_transaction() as sess:
         assert sess['name'] == 'FAR16'
