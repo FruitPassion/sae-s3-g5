@@ -40,7 +40,7 @@ def test_connexion_personnel_chargement(client):
 
 def test_connexion_deconnexion(client):
     
-    #message_reussi = b'Connexion reussie'
+    # message_reussi = b'Connexion reussie'
 
     # Test connexion superadministrateur
     username = "JED10"
@@ -68,6 +68,7 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'ALL11'
         assert sess['role'] == 'Educateur Administrateur'
+        
     #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"

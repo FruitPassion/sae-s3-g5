@@ -9,6 +9,7 @@ Test des controller du fichier educateur_admin.py
 login = "ALL11"
 mdp = "111111"
 apprenti = "ANG12"
+id_fiche = 8
 
 # test de la route de direction vers fiches apprenti
 def test_route_fiches_apprenti(client):
@@ -35,10 +36,10 @@ def test_route_ajouter_fiches(client):
 # test de la route de direction vers personnalisation
 def test_route_personnalisation(client):
     connexion_personnel_pin(client, login, mdp)
-    response = client.get(url_for("educ_admin.personnalisation"))
+    response = client.get(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
     
     # Test d'accès à la route
     assert response.status_code == 302
     
     # Test de vérification de la route
-    assert response.request.path == "/educ-admin/personnalisation"
+    assert response.request.path == "/educ-admin/personnalisation/"+str(id_fiche)
