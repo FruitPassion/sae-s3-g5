@@ -69,7 +69,7 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'ALL11'
         assert sess['role'] == 'Educateur Administrateur'
-         
+
     #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"
@@ -90,7 +90,8 @@ def test_connexion_deconnexion(client):
     # Test connexion cip
     username = "FAR16"
     passw = "161616"
-    response = connexion_personnel_mdp(client, username, passw)
+    response = connexion_personnel_pin(client, username, passw)
+    print(response.data)
     with client.session_transaction() as sess:
         assert sess['name'] == 'FAR16'
         assert sess['role'] == 'CIP'
@@ -99,11 +100,10 @@ def test_connexion_deconnexion(client):
     assert response.request.path == "/personnel/choix-formation-personnel"
     deconnexion_personnel(client)
 
-    response = connexion_personnel_pin(client, "12345", passw)
+    response = connexion_personnel_pin(client, "JED10", '123456')
+    print(response.data)
     assert b'Compte inconnu ou mot de passe invalide' in response.data
 
-    response = connexion_personnel_mdp(client, username, f'{passw}x')
-    assert b'Compte inconnu ou mot de passe invalide' in response.data
 
 
 # Test de la route affichant la liste des formations
