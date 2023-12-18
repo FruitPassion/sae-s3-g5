@@ -16,21 +16,24 @@ li {
 }
 
 .haut {
-	width:95%;
+    width: 95%;
     height: 20%;
-	position:absolute;
-	left:24.5px;
-	top:400px;
+    position: absolute;
+    left: 24.5px;
+    top: 400px;
 }
 
 .diagramme {
     background-color: white;
-    width:95%;
-	height:85%;
-	position:absolute;
-	left:24.5px;
-	top:600px;
+    width: 95%;
+    height: 85%;
+    position: absolute;
+    left: 24.5px;
+    top: 600px;
     border-radius: 10px;
+    padding-bottom: 100px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 #suivi_progression_apprenti {
@@ -51,7 +54,7 @@ li {
 
     }
 
-    .diagramme{
+    .diagramme {
         height: 95%;
     }
 
@@ -71,7 +74,11 @@ li {
 
     }
 
-    .diagramme{
+    .diagramme {
         height: 85%;
+        padding-bottom: 100px;
+        padding-left: 30px;
+        padding-right: 30px;
     }
+
 }
