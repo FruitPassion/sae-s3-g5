@@ -4,6 +4,13 @@
     margin: auto;
 }
 
+.legend{
+  display: flex;
+  justify-content: space-around;
+  text-align: justify;
+  margin: 30px;
+}
+
 .box {
     float: left;
     height: 20px;
