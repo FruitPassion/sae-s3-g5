@@ -170,7 +170,8 @@ def copier_fiche(id_fiche: int, login_personnel: str):
                                        nom_intervenant=fiche_a_copier.nom_intervenant,
                                        prenom_intervenant=fiche_a_copier.prenom_intervenant,
                                        id_personnel=get_id_personnel_by_login(login_personnel),
-                                       id_apprenti=get_id_apprenti_by_login(login_apprenti))
+                                       id_apprenti=get_id_apprenti_by_login(login_apprenti),
+                                       id_session=fiche_a_copier.id_session)
     db.session.add(nouvelle_fiche)
     db.session.commit()
     composer_fiche = get_composer_presentation(id_fiche)
@@ -192,7 +193,7 @@ def copier_fiche(id_fiche: int, login_personnel: str):
 
 def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_demande: date, nom_demandeur: str,
                                localisation: str, description_demande: str, degre_urgence: int,
-                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str):
+                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_session : str):
     """
     A partir de la fiche par defaut, la duplique et l'assigne a un eleve
 
@@ -206,8 +207,15 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     :param couleur_intervention: couleur de l'intervention
     :param nom_intervenant: nom de l'intervenant
     :param prenom_intervenant: prenom de l'intervenant
+    :param id_session: id de la session
     :return: Code de validation en fonction du résultat
     """
+    # Si l'apprenti a deja une fiche, on copie les elements de la derniere fiche
+    if get_fiche_apprentis_existe(login_apprenti):
+        composer_fiche = get_composer_presentation(get_dernier_id_fiche_apprenti(login_apprenti))
+    # Sinon on copie les elements de la fiche par defaut
+    else:
+        composer_fiche = get_composer_presentation()
     numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
     nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=nom_demandeur, date_demande=date_demande,
                                        localisation=localisation, description_demande=description_demande,
@@ -216,15 +224,9 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                        photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
                                        prenom_intervenant=prenom_intervenant,
                                        id_personnel=get_id_personnel_by_login(login_personnel),
-                                       id_apprenti=get_id_apprenti_by_login(login_apprenti))
+                                       id_apprenti=get_id_apprenti_by_login(login_apprenti), id_session=id_session)
     db.session.add(nouvelle_fiche)
     db.session.commit()
-    # Si l'apprenti a deja une fiche, on copie les elements de la derniere fiche
-    if get_fiche_apprentis_existe(login_apprenti):
-        composer_fiche = get_composer_presentation(get_dernier_id_fiche_apprenti(login_apprenti))
-    # Sinon on copie les elements de la fiche par defaut
-    else:
-        composer_fiche = get_composer_presentation()
     # On ajoute les elements de la fiche
     for element in composer_fiche:
         element["id_fiche"] = nouvelle_fiche.id_fiche

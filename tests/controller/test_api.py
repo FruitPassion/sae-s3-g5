@@ -104,7 +104,7 @@ def test_archivage_apprenti(client):
     photo="/url/photo.jpg"
     login=generate_login(nom, prenom)
     
-    add_apprenti(nom, prenom, login, photo, commit=False)
+    add_apprenti(nom, prenom, login, photo, commit=True)
     id_apprenti = get_id_apprenti_by_login(login)
     
     # Connexion en tant que superadmin

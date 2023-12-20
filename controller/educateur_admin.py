@@ -3,10 +3,12 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.custom_form import AjouterFiche
 from custom_paquets.decorateur import educadmin_login_required
-from model.apprenti import get_apprenti_by_login
+from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
+from model.formation import get_all_formation
+from model.session import get_sessions_par_apprenti, get_apprentis_by_formation
 from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -16,6 +18,41 @@ Blueprint pour toutes les routes relatives aux URL des pages des educs admin
 
 Préfixe d'URL : /educ-admin/ .
 '''
+
+
+@educ_admin.route("/accueil-educadmin", methods=["GET"])
+@educadmin_login_required
+def accueil_educadmin():
+    """
+    Page vers laquelle est redirigé l'educ admin
+    """
+    return render_template("educ_admin/accueil_educadmin.html")
+
+
+@educ_admin.route("/choix-formation", methods=["GET"])
+@educadmin_login_required
+def choix_formation():
+    """
+    Page du choix de formation par le personnel.
+    Choix de la formation pour ensuite accéder à l'ensemble des apprentis suivant cette formation.
+
+    :return: rendu de la page choix_formation.html
+    """
+    formations = get_all_formation()
+    return render_template("educ_admin/choix_formation.html", formations=formations), 200
+
+
+@educ_admin.route("/choix-eleve/<nom_formation>", methods=["GET"])
+@educadmin_login_required
+def choix_eleve(nom_formation):
+    """
+    Page d'affichage des apprentis d'une formation sélectionnée.
+    Permet d'accéder aux fiches techniques des apprentis.
+
+    :return: rendu de la page choix_apprentis.html
+    """
+    apprentis = get_apprentis_by_formation(nom_formation)
+    return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis), 200
 
 
 @educ_admin.route("/<apprenti>/fiches", methods=["GET"])
@@ -57,14 +94,17 @@ def ajouter_fiche(apprenti):
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
     form = AjouterFiche()
+    sessions = get_sessions_par_apprenti(get_id_apprenti_by_login(apprenti))
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
+        id_session = request.form.get('coursinput')
         id_fiche = assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
                                               form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1,
-                                              degres, form.nomintervenant.data, form.prenomintervenant.data)
+                                              degres, form.nomintervenant.data, form.prenomintervenant.data, id_session)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
-    return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti), 200
+    return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti,
+                           sessions=sessions), 200
 
 
 @educ_admin.route("/personnalisation/<id_fiche>", methods=["GET", "POST"])

@@ -62,7 +62,8 @@ def update_formation(identifiant, intitule, niveau_qualif, groupe, image, commit
         formation.intitule = intitule
         formation.niveau_qualif = niveau_qualif
         formation.image = image
-        db.session.commit()
+        if commit:
+            db.session.commit()
     except Exception as e:
         logging.error("Erreur lors de la modification de l'apprenti")
         logging.error(e)
@@ -94,7 +95,7 @@ def get_sessions_par_formation(id_formation):
     return Session.query.filter_by(id_formation=id_formation).all()
 
 
-def remove_formation(id_formation):
+def remove_formation(id_formation, commit=True):
     """
     Supprime une formation en BD
 
@@ -104,13 +105,16 @@ def remove_formation(id_formation):
     try:
         for apprenti in get_apprenti_by_formation(id_formation):
             remove_apprenti(apprenti.id_apprenti)
-        db.session.commit()
+        if commit:
+            db.session.commit()
         for session in get_sessions_par_formation(id_formation):
             print(session)
             db.session.delete(session)
-        db.session.commit()
-        Formation.query.filter_by(id_formation=id_formation).delete()
-        db.session.commit()
+        if commit:
+            db.session.commit()
+        db.session.delete(Formation.query.filter_by(id_formation=id_formation).first())
+        if commit:
+            db.session.commit()
         return True
     except Exception as e:
         logging.error("Erreur lors de la suppression d'une formation")

@@ -16,8 +16,6 @@ personnel = Personnel(nom=nom_personnel, prenom=prenom_personnel, login=login_pe
 # Création d'un apprenti à modifier
 nom_apprenti="SousFifre"
 prenom_apprenti="Malheureux"
-#mdp à modifier mais ca marche
-password=encrypt_password("121212")
 photo="/url/photo.jpg"
 login_apprenti=generate_login(nom_apprenti, prenom_apprenti)
 apprenti = Apprenti(nom=nom_apprenti, prenom=prenom_apprenti, login=login_apprenti, photo=photo)

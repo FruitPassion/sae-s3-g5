@@ -41,5 +41,10 @@
         Pas encore de commentaire de l'apprenti
     {% endif %}
 
-    {% include "_partial/_retour_bouton.html" %}
+
+    <div style="height: 200px"> </div>
+
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}
