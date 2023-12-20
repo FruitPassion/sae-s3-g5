@@ -273,6 +273,45 @@
     </div>
 
 
+    <div class="modal fade" id="modal-modifier-super-admin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier le super administrateur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier">
+                        <input type="hidden" value="" id="id-element" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Nom :</h3>
+                            {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Prénom :</h3>
+                            {{ form_modifier.form_prenom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Email :</h3>
+                            {{ form_modifier.form_email(class="form-control fs-1 my-3") }}
+                        </div>
+
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Mot de passe :</h3>
+                            {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    {{ form_modifier.submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>

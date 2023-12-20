@@ -27,18 +27,22 @@ function passer_parametre_form(element, nom_form){
 
 
     if (nom_form === "personnel"){
-        document.getElementById("form_email").value = document.getElementById("email-"+id_element).innerText;
 
+        
+        document.getElementById("form_email").value = document.getElementById("email-"+id_element).innerText;
+        
+        let roles = document.getElementById("nouveau_role");
         var ancienRole = document.getElementById("role-" + id_element).innerText;
-        var roles = document.getElementById("select_role");
-    
-        for (var i = 0; i < 4; i++) {
-            if (roles.options[i].text === ancienRole) {
-                roles.options[i].selected = true; // Sélection de l'option correspondante
+        ancienRole = ancienRole.replace(" ", "_");
+
+        for (var i = 0; i < roles.length ; i++) {
+            if (roles.options[i].value === ancienRole) {
+                roles[i].setAttribute("selected", "selected");
                 break; // Sortie de la boucle une fois l'option trouvée
             }
-        }   
+        }
     }
+
     else if(nom_form === "apprenti"){
         document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
     }

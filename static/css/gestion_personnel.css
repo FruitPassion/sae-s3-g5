@@ -12,6 +12,10 @@
     margin: auto;
 }
 
+.form-check-input {
+    transform: scale(2.5);
+}
+
 .grid-container > div {
     background-color: #666;
     text-align: center;
