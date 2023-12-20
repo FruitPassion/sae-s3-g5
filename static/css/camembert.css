@@ -4,6 +4,12 @@
     margin: auto;
 }
 
+canvas#camembert{
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+
 .legend{
   display: flex;
   justify-content: space-around;
