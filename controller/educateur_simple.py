@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for
 
+from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
 from model.apprenti import get_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiches_par_id_fiche
@@ -27,6 +28,7 @@ def fiches_apprenti(apprenti):
 
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
+    fiches = changer_date(fiches)
     return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
 
 

@@ -1,6 +1,7 @@
 {% extends 'common/base.html' %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
 {% endblock %}
 
@@ -13,16 +14,22 @@
 
     <div id="blocFiches">
         {% for fiche in fiches %}
-            <div class="parent">
-                <a href="{{url_for('educ_simple.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche['id_fiche'])}}">
-                    <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
-                        alt="fiche">
-                    <img id="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
-                </a>
+            <div class="d-block">
+                <div class="parent">
+                    <a class="bg-modifier"
+                       href="{{ url_for('educ_simple.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche['id_fiche']) }}">
+                        <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                             alt="fiche">
+                        <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                    </a>
+                </div>
+                <p class="text-center fs-1">Fiche n°{{ fiche["numero"] }}</p>
+                <p class="text-center fs-3">{{ fiche["date_creation"] }}</p>
             </div>
         {% endfor %}
     </div>
 
-    <!-- Bouton de retour -->
-    {% include "_partial/_retour_bouton.html" %}
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
 {% endblock %}

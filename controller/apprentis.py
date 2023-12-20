@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, session
+
+from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from model.apprenti import get_apprenti_by_login
 from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login
@@ -24,8 +26,7 @@ def redirection_connexion():
     """
     apprenti_infos = get_apprenti_by_login(session["name"])
     fiches = get_fiches_techniques_par_login(session['name'])
-    for fiche in fiches:
-        fiche["date_creation"] = fiche["date_creation"].strftime("%d/%m/%Y")
+    fiches = changer_date(fiches)
     return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos)
 
 

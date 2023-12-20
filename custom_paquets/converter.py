@@ -15,3 +15,9 @@ def generate_login(nom, prenom):
     login = unidecode(prenom[0:2].upper().strip()) + unidecode(nom[0].upper().strip()) + str(
         len(nom.strip() + prenom.strip())).zfill(2)
     return login
+
+
+def changer_date(fiches):
+    for fiche in fiches:
+        fiche["date_creation"] = fiche["date_creation"].strftime("%d/%m/%Y")
+    return fiches
