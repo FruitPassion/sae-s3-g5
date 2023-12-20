@@ -59,3 +59,10 @@ class AjouterFormation(FlaskForm):
     niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
     groupe = StringField(validators=[InputRequired()], render_kw={"placeholder": "1"})
     submit = SubmitField("Ajouter")
+    
+class ModifierFormation(FlaskForm):
+    form_identifiant = HiddenField()
+    form_intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours electricité"})
+    form_niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
+    form_groupe = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
+    form_submit = SubmitField("Modifier")

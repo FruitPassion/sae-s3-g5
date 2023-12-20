@@ -52,10 +52,9 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img style="width:180px; height:100px;"
                                      src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th class="align-middle" data-bs-toggle="modal"
-                            data-bs-target="#modal-modifier">
-                                <button onclick="modifierLigneFormation(this)"><i class="fa fa-pencil-square-o"
-                                                                         aria-hidden="true"></i></button>
+                            <th onclick="passer_parametre_form(this, 'apprenti')" class="align-middle" data-bs-toggle="modal"
+                                data-bs-target="#modal-modifier">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
                             <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
@@ -179,29 +178,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formModifierFormation" enctype="multipart/form-data">
-                        <input type="hidden" id="formationId" name="formationId" value="">
-                        <div class="mb-3">
-                            <label for="modif_intitule">Intitulé :</label>
-                            <input type="text" class="form-control" id="modif_intitule" name="intitule" required>
+                    <form method="post" id="fcontainer-modifier" enctype="multipart/form-data">
+                        <input type="hidden" id="id-element" name="id-element" value="">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Intitulé :</h3>
+                            {{ form_modifier.form_intitule(class="form-control fs-1 my-3") }}
                         </div>
-                        <div class="mb-3">
-                            <label for="modif_niveau_qualif">Niveau qualification :</label>
-                            <input type="text" class="form-control" id="modif_niveau_qualif" name="niveau_qualif" required>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Niveau qualification :</h3>
+                            {{ form_modifier.form_niveau_qualif(class="form-control fs-1 my-3") }}
                         </div>
-                        <div class="mb-3">
-                            <label for="modif_groupe">Groupe :</label>
-                            <input type="text" class="form-control" id="modif_groupe" name="groupe" required>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Groupe :</h3>
+                            {{ form_modifier.form_groupe(class="form-control fs-1 my-3") }}
                         </div>
-                        <div class="mb-3">
-                            <label for="modif_image">Image :</label>
-                            <input type="file" class="form-control" id="modif_image" name="image" accept="image/png, image/jpeg, image/jpg">
+                        <div class="w-75 test">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="image" name="image"
+                                       accept="image/png, image/jpeg, image/jpg"/>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary flex-grow-1 fs-3">Modifier</button>
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    {{ form_modifier.form_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
                 </div>
             </div>
         </div>

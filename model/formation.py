@@ -36,6 +36,8 @@ def get_nom_formation(id_formation):
     """
     return Formation.query.with_entities(Formation.intitule).filter_by(id_formation=id_formation).first().intitule
 
+def get_image_formation(id_formation):
+    return Formation.query.filter_by(id_formation=id_formation).with_entities(Formation.image).first().image
 
 def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
     """
@@ -49,6 +51,21 @@ def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
         db.session.commit()
     return formation.id_formation
 
+def update_formation(identifiant, intitule, niveau_qualif, groupe, image, commit=True):
+    """
+    Modifie une formation en BD
+
+    :return: None
+    """
+    try:
+        formation = Formation.query.filter_by(id_apprenti=identifiant).first()
+        formation.intitule = intitule
+        formation.niveau_qualif = niveau_qualif
+        formation.image = image
+        db.session.commit()
+    except Exception as e:
+        logging.error("Erreur lors de la modification de l'apprenti")
+        logging.error(e)
 
 def archiver_formation(id_formation, archiver=True, commit=True):
     """

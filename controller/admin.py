@@ -7,11 +7,11 @@ from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import stocker_photo_profile
 from model.apprenti import get_all_apprenti, add_apprenti, get_photo_profil_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
-from model.formation import get_all_formation, add_formation
+from model.formation import get_all_formation, add_formation, update_formation, get_image_formation
 from model.session import add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel
 from custom_paquets.custom_form import AjouterPersonnel
-from custom_paquets.custom_form import AjouterFormation
+from custom_paquets.custom_form import AjouterFormation, ModifierFormation
 from werkzeug.utils import secure_filename
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
@@ -116,6 +116,7 @@ def gestion_formation():
     formation = get_all_formation()
     liste_formation_archivee = get_all_formation(archive=True)
     form = AjouterFormation()
+    form_modifier = ModifierFormation()
     if form.validate_on_submit() and request.method == "POST":
         f = request.files.get("image")
         if f:
@@ -127,5 +128,15 @@ def gestion_formation():
         add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
 
+    elif form_modifier.validate_on_submit() and request.method == "POST":
+        identifiant = request.form.get("id-element")
+        
+        photo_courante = get_image_formation(identifiant)[14:]
+        if photo_courante != request.form.get("image"):
+            f = request.files.get("image")
+            chemin_image = stocker_photo_profile(f)
+        update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data, form_modifier.form_groupe.data, chemin_image)
+        return redirect(url_for("admin.gestion_formation"))
+    
     return render_template("admin/gestion_formations.html", liste_formation=formation, form=form,
-                           liste_formation_archivee=liste_formation_archivee)
+                           form_modifier = form_modifier, liste_formation_archivee=liste_formation_archivee)
