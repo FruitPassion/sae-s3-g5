@@ -14,6 +14,16 @@
         <form class="fs-2" method="post" name="ajouter">
             {{ form.hidden_tag() }}
             <div class="mb-3">
+                <label for="coursinput" class="form-label">Theme - Cours de la fiche :</label>
+                <select class="form-select form-select-lg fs-3 form-control mb-3" aria-label=".form-select-lg"
+                        name="coursinput">
+                    {% for session in sessions %}
+                        <option class="fs-3" value="{{ session['id_session'] }}">{{ session['theme'] }}
+                            - {{ session['cours'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="nominput" class="form-label">Nom du client :</label>
                 {{ form.nominput(class="form-control fs-3") }}
             </div>
@@ -65,7 +75,7 @@
             {{ form.submit(class="btn btn-primary form-control fs-3") }}
         </form>
     </div>
-
+    <div style="height: 200px"> </div>
 
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('educ_admin.fiches_apprenti', apprenti=apprenti) }}">{% include "_partial/_retour_bouton.html" %}</a>

@@ -1,0 +1,59 @@
+.form-card {
+    height: 283px;
+    width: 80%;
+    border: black 1px solid;
+    border-radius: 30px;
+}
+
+.container {
+    overflow: hidden;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.lien-formation {
+    font-size: 3.5em;
+    margin-bottom: 200px;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    text-shadow: 1px 0 10px black;
+}
+
+.formation-txt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 45px;
+}
+
+.img-formation {
+    width: 100%;
+    height: 285px;
+    object-fit: cover;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+@media screen and (max-width: 801px) {
+    .img_cover {
+        padding-top: 30px;
+        width: 700px;
+        height: 283px;
+        opacity: 0.6;
+    }
+
+    .img-formation {
+        padding-top: 30px;
+        position: absolute;
+        width: 700px;
+        height: 283px;
+        filter: blur(3px);
+    }
+
+}

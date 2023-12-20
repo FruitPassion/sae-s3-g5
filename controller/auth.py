@@ -68,6 +68,8 @@ def connexion_personnel_pin():
                 flash("Connexion réussie.")
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"))
+                elif session["role"] == "Educateur Administrateur":
+                    return redirect(url_for('educ_admin.accueil_educadmin'))
                 else:
                     return redirect(url_for("personnel.choix_formation"))
     return render_template("auth/connexion_personnel_pin.html", personnels=personnels)
@@ -105,6 +107,8 @@ def connexion_personnel_mdp():
                 flash("Connexion réussie.")
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"))
+                elif session["role"] == "Educateur Administrateur":
+                    return redirect(url_for('educ_admin.accueil_educadmin'))
                 else:
                     return redirect(url_for("personnel.choix_formation"))
     return render_template("auth/connexion_personnel_code.html", form=form), code

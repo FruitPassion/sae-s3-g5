@@ -30,6 +30,16 @@ def get_apprentis_by_formation(nom_formation: str, archive=False):
         abort(404)
 
 
+def get_sessions_par_apprenti(id_apprenti):
+    """
+    Retourne la liste de toutes les sessions auxquelles un apprenti est inscrit
+
+    :return: Une liste de sessions
+    """
+    return convert_to_dict(Session.query.with_entities(Session.theme, Session.cours, Session.id_session).join(Assister).filter_by(
+        id_apprenti=id_apprenti).all())
+
+
 def add_apprenti_assister(id_apprenti, id_formation):
     """
     Associe un apprenti à une session en BD
