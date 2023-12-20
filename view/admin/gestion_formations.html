@@ -48,8 +48,8 @@
                     {% for formation in liste_formation %}
                         <tr class="text-center" id="ele-{{ formation["id_formation"] }}">
                             <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["intitule"] }}</td>
-                            <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["niveau_qualif"] }}</td>
-                            <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["groupe"] }}</td>
+                            <td id="niveau_qualif-{{ formation['id_formation'] }}" class="align-middle">{{formation["niveau_qualif"] }}</td>
+                            <td id="groupe-{{ formation['id_formation'] }}" class="align-middle">{{formation["groupe"] }}</td>
                             <td id="image-{{ formation['id_formation'] }}" value="{{ formation['image'] }}"><img style="width:180px; height:100px;"
                                         src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
                             <th onclick="passer_parametre_form(this, 'formation')" class="align-middle" data-bs-toggle="modal"
@@ -158,7 +158,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="archiver-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir archiver la formation ?</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver la formation ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
@@ -178,7 +178,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="fcontainer-modifier" enctype="multipart/form-data">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data">
                         <input type="hidden" id="id-element" name="id-element" value="">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Intitulé :</h3>
@@ -213,17 +213,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-1" id="modal-title">Desarchiver la formation</h5>
+                    <h5 class="modal-title fs-1" id="modal-title">Désarchiver la formation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="desarchiver-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir désarchiver la formation ?</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver la formation ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
-                            onclick="desarchiver_formation()">Desarchiver</button>
+                            onclick="desarchiver_formation()">Désarchiver</button>
                 </div>
             </div>
         </div>
@@ -238,8 +238,8 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="supprimer-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûres de vouloir supprimer la formation ? Cette action
-                        est irréversible et entrainera la suppression des élèments associés à l'id de cette formation.</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer la formation ? Cette action
+                        est irréversible et entraînera la suppression des élèments associés à l'id de cette formation.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
