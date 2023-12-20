@@ -105,11 +105,14 @@ class FicheIntervention(db.Model):
     prenom_intervenant = db.Column(db.String(50), nullable=False)
     id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
     id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
+    id_session = db.Column(db.ForeignKey('db_fiches_dev.Session.id_session'), nullable=False, index=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
                                backref='fiches')
     Personnel = db.relationship('Personnel', primaryjoin='FicheIntervention.id_personnel == Personnel.id_personnel',
                                 backref='fiches')
+    Session = db.relationship('Session', primaryjoin='FicheIntervention.id_session == Session.id_session',
+                              backref='fiches')
 
 
 class Formation(db.Model):

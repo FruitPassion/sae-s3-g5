@@ -3,7 +3,7 @@ import logging
 from custom_paquets.converter import convert_to_dict
 from model.apprenti import remove_apprenti, get_apprenti_by_formation
 
-from model_db.shared_model import db, Formation, Session
+from model.shared_model import db, Formation, Session
 
 
 def get_all_formation(archive=False):

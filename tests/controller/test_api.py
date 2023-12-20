@@ -3,8 +3,8 @@ from custom_paquets.converter import generate_login
 from custom_paquets.tester_usages import connexion_personnel_mdp
 from model.formation import add_formation, get_formation_id
 from model.personnel import get_id_personnel_by_login
-from model_db.shared_model import db, Apprenti
-from model.apprenti import add_apprenti, get_apprenti_by_login, get_id_apprenti_by_login, update_nbr_essaies_connexion
+from model.shared_model import Apprenti
+from model.apprenti import add_apprenti, get_id_apprenti_by_login, update_nbr_essaies_connexion
 
 '''
 Test des controller du fichier api.py

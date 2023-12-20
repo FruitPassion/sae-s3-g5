@@ -1,4 +1,4 @@
-from model_db.shared_model import FicheIntervention, db, Apprenti
+from model.shared_model import FicheIntervention, db, Apprenti
 from model.apprenti import add_apprenti, remove_apprenti
 from custom_paquets.converter import generate_login
 

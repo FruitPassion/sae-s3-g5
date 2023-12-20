@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
 {% endblock %}
 
-
 {% block body %}
     <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
 
@@ -24,12 +23,22 @@
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">
+                        {% if fiche['etat_fiche'] == 0 %}
                     <a class="modifier" href="{{ url_for('educ_admin.modifier_fiche', id_fiche=fiche["id_fiche"]) }}">
                         <i class="fa fa-pencil-square" aria-hidden="true"></i></a>
-                    <a href="" class="bg-modifier">
+                            {% else %}
+                            <a class="modifier"></a>
+                        {% endif %}
+                    <a href="{{url_for('educ_admin.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche['id_fiche'])}}" class="bg-modifier">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
-                        <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                        {% if fiche['etat_fiche'] == 1 %}
+                            <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                        {% elif fiche['etat_fiche'] == 2 %}
+                            <img class="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
+                        {% else %}
+                            <img class="check" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
+                        {% endif %}
                     </a>
                 </div>
                 <p class="text-center fs-1">Fiche n°{{ fiche["numero"] }}</p>

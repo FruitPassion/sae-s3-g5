@@ -6,7 +6,7 @@ from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login, get_login_apprenti_by_id
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
-from model_db.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti
+from model.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti
 
 
 def get_fiches_techniques_par_login(login):
@@ -121,7 +121,7 @@ def get_fiche_apprentis_existe(login: str):
 
     :return: Boolean, vrai si il en a faux sinon
     """
-    return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login)).count != 0
+    return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login)).count() != 0
 
 
 def get_dernier_numero_fiche_apprenti(login: str):
@@ -139,6 +139,7 @@ def get_dernier_id_fiche_apprenti(login: str):
     :param login: login de l'apprenti
     :return: id de la fiche
     """
+
     if get_fiche_apprentis_existe(login):
         return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login)).with_entities(
             FicheIntervention.id_fiche).order_by(FicheIntervention.id_fiche.desc()).first().id_fiche
@@ -207,7 +208,6 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     :param prenom_intervenant: prenom de l'intervenant
     :return: Code de validation en fonction du résultat
     """
-    dernier_fiche_id = get_dernier_id_fiche_apprenti(login_apprenti)
     numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
     nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=nom_demandeur, date_demande=date_demande,
                                        localisation=localisation, description_demande=description_demande,
@@ -221,7 +221,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     db.session.commit()
     # Si l'apprenti a deja une fiche, on copie les elements de la derniere fiche
     if get_fiche_apprentis_existe(login_apprenti):
-        composer_fiche = get_composer_presentation(dernier_fiche_id)
+        composer_fiche = get_composer_presentation(get_dernier_id_fiche_apprenti(login_apprenti))
     # Sinon on copie les elements de la fiche par defaut
     else:
         composer_fiche = get_composer_presentation()

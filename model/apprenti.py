@@ -1,10 +1,9 @@
 import logging
-from hmac import compare_digest
 
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.security import compare_passwords
 
-from model_db.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
+from model.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
     FicheIntervention, Session
 
 

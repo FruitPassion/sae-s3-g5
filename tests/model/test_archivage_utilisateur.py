@@ -1,6 +1,6 @@
 from model.personnel import get_id_personnel_by_login, add_personnel, archiver_personnel
 from model.apprenti import add_apprenti, archiver_apprenti
-from model_db.shared_model import db, Apprenti, Personnel
+from model.shared_model import db, Apprenti, Personnel
 from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 

@@ -5,8 +5,9 @@ from custom_paquets.custom_form import AjouterFiche
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login
 from model.composer import modifier_composition
-from model.ficheintervention import get_fiches_techniques_finies_par_login, assigner_fiche_dummy_eleve, \
-    get_fiches_par_id_fiche, get_proprietaire_fiche_par_id_fiche, copier_fiche
+from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
+    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
+from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
@@ -28,7 +29,7 @@ def fiches_apprenti(apprenti):
     :return: rendu de la page choix_fiches_apprenti.html
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
-    fiches = get_fiches_techniques_finies_par_login(apprenti)
+    fiches = get_fiches_techniques_par_login(apprenti)
     return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
 
 
@@ -59,8 +60,8 @@ def ajouter_fiche(apprenti):
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
         id_fiche = assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
-                                   form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1, degres,
-                                   form.nomintervenant.data, form.prenomintervenant.data)
+                                              form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1,
+                                              degres, form.nomintervenant.data, form.prenomintervenant.data)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
     return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti), 200
@@ -85,3 +86,17 @@ def personnalisation(id_fiche):
         return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)))
     return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_police,
                            composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
+
+
+@educ_admin.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
+@educadmin_login_required
+def visualiser_commentaires(apprenti, fiche):
+    """
+    Page d'affichage des commentaires de la fiche d'identifiant fiche de l'apprenti au login apprenti
+
+    :return: les commentaires de la fiche de l'élève sélectionnée.
+    """
+
+    commentaires = get_commentaires_par_fiche(fiche)
+    return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
+                           commentaires=commentaires), 200
