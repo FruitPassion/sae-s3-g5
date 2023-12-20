@@ -19,43 +19,45 @@ function passer_parametre_form(element, nom_form){
     hidden_value.value = id_element;
     document.getElementById("form_nom").value = document.getElementById("nom-"+id_element).innerText;
     document.getElementById("form_prenom").value = document.getElementById("prenom-"+id_element).innerText;
-    document.getElementById("form_intitule").value = document.getElementById("intitule-"+id_element).innerText;
-    document.getElementById("form_niveau_qualif").value = document.getElementById("niveau_qualif-"+id_element).innerText;
-    document.getElementById("form_groupe").value = document.getElementById("groupe-"+id_element).innerText;
+    
     if (document.getElementById("actif-"+id_element).classList.contains("fa-check")){
         document.getElementById("form_actif").checked = true;
     } else {
         document.getElementById("form_actif").checked = false;
     }
 
-    if (nom_form === "personnel"){
-        document.getElementById("form_email").value = document.getElementById("email-"+id_element).innerText;
+    switch(nom_form){
+        case "personnel":
+            document.getElementById("email_personnel").value = document.getElementById("email-"+id_element).innerText;
         
-        let roles = document.getElementById("nouveau_role");
-        let ancienRole = document.getElementById("role-" + id_element).innerText;
-        
-        ancienRole = ancienRole.replace(" ", "_");
+            let roles = document.getElementById("nouveau_role");
+            let ancienRole = document.getElementById("role-" + id_element).innerText;
+            
+            ancienRole = ancienRole.replace(" ", "_");
 
-        for (let i = 0; i < roles.length ; i++) {
-            if (roles.options[i].value === ancienRole) {
-                roles[i].setAttribute("selected", "selected");
-                break; // Sortie de la boucle une fois l'option trouvée
+            for (let i = 0; i < roles.length ; i++) {
+                if (roles.options[i].value === ancienRole) {
+                    roles[i].setAttribute("selected", "selected");
+                    break; // Sortie de la boucle une fois l'option trouvée
+                }
             }
-        }
-    }
+            break;
 
-    else if(nom_form === "apprenti"){
-        document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
-    }
+        case "apprenti":
+            document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
+            break;
 
-    else if (nom_form === "admin"){
-        document.getElementById("mail_admin").value = document.getElementById("email-"+id_element).innerText;
-        document.getElementById("nom_admin").value = document.getElementById("nom-"+id_element).innerText;
-        document.getElementById("prenom_admin").value = document.getElementById("prenom-"+id_element).innerText;
-        
+        case "admin":
+            document.getElementById("mail_admin").value = document.getElementById("email-"+id_element).innerText;
+            document.getElementById("nom_admin").value = document.getElementById("nom-"+id_element).innerText;
+            document.getElementById("prenom_admin").value = document.getElementById("prenom-"+id_element).innerText;
+            break;
+        case "formation":
+            document.getElementById("form_intitule").value = document.getElementById("intitule-"+id_element).innerText;
+            document.getElementById("form_niveau_qualif").value = document.getElementById("niveau_qualif-"+id_element).innerText;
+            document.getElementById("form_groupe").value = document.getElementById("groupe-"+id_element).innerText;
+            document.getElementById("image").value = document.getElementById("image-"+id_element).innerText;
+            break;
     }
-    
-    else if (nom_form == "formation"){
-        document.getElementById("image").value = document.getElementById("image-"+id_element).innerText;
-    }
+     
 }

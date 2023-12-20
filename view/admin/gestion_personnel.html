@@ -248,7 +248,7 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Email :</h3>
-                            {{ form_modifier.form_email(class="form-control fs-1 my-3") }}
+                            {{ form_modifier.form_email(class="form-control fs-1 my-3", id="email_personnel") }}
                         </div>
 
                         <div class="w-75 test">
@@ -262,7 +262,7 @@
 
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Mot de passe :</h3>
-                            {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
+                            {{ form_modifier.form_password(pattern = "[0-9]{6}", class = "form-control fs-1 my-3") }}
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Utilisateur actif :</h3>

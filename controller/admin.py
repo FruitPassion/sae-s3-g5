@@ -53,10 +53,28 @@ def gestion_personnel():
         nouveau_role = request.form.get("nouveau_role")
         nouveau_role = nouveau_role.replace("_", " ")
         identifiant = request.form.get("id-element")
-        password = encrypt_password(form_modifier.form_password)
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
+        if form_modifier.form_password :
+            print(request.form.get('form_password'))
+            new_password = encrypt_password(request.form.get('form_password'))
+            update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data,
+                         new_password, nouveau_role)
+        
         update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data,
-                         password, nouveau_role)
+                         form_modifier.form_password, nouveau_role)
+        return redirect(url_for("admin.gestion_personnel"))
+
+    elif form_modifier_admin.validate_on_submit() and request.method == "POST":
+        role = "SuperAdministrateur"
+        identifiant = request.form.get("id-element")
+        login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
+        if form_modifier_admin.form_password :
+            new_password = encrypt_password(request.form.get('form_password'))
+            update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
+                         new_password, role)
+        
+        update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
+                         form_modifier_admin.form_password, role)
         return redirect(url_for("admin.gestion_personnel"))
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":
