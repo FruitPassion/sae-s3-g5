@@ -237,7 +237,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier">
-                        <input type="hidden" value="" id="id-element" name="id-element">
+                        <input type="hidden" value="" id="id-element-personnel" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
                             {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
@@ -266,17 +266,17 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Utilisateur actif :</h3>
-                            <div class="form-check form-switch" for="form_actif">
+                            <div class="form-check form-switch" >
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                    id="form_actif">
+                                    id="form_actif" name="form_actif">
                             </div>
                         </div>
 
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                <div class="modal-footer d-flex">
                     {{ form_modifier.submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control" data-bs-dismiss="modal">Annuler</button>
                 </div>
             </div>
         </div>
@@ -292,7 +292,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier-admin">
-                        <input type="hidden" value="" id="id-element" name="id-element">
+                        <input type="hidden" value="" id="id-element-admin" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
                             {{ form_modifier_admin.form_nom(class="form-control fs-1 my-3", id= "nom_admin") }}
@@ -312,9 +312,9 @@
 
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                <div class="modal-footer d-flex">
                     {{ form_modifier_admin.submit(form="container-modifier-admin", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control" data-bs-dismiss="modal">Annuler</button>
                 </div>
             </div>
         </div>

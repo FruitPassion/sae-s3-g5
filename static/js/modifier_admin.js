@@ -15,7 +15,7 @@ function visibilite() {
 
 function passer_parametre_form(element, nom_form){
     let id_element = element.parentElement.id.replace('ele-','');
-    let hidden_value = document.getElementById("id-element");
+    let hidden_value = document.getElementById("id-element-"+nom_form);
     hidden_value.value = id_element;
     document.getElementById("form_nom").value = document.getElementById("nom-"+id_element).innerText;
     document.getElementById("form_prenom").value = document.getElementById("prenom-"+id_element).innerText;

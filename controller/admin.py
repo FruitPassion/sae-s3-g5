@@ -49,34 +49,33 @@ def gestion_personnel():
     form_modifier = ModifierPersonnel()
     form_modifier_admin = ModifierAdmin()
 
-    if form_modifier_admin.validate_on_submit() and request.method == "POST":
+    if form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin' in request.form.values():
         role = "SuperAdministrateur"
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
-        if form_modifier_admin.form_password.data :
+        if form_modifier_admin.form_password.data:
             new_password = encrypt_password(form_modifier_admin.form_password.data)
-            update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
-                         role, new_password)
         else:
-            update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
-                            role)
+            new_password = None
+        update_personnel(identifiant, login, form_modifier_admin.form_nom.data,
+                         form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
+                         role, new_password)
         return redirect(url_for("admin.gestion_personnel"))
 
-
-    elif form_modifier.validate_on_submit() and request.method == "POST":
-        nouveau_role = request.form.get("nouveau_role")
-        nouveau_role = nouveau_role.replace("_", " ")
+    elif form_modifier.validate_on_submit() and request.method == "POST" and 'Modifier' in request.form.values():
+        nouveau_role = request.form.get("nouveau_role").replace("_", " ")
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
 
         if form_modifier.form_password.data:
             new_password = encrypt_password(form_modifier.form_password.data)
-            update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data, nouveau_role, new_password)
         else:
-            update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data, nouveau_role)
+            new_password = None
+        actif = request.form.get("form_actif") == "on"
+        update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data,
+                         form_modifier.form_email.data, nouveau_role, actif=actif, password=new_password)
         return redirect(url_for("admin.gestion_personnel"))
-    
-        
+
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         password = encrypt_password(request.form.get('password'))
@@ -84,8 +83,9 @@ def gestion_personnel():
         add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
         return redirect(url_for("admin.gestion_personnel"))
 
-    return render_template("admin/gestion_personnel.html", liste_personnel = personnel, form_ajouter = form_ajouter,
-                           form_modifier = form_modifier, form_modifier_admin = form_modifier_admin, couleurs = couleurs, liste_personnel_archive=liste_personnel_archive)
+    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form_ajouter=form_ajouter,
+                           form_modifier=form_modifier, form_modifier_admin=form_modifier_admin, couleurs=couleurs,
+                           liste_personnel_archive=liste_personnel_archive)
 
 
 @admin.route("/gestion-apprenti", methods=["GET", "POST"])
@@ -105,15 +105,16 @@ def gestion_apprenti():
         identifiant = request.form.get("id-element")
         password = encrypt_password(form_modifier.form_password.data)
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
-        
-        photo_courante = get_photo_profil_apprenti(identifiant)[14:]
-        if photo_courante != request.form.get("avatar"):
+
+        chemin_avatar = get_photo_profil_apprenti(identifiant)[14:]
+        if chemin_avatar != request.form.get("avatar"):
             f = request.files.get("avatar")
             chemin_avatar = stocker_photo_profile(f)
-        update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password, chemin_avatar)
+        update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password,
+                        chemin_avatar)
         return redirect(url_for("admin.gestion_apprenti"))
-    
-    
+
+
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         f = request.files.get("avatar")
@@ -123,7 +124,8 @@ def gestion_apprenti():
         return redirect(url_for("admin.gestion_apprenti"))
 
     return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form_ajouter=form_ajouter,
-                           form_modifier = form_modifier, formations=formations, liste_apprenti_archivee=liste_apprenti_archivee)
+                           form_modifier=form_modifier, formations=formations,
+                           liste_apprenti_archivee=liste_apprenti_archivee)
 
 
 @admin.route("/gestion-formation", methods=["GET", "POST", "DELETE"])
@@ -153,8 +155,9 @@ def gestion_formation():
         if image_courante != request.form.get("image"):
             f = request.files.get("image")
             chemin_image = stocker_image_formation(f)
-        update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data, form_modifier.form_groupe.data, chemin_image)
+        update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data,
+                         form_modifier.form_groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
-    
+
     return render_template("admin/gestion_formations.html", liste_formation=formation, form=form,
-                           form_modifier = form_modifier, liste_formation_archivee=liste_formation_archivee)
+                           form_modifier=form_modifier, liste_formation_archivee=liste_formation_archivee)
