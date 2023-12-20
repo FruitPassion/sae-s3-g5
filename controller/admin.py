@@ -47,6 +47,7 @@ def gestion_personnel():
     liste_personnel_archive = get_all_personnel(archive=True)
     form_ajouter = AjouterPersonnel()
     form_modifier = ModifierPersonnel()
+    form_modifier_admin = ModifierPersonnel()
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         nouveau_role = request.form.get("nouveau_role")
@@ -65,8 +66,8 @@ def gestion_personnel():
         add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
         return redirect(url_for("admin.gestion_personnel"))
 
-    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form_ajouter=form_ajouter,
-                           form_modifier=form_modifier, couleurs=couleurs, liste_personnel_archive=liste_personnel_archive)
+    return render_template("admin/gestion_personnel.html", liste_personnel = personnel, form_ajouter = form_ajouter,
+                           form_modifier = form_modifier, form_modifier_admin = form_modifier_admin, couleurs = couleurs, liste_personnel_archive=liste_personnel_archive)
 
 
 @admin.route("/gestion-apprenti", methods=["GET", "POST"])

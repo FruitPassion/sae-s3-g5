@@ -62,13 +62,23 @@
                                     <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th onclick="passer_parametre_form(this, 'personnel')" class="align-middle" data-bs-toggle="modal"
-                                data-bs-target="#modal-modifier">
-                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                            </th>
+                            {% if personnel["role"] != "SuperAdministrateur" %}
+                                <th onclick="passer_parametre_form(this, 'personnel')" class="align-middle" data-bs-toggle="modal"
+                                    data-bs-target="#modal-modifier">
+                                    <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                </th>
+                            {% else %}
+                                <th onclick="passer_parametre_form(this, 'admin')" class="align-middle" data-bs-toggle="modal"
+                                    data-bs-target="#modal-modifier-super-admin">
+                                    <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                </th>
+                            {% endif %}
+                            
                             <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
-                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                                {% if personnel["role"] != "SuperAdministrateur" %}
+                                    <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                                {% endif %}
                             </th>
                         </tr>
                     {% endfor %}
@@ -281,31 +291,30 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier">
+                    <form method="post" id="container-modifier-admin">
                         <input type="hidden" value="" id="id-element" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
-                            {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
+                            {{ form_modifier_admin.form_nom(class="form-control fs-1 my-3", id= "nom_admin") }}
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Prénom :</h3>
-                            {{ form_modifier.form_prenom(class="form-control fs-1 my-3") }}
+                            {{ form_modifier_admin.form_prenom(class="form-control fs-1 my-3", id= "prenom_admin") }}
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Email :</h3>
-                            {{ form_modifier.form_email(class="form-control fs-1 my-3") }}
+                            {{ form_modifier_admin.form_email(class="form-control fs-1 my-3", id= "mail_admin") }}
                         </div>
-
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Mot de passe :</h3>
-                            {{ form_modifier.form_password(class="form-control fs-1 my-3") }}
+                            {{ form_modifier_admin.form_password(class="form-control fs-1 my-3") }}
                         </div>
 
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
-                    {{ form_modifier.submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    {{ form_modifier.submit(form="container-modifier-admin", class="btn btn-primary fs-3 form-control text-center") }}
                 </div>
             </div>
         </div>

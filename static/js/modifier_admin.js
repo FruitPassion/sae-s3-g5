@@ -25,17 +25,15 @@ function passer_parametre_form(element, nom_form){
         document.getElementById("form_actif").checked = false;
     }
 
-
     if (nom_form === "personnel"){
-
-        
         document.getElementById("form_email").value = document.getElementById("email-"+id_element).innerText;
         
         let roles = document.getElementById("nouveau_role");
-        var ancienRole = document.getElementById("role-" + id_element).innerText;
+        let ancienRole = document.getElementById("role-" + id_element).innerText;
+        
         ancienRole = ancienRole.replace(" ", "_");
 
-        for (var i = 0; i < roles.length ; i++) {
+        for (let i = 0; i < roles.length ; i++) {
             if (roles.options[i].value === ancienRole) {
                 roles[i].setAttribute("selected", "selected");
                 break; // Sortie de la boucle une fois l'option trouvée
@@ -45,6 +43,13 @@ function passer_parametre_form(element, nom_form){
 
     else if(nom_form === "apprenti"){
         document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
+    }
+
+    else if (nom_form === "admin"){
+        document.getElementById("mail_admin").value = document.getElementById("email-"+id_element).innerText;
+        document.getElementById("nom_admin").value = document.getElementById("nom-"+id_element).innerText;
+        document.getElementById("prenom_admin").value = document.getElementById("prenom-"+id_element).innerText;
+        
     }
     
 }
