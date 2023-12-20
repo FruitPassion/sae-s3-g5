@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify
 
 from custom_paquets.decorateur import admin_login_required
 from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_apprenti, archiver_apprenti, \
-    remove_apprenti
+    remove_apprenti, archiver_apprentis_formation
 from model.formation import archiver_formation, remove_formation
 from model.personnel import archiver_personnel
 
@@ -35,7 +35,16 @@ def api_archiver_formation(id_formation, commit=True):
     """
     Archiver une formation à partir de son id
     """
-    return {"valide": archiver_formation(id_formation, commit=commit)}
+    return {"valide": archiver_formation(id_formation, commit=commit), "retirer": True}
+
+
+@api.route("/archiver-apprentis-formation/<id_formation>", methods=["GET", "POST"])
+@admin_login_required
+def api_archiver_apprentis_formation(id_formation, commit=True):
+    """
+    Archiver tous les apprentis d'une formation à partir de son id
+    """
+    return {"valide": archiver_apprentis_formation(id_formation, commit=commit), "retirer": False}
 
 
 @api.route("/desarchiver-formation/<id_formation>", methods=["GET", "POST"])
@@ -62,7 +71,7 @@ def api_archiver_apprenti(id_apprenti):
     """
     Archiver un apprenti à partir de son id
     """
-    return {"valide": archiver_apprenti(id_apprenti)}
+    return {"valide": archiver_apprenti(id_apprenti), "retirer": True}
 
 
 @api.route("/desarchiver-apprenti/<id_apprenti>", methods=["GET", "POST"])
@@ -89,7 +98,7 @@ def api_archiver_personnel(id_personnel):
     """
     Archiver un personnel à partir de son id
     """
-    return {"valide": archiver_personnel(id_personnel)}
+    return {"valide": archiver_personnel(id_personnel), "retirer": True}
 
 
 @api.route("/desarchiver-personnel/<id_personnel>", methods=["GET", "POST"])

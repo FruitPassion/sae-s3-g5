@@ -45,7 +45,7 @@ def get_login_apprenti_by_id(id_apprenti: str):
 
 def check_apprenti(login: str):
     """
-    À partir d'un login, verifie si un compte existe
+    À partir d'un login, verifie si un compte apprenti existe
 
     :return: Un booleen vrai si le compte existe
     """
@@ -73,15 +73,15 @@ def get_nbr_essaie_connexion_apprenti(login: str):
     À partir d'un login, recupère le nombre d'essayer de connexion d'un apprenti
 
     :param login: LOGIN (ABC12) d'un apprenti
-    :return: UN nombre allant de 0 à 5
+    :return: Un nombre allant de 0 à 5.
     """
     return Apprenti.query.filter_by(login=login).first().essaies
 
 
-def update_nbr_essaies_connexion(login: str, nombre_essais = 0):
+def update_nbr_essaies_connexion(login: str, nombre_essais=0):
     """
-    Augmente le nombre d'essaies de connexion d'un apprenti de 1
-    Limité à 5
+    Augmente le nombre d'essais de connexion d'un apprenti de 1
+    Limité à cinq essais.
 
     :return: Booleen en fonction de la réussite de l'opération
     """
@@ -142,12 +142,36 @@ def update_apprenti(identifiant, login, nom, prenom, password, photo, commit=Tru
         logging.error("Erreur lors de la modification de l'apprenti")
         logging.error(e)
 
+
+def archiver_apprentis_formation(id_formation, archiver=True, commit=True):
+    """
+    Archive tous les apprentis d'une formation en BD
+
+    :param id_formation: id de la formation
+    :param archiver: True pour archiver, False pour désarchiver
+    :param commit: True pour commit, False pour ne pas commit
+    :return: None
+    """
+    try:
+        apprentis = Apprenti.query.join(Assister).join(Session).filter_by(id_formation=id_formation).all()
+        for apprenti in apprentis:
+            apprenti.archive = archiver
+        if commit:
+            db.session.commit()
+        return True
+    except Exception as e:
+        logging.error("Erreur lors de l'archivage des apprentis d'une formation")
+        logging.error(e)
+        return False
+
+
 def archiver_apprenti(id_apprenti, archiver=True, commit=True):
     """
     Archive un apprenti en BD
 
     :param id_apprenti: id de l'apprenti à archiver
     :param archiver: True pour archiver, False pour désarchiver
+    :param commit: True pour commit, False pour ne pas commit
     :return: None
     """
     try:
@@ -167,6 +191,7 @@ def remove_apprenti(id_apprenti, commit=True):
     Supprime un apprenti en BD
 
     :param id_apprenti: id de l'apprenti à supprimer
+    :param commit: True pour commit, False pour ne pas commit
     :return: None
     """
     try:

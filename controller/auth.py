@@ -41,12 +41,23 @@ def choix_connexion():
 @auth.route("/choix-type-connexion")
 @logout_required
 def choix_type_connexion():
+    """
+    Page permettant de choisir le type de connexion que l'on souhaite effectuer.
+
+    :return: Rendu de la page choix_type_connexion.html
+    """
     return render_template("auth/choix_type_connexion.html")
 
 
 @auth.route("/connexion-personnel-pin", methods=["GET", "POST"])
 @logout_required
 def connexion_personnel_pin():
+    """
+    Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
+    aura accès à un panneau de possibilités différentes.
+
+    :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
+    """
     personnels = get_liste_personnel_non_super()
     if request.method == "POST":
         passwd = request.form["code"]
@@ -82,7 +93,7 @@ def connexion_personnel_mdp():
     Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
     aura accès à un panneau de possibilités différentes.
 
-    :return: en fonction du rôle de la personne, on est redirigé vers la page correspondante.
+    :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """
     form = LoginPersonnelForm()
     code = 200

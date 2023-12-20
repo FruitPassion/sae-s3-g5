@@ -36,8 +36,10 @@ def get_nom_formation(id_formation):
     """
     return Formation.query.with_entities(Formation.intitule).filter_by(id_formation=id_formation).first().intitule
 
+
 def get_image_formation(id_formation):
     return Formation.query.filter_by(id_formation=id_formation).with_entities(Formation.image).first().image
+
 
 def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
     """
@@ -50,6 +52,7 @@ def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
     if commit:
         db.session.commit()
     return formation.id_formation
+
 
 def update_formation(identifiant, intitule, niveau_qualif, groupe, image, commit=True):
     """
@@ -68,6 +71,7 @@ def update_formation(identifiant, intitule, niveau_qualif, groupe, image, commit
     except Exception as e:
         logging.error("Erreur lors de la modification de l'apprenti")
         logging.error(e)
+
 
 def archiver_formation(id_formation, archiver=True, commit=True):
     """

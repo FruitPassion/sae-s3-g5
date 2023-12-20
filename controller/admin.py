@@ -59,7 +59,7 @@ def gestion_personnel():
             new_password = None
         update_personnel(identifiant, login, form_modifier_admin.form_nom.data,
                          form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
-                         role, new_password)
+                         role, password=new_password)
         return redirect(url_for("admin.gestion_personnel"))
 
     elif form_modifier.validate_on_submit() and request.method == "POST" and 'Modifier' in request.form.values():
@@ -113,8 +113,6 @@ def gestion_apprenti():
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password,
                         chemin_avatar)
         return redirect(url_for("admin.gestion_apprenti"))
-
-
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         f = request.files.get("avatar")

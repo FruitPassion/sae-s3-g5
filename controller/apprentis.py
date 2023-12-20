@@ -22,7 +22,7 @@ def redirection_connexion():
     Page de redirection des apprentis une fois qu'ils sont authentifiés.
     Ils accèdent à la liste de leurs fiches techniques.
 
-    :return: rendu de la page accueil_apprentis.html
+    :return: Rendu de la page accueil_apprentis.html
     """
     apprenti_infos = get_apprenti_by_login(session["name"])
     fiches = get_fiches_techniques_par_login(session['name'])

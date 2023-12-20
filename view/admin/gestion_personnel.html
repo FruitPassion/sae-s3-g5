@@ -236,7 +236,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier">
+                    <form method="post" id="container-modifier" autocomplete="off">
                         <input type="hidden" value="" id="id-element-personnel" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
@@ -262,7 +262,7 @@
 
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Mot de passe :</h3>
-                            {{ form_modifier.form_password(pattern = "[0-9]{6}", class = "form-control fs-1 my-3") }}
+                            {{ form_modifier.form_password(pattern = "[0-9]{6}", class = "form-control fs-1 my-3", autocomplete="new-password") }}
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Utilisateur actif :</h3>
@@ -291,7 +291,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier-admin">
+                    <form method="post" id="container-modifier-admin" autocomplete="off">
                         <input type="hidden" value="" id="id-element-admin" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
@@ -307,7 +307,7 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Mot de passe :</h3>
-                            {{ form_modifier_admin.form_password(class="form-control fs-1 my-3") }}
+                            {{ form_modifier_admin.form_password(class="form-control fs-1 my-3", autocomplete="new-password") }}
                         </div>
 
                     </form>

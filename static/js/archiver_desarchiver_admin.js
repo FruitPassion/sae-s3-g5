@@ -2,6 +2,11 @@ function validation_archivage(element){
     document.getElementById("archiver-value").value = element.parentElement.id.replace('ele-','');
 }
 
+function validation_archivage_apprentis(element){
+    document.getElementById("archiver-apprentis-value").value = element.parentElement.id.replace('ele-','');
+}
+
+
 function archiver_apprenti(){
     archiver("apprenti");
 }
@@ -11,22 +16,26 @@ function archiver_formation(){
     archiver("formation");
 }
 
+function archiver_apprentis_formation(){
+    archiver("apprentis-formation", "archiver-apprentis-value");
+}
 
 function archiver_personnel(){
     archiver("personnel");
 }
 
-function archiver(route){
-    let id_element = document.getElementById("archiver-value").value;
+function archiver(route, elementid="archiver-value"){
+    let id_element = document.getElementById(elementid).value;
     let row = document.getElementById("ele-" + id_element);
 
     afficher_snack("Archivage en cours...", "info");
-
     $.getJSON("/api/archiver-"+route+"/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
             afficher_snack("Archivage réussi !", "success");
-            row.parentElement.removeChild(row);
-            document.getElementById("recharger-2").removeAttribute("hidden");
+            if (data["retirer"]){
+                row.parentElement.removeChild(row);
+                document.getElementById("recharger-2").removeAttribute("hidden");
+            }
         } else {
             afficher_snack("Archivage échoué.", "error");
         }

@@ -61,7 +61,8 @@
                                 data-bs-target="#modal-archiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle">
+                            <th class="align-middle" onclick="validation_archivage_apprentis(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-archiver-apprentis">
                                 <button><i class="fa fa-refresh" aria-hidden="true"></i></button>
                             </th>                            
                         </tr>
@@ -130,7 +131,7 @@
                             <td class="align-middle">{{ formation["intitule"] }}</td>
                             <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
                             <td class="align-middle">{{ formation["groupe"] }}</td>
-                            <td><img style="width:180px; height:100px;"
+                            <td><img alt="img formation" style="width:180px; height:100px;"
                                      src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
                             <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
@@ -182,7 +183,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier" enctype="multipart/form-data">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
                         <input type="hidden" id="id-element" name="id-element" value="">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Intitulé :</h3>
@@ -249,6 +250,27 @@
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
                             onclick="supprimer_formation()">Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-archiver-apprentis" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver apprentis de la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-apprentis-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver tous les apprentis de cette formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="archiver_apprentis_formation()">Archiver
                     </button>
                 </div>
             </div>
