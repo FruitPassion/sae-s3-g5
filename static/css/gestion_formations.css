@@ -28,9 +28,3 @@
 .modal{
     --bs-modal-width: 75%;
 }
-
-.modal-footer {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-}

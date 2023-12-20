@@ -47,12 +47,12 @@
                     <tbody>
                     {% for formation in liste_formation %}
                         <tr class="text-center" id="ele-{{ formation["id_formation"] }}">
-                            <td class="align-middle">{{ formation["intitule"] }}</td>
-                            <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
-                            <td class="align-middle">{{ formation["groupe"] }}</td>
-                            <td><img style="width:180px; height:100px;"
-                                     src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th onclick="passer_parametre_form(this, 'apprenti')" class="align-middle" data-bs-toggle="modal"
+                            <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["intitule"] }}</td>
+                            <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["niveau_qualif"] }}</td>
+                            <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["groupe"] }}</td>
+                            <td id="image-{{ formation['id_formation'] }}" value="{{ formation['image'] }}"><img style="width:180px; height:100px;"
+                                        src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
+                            <th onclick="passer_parametre_form(this, 'formation')" class="align-middle" data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
                                 <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>

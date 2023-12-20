@@ -28,3 +28,14 @@ def stocker_photo_profile(file):
     img = Image.open(file.stream)
     resize_image(img, "./static/images/" + chemin_avatar)
     return chemin_avatar
+
+def stocker_image_formation(file):
+    if file:
+        chemin_image = "./static/images/formation_image/" + secure_filename(file.filename)
+        file.save(chemin_image)
+        chemin_image = "formation_image/" + secure_filename(file.filename)
+    else:
+        chemin_image = "formation_image/" + "default_formation.png"
+    img = Image.open(file.stream)
+    resize_image(img, "./static/images/" + chemin_image)
+    return chemin_image

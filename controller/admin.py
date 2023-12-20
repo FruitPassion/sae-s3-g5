@@ -5,6 +5,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import stocker_photo_profile
+from custom_paquets.gestion_image import stocker_image_formation
 from model.apprenti import get_all_apprenti, add_apprenti, get_photo_profil_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formation, add_formation, update_formation, get_image_formation
@@ -130,11 +131,10 @@ def gestion_formation():
 
     elif form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        
-        photo_courante = get_image_formation(identifiant)[14:]
-        if photo_courante != request.form.get("image"):
+        image_courante = get_image_formation(identifiant)[14:]
+        if image_courante != request.form.get("image"):
             f = request.files.get("image")
-            chemin_image = stocker_photo_profile(f)
+            chemin_image = stocker_image_formation(f)
         update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data, form_modifier.form_groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
     
