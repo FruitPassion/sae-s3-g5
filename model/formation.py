@@ -58,7 +58,7 @@ def update_formation(identifiant, intitule, niveau_qualif, groupe, image, commit
     :return: None
     """
     try:
-        formation = Formation.query.filter_by(id_apprenti=identifiant).first()
+        formation = Formation.query.filter_by(id_formation=identifiant).first()
         formation.intitule = intitule
         formation.niveau_qualif = niveau_qualif
         formation.groupe = groupe
