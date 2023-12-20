@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 
+from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
 from model.trace import get_commentaires_par_fiche
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
@@ -39,6 +40,7 @@ def fiches_apprenti(apprenti):
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
+    fiches = changer_date(fiches)
     return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos, fiches=fiches)
 
 
