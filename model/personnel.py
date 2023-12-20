@@ -140,7 +140,7 @@ def add_personnel(login, nom, prenom, email, password, role, commit=True):
         logging.error(e)
 
 
-def update_personnel(identifiant, login, nom, prenom, email, password, role, commit=True):
+def update_personnel(identifiant, login, nom, prenom, email, role, password = None, commit=True):
     """
     Modifie un membre du personnel en BD
 
@@ -148,14 +148,21 @@ def update_personnel(identifiant, login, nom, prenom, email, password, role, com
     """
     try:
         personnel = Personnel.query.filter_by(id_personnel=identifiant).first()
+  
         personnel.login = login
         personnel.nom = nom
         personnel.prenom = prenom
         personnel.email = email
-        personnel.mdp = password
         personnel.role = role
-        if commit:
-            db.session.commit()
+        if password is not None:
+            personnel.mdp = password
+            if commit:
+                db.session.commit()
+        else:
+            personnel.mdp = personnel.mdp
+            if commit:
+                db.session.commit()
+        
     except Exception as e:
         logging.error("Erreur lors de la modification d'un membre du personnel")
         logging.error(e)

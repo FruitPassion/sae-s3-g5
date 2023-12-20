@@ -10,7 +10,7 @@ from model.apprenti import get_all_apprenti, add_apprenti, get_photo_profil_appr
 from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formation, add_formation, update_formation, get_image_formation
 from model.session import add_apprenti_assister
-from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel
+from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel, ModifierAdmin
 from custom_paquets.custom_form import AjouterPersonnel
 from custom_paquets.custom_form import AjouterFormation, ModifierFormation
 from werkzeug.utils import secure_filename
@@ -47,36 +47,36 @@ def gestion_personnel():
     liste_personnel_archive = get_all_personnel(archive=True)
     form_ajouter = AjouterPersonnel()
     form_modifier = ModifierPersonnel()
-    form_modifier_admin = ModifierPersonnel()
+    form_modifier_admin = ModifierAdmin()
 
-    if form_modifier.validate_on_submit() and request.method == "POST":
+    if form_modifier_admin.validate_on_submit() and request.method == "POST":
+        role = "SuperAdministrateur"
+        identifiant = request.form.get("id-element")
+        login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
+        if form_modifier_admin.form_password.data :
+            new_password = encrypt_password(form_modifier_admin.form_password.data)
+            update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
+                         role, new_password)
+        else:
+            update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
+                            role)
+        return redirect(url_for("admin.gestion_personnel"))
+
+
+    elif form_modifier.validate_on_submit() and request.method == "POST":
         nouveau_role = request.form.get("nouveau_role")
         nouveau_role = nouveau_role.replace("_", " ")
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
-        if form_modifier.form_password :
-            print(request.form.get('form_password'))
-            new_password = encrypt_password(request.form.get('form_password'))
-            update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data,
-                         new_password, nouveau_role)
-        
-        update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data,
-                         form_modifier.form_password, nouveau_role)
-        return redirect(url_for("admin.gestion_personnel"))
 
-    elif form_modifier_admin.validate_on_submit() and request.method == "POST":
-        role = "SuperAdministrateur"
-        identifiant = request.form.get("id-element")
-        login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
-        if form_modifier_admin.form_password :
-            new_password = encrypt_password(request.form.get('form_password'))
-            update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
-                         new_password, role)
-        
-        update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
-                         form_modifier_admin.form_password, role)
+        if form_modifier.form_password.data:
+            new_password = encrypt_password(form_modifier.form_password.data)
+            update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data, nouveau_role, new_password)
+        else:
+            update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data, nouveau_role)
         return redirect(url_for("admin.gestion_personnel"))
-
+    
+        
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         password = encrypt_password(request.form.get('password'))

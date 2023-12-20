@@ -54,6 +54,15 @@ class ModifierPersonnel(FlaskForm):
     submit = SubmitField("Modifier")
 
 
+class ModifierAdmin(FlaskForm):
+    form_identifiant = HiddenField()
+    form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
+    form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
+    form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
+    form_password = PasswordField()
+    submit = SubmitField("Modifier Admin")
+
+
 class AjouterFormation(FlaskForm):
     intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours plomberie"})
     niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
