@@ -13,6 +13,9 @@
     <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
 
     <div id="blocFiches">
+        {% if fiches|length == 0 %}
+            <p class="text-center fs-1 my-5">Aucune fiche technique n'a été créée pour cet apprenti.</p>
+        {% endif %}
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">

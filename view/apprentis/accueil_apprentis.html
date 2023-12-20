@@ -11,6 +11,9 @@
 
 
     <div id="blocFiches">
+        {% if fiches|length == 0 %}
+            <p class="text-center fs-1 my-5">Aucune fiche pour l'instant. {% include "_partial/_tts.html" %}</p>
+        {% endif %}
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">
@@ -31,9 +34,11 @@
             </div>
         {% endfor %}
     </div>
-    <div id="suivi_progression">
-        <a href="{{ url_for('apprenti.suivi_progression') }}">
-            <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
-            Suivi de progression {% include "_partial/_tts.html" %}</a>
-    </div>
+    {% if fiches|length != 0 %}
+        <div id="suivi_progression">
+            <a href="{{ url_for('apprenti.suivi_progression') }}">
+                <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
+                Suivi de progression {% include "_partial/_tts.html" %}</a>
+        </div>
+    {% endif %}
 {% endblock %}
