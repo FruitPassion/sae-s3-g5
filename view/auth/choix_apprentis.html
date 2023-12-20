@@ -9,7 +9,10 @@
 {% block body %}
     <h1>Choisissez votre profil {% include "_partial/_tts.html" %}</h1>
 
-    <div id="liste_appprentis" >
+    <div id="liste_appprentis">
+        {% if apprentis|length == 0 %}
+            <p>Aucun apprenti n'est inscrit à cette formation {% include "_partial/_tts.html" %}</p>
+        {% endif %}
         {% for apprenti in apprentis %}
             <div class="apprenti">
                 <a href="{{ url_for('auth.connexion_apprentis', nom_formation=nom_formation, login_apprenti=apprenti['login']) }}">

@@ -140,9 +140,8 @@ def gestion_formation():
     if form.validate_on_submit() and request.method == "POST":
         f = request.files.get("image")
         if f:
-            chemin_image = "./static/images/formation_image/" + secure_filename(f.filename)
-            f.save(chemin_image)
-            chemin_image = "formation_image/" + secure_filename(f.filename)
+            f = request.files.get("image")
+            chemin_image = stocker_image_formation(f)
         else:
             chemin_image = "formation_image/" + "defaut_formation.jpg"
         add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
