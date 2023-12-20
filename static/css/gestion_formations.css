@@ -28,3 +28,7 @@
 .modal{
     --bs-modal-width: 75%;
 }
+
+.align-middle{
+    vertical-align: middle;
+}

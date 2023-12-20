@@ -19,6 +19,9 @@ function passer_parametre_form(element, nom_form){
     hidden_value.value = id_element;
     document.getElementById("form_nom").value = document.getElementById("nom-"+id_element).innerText;
     document.getElementById("form_prenom").value = document.getElementById("prenom-"+id_element).innerText;
+    document.getElementById("form_intitule").value = document.getElementById("intitule-"+id_element).innerText;
+    document.getElementById("form_niveau_qualif").value = document.getElementById("niveau_qualif-"+id_element).innerText;
+    document.getElementById("form_groupe").value = document.getElementById("groupe-"+id_element).innerText;
     if (document.getElementById("actif-"+id_element).classList.contains("fa-check")){
         document.getElementById("form_actif").checked = true;
     } else {
@@ -52,4 +55,7 @@ function passer_parametre_form(element, nom_form){
         
     }
     
+    else if (nom_form == "formation"){
+        document.getElementById("image").value = document.getElementById("image-"+id_element).innerText;
+    }
 }
