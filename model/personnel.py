@@ -152,9 +152,10 @@ def update_personnel(identifiant, login, nom, prenom, email, password, role, com
         personnel.nom = nom
         personnel.prenom = prenom
         personnel.email = email
-        personnel.password = password
+        personnel.mdp = password
         personnel.role = role
-        db.session.commit()
+        if commit:
+            db.session.commit()
     except Exception as e:
         logging.error("Erreur lors de la modification d'un membre du personnel")
         logging.error(e)

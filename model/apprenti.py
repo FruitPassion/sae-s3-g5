@@ -136,7 +136,8 @@ def update_apprenti(identifiant, login, nom, prenom, password, photo, commit=Tru
         apprenti.prenom = prenom
         apprenti.mdp = password
         apprenti.photo = photo
-        db.session.commit()
+        if commit:
+            db.session.commit()
     except Exception as e:
         logging.error("Erreur lors de la modification de l'apprenti")
         logging.error(e)

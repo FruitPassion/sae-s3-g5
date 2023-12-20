@@ -72,7 +72,7 @@ def test_connexion_deconnexion(client):
 
     #assert message_reussi in response.data
     assert response.status_code == 200
-    assert response.request.path == "/personnel/choix-formation-personnel"
+    assert response.request.path == "/educ-admin/accueil-educadmin"
     deconnexion_personnel(client)
 
     # Test connexion educateur
