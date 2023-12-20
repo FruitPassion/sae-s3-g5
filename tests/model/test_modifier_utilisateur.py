@@ -1,4 +1,4 @@
-from model_db.shared_model import db, Personnel, Apprenti
+from model.shared_model import db, Personnel, Apprenti
 from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 from model.personnel import add_personnel, update_personnel, get_id_personnel_by_login

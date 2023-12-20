@@ -1,4 +1,4 @@
-from model_db.shared_model import db, Personnel, Apprenti
+from model.shared_model import db, Personnel, Apprenti
 from model.personnel import add_personnel
 from model.apprenti import add_apprenti
 from custom_paquets.converter import generate_login

@@ -1,4 +1,4 @@
-from model_db.shared_model import db, Assister
+from model.shared_model import Assister
 
 
 def get_apprenti_by_id_session(id_session):

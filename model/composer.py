@@ -1,6 +1,6 @@
 from custom_paquets.converter import convert_to_dict
 from model.pictogramme import get_pictogramme_by_url
-from model_db.shared_model import db, ComposerPresentation as Compo, ElementBase as Elem
+from model.shared_model import db, ComposerPresentation as Compo, ElementBase as Elem
 
 
 def get_composer_presentation(id_fiche=1):

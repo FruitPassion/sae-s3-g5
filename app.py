@@ -19,7 +19,7 @@ from pygit2 import Repository
 from custom_paquets.gestions_erreur import logging_erreur, ConfigurationError, GitBranchError
 
 # odel de la base de données
-from model_db.shared_model import db
+from model.shared_model import db
 
 # Controller
 from controller.cip import cip

@@ -1,6 +1,6 @@
 from flask import abort
 
-from model_db.shared_model import db, Session, Apprenti, Assister
+from model.shared_model import db, Session, Apprenti, Assister
 from custom_paquets.converter import convert_to_dict
 from model.formation import get_formation_id, get_sessions_par_formation
 

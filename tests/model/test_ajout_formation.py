@@ -1,4 +1,4 @@
-from model_db.shared_model import db, Formation
+from model.shared_model import db, Formation
 from model.formation import add_formation
 
 def test_ajouter_formation(client):
