@@ -51,7 +51,7 @@ def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
     db.session.add(formation)
     if commit:
         db.session.commit()
-    return formation.id_formation
+    return get_formation_id(intitule)
 
 
 def update_formation(identifiant, intitule, niveau_qualif, groupe, image, commit=True):

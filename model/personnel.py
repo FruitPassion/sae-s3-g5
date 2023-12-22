@@ -135,6 +135,7 @@ def add_personnel(login, nom, prenom, email, password, role, commit=True):
         db.session.add(personnel)
         if commit:
             db.session.commit()
+        return get_id_personnel_by_login(login)
     except Exception as e:
         logging.error("Erreur lors de l'ajout d'un membre du personnel")
         logging.error(e)
