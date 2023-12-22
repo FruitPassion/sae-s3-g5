@@ -5,6 +5,7 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+# Configuration du logger
 logging.basicConfig(level=logging.ERROR,
                     filename='app.log',
                     filemode='a',
@@ -13,6 +14,9 @@ logging.basicConfig(level=logging.ERROR,
 
 
 class DevConfig:
+    """
+    Configuration de l'application en mode développement
+    """
     SECRET_KEY = "3@$=)+Nj{HlH8E&u-43}K.~)C3JTSCL5L9a63_iH#UN6V4nd9d"
     ENVIRONMENT = "development"
     FLASK_APP = "FichesDev"
@@ -30,6 +34,9 @@ class DevConfig:
 
 
 class ProdConfig:
+    """
+    Configuration de l'application en mode production
+    """
     SECRET_KEY = os.urandom(32)
     ENVIRONMENT = "production"
     FLASK_APP = "FichesProd"

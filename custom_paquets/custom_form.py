@@ -6,7 +6,11 @@ from wtforms.widgets import TextArea, NumberInput
 
 VALIDATE = "validateForm()"
 
+
 class LoginPersonnelForm(FlaskForm):
+    """
+    Formulaire de connexion pour le personnel
+    """
     login = StringField(validators=[InputRequired(), Length(min=5, max=5)], render_kw={"placeholder": "ABC12"})
 
     password = PasswordField(validators=[InputRequired(), Length(min=2)], render_kw={"placeholder": "*********"})
@@ -15,6 +19,9 @@ class LoginPersonnelForm(FlaskForm):
 
 
 class AjouterFiche(FlaskForm):
+    """
+    Formulaire d'ajout de fiche
+    """
     nominput = StringField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
     dateinput = DateField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
     lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
@@ -25,12 +32,18 @@ class AjouterFiche(FlaskForm):
 
 
 class AjouterApprenti(FlaskForm):
+    """
+    Formulaire d'ajout d'apprenti
+    """
     nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Dupont"})
     prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Jean"})
     submit = SubmitField("Enregistrer")
 
 
 class ModifierApprenti(FlaskForm):
+    """
+    Formulaire de modification d'apprenti
+    """
     form_identifiant = HiddenField()
     form_password = PasswordField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Dupont"})
@@ -39,6 +52,9 @@ class ModifierApprenti(FlaskForm):
 
 
 class AjouterPersonnel(FlaskForm):
+    """
+    Formulaire d'ajout de personnel
+    """
     password = PasswordField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput())
     nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
@@ -47,6 +63,9 @@ class AjouterPersonnel(FlaskForm):
 
 
 class ModifierPersonnel(FlaskForm):
+    """
+    Formulaire de modification de personnel
+    """
     form_identifiant = HiddenField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
@@ -56,6 +75,9 @@ class ModifierPersonnel(FlaskForm):
 
 
 class ModifierAdmin(FlaskForm):
+    """
+    Formulaire de modification de l'admin admin
+    """
     form_identifiant = HiddenField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
@@ -65,12 +87,19 @@ class ModifierAdmin(FlaskForm):
 
 
 class AjouterFormation(FlaskForm):
+    """
+    Formulaire d'ajout de formation
+    """
     intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours plomberie"})
     niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
     groupe = StringField(validators=[InputRequired()], render_kw={"placeholder": "1"})
     submit = SubmitField("Ajouter")
-    
+
+
 class ModifierFormation(FlaskForm):
+    """
+    Formulaire de modification de formation
+    """
     form_identifiant = HiddenField()
     form_intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours electricité"})
     form_niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
