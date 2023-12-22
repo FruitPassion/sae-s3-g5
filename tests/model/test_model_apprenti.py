@@ -29,24 +29,16 @@ def test_modifier_apprenti(client):
     # Création d'un apprenti à modifier
     apprenti = ApprentiTest()
 
-    # Modification des chmaps de l'apprenti
-    new_nom = "Du Maître"
-    new_prenom = "Toutou"
-    new_login = generate_login(new_nom, new_prenom)
-    new_photo = "/url/photo2.jpg"
-    password = encrypt_password("121212")
-
     # Modification de l'apprenti
     apprenti2 = ApprentiTestModif(apprenti.id_apprenti)
 
     # Vérification que l'apprenti soit bien modifé
     apprenti_modif: Apprenti = db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti2.id_apprenti).first()
     assert apprenti_modif is not None
-    assert apprenti_modif.nom == new_nom
-    assert apprenti_modif.prenom == new_prenom
-    assert apprenti_modif.login == new_login
-    assert apprenti_modif.photo == new_photo
-    assert apprenti_modif.photo == new_photo
+    assert apprenti_modif.nom == apprenti2.nom
+    assert apprenti_modif.prenom == apprenti2.prenom
+    assert apprenti_modif.login == apprenti2.login
+    assert apprenti_modif.photo == apprenti2.photo
 
     db.session.rollback()
 

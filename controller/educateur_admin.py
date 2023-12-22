@@ -104,7 +104,7 @@ def ajouter_fiche(apprenti):
                                               form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1,
                                               degres, form.nomintervenant.data, form.prenomintervenant.data, id_session)
         flash("Fiche enregistrée avec succès")
-        return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
+        return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche), 302)
     return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti,
                            sessions=sessions), 200
 
@@ -125,7 +125,7 @@ def personnalisation(id_fiche):
     if request.method == 'POST':
         modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")
-        return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)))
+        return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)), 302)
     return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_police,
                            composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
 

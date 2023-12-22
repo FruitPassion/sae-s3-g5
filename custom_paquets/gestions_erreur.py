@@ -29,3 +29,6 @@ class GitBranchError(ProjectError):
 class ConfigurationError(ProjectError):
     pass
 
+
+class LogOpeningError(ProjectError):
+    pass

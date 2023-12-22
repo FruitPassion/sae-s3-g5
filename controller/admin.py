@@ -48,6 +48,7 @@ def gestion_personnel():
     form_ajouter = AjouterPersonnel()
     form_modifier = ModifierPersonnel()
     form_modifier_admin = ModifierAdmin()
+    REDIRECTION = "admin.gestion_personnel"
 
     if form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin' in request.form.values():
         role = "SuperAdministrateur"
@@ -60,7 +61,7 @@ def gestion_personnel():
         update_personnel(identifiant, login, form_modifier_admin.form_nom.data,
                          form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
                          role, password=new_password)
-        return redirect(url_for("admin.gestion_personnel"))
+        return redirect(url_for(REDIRECTION), 302)
 
     elif form_modifier.validate_on_submit() and request.method == "POST" and 'Modifier' in request.form.values():
         nouveau_role = request.form.get("nouveau_role").replace("_", " ")
@@ -74,14 +75,14 @@ def gestion_personnel():
         actif = request.form.get("form_actif") == "on"
         update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data,
                          form_modifier.form_email.data, nouveau_role, actif=actif, password=new_password)
-        return redirect(url_for("admin.gestion_personnel"))
+        return redirect(url_for(REDIRECTION), 302)
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         password = encrypt_password(request.form.get('password'))
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
-        return redirect(url_for("admin.gestion_personnel"))
+        return redirect(url_for(REDIRECTION), 302)
 
     return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form_ajouter=form_ajouter,
                            form_modifier=form_modifier, form_modifier_admin=form_modifier_admin, couleurs=couleurs,
@@ -112,14 +113,14 @@ def gestion_apprenti():
             chemin_avatar = stocker_photo_profile(f)
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password,
                         chemin_avatar)
-        return redirect(url_for("admin.gestion_apprenti"))
+        return redirect(url_for("admin.gestion_apprenti"), 302)
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         f = request.files.get("avatar")
         chemin_avatar = stocker_photo_profile(f)
         id_apprenti = add_apprenti(form_ajouter.nom.data, form_ajouter.prenom.data, login, chemin_avatar)
         add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
-        return redirect(url_for("admin.gestion_apprenti"))
+        return redirect(url_for("admin.gestion_apprenti"), 302)
 
     return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form_ajouter=form_ajouter,
                            form_modifier=form_modifier, formations=formations,
@@ -145,12 +146,12 @@ def gestion_formation():
         else:
             chemin_image = "formation_image/" + "defaut_formation.jpg"
         add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
-        return redirect(url_for("admin.gestion_formation"))
+        return redirect(url_for("admin.gestion_formation"), 302)
 
     elif form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        image_courante = get_image_formation(identifiant)[14:]
-        if image_courante != request.form.get("image"):
+        chemin_image = get_image_formation(identifiant)[14:]
+        if chemin_image != request.form.get("image"):
             f = request.files.get("image")
             chemin_image = stocker_image_formation(f)
         update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data,

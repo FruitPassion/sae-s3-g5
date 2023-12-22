@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+FICHE_PERSONNEL = 'db_fiches_dev.Personnel.id_personnel'
+
 
 class Apprenti(db.Model):
     __tablename__ = 'Apprenti'
@@ -64,7 +66,7 @@ class EducAdmin(db.Model):
     __tablename__ = 'EducAdmin'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
-    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), primary_key=True)
+    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), primary_key=True)
 
     Personnel = db.relationship('Personnel', primaryjoin='EducAdmin.id_personnel == Personnel.id_personnel',
                                 backref='educadmins')
@@ -79,7 +81,7 @@ class ElementBase(db.Model):
     type = db.Column(db.String(50), nullable=False)
     text = db.Column(db.String(50))
     audio = db.Column(db.String(100))
-    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), index=True)
+    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), index=True)
 
     Personnel = db.relationship('Personnel', primaryjoin='ElementBase.id_personnel == Personnel.id_personnel',
                                 backref='elementbases')
@@ -104,7 +106,7 @@ class FicheIntervention(db.Model):
     nom_intervenant = db.Column(db.String(50), nullable=False)
     prenom_intervenant = db.Column(db.String(50), nullable=False)
     id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
-    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), nullable=False, index=True)
+    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), nullable=False, index=True)
     id_session = db.Column(db.ForeignKey('db_fiches_dev.Session.id_session'), nullable=False, index=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
@@ -131,7 +133,7 @@ class LaisserTrace(db.Model):
     __tablename__ = 'LaisserTrace'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
-    id_personnel = db.Column(db.ForeignKey('db_fiches_dev.Personnel.id_personnel'), primary_key=True)
+    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), primary_key=True)
     horodatage = db.Column(db.DateTime, primary_key=True)
     intitule = db.Column(db.String(50), nullable=False)
     eval_texte = db.Column(db.Text, nullable=False)

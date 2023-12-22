@@ -30,15 +30,18 @@ def build_pictogrammes():
             if dico["categorie"] == key and dico["categorie"] != "Autre":
                 to_return[key][dico["souscategorie"]] = []
             to_return["Autre"]["Autre"] = []
-        for element in to_return[key].keys():
-            for dico in pictos:
-                _ = {"url": dico["url"], "label": dico["label"], "id": dico["id_pictogramme"]}
-                if dico["souscategorie"] == element and dico["categorie"] != "Autre":
-                    to_return[key][dico["souscategorie"]].append(_)
-                elif dico["categorie"] == "Autre" and _ not in to_return["Autre"]["Autre"]:
-                    to_return["Autre"]["Autre"].append(_)
-
+        build_elements(key, to_return, pictos)
     return to_return
+
+
+def build_elements(key, to_return, pictos):
+    for element in to_return[key].keys():
+        for dico in pictos:
+            _ = {"url": dico["url"], "label": dico["label"], "id": dico["id_pictogramme"]}
+            if dico["souscategorie"] == element and dico["categorie"] != "Autre":
+                to_return[key][dico["souscategorie"]].append(_)
+            elif dico["categorie"] == "Autre" and _ not in to_return["Autre"]["Autre"]:
+                to_return["Autre"]["Autre"].append(_)
 
 
 def get_common_element(element, bases):

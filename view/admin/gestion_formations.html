@@ -33,7 +33,7 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered">
+                <table class="table table-bordered" aria-describedby="tableau formations">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Intitulé</th>
@@ -52,16 +52,16 @@
                             <td id="niveau_qualif-{{ formation['id_formation'] }}" class="align-middle">{{formation["niveau_qualif"] }}</td>
                             <td id="groupe-{{ formation['id_formation'] }}" class="align-middle">{{formation["groupe"] }}</td>
                             <td id="image-{{ formation['id_formation'] }}" value="{{ formation['image'] }}"><img style="width:180px; height:100px;"
-                                        src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th onclick="passer_parametre_form(this, 'formation')" class="align-middle" data-bs-toggle="modal"
+                                        src="{{ url_for('static', filename='images/'+formation['image']) }}" alt="image formation"></td>
+                            <th scope="row" onclick="passer_parametre_form(this, 'formation')" class="align-middle" data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
                                 <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle" onclick="validation_archivage_apprentis(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_archivage_apprentis(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver-apprentis">
                                 <button><i class="fa fa-refresh" aria-hidden="true"></i></button>
                             </th>                            
@@ -114,7 +114,7 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered">
+                <table class="table table-bordered" aria-describedby="tableau formations archivées">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Intitulé</th>
@@ -133,11 +133,11 @@
                             <td class="align-middle">{{ formation["groupe"] }}</td>
                             <td><img alt="img formation" style="width:180px; height:100px;"
                                      src="{{ url_for('static', filename='images/'+formation['image']) }}"></td>
-                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle" onclick="validation_suppression(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_suppression(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-supprimer">
                                 <button><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </th>

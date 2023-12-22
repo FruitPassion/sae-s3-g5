@@ -1,3 +1,5 @@
+import logging
+
 from flask import abort
 
 from model.shared_model import db, Session, Apprenti, Assister
@@ -26,8 +28,9 @@ def get_apprentis_by_formation(nom_formation: str, archive=False):
         return convert_to_dict(Session.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
             Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
                                                    Apprenti.photo).filter(Apprenti.archive == archive).all())
-    except:
-        abort(404)
+    except Exception as e:
+        logging.error("Erreur lors de la récupération des apprentis par formation")
+        logging.error(e)
 
 
 def get_sessions_par_apprenti(id_apprenti):

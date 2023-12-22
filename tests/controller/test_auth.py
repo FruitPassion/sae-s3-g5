@@ -4,7 +4,6 @@ from custom_paquets.tester_usages import connexion_personnel_pin, connexion_pers
 from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
 
-
 '''
 Test des controller du fichier auth.py
 '''
@@ -31,7 +30,7 @@ def test_connexion_personnel_chargement(client):
 
     # Test de vérification de la route
     assert response.request.path == "/connexion-personnel-pin"
-    
+
     # Version MDP
     response = client.get(url_for("auth.connexion_personnel_mdp"))
     assert response.status_code == 200
@@ -39,8 +38,6 @@ def test_connexion_personnel_chargement(client):
 
 
 def test_connexion_deconnexion(client):
-    
-    # message_reussi = b'Connexion reussie'
 
     # Test connexion superadministrateur
     username = "JED10"
@@ -49,8 +46,7 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'JED10'
         assert sess['role'] == 'SuperAdministrateur'
-        
-    #assert message_reussi in response.data
+
     assert response.status_code == 200
     assert response.request.path == "/admin/accueil-admin"
 
@@ -58,7 +54,6 @@ def test_connexion_deconnexion(client):
     response = deconnexion_personnel(client)
     with client.session_transaction() as sess:
         assert sess.get('name') is None
-    #assert b'Deconnexion reussie.' in response.data
     assert response.status_code == 200
     assert response.request.path == "/"
 
@@ -70,7 +65,6 @@ def test_connexion_deconnexion(client):
         assert sess['name'] == 'ALL11'
         assert sess['role'] == 'Educateur Administrateur'
 
-    #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/educ-admin/accueil-educadmin"
     deconnexion_personnel(client)
@@ -82,7 +76,6 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'MAC10'
         assert sess['role'] == 'Educateur'
-    #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"
     deconnexion_personnel(client)
@@ -95,7 +88,6 @@ def test_connexion_deconnexion(client):
     with client.session_transaction() as sess:
         assert sess['name'] == 'FAR16'
         assert sess['role'] == 'CIP'
-    #assert message_reussi in response.data
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"
     deconnexion_personnel(client)
@@ -103,7 +95,6 @@ def test_connexion_deconnexion(client):
     response = connexion_personnel_pin(client, "JED10", '123456')
     print(response.data)
     assert b'Compte inconnu ou mot de passe invalide' in response.data
-
 
 
 # Test de la route affichant la liste des formations
@@ -138,11 +129,10 @@ def test_choix_eleve_apprentis(client):
     apprentis = get_apprentis_by_formation(nom_formation)
     html = response.get_data(as_text=True)
     for apprenti in apprentis:
-        assert 'class="libelle">'+apprenti["prenom"]+' '+apprenti["nom"] in html
+        assert 'class="libelle">' + apprenti["prenom"] + ' ' + apprenti["nom"] in html
 
     nom_formation = "Page erreur"
     response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=nom_formation))
 
     # Test d'accès à la route
     assert response.status_code == 404
-

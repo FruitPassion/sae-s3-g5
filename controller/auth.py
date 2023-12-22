@@ -25,6 +25,10 @@ Blueprint pour toutes les routes relatives au authentifications.
 Pas de préfice d'URL.
 '''
 
+COMPTE_BLOQUE = "Compte bloqué, contacter un admin"
+COMPTE_INCONNU = "Compte inconnu ou mot de passe invalide."
+CONNEXION_REUSSIE = "Connexion réussie."
+
 
 @auth.route("/")
 @logout_required
@@ -59,31 +63,32 @@ def connexion_personnel_pin():
     :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """
     personnels = get_liste_personnel_non_super()
+    code = 200
     if request.method == "POST":
         passwd = request.form["code"]
         login = request.form.get('login_select')
         if not check_password(login, passwd):
             if get_nbr_essaie_connexion_personnel(login) == 3:
-                flash("Compte bloqué, contacter un admin", "error")
+                flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
-                flash("Compte inconnu ou mot de passe invalide.", "error")
+                flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
             if get_nbr_essaie_connexion_personnel(login) == 3:
-                flash("Compte bloqué, contacter un admin", "error")
+                flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 session["name"] = login
                 session["role"] = get_role(login)
-                flash("Connexion réussie.")
+                flash(CONNEXION_REUSSIE)
                 if session["role"] == 'SuperAdministrateur':
-                    return redirect(url_for("admin.accueil_admin"))
+                    return redirect(url_for("admin.accueil_admin"), 302)
                 elif session["role"] == "Educateur Administrateur":
-                    return redirect(url_for('educ_admin.accueil_educadmin'))
+                    return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"))
-    return render_template("auth/connexion_personnel_pin.html", personnels=personnels)
+    return render_template("auth/connexion_personnel_pin.html", personnels=personnels), code
 
 
 @auth.route("/connexion-personnel-mdp", methods=["GET", "POST"])
@@ -99,29 +104,29 @@ def connexion_personnel_mdp():
     code = 200
     if form.validate_on_submit():
         if not check_personnel(form.login.data):
-            flash("Compte inconnu ou mot de passe invalide.", "error")
+            flash(COMPTE_INCONNU, "error")
             code = 403
         elif not check_password(form.login.data, form.password.data):
             if get_nbr_essaie_connexion_personnel(form.login.data) == 3:
-                flash("Compte bloqué, contacter un admin", "error")
+                flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
-                flash("Compte inconnu ou mot de passe invalide.", "error")
+                flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
             if get_nbr_essaie_connexion_personnel(form.login.data) == 3:
-                flash("Compte bloqué, contacter un admin", "error")
+                flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 session["name"] = form.login.data
                 session["role"] = get_role(form.login.data)
-                flash("Connexion réussie.")
+                flash(CONNEXION_REUSSIE)
                 if session["role"] == 'SuperAdministrateur':
-                    return redirect(url_for("admin.accueil_admin"))
+                    return redirect(url_for("admin.accueil_admin"), 302)
                 elif session["role"] == "Educateur Administrateur":
-                    return redirect(url_for('educ_admin.accueil_educadmin'))
+                    return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
-                    return redirect(url_for("personnel.choix_formation"))
+                    return redirect(url_for("personnel.choix_formation"), 302)
     return render_template("auth/connexion_personnel_code.html", form=form), code
 
 
@@ -167,14 +172,14 @@ def connexion_apprentis(nom_formation, login_apprenti):
         if check_apprenti(login) and check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
-            flash("Connexion réussie.")
-            return redirect(url_for("apprenti.redirection_connexion"))
+            flash(CONNEXION_REUSSIE)
+            return redirect(url_for("apprenti.redirection_connexion"), 302)
         else:
             if get_nbr_essaie_connexion_apprenti(login) == 5:
-                flash("Compte bloqué, contacter un admin", "error")
+                flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
-                flash("Compte inconnu ou mot de passe invalide.", "error")
+                flash(COMPTE_INCONNU, "error")
                 code = 403
     return render_template("auth/connexion_apprentis.html", apprenti=apprenti, nom_formation=nom_formation), code
 
@@ -189,4 +194,4 @@ def logout():
     session.pop('role', None)
     session.pop('name', None)
     flash("Déconnexion réussie.")
-    return redirect(url_for("auth.choix_connexion"))
+    return redirect(url_for("auth.choix_connexion"), 302)

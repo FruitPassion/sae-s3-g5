@@ -1,4 +1,7 @@
+import logging
+
 from custom_paquets import check_requirements
+from custom_paquets.app_checker import check_config, check_git_branch
 
 # Verification de la présence des dépendances dans l'environnement virtuel
 check_requirements.checking()
@@ -13,10 +16,9 @@ from flask_wtf import CSRFProtect
 from werkzeug.exceptions import HTTPException
 
 # Paquets git
-from pygit2 import Repository
 
 # Paquet gestion d'erreur
-from custom_paquets.gestions_erreur import logging_erreur, ConfigurationError, GitBranchError
+from custom_paquets.gestions_erreur import logging_erreur
 
 # odel de la base de données
 from model.shared_model import db
@@ -35,8 +37,8 @@ from controller.auth import auth
 # Fonction pour creer une application et la parametrer
 def create_app(config=None):
     # Vérification de la configuration demandée.
-    if config not in [None, "Developpement"]:
-        raise ConfigurationError("Configuration invalide")
+    # Si aucune configuration n'est demandée, la configuration par défaut est la configuration de développement
+    check_config(config)
 
     # Declaration de l'application
     # Changement du chemin d'accès des templates
@@ -44,17 +46,7 @@ def create_app(config=None):
 
     # Vérification de la branche du Git
     # Utilisable uniquement dans la branche main ou dev
-    if Repository('.').head.shorthand == "dev" or config == "Developpement":
-        # Effacer fichier de logs
-        try:
-            open('app.log', 'w').close()
-        except:
-            pass
-        app.config.from_object('config.DevConfig')
-    elif Repository('.').head.shorthand == "main":
-        app.config.from_object('config.ProdConfig')
-    else:
-        raise GitBranchError("Branche inconnue")
+    check_git_branch(config, app)
 
     # Enregistrement des controller
     app.register_blueprint(auth)
@@ -90,8 +82,9 @@ def create_app(config=None):
                 with open('static/error.json') as json_file:
                     errors = json.load(json_file)
                     description = errors[f"{code}"]["description"]
-            except:
-                pass
+            except SystemExit as e:
+                logging.exception('error while accessing the dict')
+                raise e
         return render_template("common/erreur.html", titre='erreur', erreur=f"Erreur {code}",
                                description=description, description_plus=description_plus), code
 

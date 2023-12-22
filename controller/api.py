@@ -17,19 +17,19 @@ Préfixe d'URL : /api/ .
 '''
 
 
-@api.route("/check-password-apprenti/<user>/<password>", methods=["GET", "POST"])
+@api.route("/check-password-apprenti/<user>/<password>", methods=["GET"])
 def api_check_password_apprenti(user, password):
     """
     Vérifie que le login et le password correspondent bien à ceux de la base de données
     """
     essaies = get_nbr_essaie_connexion_apprenti(user)
     if essaies != 5:
-        return {"valide": check_password_apprenti(user, password)}, 200
+        return {"valide": check_password_apprenti(user, password)}
     else:
-        return {"blocage": True}, 200
+        return {"blocage": True}
 
 
-@api.route("/archiver-formation/<id_formation>", methods=["GET", "POST"])
+@api.route("/archiver-formation/<id_formation>", methods=["GET"])
 @admin_login_required
 def api_archiver_formation(id_formation, commit=True):
     """
@@ -38,7 +38,7 @@ def api_archiver_formation(id_formation, commit=True):
     return {"valide": archiver_formation(id_formation, commit=commit), "retirer": True}
 
 
-@api.route("/archiver-apprentis-formation/<id_formation>", methods=["GET", "POST"])
+@api.route("/archiver-apprentis-formation/<id_formation>", methods=["GET"])
 @admin_login_required
 def api_archiver_apprentis_formation(id_formation, commit=True):
     """
@@ -47,7 +47,7 @@ def api_archiver_apprentis_formation(id_formation, commit=True):
     return {"valide": archiver_apprentis_formation(id_formation, commit=commit), "retirer": False}
 
 
-@api.route("/desarchiver-formation/<id_formation>", methods=["GET", "POST"])
+@api.route("/desarchiver-formation/<id_formation>", methods=["GET"])
 @admin_login_required
 def api_desarchiver_formation(id_formation):
     """
@@ -56,7 +56,7 @@ def api_desarchiver_formation(id_formation):
     return {"valide": archiver_formation(id_formation, archiver=False)}
 
 
-@api.route("/supprimer-formation/<id_formation>", methods=["GET", "POST"])
+@api.route("/supprimer-formation/<id_formation>", methods=["GET"])
 @admin_login_required
 def api_supprimer_formation(id_formation):
     """
@@ -65,7 +65,7 @@ def api_supprimer_formation(id_formation):
     return {"valide": remove_formation(id_formation)}
 
 
-@api.route("/archiver-apprenti/<id_apprenti>", methods=["GET", "POST"])
+@api.route("/archiver-apprenti/<id_apprenti>", methods=["GET"])
 @admin_login_required
 def api_archiver_apprenti(id_apprenti):
     """
@@ -74,7 +74,7 @@ def api_archiver_apprenti(id_apprenti):
     return {"valide": archiver_apprenti(id_apprenti), "retirer": True}
 
 
-@api.route("/desarchiver-apprenti/<id_apprenti>", methods=["GET", "POST"])
+@api.route("/desarchiver-apprenti/<id_apprenti>", methods=["GET"])
 @admin_login_required
 def api_desarchiver_apprenti(id_apprenti):
     """
@@ -83,7 +83,7 @@ def api_desarchiver_apprenti(id_apprenti):
     return {"valide": archiver_apprenti(id_apprenti, archiver=False)}
 
 
-@api.route("/supprimer-apprenti/<id_apprenti>", methods=["GET", "POST"])
+@api.route("/supprimer-apprenti/<id_apprenti>", methods=["GET"])
 @admin_login_required
 def api_supprimer_apprenti(id_apprenti):
     """
@@ -92,7 +92,7 @@ def api_supprimer_apprenti(id_apprenti):
     return {"valide": remove_apprenti(id_apprenti)}
 
 
-@api.route("/archiver-personnel/<id_personnel>", methods=["GET", "POST"])
+@api.route("/archiver-personnel/<id_personnel>", methods=["GET"])
 @admin_login_required
 def api_archiver_personnel(id_personnel):
     """
@@ -101,7 +101,7 @@ def api_archiver_personnel(id_personnel):
     return {"valide": archiver_personnel(id_personnel), "retirer": True}
 
 
-@api.route("/desarchiver-personnel/<id_personnel>", methods=["GET", "POST"])
+@api.route("/desarchiver-personnel/<id_personnel>", methods=["GET"])
 @admin_login_required
 def api_desarchiver_personnel(id_personnel):
     """

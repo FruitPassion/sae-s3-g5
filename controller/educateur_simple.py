@@ -63,7 +63,7 @@ def modifier_commentaires(apprenti, fiche):
         eval_texte = request.form["eval_texte"]
         modifier_commentaire_texte(fiche["id_fiche"], commentaires["horodatage"], commentaire_texte)
         modifier_evaluation_texte(fiche["id_fiche"], commentaires["horodatage"], eval_texte)
-        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]))
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]), 200)
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
 
@@ -81,5 +81,6 @@ def ajouter_commentaires(apprenti, fiche):
         eval_texte = request.form["evaluation"]
         intitule = request.form["intitule"]
         ajouter_commentaires_evaluation(fiche["id_fiche"], commentaire_texte, eval_texte, None, None, session.get("name"), intitule)
-        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]))
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]), 200)
     return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200
+

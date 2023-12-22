@@ -32,7 +32,7 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered">
+                <table class="table table-bordered" aria-describedby="table des apprentis">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -48,23 +48,31 @@
                     {% for apprenti in liste_apprenti %}
                         <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
                             id="ele-{{ apprenti['id_apprenti'] }}">
-                            <td id="login-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["login"] }}</td>
+                            <td id="login-{{ apprenti['id_apprenti'] }}"
+                                class="align-middle">{{ apprenti["login"] }}</td>
                             <td id="nom-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["nom"] }}</td>
-                            <td id="prenom-{{ apprenti['id_apprenti'] }}"class="align-middle">{{ apprenti["prenom"] }}</td>
-                            <td id="photo-{{ apprenti['id_apprenti'] }}" value="{{ apprenti['photo'] }}"><img style="width:80px; border-radius: 60px;"
-                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
+                            <td id="prenom-{{ apprenti['id_apprenti'] }}"
+                                class="align-middle">{{ apprenti["prenom"] }}</td>
+                            <td id="photo-{{ apprenti['id_apprenti'] }}" value="{{ apprenti['photo'] }}"><img
+                                    style="width:80px; border-radius: 60px;"
+                                    src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
+                                    alt="photo profile apprenti"></td>
                             <td class="align-middle">
                                 {% if apprenti["essaies"] == 5 %}
-                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-times" aria-hidden="true"></i>
+                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-times"
+                                       aria-hidden="true"></i>
                                 {% else %}
-                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-check" aria-hidden="true"></i>
+                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-check"
+                                       aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th onclick="passer_parametre_form(this, 'apprenti')" class="align-middle" data-bs-toggle="modal"
+                            <th scope="row" onclick="passer_parametre_form(this, 'apprenti')" class="align-middle"
+                                data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
                                 <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_archivage(this)"
+                                data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
@@ -121,7 +129,7 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered">
+                <table class="table table-bordered" aria-describedby="table arpprentis archivés">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -140,7 +148,8 @@
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
                             <td class="align-middle">{{ apprenti["prenom"] }}</td>
                             <td><img style="width:80px; border-radius: 60px;"
-                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"></td>
+                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
+                                     alt="photo profile apprenti"></td>
                             <td class="align-middle">
                                 {% if apprenti["essaies"] == 5 %}
                                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -148,11 +157,13 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_desarchivage(this)"
+                                data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
-                            <th class="align-middle" onclick="validation_suppression(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle" onclick="validation_suppression(this)"
+                                data-bs-toggle="modal"
                                 data-bs-target="#modal-supprimer">
                                 <button><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </th>
@@ -268,7 +279,7 @@
                             <h3 class="fs-1 my-3">Utilisateur actif :</h3>
                             <div class="form-check form-switch" for="form_actif">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                    id="form_actif">
+                                       id="form_actif">
                             </div>
                         </div>
 

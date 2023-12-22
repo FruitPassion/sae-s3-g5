@@ -4,6 +4,7 @@ from wtforms import EmailField, HiddenField, StringField, PasswordField, SubmitF
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea, NumberInput
 
+VALIDATE = "validateForm()"
 
 class LoginPersonnelForm(FlaskForm):
     login = StringField(validators=[InputRequired(), Length(min=5, max=5)], render_kw={"placeholder": "ABC12"})
@@ -14,12 +15,12 @@ class LoginPersonnelForm(FlaskForm):
 
 
 class AjouterFiche(FlaskForm):
-    nominput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    dateinput = DateField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    decriptioninput = StringField(u'Text', widget=TextArea(), render_kw={"onchange": "validateForm()"})
-    nomintervenant = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
-    prenomintervenant = StringField(validators=[InputRequired()], render_kw={"onchange": "validateForm()"})
+    nominput = StringField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
+    dateinput = DateField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
+    lieuinput = StringField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
+    decriptioninput = StringField(u'Text', widget=TextArea(), render_kw={"onchange": VALIDATE})
+    nomintervenant = StringField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
+    prenomintervenant = StringField(validators=[InputRequired()], render_kw={"onchange": VALIDATE})
     submit = SubmitField("Ajouter", render_kw={"disabled": "true"})
 
 
@@ -58,7 +59,7 @@ class ModifierAdmin(FlaskForm):
     form_identifiant = HiddenField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
-    form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
+    form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "jean@neuil@gmail.com"})
     form_password = PasswordField()
     submit = SubmitField("Modifier Admin")
 

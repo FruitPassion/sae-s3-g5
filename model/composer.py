@@ -65,20 +65,24 @@ def modifier_composition(form_data, id_fiche):
     for composition in compositions:
         for key, value in form_data.items():
             if composition.position_elem == key.split('-')[-1] and "selecteur-element" not in key:
-                if 'selecteur-niveau' in key:
-                    composition.niveau = value
-                elif 'selecteur-police' in key:
-                    composition.police = value
-                elif 'taille-police' in key:
-                    composition.taille_texte = value
-                elif 'couleur-police' in key:
-                    composition.couleur = value
-                elif 'couleur-fond' in key:
-                    composition.couleur_fond = value
-                elif 'selecteur-picto' in key:
-                    composition.id_pictogramme = get_pictogramme_by_url(value)["id_pictogramme"]
-                elif 'taille-picto' in key:
-                    composition.taille_pictogramme = value
-                elif 'couleur-picto' in key:
-                    composition.couleur_pictogramme = value
+                modifier_composition_par_element(composition, key, value)
     db.session.commit()
+
+
+def modifier_composition_par_element(composition, key, value):
+    if 'selecteur-niveau' in key:
+        composition.niveau = value
+    elif 'selecteur-police' in key:
+        composition.police = value
+    elif 'taille-police' in key:
+        composition.taille_texte = value
+    elif 'couleur-police' in key:
+        composition.couleur = value
+    elif 'couleur-fond' in key:
+        composition.couleur_fond = value
+    elif 'selecteur-picto' in key:
+        composition.id_pictogramme = get_pictogramme_by_url(value)["id_pictogramme"]
+    elif 'taille-picto' in key:
+        composition.taille_pictogramme = value
+    elif 'couleur-picto' in key:
+        composition.couleur_pictogramme = value
