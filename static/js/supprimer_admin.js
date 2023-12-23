@@ -26,7 +26,6 @@ function supprimer(route){
         if (data["valide"]) {
             afficher_snack("Suppression réussi !", "success");
             row.parentElement.removeChild(row);
-            document.getElementById("recharger-2").removeAttribute("hidden");
         } else {
             afficher_snack("Suppression échouée.", "error");
         }

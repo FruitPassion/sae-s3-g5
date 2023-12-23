@@ -32,7 +32,7 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="tableau personnel">
+                <table class="table table-bordered" aria-describedby="tableau personnel" id="table-non-archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -63,18 +63,21 @@
                                 {% endif %}
                             </td>
                             {% if personnel["role"] != "SuperAdministrateur" %}
-                                <th scope="row" onclick="passer_parametre_form(this, 'personnel')" class="align-middle" data-bs-toggle="modal"
+                                <th scope="row" onclick="passer_parametre_form(this, 'personnel')"
+                                    class="align-middle ele-btn-modif" data-bs-toggle="modal"
                                     data-bs-target="#modal-modifier">
                                     <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                 </th>
                             {% else %}
-                                <th scope="row" onclick="passer_parametre_form(this, 'admin')" class="align-middle" data-bs-toggle="modal"
+                                <th scope="row" onclick="passer_parametre_form(this, 'admin')"
+                                    class="align-middle" data-bs-toggle="modal"
                                     data-bs-target="#modal-modifier-super-admin">
                                     <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                 </th>
                             {% endif %}
                             
-                            <th scope="row" class="align-middle" onclick="validation_archivage(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middl ele-btn-archiver"
+                                onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
                                 {% if personnel["role"] != "SuperAdministrateur" %}
                                     <button><i class="fa fa-archive" aria-hidden="true"></i></button>
@@ -84,9 +87,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="recharger-1" hidden="">
-                    {% include "_partial/_mise_a_jour.html" %}
-                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" name="ajout_personnel">
@@ -141,7 +141,7 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" aria-describedby="tableau personnel archivé">
+                <table class="table table-bordered" aria-describedby="tableau personnel archivé" id="table-archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -169,7 +169,8 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th scope="row" class="align-middle" onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                            <th scope="row" class="align-middle ele-btn-desarchiver"
+                                onclick="validation_desarchivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
@@ -177,9 +178,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="recharger-2" hidden="">
-                    {% include "_partial/_mise_a_jour.html" %}
-                </div>
             </div>
         </div>
     </div>

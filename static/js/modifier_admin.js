@@ -17,17 +17,10 @@ function passer_parametre_form(element, nom_form){
     let id_element = element.parentElement.id.replace('ele-','');
     let hidden_value = document.getElementById("id-element-"+nom_form);
     hidden_value.value = id_element;
-    document.getElementById("form_nom").value = document.getElementById("nom-"+id_element).innerText;
-    document.getElementById("form_prenom").value = document.getElementById("prenom-"+id_element).innerText;
-    
-    if (document.getElementById("actif-"+id_element).classList.contains("fa-check")){
-        document.getElementById("form_actif").checked = true;
-    } else {
-        document.getElementById("form_actif").checked = false;
-    }
 
     switch(nom_form){
         case "personnel":
+            set_nom_prenom(id_element)
             document.getElementById("email_personnel").value = document.getElementById("email-"+id_element).innerText;
         
             let roles = document.getElementById("nouveau_role");
@@ -44,10 +37,11 @@ function passer_parametre_form(element, nom_form){
             break;
 
         case "apprenti":
-            document.getElementById("avatar").value = document.getElementById("photo-"+id_element).innerText;
+            set_nom_prenom(id_element)
             break;
 
         case "admin":
+            set_nom_prenom(id_element)
             document.getElementById("mail_admin").value = document.getElementById("email-"+id_element).innerText;
             document.getElementById("nom_admin").value = document.getElementById("nom-"+id_element).innerText;
             document.getElementById("prenom_admin").value = document.getElementById("prenom-"+id_element).innerText;
@@ -56,8 +50,17 @@ function passer_parametre_form(element, nom_form){
             document.getElementById("form_intitule").value = document.getElementById("intitule-"+id_element).innerText;
             document.getElementById("form_niveau_qualif").value = document.getElementById("niveau_qualif-"+id_element).innerText;
             document.getElementById("form_groupe").value = document.getElementById("groupe-"+id_element).innerText;
-            document.getElementById("image").value = document.getElementById("image-"+id_element).innerText;
             break;
     }
-     
+}
+
+function set_nom_prenom(id_element){
+    document.getElementById("form_nom").value = document.getElementById("nom-"+id_element).innerText;
+    document.getElementById("form_prenom").value = document.getElementById("prenom-"+id_element).innerText;
+
+    if (document.getElementById("actif-"+id_element).classList.contains("fa-check")){
+        document.getElementById("form_actif").checked = true;
+    } else {
+        document.getElementById("form_actif").checked = false;
+    }
 }

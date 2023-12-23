@@ -32,7 +32,7 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="table des apprentis">
+                <table class="table table-bordered" aria-describedby="table des apprentis" id="table-non-archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -66,12 +66,12 @@
                                        aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th scope="row" onclick="passer_parametre_form(this, 'apprenti')" class="align-middle"
-                                data-bs-toggle="modal"
+                            <th scope="row" onclick="passer_parametre_form(this, 'apprenti')"
+                                class="align-middle ele-btn-modif" data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
                                 <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                             </th>
-                            <th scope="row" class="align-middle" onclick="validation_archivage(this)"
+                            <th scope="row" class="align-middle ele-btn-archiver" onclick="validation_archivage(this)"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
@@ -80,9 +80,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="recharger-1" hidden="">
-                    {% include "_partial/_mise_a_jour.html" %}
-                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">
@@ -129,7 +126,7 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" aria-describedby="table arpprentis archivés">
+                <table class="table table-bordered" id="table-archive" aria-describedby="table arpprentis archivés">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -143,7 +140,8 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprenti_archivee %}
-                        <tr class="text-center" id="arch-ele-{{ apprenti['id_apprenti'] }}">
+                        <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
+                            id="arch-ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
                             <td class="align-middle">{{ apprenti["prenom"] }}</td>
@@ -157,12 +155,12 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            <th scope="row" class="align-middle" onclick="validation_desarchivage(this)"
+                            <th scope="row" class="align-middle ele-btn-desarchiver" onclick="validation_desarchivage(this)"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
-                            <th scope="row" class="align-middle" onclick="validation_suppression(this)"
+                            <th scope="row" class="align-middle ele-btn-supprimer" onclick="validation_suppression(this)"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal-supprimer">
                                 <button><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -171,9 +169,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="recharger-2" hidden="">
-                    {% include "_partial/_mise_a_jour.html" %}
-                </div>
             </div>
         </div>
     </div>
@@ -253,7 +248,8 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
-                        <input type="hidden" value="" id="id-element" name="id-element">
+                        {{ form_modifier.hidden_tag() }}
+                        <input type="hidden" value="" id="id-element-apprenti" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
                             {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
@@ -270,8 +266,8 @@
                         <div class="w-75 test">
                             <div class="mb-3">
                                 <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
-                                <input class="form-control fs-1 my-3" type="file" id="avatar" name="avatar"
-                                       accept="image/png, image/jpeg, image/jpg"/>
+                                <input class="form-control fs-1 my-3" type="file" id="avatar-modifier" name="avatar-modifier"
+                                       accept="image/png, image/jpeg, image/jpg" value="oui.jpg"/>
                             </div>
                         </div>
 
@@ -285,9 +281,9 @@
 
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                <div class="modal-footer d-flex">
                     {{ form_modifier.form_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control text-center" data-bs-dismiss="modal">Annuler</button>
                 </div>
             </div>
         </div>
