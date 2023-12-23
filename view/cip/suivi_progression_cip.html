@@ -19,9 +19,7 @@
     <div class="diagramme">
         <canvas id="suivi_progression_cip" aria-label="chart" role="img" type="module"></canvas>
         {% block javascripts %}
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.min.js"
-                    integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
-                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.0/chart.min.js"></script>
             <script src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
             <script>
                 window.onload = function() {
