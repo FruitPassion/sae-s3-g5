@@ -8,6 +8,11 @@
     margin: auto;
 }
 
+#ajouter {
+    margin-left:50%;
+    margin-right:-50%;
+}
+
 .test{
     margin: auto;
 }
@@ -31,6 +36,7 @@
 #enregistrer {
     margin-left: 50%;
     margin-right: -50%;
+    display: none;
 }
 
 #bloc_password {
@@ -45,6 +51,12 @@
     cursor: pointer;
 }
 
-#enregistrer {
-    display: none;
+.align-middle{
+    vertical-align: middle;
+}
+
+.replace-check {
+    position: relative;
+    left: 50px;
+    top: 30px;
 }

@@ -3,7 +3,7 @@
 {% block title %}Gestion des apprentis{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_personnel.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
 {% endblock %}
 
@@ -271,9 +271,9 @@
                             </div>
                         </div>
 
-                        <div class="w-75 test">
+                        <div class="w-75 test d-flex">
                             <h3 class="fs-1 my-3">Utilisateur actif :</h3>
-                            <div class="form-check form-switch" for="form_actif">
+                            <div class="form-check form-switch replace-check">
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        id="form_actif">
                             </div>
