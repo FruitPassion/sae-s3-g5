@@ -93,8 +93,9 @@ def gestion_personnel():
 @admin_login_required
 def gestion_apprenti():
     """
-    Page listant tous les comptes des apprentis et permettant de supprimer ou modifier leurs informations
-    On peut aussi y rajouter du personnel
+    Page listant tous les comptes des apprentis et permettant de supprimer, modifier, archiver et désarchiver leurs
+    comptes.
+    On peux également rajouter des apprentis.
     """
 
     formations = get_all_formation()
@@ -104,15 +105,19 @@ def gestion_apprenti():
     form_modifier = ModifierApprenti()
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        password = encrypt_password(form_modifier.form_password.data)
+        if form_modifier.form_password.data:
+            password = encrypt_password(form_modifier.form_password.data)
+        else:
+            password = None
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
-
-        chemin_avatar = get_photo_profil_apprenti(identifiant)[14:]
-        if chemin_avatar != request.form.get("avatar"):
-            f = request.files.get("avatar")
+        if len(request.files.get("avatar-modifier").filename) != 0:
+            f = request.files.get("avatar-modifier")
             chemin_avatar = stocker_photo_profile(f)
-        update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, password,
-                        chemin_avatar)
+        else:
+            chemin_avatar = get_photo_profil_apprenti(identifiant)
+        actif = request.form.get("form_actif") == "on"
+        update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, chemin_avatar,
+                        password, actif)
         return redirect(url_for("admin.gestion_apprenti"), 302)
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
@@ -141,7 +146,6 @@ def gestion_formation():
     if form.validate_on_submit() and request.method == "POST":
         f = request.files.get("image")
         if f:
-            f = request.files.get("image")
             chemin_image = stocker_image_formation(f)
         else:
             chemin_image = "formation_image/" + "defaut_formation.jpg"
@@ -150,10 +154,11 @@ def gestion_formation():
 
     elif form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        chemin_image = get_image_formation(identifiant)[14:]
-        if chemin_image != request.form.get("image"):
-            f = request.files.get("image")
+        if len(request.files.get("image-formation").filename) != 0:
+            f = request.files.get("image-formation")
             chemin_image = stocker_image_formation(f)
+        else:
+            chemin_image = get_image_formation(identifiant)
         update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data,
                          form_modifier.form_groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
