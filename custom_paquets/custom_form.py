@@ -45,7 +45,6 @@ class ModifierApprenti(FlaskForm):
     Formulaire de modification d'apprenti
     """
     form_identifiant = HiddenField()
-    form_password = PasswordField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Dupont"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Jean"})
     form_submit = SubmitField("Modifier")

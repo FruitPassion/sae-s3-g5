@@ -105,19 +105,16 @@ def gestion_apprenti():
     form_modifier = ModifierApprenti()
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        if form_modifier.form_password.data:
-            password = encrypt_password(form_modifier.form_password.data)
-        else:
-            password = None
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
         if len(request.files.get("avatar-modifier").filename) != 0:
             f = request.files.get("avatar-modifier")
             chemin_avatar = stocker_photo_profile(f)
         else:
             chemin_avatar = get_photo_profil_apprenti(identifiant)
-        actif = request.form.get("form_actif") == "on"
+        actif = (request.form.get("form_actif") == "on")
+        reinitialiser_pass = (request.form.get("form_reinitialiser") == "on")
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, chemin_avatar,
-                        password, actif)
+                        reinitialiser_pass, actif)
         return redirect(url_for("admin.gestion_apprenti"), 302)
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)

@@ -19,6 +19,16 @@ def get_all_apprenti(archive=False):
     return convert_to_dict(apprenti)
 
 
+def check_password_is_set(login: str):
+    """
+    Vérifie si le mot de passe d'un apprenti à bien été paramétré
+
+    :param login: Login de l'apprenti
+    :return: Un booleen si le mot de passe à été paramétré
+    """
+    return Apprenti.query.filter_by(login=login).first().mdp != "0000"
+
+
 def get_apprenti_by_login(login: str):
     """
     Recupere les informations d'un apprenti à partir de son Login
@@ -59,13 +69,16 @@ def check_password_apprenti(login: str, new_password: str):
 
     :return: Ub booleen vrai si le mot de passe est valide
     """
-    old_password = Apprenti.query.with_entities(Apprenti.mdp).filter_by(login=login).first().mdp
-    digest = compare_passwords(new_password, old_password)
-    if digest and get_nbr_essaie_connexion_apprenti(login) < 5:
-        reset_nbr_essaies_connexion(login)
-    elif not digest and get_nbr_essaie_connexion_apprenti(login) < 5:
-        update_nbr_essaies_connexion(login)
-    return digest
+    try:
+        old_password = Apprenti.query.with_entities(Apprenti.mdp).filter_by(login=login).first().mdp
+        digest = compare_passwords(new_password, old_password)
+        if digest and get_nbr_essaie_connexion_apprenti(login) < 5:
+            reset_nbr_essaies_connexion(login)
+        elif not digest and get_nbr_essaie_connexion_apprenti(login) < 5:
+            update_nbr_essaies_connexion(login)
+        return digest
+    except:
+        return False
 
 
 def get_nbr_essaie_connexion_apprenti(login: str):
@@ -123,7 +136,7 @@ def add_apprenti(nom, prenom, login, photo, commit=True):
     return get_id_apprenti_by_login(login)
 
 
-def update_apprenti(identifiant, login, nom, prenom, photo, password=None, actif=None, commit=True):
+def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, commit=True):
     """
     Modifie un apprenti en BD
 
@@ -135,12 +148,12 @@ def update_apprenti(identifiant, login, nom, prenom, photo, password=None, actif
         apprenti.nom = nom
         apprenti.prenom = prenom
         apprenti.photo = photo
-        if password is not None:
-            apprenti.mdp = password
+        if password:
+            apprenti.mdp = "0000"
         if actif:
             apprenti.essaies = 0
-        elif actif == False:
-            apprenti.essaies = 3
+        else:
+            apprenti.essaies = 5
         if commit:
             db.session.commit()
     except Exception as e:

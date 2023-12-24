@@ -19,7 +19,11 @@
             <li>Compte bloqué, contacter un admin {% include "_partial/_tts.html" %}</li>
         </ul>
     </div>
-    <h1>Saisissez votre code {% include "_partial/_tts.html" %}</h1>
+    {% if code_set %}
+        <h1>Saisissez votre code {% include "_partial/_tts.html" %}</h1>
+    {% else %}
+        <h1>Votre code n'a pas encore été paramétré, saisissez en un nouveau {% include "_partial/_tts.html" %}</h1>
+    {% endif %}
     <svg class="patternlock w-100" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="800px">
         <g class="lock-actives"></g>
         <g class="lock-lines"></g>

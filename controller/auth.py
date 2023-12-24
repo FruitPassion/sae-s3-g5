@@ -11,7 +11,7 @@ from flask import (
 from custom_paquets.custom_form import LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
-    check_apprenti
+    check_apprenti, check_password_is_set
 from model.session import get_apprentis_by_formation
 from model.formation import get_all_formation
 from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel, \
@@ -166,6 +166,7 @@ def connexion_apprentis(nom_formation, login_apprenti):
     """
     apprenti = get_apprenti_by_login(login_apprenti)
     code = 200
+    code_set = check_password_is_set(login_apprenti)
     if request.method == "POST":
         login = request.form.get("login")
         password = request.form.get("pass")
@@ -181,7 +182,8 @@ def connexion_apprentis(nom_formation, login_apprenti):
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
-    return render_template("auth/connexion_apprentis.html", apprenti=apprenti, nom_formation=nom_formation), code
+    return render_template("auth/connexion_apprentis.html", apprenti=apprenti,
+                           nom_formation=nom_formation, code_set=code_set), code
 
 
 @auth.route("/logout", methods=["GET", "POST"])
