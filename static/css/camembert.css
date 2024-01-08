@@ -2,6 +2,7 @@
     width: 60%;
     align-content: center;
     margin: auto;
+    margin-top: 80px;
 }
 
 canvas#camembert{
@@ -15,6 +16,7 @@ canvas#camembert{
   justify-content: space-around;
   text-align: justify;
   margin: 30px;
+  margin-top: 90px;
 }
 
 .texte{
@@ -23,12 +25,12 @@ canvas#camembert{
 }
 
 .box {
-    float: center;
     height: 30px;
     width: 100px;
     margin-bottom: 15px;
     border: 1px solid black;
     clear: both;
+    margin-left: 38%;
   }
   
   .red {
@@ -44,5 +46,5 @@ canvas#camembert{
   }
 
   p{
-    text-align: left;
+    text-align: center;
   }
