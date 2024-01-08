@@ -1,4 +1,4 @@
-function creation_graphique_suivi_progression_cip(niv_fiche) {
+function creation_graphique_suivi_progression_cip(niv_fiche, etat_fiches) {
   var chart_suivi_progression = document.getElementById('suivi_progression_cip');
   var context = chart_suivi_progression.getContext('2d');
   const liste_niv_fiche = [];
@@ -7,7 +7,24 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
     liste_niv_fiche.push(niveau["total_niveau"]);
     liste_num_fiche.push(niveau["numero"]);
   }
-
+  const liste_etat_fiche = [];
+  for (const etat of etat_fiches) {
+    if (etat === 0){
+      const etatEnCours = new Image();
+      etatEnCours.src = "/static/images/pause.png";
+      liste_etat_fiche.push(etatEnCours);
+    }
+    if (etat === 1){
+      const etatFini = new Image();
+      etatFini.src = "/static/images/check.png";
+      liste_etat_fiche.push(etatFini);
+    }
+    if (etat === 2){
+      const etatArret = new Image();
+      etatArret.src = "/static/images/stop.png";
+      liste_etat_fiche.push(etatArret);
+    }
+  }
   var line_chart = new Chart(context, {
     type: 'line',
     data: {
@@ -21,6 +38,11 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
     },
     options: {
       plugins: {
+        elements:{
+          point:{
+            pointStyle: liste_etat_fiche,
+          }
+        },
         title: {
           display: true,
           text: 'Niveau total des fiches',
@@ -57,7 +79,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
               family: 'Montserrat',
             },
           },
-          max: 70,
+          max: 66,
           ticks: {
             stepSize: 1,
           },

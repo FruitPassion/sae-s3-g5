@@ -102,7 +102,6 @@ def get_etat_fiche_par_id_fiche(id_fiche):
     return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
         FicheIntervention.etat_fiche).first().etat_fiche
 
-
 def get_fiches_techniques_finies_par_login(login):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login

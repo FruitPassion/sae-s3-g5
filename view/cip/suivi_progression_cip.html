@@ -16,7 +16,7 @@
             <script src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
             <script>
                 window.onload = function() {
-                    creation_graphique_suivi_progression_cip({{ niv_fiche|safe }});
+                    creation_graphique_suivi_progression_cip({{ niv_fiche|safe }}, {{ etat_fiches }});
                 }
             </script>
         {% endblock %}
