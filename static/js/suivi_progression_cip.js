@@ -31,6 +31,9 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
               },
           }
       },
+      legend: {
+          display: false,
+      }
       layout: {
           padding: 0,
       },

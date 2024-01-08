@@ -28,7 +28,7 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
             i--;
         }
     }
-    
+    Chart.register(ChartDataLabels);
     var chart = new Chart(context, {
         type: 'pie',
         data: {
@@ -43,18 +43,19 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
         options: {
             plugins: {
                 legend: {
-                    display: false
+                    display: false,
                 },
                 datalabels: {
                     color: 'black',
                     anchor: 'center',
                     font: {
-                        size: 30,
+                        size: 50,
                         weight: 'bold'
                     },
                     formatter: (value, context) => {
                         return value;
-                    }
+                    },
+                    display: true,
                 },
             },
             responsive: true,
