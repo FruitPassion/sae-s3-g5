@@ -67,7 +67,28 @@ def get_id_cours_by_theme(theme):
     except Exception as e:
         logging.error("Erreur lors de la récupération de l'id du cours")
         logging.error(e)
+        
 
+def get_cours_id(nom_cours: str):
+    """
+    Retourne l'id d'un cours à partir de son nom
+
+    :return: Un id de cours
+    """
+    return Cours.query.with_entities(Cours.id_cours).filter_by(cours=nom_cours).first().id_cours
+
+
+def add_cours(theme, cours, duree, commit=True):
+    """
+    Ajoute un cours en BD
+
+    :return: id_cours
+    """
+    cours = Cours(theme=theme, cours=cours, duree=duree)
+    db.cours.add(cours)
+    if commit:
+        db.cours.commit()
+    return get_cours_id(theme)
 
 
 def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True):
