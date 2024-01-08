@@ -9,7 +9,7 @@ from custom_paquets.gestion_image import stocker_image_formation
 from model.apprenti import get_all_apprenti, add_apprenti, get_photo_profil_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formation, add_formation, update_formation, get_image_formation
-from model.session import add_apprenti_assister
+from model.cours import add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel, ModifierAdmin
 from custom_paquets.custom_form import AjouterPersonnel
 from custom_paquets.custom_form import AjouterFormation, ModifierFormation

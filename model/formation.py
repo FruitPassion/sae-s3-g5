@@ -93,7 +93,7 @@ def archiver_formation(id_formation, archiver=True, commit=True):
         return False
 
 
-def get_sessions_par_formation(id_formation):
+def get_cours_par_formation(id_formation):
     """
     :return: toutes les cours de la formation id_formation
     """

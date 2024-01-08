@@ -2,7 +2,7 @@ from custom_paquets.tester_usages import ApprentiTest, FormationTest
 from model.formation import archiver_formation
 from model.apprenti import remove_apprenti
 from model.formation import remove_formation
-from model.session import add_apprenti_assister
+from model.cours import add_apprenti_assister
 from model.shared_model import Apprenti, db, Formation, Session
 
 
@@ -36,7 +36,7 @@ def test_supprimer_formation(client):
     # Ajout d'un apprenti à la formation
     apprenti = ApprentiTest(commit=True)
 
-    # Ajout de l'apprenti dans une session de la formation
+    # Ajout de l'apprenti dans un cours de la formation
     add_apprenti_assister(apprenti.id_apprenti, formation.id_formation)
 
     # Suppression de la formation
