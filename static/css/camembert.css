@@ -25,7 +25,7 @@ canvas#camembert{
 }
 
 .box {
-    height: 30px;
+    height: 40px;
     width: 100px;
     margin-bottom: 15px;
     border: 1px solid black;
