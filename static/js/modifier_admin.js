@@ -54,9 +54,10 @@ function passer_parametre_form(element, nom_form){
             break;
         
         case "cours":
-            document.getElementById("theme").value = document.getElementById("theme-"+id_element).innerText;
-            document.getElementById("cours").value = document.getElementById("cours-"+id_element).innerText;
-            document.getElementById("duree").value = document.getElementById("duree-"+id_element).innerText;
+            document.getElementById("form_theme").value = document.getElementById("theme-"+id_element).innerText;
+            document.getElementById("form_cours").value = document.getElementById("cours-"+id_element).innerText;
+            document.getElementById("form_duree").value = document.getElementById("duree-"+id_element).innerText;
+            document.getElementById("select_formation").value = document.getElementById("formation-"+id_element).innerText;
             break;
     }
 }

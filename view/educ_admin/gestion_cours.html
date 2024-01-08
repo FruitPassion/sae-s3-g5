@@ -37,6 +37,7 @@
                         <th scope="col">Thème</th>
                         <th scope="col">Intitulé</th>
                         <th scope="col">Durée</th>
+                        <th scope="col">Formation associée</th>
                         <th scope="col">Modifier</th>
                         <th scope="col">Archiver</th>
                     </tr>
@@ -46,9 +47,9 @@
                         <tr class="text-center" id="ele-{{ cours['id_cours'] }}">
                             <td id="theme-{{ cours['id_cours'] }}"
                                 class="align-middle">{{ cours["theme"] }}</td>
-                            <td id="cours-{{ cours['cours'] }}" class="align-middle">{{ cours["cours"] }}</td>
-                            <td id="duree-{{ cours['duree'] }}"
-                                class="align-middle">{{ cours["duree"] }}</td>
+                            <td id="cours-{{ cours['id_cours'] }}" class="align-middle">{{ cours["cours"] }}</td>
+                            <td id="duree-{{ cours['id_cours'] }}" class="align-middle">{{ cours["duree"] }}</td>
+                            <td id="formation-{{ cours['id_cours'] }}">{{ cours['id_formation'] }}</td>   
                             <th scope="row" onclick="passer_parametre_form(this, 'cours')"
                                 class="align-middle ele-btn-modif" data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
@@ -64,50 +65,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
-                <form method="post" id="container-ajout" enctype="multipart/form-data">
-                    {{ form_ajouter.hidden_tag() }}
-                    <div class="d-flex w-75 test">
-                        <div class="m-4 w-50">
-                            <div>
-                                <h3 class="fs-1 my-3">Thème :</h3>
-                            </div>
-                            <div>
-                                {{ form_ajouter.theme(class="form-control fs-1 my-3") }}
-                            </div>
-                            <div>
-                                <h3 class="fs-1 my-3">Intitulé du cours :</h3>
-                            </div>
-                            <div>
-                                {{ form_ajouter.cours(class="form-control fs-1 my-3") }}
-                            </div>
-                        </div>
-                        <div class="m-4 w-50">
-                            <div>
-                                <h3 class="fs-1 my-3">Durée (en année) :</h3>
-                            </div>
-                            <div>
-                                {{ form_ajouter.duree(class="form-control fs-1 my-3") }}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 class="fs-1 my-3">Choisissez une formation :</h3>
-                            <select name="select_formation" class="fs-1 my-3 form-select" required>
-                                <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
-                                </option>
-                                {% for formation in formations %}
-                                    <option value="{{ formation['id_formation'] }}"
-                                    >{{ formation["intitule"] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="w-50 mx-auto my-5">
-                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
-                    </div>
-                </form>
-            </div>
+            
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
                 <table class="table table-bordered" id="table-archive" aria-describedby="table cours archivés">
                     <thead>
@@ -115,6 +73,7 @@
                         <th scope="col">Thème</th>
                         <th scope="col">Intitulé du cours</th>
                         <th scope="col">Durée</th>
+                        <th scope="col">Formation associée</th>
                         <th scope="col">Désarchiver</th>
                         <th scope="col">Supprimer</th>
                     </tr>
@@ -122,9 +81,10 @@
                     <tbody>
                     {% for cours in cours_archives %}
                         <tr class="text-center" id="arch-ele-{{ cours['id_cours'] }}">
-                            <td class="align-middle">{{ unCours["theme"] }}</td>
-                            <td class="align-middle">{{ unCours["cours"] }}</td>
-                            <td class="align-middle">{{ unCours["duree"] }}</td>
+                            <td class="align-middle">{{ cours["theme"] }}</td>
+                            <td class="align-middle">{{ cours["cours"] }}</td>
+                            <td class="align-middle">{{ cours["duree"] }}</td>
+                            <td class="align-middle">{{ cours["id_formation"] }}</td>
                             <th scope="row" class="align-middle ele-btn-desarchiver"
                                 onclick="validation_desarchivage(this)"
                                 data-bs-toggle="modal"
@@ -212,7 +172,7 @@
     </div>
 
     <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fs-1" id="modal-title">Modifier le cours</h5>
@@ -236,7 +196,7 @@
                         </div>
                         <div>
                             <h3 class="fs-1 my-3">Formation associée :</h3>
-                            <select name="select_formation" class="fs-1 my-3 form-select" required>
+                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select" required>
                                 <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                 </option>
                                 {% for formation in formations %}

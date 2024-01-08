@@ -8,7 +8,7 @@ from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
-from model.formation import get_all_formation
+from model.formation import get_all_formation, get_cours_par_formation, get_nom_formation
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours
 from model.trace import get_commentaires_par_fiche
 
@@ -62,8 +62,8 @@ def gestion_cours():
         update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data)
         return redirect(url_for("educadmin.gestion_cours"), 302)
     
-    return render_template("educ_admin/gestion_cours.html", cours=cours,
-                           form_modifier = form_modifier, coursArchives = coursArchives, formations = formations), 200
+    return render_template("educ_admin/gestion_cours.html", cours=cours, formations = formations,
+                           form_modifier = form_modifier, coursArchives = coursArchives), 200
 
 
 @educ_admin.route("/choix-eleve/<nom_formation>", methods=["GET"])

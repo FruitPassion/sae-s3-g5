@@ -115,5 +115,5 @@ class ModifierCours(FlaskForm):
     form_identifiant = HiddenField()
     form_theme = StringField(validators=[InputRequired()], render_kw={"placeholder": "Problème tuyauterie"})
     form_cours = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
-    form_duree = IntegerField(validators=[InputRequired()], render_kw={"placeholder": "4"})
+    form_duree = IntegerField(widget=NumberInput(min = 1))
     form_submit = SubmitField("Modifier")
