@@ -46,3 +46,13 @@ def test_route_personnalisation(client):
 
     # Test de vérification de la route
     assert response.request.path == "/educ-admin/personnalisation/" + str(id_fiche)
+
+def test_route_gestion_cours(client):
+    connexion_personnel_pin(client, login, mdp)
+    response = client.get(url_for("educ_admin.gestion_cours"))
+
+    # Test d'accès à la route
+    assert response.status_code == 200
+
+    # Test de vérification de la route
+    assert response.request.path == "/educ-admin/gestion-cours"
