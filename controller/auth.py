@@ -12,7 +12,7 @@ from custom_paquets.custom_form import LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
     check_apprenti, check_password_is_set
-from model.session import get_apprentis_by_formation
+from model.cours import get_apprentis_by_formation
 from model.formation import get_all_formation
 from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel, \
     get_liste_personnel_non_super

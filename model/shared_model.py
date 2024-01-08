@@ -24,11 +24,11 @@ class Assister(db.Model):
     __table_args__ = {'schema': 'db_fiches_dev'}
 
     id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), primary_key=True)
-    id_session = db.Column(db.ForeignKey('db_fiches_dev.Session.id_session'), primary_key=True)
+    id_cours = db.Column(db.ForeignKey('db_fiches_dev.Cours.id_cours'), primary_key=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='Assister.id_apprenti == Apprenti.id_apprenti',
                                backref='assistes')
-    Session = db.relationship('Session', primaryjoin='Assister.id_session == Session.id_session',
+    Cours = db.relationship('Cours', primaryjoin='Assister.id_cours == Cours.id_cours',
                               backref='assistes')
 
 
@@ -107,13 +107,13 @@ class FicheIntervention(db.Model):
     prenom_intervenant = db.Column(db.String(50), nullable=False)
     id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
     id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), nullable=False, index=True)
-    id_session = db.Column(db.ForeignKey('db_fiches_dev.Session.id_session'), nullable=False, index=True)
+    id_cours = db.Column(db.ForeignKey('db_fiches_dev.Cours.id_cours'), nullable=False, index=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
                                backref='fiches')
     Personnel = db.relationship('Personnel', primaryjoin='FicheIntervention.id_personnel == Personnel.id_personnel',
                                 backref='fiches')
-    Session = db.relationship('Session', primaryjoin='FicheIntervention.id_session == Session.id_session',
+    Cours = db.relationship('Cours', primaryjoin='FicheIntervention.id_cours == Cours.id_cours',
                               backref='fiches')
 
 
@@ -176,16 +176,16 @@ class Pictogramme(db.Model):
     souscategorie = db.Column(db.String(50), nullable=False)
 
 
-class Session(db.Model):
-    __tablename__ = 'Session'
+class Cours(db.Model):
+    __tablename__ = 'Cours'
     __table_args__ = {'schema': 'db_fiches_dev'}
 
-    id_session = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_cours = db.Column(db.Integer, primary_key=True, autoincrement=True)
     theme = db.Column(db.String(50), nullable=False)
     cours = db.Column(db.String(50), nullable=False)
     duree = db.Column(db.Integer)
     archive = db.Column(db.Boolean, nullable=False, default=False)
     id_formation = db.Column(db.ForeignKey('db_fiches_dev.Formation.id_formation'), nullable=False, index=True)
 
-    Formation = db.relationship('Formation', primaryjoin='Session.id_formation == Formation.id_formation',
-                                backref='sessions')
+    Formation = db.relationship('Formation', primaryjoin='Cours.id_formation == Formation.id_formation',
+                                backref='cours')
