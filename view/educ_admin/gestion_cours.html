@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_cours.css') }}">
 {% endblock %}
 
 {% block javascripts %}
@@ -89,18 +90,17 @@
                             <div>
                                 {{ form_ajouter.duree(class="form-control fs-1 my-3") }}
                             </div>
-                        </div>
-
-                        <div>
-                            <h3 class="fs-1 my-3">Choisissez une formation :</h3>
-                            <select name="select_formation" class="fs-1 my-3 form-select" required>
-                                <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
-                                </option>
-                                {% for formation in formations %}
-                                    <option value="{{ formation['id_formation'] }}"
-                                    >{{ formation["intitule"] }}</option>
-                                {% endfor %}
-                            </select>
+                            <div>
+                                <h3 class="fs-1 my-3">Choisissez une formation :</h3>
+                                <select name="select_formation" class="fs-1 my-3 form-select" required>
+                                    <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
+                                    </option>
+                                    {% for formation in formations %}
+                                        <option value="{{ formation['id_formation'] }}"
+                                        >{{ formation["intitule"] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="w-50 mx-auto my-5">
