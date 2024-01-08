@@ -29,7 +29,6 @@ function creation_graphique_suivi_progression_apprenti(etat_fiches) {
         }
     }
     
-    Chart.register(ChartDataLabels);
     var chart = new Chart(context, {
         type: 'pie',
         data: {

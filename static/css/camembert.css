@@ -17,10 +17,15 @@ canvas#camembert{
   margin: 30px;
 }
 
+.texte{
+  width: 50%;
+  text-align: justify;
+}
+
 .box {
     float: left;
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 100px;
     margin-bottom: 15px;
     border: 1px solid black;
     clear: both;
