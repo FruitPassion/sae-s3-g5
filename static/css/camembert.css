@@ -23,7 +23,7 @@ canvas#camembert{
 }
 
 .box {
-    float: left;
+    float: center;
     height: 30px;
     width: 100px;
     margin-bottom: 15px;
