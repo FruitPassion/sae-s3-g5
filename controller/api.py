@@ -6,7 +6,7 @@ from custom_paquets.decorateur import admin_login_required
 from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_apprenti, archiver_apprenti, \
     remove_apprenti, archiver_apprentis_formation, set_password_apprenti
 from model.formation import archiver_formation, remove_formation
-from model.personnel import archiver_personnel
+from model.personnel import archiver_personnel, remove_personnel
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -121,3 +121,12 @@ def api_desarchiver_personnel(id_personnel):
     Désarchiver un personnel à partir de son id
     """
     return {"valide": archiver_personnel(id_personnel, archiver=False)}
+
+
+@api.route("/supprimer-personnel/<id_personnel>", methods=["GET"])
+@admin_login_required
+def api_supprimer_personnel(id_personnel):
+    """
+    Supprimer un personnel à partir de son id
+    """
+    return {"valide": remove_personnel(id_personnel)}

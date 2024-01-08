@@ -103,7 +103,7 @@ def connexion_personnel_mdp():
     form = LoginPersonnelForm()
     code = 200
     if form.validate_on_submit():
-        if not check_personnel(form.login.data):
+        if not check_personnel(form.login.data) or form.login.data == "dummy":
             flash(COMPTE_INCONNU, "error")
             code = 403
         elif not check_password(form.login.data, form.password.data):

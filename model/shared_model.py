@@ -29,7 +29,7 @@ class Assister(db.Model):
     Apprenti = db.relationship('Apprenti', primaryjoin='Assister.id_apprenti == Apprenti.id_apprenti',
                                backref='assistes')
     Cours = db.relationship('Cours', primaryjoin='Assister.id_cours == Cours.id_cours',
-                              backref='assistes')
+                            backref='assistes')
 
 
 class ComposerPresentation(db.Model):
@@ -81,10 +81,6 @@ class ElementBase(db.Model):
     type = db.Column(db.String(50), nullable=False)
     text = db.Column(db.String(50))
     audio = db.Column(db.String(100))
-    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), index=True)
-
-    Personnel = db.relationship('Personnel', primaryjoin='ElementBase.id_personnel == Personnel.id_personnel',
-                                backref='elementbases')
 
 
 class FicheIntervention(db.Model):
@@ -114,7 +110,7 @@ class FicheIntervention(db.Model):
     Personnel = db.relationship('Personnel', primaryjoin='FicheIntervention.id_personnel == Personnel.id_personnel',
                                 backref='fiches')
     Cours = db.relationship('Cours', primaryjoin='FicheIntervention.id_cours == Cours.id_cours',
-                              backref='fiches')
+                            backref='fiches')
 
 
 class Formation(db.Model):

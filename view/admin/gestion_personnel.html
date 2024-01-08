@@ -151,6 +151,7 @@
                         <th scope="col">Role</th>
                         <th scope="col">Actif</th>
                         <th scope="col">Désarchiver</th>
+                        <th scope="col">Supprimer</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -173,6 +174,11 @@
                                 onclick="validation_desarchivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-desarchiver">
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-supprimer"
+                                onclick="validation_suppression(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-supprimer">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </th>
                         </tr>
                     {% endfor %}
@@ -318,6 +324,27 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Supprimer le personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="supprimer-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer le personnel ? Cette action
+                        est irréversible et entraînera l'anonymisation de ce personnel en base de données'.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
+                            onclick="supprimer_personnel()">Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>

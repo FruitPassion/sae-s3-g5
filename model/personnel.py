@@ -3,7 +3,7 @@ import logging
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.security import compare_passwords
 
-from model.shared_model import db, Personnel
+from model.shared_model import db, Personnel, LaisserTrace, EducAdmin, FicheIntervention
 
 
 def get_all_personnel(archive=False):
@@ -14,13 +14,15 @@ def get_all_personnel(archive=False):
     """
     personnel = Personnel.query.with_entities(
         Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
-        Personnel.essaies).order_by(Personnel.login).filter(Personnel.archive == archive).all()
+        Personnel.essaies).order_by(Personnel.login).filter(Personnel.archive == archive).filter(
+        Personnel.role != "dummy").all()
     return convert_to_dict(personnel)
 
 
 def get_liste_personnel_non_super(archive=False):
     return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
-        Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).all())
+        Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).filter(
+        Personnel.role != "dummy").all())
 
 
 def get_id_personnel_by_login(login: str):
@@ -175,6 +177,7 @@ def archiver_personnel(id_personnel: int, archiver=True, commit=True):
 
     :param id_personnel: id du membre du personnel à archiver
     :param archiver: True pour archiver, False pour désarchiver
+    :param commit: True pour commit, False pour ne pas commit
     :return: Booleen en fonction de la réussite de l'opération
     """
     try:
@@ -185,5 +188,50 @@ def archiver_personnel(id_personnel: int, archiver=True, commit=True):
         return True
     except Exception as e:
         logging.error("Erreur lors de l'archivage d'un membre du personnel")
+        logging.error(e)
+        return False
+
+
+def remove_personnel(id_personnel: int, commit=True):
+    """
+    Supprime un membre du personnel en l'anonimisant (dummy)
+    Remplace toute les référence à son id en base de données par celle du personnel dummy
+
+    :param id_personnel: id du membre du personnel à supprimer
+    :param commit: True pour commit, False pour ne pas commit
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    try:
+        # Retirer le personnel des traces
+        traces = LaisserTrace.query.filter_by(id_personnel=id_personnel).all()
+        if traces:
+            for trace in traces:
+                trace.id_personnel = 1
+
+        # Retirer le personnel des fiches d'intervention
+        fiches = FicheIntervention.query.filter_by(id_personnel=id_personnel).all()
+        if fiches:
+            for fiche in fiches:
+                fiche.id_personnel = 1
+
+        if commit:
+            db.session.commit()
+
+        # Retirer le personnel des Educateur Administrateur
+        educ_admin = EducAdmin.query.filter_by(id_personnel=id_personnel).first()
+        if educ_admin:
+            db.session.delete(educ_admin)
+
+        if commit:
+            db.session.commit()
+
+        # Supprimer le personnel
+        personnel = Personnel.query.filter_by(id_personnel=id_personnel).first()
+        db.session.delete(personnel)
+        if commit:
+            db.session.commit()
+        return True
+    except Exception as e:
+        logging.error("Erreur lors de la suppression d'un membre du personnel")
         logging.error(e)
         return False
