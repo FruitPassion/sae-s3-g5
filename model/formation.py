@@ -3,7 +3,7 @@ import logging
 from custom_paquets.converter import convert_to_dict
 from model.apprenti import remove_apprenti, get_apprenti_by_formation
 
-from model.shared_model import db, Formation, Session
+from model.shared_model import db, Formation, Cours
 
 
 def get_all_formation(archive=False):
@@ -95,9 +95,9 @@ def archiver_formation(id_formation, archiver=True, commit=True):
 
 def get_sessions_par_formation(id_formation):
     """
-    :return: toutes les sessions de la formation id_formation
+    :return: toutes les cours de la formation id_formation
     """
-    return Session.query.filter_by(id_formation=id_formation).all()
+    return Cours.query.filter_by(id_formation=id_formation).all()
 
 
 def remove_formation(id_formation, commit=True):
@@ -112,9 +112,9 @@ def remove_formation(id_formation, commit=True):
             remove_apprenti(apprenti.id_apprenti)
         if commit:
             db.session.commit()
-        for session in get_sessions_par_formation(id_formation):
-            print(session)
-            db.session.delete(session)
+        for cours in get_cours_par_formation(id_formation):
+            print(cours)
+            db.session.delete(cours)
         if commit:
             db.session.commit()
         db.session.delete(Formation.query.filter_by(id_formation=id_formation).first())

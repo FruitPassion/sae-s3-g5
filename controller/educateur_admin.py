@@ -9,7 +9,7 @@ from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
 from model.formation import get_all_formation
-from model.session import get_sessions_par_apprenti, get_apprentis_by_formation
+from model.cours import get_cours_par_apprenti, get_apprentis_by_formation
 from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -96,17 +96,17 @@ def ajouter_fiche(apprenti):
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
     form = AjouterFiche()
-    sessions = get_sessions_par_apprenti(get_id_apprenti_by_login(apprenti))
+    cours = get_cours_par_apprenti(get_id_apprenti_by_login(apprenti))
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
-        id_session = request.form.get('coursinput')
+        id_cours = request.form.get('coursinput')
         id_fiche = assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
                                               form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1,
-                                              degres, form.nomintervenant.data, form.prenomintervenant.data, id_session)
+                                              degres, form.nomintervenant.data, form.prenomintervenant.data, id_cours)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche), 302)
     return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti,
-                           sessions=sessions), 200
+                           cours=cours), 200
 
 
 @educ_admin.route("/personnalisation/<id_fiche>", methods=["GET", "POST"])

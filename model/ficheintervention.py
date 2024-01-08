@@ -171,7 +171,7 @@ def copier_fiche(id_fiche: int, login_personnel: str):
                                        prenom_intervenant=fiche_a_copier.prenom_intervenant,
                                        id_personnel=get_id_personnel_by_login(login_personnel),
                                        id_apprenti=get_id_apprenti_by_login(login_apprenti),
-                                       id_session=fiche_a_copier.id_session)
+                                       id_cours=fiche_a_copier.id_cours)
     db.session.add(nouvelle_fiche)
     db.session.commit()
     composer_fiche = get_composer_presentation(id_fiche)
@@ -207,7 +207,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     :param couleur_intervention: couleur de l'intervention
     :param nom_intervenant: nom de l'intervenant
     :param prenom_intervenant: prenom de l'intervenant
-    :param id_session: id de la session
+    :param id_cours: id du cours
     :return: Code de validation en fonction du résultat
     """
     # Si l'apprenti a deja une fiche, on copie les elements de la derniere fiche
@@ -224,7 +224,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                        photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
                                        prenom_intervenant=prenom_intervenant,
                                        id_personnel=get_id_personnel_by_login(login_personnel),
-                                       id_apprenti=get_id_apprenti_by_login(login_apprenti), id_session=id_session)
+                                       id_apprenti=get_id_apprenti_by_login(login_apprenti), id_cours=id_cours)
     db.session.add(nouvelle_fiche)
     db.session.commit()
     # On ajoute les elements de la fiche

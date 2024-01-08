@@ -4,7 +4,7 @@ from custom_paquets.converter import convert_to_dict
 from custom_paquets.security import compare_passwords
 
 from model.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
-    FicheIntervention, Session
+    FicheIntervention, Cours
 
 
 def get_all_apprenti(archive=False):
@@ -171,7 +171,7 @@ def archiver_apprentis_formation(id_formation, archiver=True, commit=True):
     :return: None
     """
     try:
-        apprentis = Apprenti.query.join(Assister).join(Session).filter_by(id_formation=id_formation).all()
+        apprentis = Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
         for apprenti in apprentis:
             apprenti.archive = archiver
         if commit:
@@ -236,7 +236,7 @@ def remove_apprenti(id_apprenti, commit=True):
 
 
 def get_apprenti_by_formation(id_formation):
-    return Apprenti.query.join(Assister).join(Session).filter_by(id_formation=id_formation).all()
+    return Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
 
 
 def get_photo_profil_apprenti(id_apprenti):

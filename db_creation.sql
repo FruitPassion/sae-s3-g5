@@ -48,15 +48,15 @@ CREATE TABLE Formation
     PRIMARY KEY (id_formation)
 );
 
-CREATE TABLE Session
+CREATE TABLE Cours
 (
-    id_session   INT AUTO_INCREMENT,
+    id_cours   INT AUTO_INCREMENT,
     theme        VARCHAR(50) NOT NULL,
     cours        VARCHAR(50) NOT NULL,
     duree        INT,
     id_formation INT         NOT NULL,
     archive      BOOLEAN     NOT NULL DEFAULT (0),
-    PRIMARY KEY (id_session),
+    PRIMARY KEY (id_cours),
     FOREIGN KEY (id_formation) REFERENCES Formation (id_formation)
 );
 
@@ -107,11 +107,11 @@ CREATE TABLE FicheIntervention
     prenom_intervenant   VARCHAR(50) NOT NULL,
     id_personnel         INT         NOT NULL,
     id_apprenti          INT         NOT NULL,
-    id_session         INT         NOT NULL,
+    id_cours         INT         NOT NULL,
     PRIMARY KEY (id_fiche),
     FOREIGN KEY (id_personnel) REFERENCES EducAdmin (id_personnel),
     FOREIGN KEY (id_apprenti) REFERENCES Apprenti (id_apprenti),
-    FOREIGN KEY (id_session) REFERENCES Session (id_session),
+    FOREIGN KEY (id_cours) REFERENCES Cours (id_cours),
     CONSTRAINT ch_fiche_etat CHECK (FicheIntervention.etat_fiche >= 0 AND FicheIntervention.etat_fiche <= 2),
     CONSTRAINT ch_fiche_degre CHECK (FicheIntervention.degre_urgence >= 1 AND FicheIntervention.degre_urgence <= 4)
 );
@@ -139,10 +139,10 @@ CREATE TABLE LaisserTrace
 CREATE TABLE Assister
 (
     id_apprenti INT,
-    id_session  INT,
-    PRIMARY KEY (id_apprenti, id_session),
+    id_cours  INT,
+    PRIMARY KEY (id_apprenti, id_cours),
     FOREIGN KEY (id_apprenti) REFERENCES Apprenti (id_apprenti),
-    FOREIGN KEY (id_session) REFERENCES Session (id_session)
+    FOREIGN KEY (id_cours) REFERENCES Cours (id_cours)
 );
 
 CREATE TABLE ComposerPresentation
@@ -227,7 +227,7 @@ INSERT INTO Formation (intitule, niveau_qualif, groupe, image)
 VALUES ('Parcours plomberie', 3, 1, 'formation_image/plomberie.jpg'),
        ('Parcours maintenance bâtiment', 3, 2, 'formation_image/maintenance_batiment.jpg');
 
-INSERT INTO Session (theme, cours, duree, id_formation)
+INSERT INTO Cours (theme, cours, duree, id_formation)
 VALUES ('Probleme tuyauterie', 'Colmater fuite', 3, 1),
        ('Probleme tuyauterie', 'Remplacer tuyau rouillé', 4, 1),
        ('Probleme tuyauterie', 'Remplacer Joint', 2, 1),
@@ -236,7 +236,7 @@ VALUES ('Probleme tuyauterie', 'Colmater fuite', 3, 1),
        ('Serrurier', 'Demonter serrure', 3, 2),
        ('Electrique', 'Remplacer tube néon', 3, 2);
 
-INSERT INTO Assister (id_apprenti, id_session)
+INSERT INTO Assister (id_apprenti, id_cours)
 VALUES (2, 1),
        (2, 2),
        (2, 3),
@@ -295,7 +295,7 @@ VALUES ('Intervention', 'categorie', NULL, NULL, 3),
 
 INSERT INTO FicheIntervention (id_fiche, numero, nom_du_demandeur, date_demande, localisation, description_demande,
                                degre_urgence, couleur_intervention, etat_fiche, date_creation, id_personnel,
-                               id_apprenti, nom_intervenant, prenom_intervenant, id_session)
+                               id_apprenti, nom_intervenant, prenom_intervenant, id_cours)
 VALUES (1, 0, 'dummy', '1990-01-01', 'dummy', 'dummy', 4, 'vert', 0, '1999-01-01 01:01:01', 2, 1, 'Daniel', 'Bernard', 1),
        (2, 1, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 0, '2023-11-03 12:30:00', 2,
         2, 'Daniel', 'Bernard', 1),
