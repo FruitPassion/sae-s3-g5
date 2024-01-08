@@ -19,7 +19,7 @@ canvas#camembert{
 
 .texte{
   width: 50%;
-  text-align: justify;
+  padding: 20px;
 }
 
 .box {
