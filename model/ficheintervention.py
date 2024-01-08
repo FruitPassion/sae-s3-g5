@@ -193,7 +193,7 @@ def copier_fiche(id_fiche: int, login_personnel: str):
 
 def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_demande: date, nom_demandeur: str,
                                localisation: str, description_demande: str, degre_urgence: int,
-                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_session : str):
+                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_cours : str):
     """
     A partir de la fiche par defaut, la duplique et l'assigne a un eleve
 

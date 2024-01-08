@@ -46,10 +46,17 @@ function passer_parametre_form(element, nom_form){
             document.getElementById("nom_admin").value = document.getElementById("nom-"+id_element).innerText;
             document.getElementById("prenom_admin").value = document.getElementById("prenom-"+id_element).innerText;
             break;
+
         case "formation":
             document.getElementById("form_intitule").value = document.getElementById("intitule-"+id_element).innerText;
             document.getElementById("form_niveau_qualif").value = document.getElementById("niveau_qualif-"+id_element).innerText;
             document.getElementById("form_groupe").value = document.getElementById("groupe-"+id_element).innerText;
+            break;
+        
+        case "cours":
+            document.getElementById("theme").value = document.getElementById("theme-"+id_element).innerText;
+            document.getElementById("cours").value = document.getElementById("cours-"+id_element).innerText;
+            document.getElementById("duree").value = document.getElementById("duree-"+id_element).innerText;
             break;
     }
 }

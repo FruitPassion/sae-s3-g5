@@ -1,6 +1,6 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import EmailField, HiddenField, StringField, PasswordField, SubmitField, DateField
+from wtforms import EmailField, HiddenField, IntegerField, StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea, NumberInput
 
@@ -103,4 +103,17 @@ class ModifierFormation(FlaskForm):
     form_intitule = StringField(validators=[InputRequired()], render_kw={"placeholder": "Parcours electricité"})
     form_niveau_qualif = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
     form_groupe = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
+    form_submit = SubmitField("Modifier")
+
+
+
+
+class ModifierCours(FlaskForm):
+    """
+    Formulaire de modification d'un cours
+    """
+    form_identifiant = HiddenField()
+    form_theme = StringField(validators=[InputRequired()], render_kw={"placeholder": "Problème tuyauterie"})
+    form_cours = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
+    form_duree = IntegerField(validators=[InputRequired()], render_kw={"placeholder": "4"})
     form_submit = SubmitField("Modifier")

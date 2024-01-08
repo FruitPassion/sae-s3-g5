@@ -54,3 +54,37 @@ def add_apprenti_assister(id_apprenti, id_formation):
         assister = Assister(id_apprenti=id_apprenti, id_cours=unCours.id_cours)
         db.session.add(assister)
     db.session.commit()
+
+
+def get_id_cours_by_theme(theme):
+    """
+    Retourne l'id d'un cours en fonction de son thème
+
+    :return: id_cours
+    """
+    try:
+        return Cours.query.filter_by(theme=theme).first().id_cours
+    except Exception as e:
+        logging.error("Erreur lors de la récupération de l'id du cours")
+        logging.error(e)
+
+
+
+def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True):
+    """
+    Modifie un cours en BD
+
+    :return: None
+    """
+    try:
+        cours = Cours.query.filter_by(id_cours = identifiant).first()
+        cours.theme = theme
+        cours.cours = intitule
+        cours.duree = duree
+        cours.id_formation = id_formation
+        if commit:
+            db.session.commit()
+    except Exception as e:
+        logging.error("Erreur lors de la modification du cours")
+        logging.error(e)
+
