@@ -13,23 +13,24 @@ li {
     padding: 1.45em;
     padding-top: 1em;
     padding-bottom: 1em;
+    font-size: 30px;
 }
 
 .haut {
     width: 95%;
     height: 20%;
     position: absolute;
-    left: 24.5px;
+    left: 30px;
+    top: 900px;
+    margin-top: 150px;
 }
 
 .diagramme {
     background-color: white;
-    width: 95%;
-    height: 85%;
+    width: 90%;
+    height: 90%;
     position: absolute;
-    border-radius: 10px;
-    padding: 100px;
-    align-content: center;
+    margin: 5%;
 }
 
 #suivi_progression_apprenti {
@@ -46,31 +47,16 @@ li {
 
     }
 
-    .diagramme {
-        height: 95%;
-    }
-
     .btn {
         top: 34em;
     }
 
 }
 
-@media screen and (width > 1290px ) {
+@media screen and (height > 700px) {
 
-    .haut li {
-        font-size: 1.5em;
-        padding: 4.25em;
-        padding-top: 1em;
-        padding-bottom: 1em;
-
+    #suivi_progression_cip {
+        height: 100%;
     }
-
-    .diagramme {
-        height: 85%;
-        padding-bottom: 100px;
-        padding-left: 30px;
-        padding-right: 30px;
-    }
-
+    
 }
