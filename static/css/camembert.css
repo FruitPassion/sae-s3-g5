@@ -42,3 +42,7 @@ canvas#camembert{
   .orange {
     background-color: #FF8B28;
   }
+
+  p{
+    text-align: left;
+  }
