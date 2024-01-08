@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_cours.css') }}">
 {% endblock %}
 
 {% block javascripts %}
@@ -65,7 +66,49 @@
                     </tbody>
                 </table>
             </div>
-            
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    {{ form_ajouter.hidden_tag() }}
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Thème :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.theme(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Intitulé du cours :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.cours(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Durée (en année) :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.duree(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Choisissez une formation :</h3>
+                                <select name="select_formation" class="fs-1 my-3 form-select" required>
+                                    <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
+                                    </option>
+                                    {% for formation in formations %}
+                                        <option value="{{ formation['id_formation'] }}"
+                                        >{{ formation["intitule"] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-50 mx-auto my-5">
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
+            </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
                 <table class="table table-bordered" id="table-archive" aria-describedby="table cours archivés">
                     <thead>

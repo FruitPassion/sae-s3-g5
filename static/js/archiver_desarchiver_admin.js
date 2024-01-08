@@ -85,7 +85,7 @@ function archiver(route, elementid = "archiver-value") {
                         break;
                     case "personnel":
                         clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
-                        clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = "";
+                        clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
                         break;
                 }
                 table.appendChild(clone);
@@ -128,16 +128,14 @@ function desarchiver(route) {
         if (data["valide"]) {
             afficher_snack("Desarchivage réussi !", "success");
             switch (route) {
-                case "apprenti":
-                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
-                    clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
-                    break;
                 case "formation":
                     clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
                     clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver + btn_archiver_apprenti;
                     break;
+                case "apprenti":
                 case "personnel":
-                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route) + btn_archiver;
+                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
+                    clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
                     break;
             }
             table.appendChild(clone);

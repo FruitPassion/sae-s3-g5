@@ -3,13 +3,14 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import AjouterFiche, ModifierCours
+from custom_paquets.custom_form import AjouterCours
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
-from model.formation import get_all_formation, get_cours_par_formation, get_nom_formation
-from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours
+from model.formation import get_all_formation
+from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -43,7 +44,7 @@ def choix_formation():
     return render_template("educ_admin/choix_formation.html", formations=formations), 200
 
 
-@educ_admin.route("/gestion-cours", methods=["GET"])
+@educ_admin.route("/gestion-cours", methods=["GET", "POST"])
 @educadmin_login_required
 def gestion_cours():
     """
@@ -56,14 +57,18 @@ def gestion_cours():
     coursArchives = get_all_cours(archive=True)
     form_modifier = ModifierCours()
     formations = get_all_formation()
+    form_ajouter = AjouterCours()
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
         update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data)
         return redirect(url_for("educadmin.gestion_cours"), 302)
+    elif form_ajouter.validate_on_submit() and request.method == "POST":
+        add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data)
+        return redirect(url_for("educ_admin.gestion_cours"), 302)
     
-    return render_template("educ_admin/gestion_cours.html", cours=cours, formations = formations,
-                           form_modifier = form_modifier, coursArchives = coursArchives), 200
+    return render_template("educ_admin/gestion_cours.html", cours=cours,
+                           form_modifier = form_modifier, form_ajouter=form_ajouter, coursArchives = coursArchives, formations = formations), 200
 
 
 @educ_admin.route("/choix-eleve/<nom_formation>", methods=["GET"])
@@ -165,3 +170,4 @@ def visualiser_commentaires(apprenti, fiche):
     commentaires = get_commentaires_par_fiche(fiche)
     return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
+    

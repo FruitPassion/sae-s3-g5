@@ -106,6 +106,14 @@ class ModifierFormation(FlaskForm):
     form_submit = SubmitField("Modifier")
 
 
+class AjouterCours(FlaskForm):
+    """
+    Formulaire d'ajout d'un cours
+    """
+    theme = StringField(validators=[InputRequired()], render_kw={"placeholder": "Problème tuyauterie"})
+    cours = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
+    duree = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
+    submit = SubmitField("Ajouter")
 
 
 class ModifierCours(FlaskForm):
