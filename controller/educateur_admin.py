@@ -64,7 +64,8 @@ def gestion_cours():
         update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data)
         return redirect(url_for("educadmin.gestion_cours"), 302)
     elif form_ajouter.validate_on_submit() and request.method == "POST":
-        add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data)
+        selected_formation_id = request.form.get('select_formation')
+        add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data, selected_formation_id)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
     
     return render_template("educ_admin/gestion_cours.html", cours=cours,

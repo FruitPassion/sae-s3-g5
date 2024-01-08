@@ -78,17 +78,17 @@ def get_cours_id(nom_cours: str):
     return Cours.query.with_entities(Cours.id_cours).filter_by(cours=nom_cours).first().id_cours
 
 
-def add_cours(theme, cours, duree, commit=True):
+def add_cours(theme, cours, duree, id_formation, commit=True):
     """
     Ajoute un cours en BD
 
     :return: id_cours
     """
-    cours = Cours(theme=theme, cours=cours, duree=duree)
-    db.cours.add(cours)
+    cours = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
+    db.session.add(cours)
     if commit:
-        db.cours.commit()
-    return get_cours_id(theme)
+        db.session.commit()
+    return cours.id_cours
 
 
 def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True):
