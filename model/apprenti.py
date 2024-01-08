@@ -1,7 +1,7 @@
 import logging
 
 from custom_paquets.converter import convert_to_dict
-from custom_paquets.security import compare_passwords
+from custom_paquets.security import compare_passwords, encrypt_password
 
 from model.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
     FicheIntervention, Cours
@@ -60,6 +60,21 @@ def check_apprenti(login: str):
     :return: Un booleen vrai si le compte existe
     """
     return Apprenti.query.filter_by(login=login).count() == 1
+
+
+def set_password_apprenti(login: str, new_password: str):
+    """
+    À partir d'un login et d'un mot de passe, modifie le mot de passe de l'apprenti
+
+    :return: Un booleen vrai si le mot de passe a été modifié
+    """
+    try:
+        apprenti = Apprenti.query.filter_by(login=login).first()
+        apprenti.mdp = encrypt_password(new_password)
+        db.session.commit()
+        return True
+    except:
+        return False
 
 
 def check_password_apprenti(login: str, new_password: str):

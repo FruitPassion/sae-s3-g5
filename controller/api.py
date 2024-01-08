@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify
 
 from custom_paquets.decorateur import admin_login_required
 from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_apprenti, archiver_apprenti, \
-    remove_apprenti, archiver_apprentis_formation
+    remove_apprenti, archiver_apprentis_formation, set_password_apprenti
 from model.formation import archiver_formation, remove_formation
 from model.personnel import archiver_personnel
 
@@ -27,6 +27,20 @@ def api_check_password_apprenti(user, password):
         return {"valide": check_password_apprenti(user, password)}
     else:
         return {"blocage": True}
+
+
+@api.route("/set-password-apprenti/<user>/<password>", methods=["GET"])
+def api_set_password_apprenti(user, password):
+    """
+    Modifie le mot de passe d'un apprenti
+
+    :param user: Login de l'apprenti
+    :param password: Nouveau mot de passe
+    """
+    if check_password_apprenti(user, password):
+        return {"valide": False}
+    else:
+        return {"valide": set_password_apprenti(user, password)}
 
 
 @api.route("/archiver-formation/<id_formation>", methods=["GET"])
