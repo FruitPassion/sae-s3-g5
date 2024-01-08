@@ -1,7 +1,7 @@
 import logging
 
 from custom_paquets.converter import convert_to_dict
-from custom_paquets.security import compare_passwords
+from custom_paquets.security import compare_passwords, encrypt_password
 
 from model.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
     FicheIntervention, Cours
@@ -62,6 +62,21 @@ def check_apprenti(login: str):
     return Apprenti.query.filter_by(login=login).count() == 1
 
 
+def set_password_apprenti(login: str, new_password: str):
+    """
+    À partir d'un login et d'un mot de passe, modifie le mot de passe de l'apprenti
+
+    :return: Un booleen vrai si le mot de passe a été modifié
+    """
+    try:
+        apprenti = Apprenti.query.filter_by(login=login).first()
+        apprenti.mdp = encrypt_password(new_password)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
 def check_password_apprenti(login: str, new_password: str):
     """
     À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
@@ -91,7 +106,7 @@ def get_nbr_essaie_connexion_apprenti(login: str):
     return Apprenti.query.filter_by(login=login).first().essaies
 
 
-def update_nbr_essaies_connexion(login: str, nombre_essais=0):
+def update_nbr_essaies_connexion(login: str):
     """
     Augmente le nombre d'essais de connexion d'un apprenti de 1
     Limité à cinq essais.
@@ -100,7 +115,22 @@ def update_nbr_essaies_connexion(login: str, nombre_essais=0):
     """
     apprenti = Apprenti.query.filter_by(login=login).first()
     apprenti.essaies = apprenti.essaies + 1
-    apprenti.essaies = nombre_essais
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+def set_nbr_essaies_connexion(login: str, nbr_essaies: int):
+    """
+    Modifie le nombre d'essais de connexion d'un apprenti
+    Limité à cinq essais.
+
+    :return: Booleen en fonction de la réussite de l'opération
+    """
+    apprenti = Apprenti.query.filter_by(login=login).first()
+    apprenti.essaies = nbr_essaies
     try:
         db.session.commit()
         return True
