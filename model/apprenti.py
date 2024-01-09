@@ -191,28 +191,6 @@ def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, com
         logging.error(e)
 
 
-def archiver_apprentis_formation(id_formation, archiver=True, commit=True):
-    """
-    Archive tous les apprentis d'une formation en BD
-
-    :param id_formation: id de la formation
-    :param archiver: True pour archiver, False pour désarchiver
-    :param commit: True pour commit, False pour ne pas commit
-    :return: None
-    """
-    try:
-        apprentis = Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
-        for apprenti in apprentis:
-            apprenti.archive = archiver
-        if commit:
-            db.session.commit()
-        return True
-    except Exception as e:
-        logging.error("Erreur lors de l'archivage des apprentis d'une formation")
-        logging.error(e)
-        return False
-
-
 def archiver_apprenti(id_apprenti, archiver=True, commit=True):
     """
     Archive un apprenti en BD

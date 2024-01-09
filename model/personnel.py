@@ -235,3 +235,5 @@ def remove_personnel(id_personnel: int, commit=True):
         logging.error("Erreur lors de la suppression d'un membre du personnel")
         logging.error(e)
         return False
+
+

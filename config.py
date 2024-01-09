@@ -27,10 +27,12 @@ class DevConfig:
     SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
-    SESSION_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
     }
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
 
 
 class ProdConfig:
@@ -47,7 +49,9 @@ class ProdConfig:
     SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
-    SESSION_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
     }
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'

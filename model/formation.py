@@ -113,7 +113,6 @@ def remove_formation(id_formation, commit=True):
         if commit:
             db.session.commit()
         for cours in get_cours_par_formation(id_formation):
-            print(cours)
             db.session.delete(cours)
         if commit:
             db.session.commit()
@@ -125,3 +124,35 @@ def remove_formation(id_formation, commit=True):
         logging.error("Erreur lors de la suppression d'une formation")
         logging.error(e)
         return False
+
+
+def reinitisaliser_formation(id_formation, commit=True):
+    """
+    Reinitialise une formation en retirant tous les apprentis et les cours d'une formation
+
+    :param id_formation:
+    :param commit:
+    :return:
+    """
+    try:
+        # TODO: appel de la génération des XLS pour les apprentis et les cours
+        # generer_xls_apprentis(id_formation)
+        # generer_xls_cours(id_formation)
+
+        # Suppression des apprentis
+        for apprenti in get_apprenti_by_formation(id_formation):
+            remove_apprenti(apprenti.id_apprenti)
+
+        # Suppression des cours
+        for cours in get_cours_par_formation(id_formation):
+            db.session.delete(cours)
+
+        if commit:
+            db.session.commit()
+        return True
+    except Exception as e:
+        logging.error("Erreur lors de la reinitisalisation d'une formation")
+        logging.error(e)
+        return False
+
+
