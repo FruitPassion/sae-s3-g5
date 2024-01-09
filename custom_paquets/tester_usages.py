@@ -6,7 +6,7 @@ from custom_paquets.security import encrypt_password
 from model.apprenti import add_apprenti, update_apprenti
 from model.formation import add_formation
 from model.personnel import reset_nbr_essaies_connexion, add_personnel, update_personnel
-
+from model.cours import add_cours
 
 # Fonction de connexion avec un code pin
 def connexion_personnel_pin(client, username, password):
@@ -87,3 +87,12 @@ class FormationTest:
         self.image = "formation_image/elec.jpg"
 
         self.id_formation = add_formation(self.intitule, self.niveau_qualification, self.groupe, self.image, commit=commit)
+
+class CoursTest:
+    def __init__(self, commit=False):
+        self.theme = "Electrique"
+        self.cours = "Réparer un branchement électrique"
+        self.duree = 5
+        self.id_formation = 2
+
+        self.id_cours = add_cours(self.theme, self.cours, self.duree, self.id_formation, commit=commit)
