@@ -15,6 +15,7 @@
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/reinitialiser_admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -62,8 +63,8 @@
                                 <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                             </th>
                             <th scope="row" class="align-middle ele-btn-archiver-arpprenti"
-                                onclick="validation_archivage_apprentis(this)" data-bs-toggle="modal"
-                                data-bs-target="#modal-archiver-apprentis">
+                                onclick="validation_reinitialisation_formation(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-reinitialiser">
                                 <button><i class="fa fa-refresh" aria-hidden="true"></i></button>
                             </th>                            
                         </tr>
@@ -226,6 +227,26 @@
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
                             onclick="desarchiver_formation()">Désarchiver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-reinitialiser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <h5 class="modal-title fs-1" id="modal-title">Réinitialiser la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="reinitialiser-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir réinitialiser la formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="reinitialiser()">Reinitialiser</button>
                 </div>
             </div>
         </div>

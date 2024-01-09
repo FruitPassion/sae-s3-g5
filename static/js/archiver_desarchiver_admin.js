@@ -22,8 +22,8 @@ const btn_archiver =
 
 const btn_archiver_apprenti =
     '<th scope="row" class="align-middle ele-btn-archiver-arpprenti"\n' +
-    '                                onclick="validation_archivage_apprentis(this)" data-bs-toggle="modal"\n' +
-    '                                data-bs-target="#modal-archiver-apprentis">\n' +
+    '                                onclick="reinitialiser_formation(this)" data-bs-toggle="modal"\n' +
+    '                                data-bs-target="#modal-reinitialiser">\n' +
     '                                <button><i class="fa fa-refresh" aria-hidden="true"></i></button>\n' +
     '                            </th>'
 
@@ -39,11 +39,6 @@ function validation_archivage(element) {
     document.getElementById("archiver-value").value = element.parentElement.id.replace('ele-', '');
 }
 
-function validation_archivage_apprentis(element) {
-    document.getElementById("archiver-apprentis-value").value = element.parentElement.id.replace('ele-', '');
-}
-
-
 function archiver_apprenti() {
     archiver("apprenti");
 }
@@ -51,10 +46,6 @@ function archiver_apprenti() {
 
 function archiver_formation() {
     archiver("formation");
-}
-
-function archiver_apprentis_formation() {
-    archiver("apprentis-formation", "archiver-apprentis-value");
 }
 
 function archiver_personnel() {
@@ -74,6 +65,7 @@ function archiver(route, elementid = "archiver-value") {
             afficher_snack("Archivage réussi !", "success");
             if (data["retirer"]) {
                 switch (route) {
+                    case "personnel":
                     case "apprenti":
                         clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
                         clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
@@ -82,10 +74,6 @@ function archiver(route, elementid = "archiver-value") {
                         clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
                         clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
                         clone.getElementsByClassName("ele-btn-archiver-arpprenti")[0].outerHTML = "";
-                        break;
-                    case "personnel":
-                        clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
-                        clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
                         break;
                 }
                 table.appendChild(clone);

@@ -4,8 +4,8 @@ from flask import Blueprint, jsonify
 
 from custom_paquets.decorateur import admin_login_required
 from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_apprenti, archiver_apprenti, \
-    remove_apprenti, archiver_apprentis_formation, set_password_apprenti
-from model.formation import archiver_formation, remove_formation
+    remove_apprenti, set_password_apprenti
+from model.formation import archiver_formation, remove_formation, reinitisaliser_formation
 from model.personnel import archiver_personnel, remove_personnel
 
 api = Blueprint('api', __name__, url_prefix="/api")
@@ -51,13 +51,17 @@ def api_archiver_formation(id_formation, commit=True):
     return {"valide": archiver_formation(id_formation, commit=commit), "retirer": True}
 
 
-@api.route("/archiver-apprentis-formation/<id_formation>", methods=["GET"])
+@api.route("/reinitialiser-formation/<id_formation>", methods=["GET"])
 @admin_login_required
-def api_archiver_apprentis_formation(id_formation, commit=True):
+def api_reinitialiser_formation(id_formation, commit=True):
     """
-    Archiver tous les apprentis d'une formation à partir de son id
+    Réinitialiser une formation à partir de son id
+
+    :param id_formation:
+    :param commit:
+    :return: JSON valide
     """
-    return {"valide": archiver_apprentis_formation(id_formation, commit=commit), "retirer": False}
+    return {"valide": reinitisaliser_formation(id_formation, commit=commit)}
 
 
 @api.route("/desarchiver-formation/<id_formation>", methods=["GET"])
@@ -65,6 +69,9 @@ def api_archiver_apprentis_formation(id_formation, commit=True):
 def api_desarchiver_formation(id_formation):
     """
     Désarchiver une formation à partir de son id
+
+    :param id_formation:
+    :return: JSON valide
     """
     return {"valide": archiver_formation(id_formation, archiver=False)}
 
