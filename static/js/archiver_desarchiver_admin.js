@@ -53,6 +53,11 @@ function archiver_formation() {
     archiver("formation");
 }
 
+
+function archiver_cours() {
+    archiver("cours");
+}
+
 function archiver_apprentis_formation() {
     archiver("apprentis-formation", "archiver-apprentis-value");
 }
@@ -87,6 +92,10 @@ function archiver(route, elementid = "archiver-value") {
                         clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
                         clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
                         break;
+                    case "cours":
+                        clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
+                        clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
+                        break;
                 }
                 table.appendChild(clone);
                 row.parentElement.removeChild(row);
@@ -115,6 +124,12 @@ function desarchiver_personnel() {
     desarchiver("personnel");
 }
 
+
+function desarchiver_cours() {
+    desarchiver("cours");
+}
+
+
 function desarchiver(route) {
     let id_element = document.getElementById("desarchiver-value").value;
     let row = document.getElementById("arch-ele-" + id_element);
@@ -122,7 +137,7 @@ function desarchiver(route) {
     let clone = row.cloneNode(true);
     clone.id = clone.id.replace("arch-", "")
 
-    afficher_snack("Desarchivage en cours...", "info");
+    afficher_snack("Désarchivage en cours...", "info");
 
     $.getJSON("/api/desarchiver-" + route + "/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
@@ -134,6 +149,10 @@ function desarchiver(route) {
                     break;
                 case "apprenti":
                 case "personnel":
+                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
+                    clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
+                    break;
+                case "cours":
                     clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
                     clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
                     break;

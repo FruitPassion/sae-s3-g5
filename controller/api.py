@@ -7,6 +7,7 @@ from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_app
     remove_apprenti, archiver_apprentis_formation, set_password_apprenti
 from model.formation import archiver_formation, remove_formation
 from model.personnel import archiver_personnel, remove_personnel
+from model.cours import archiver_cours, remove_cours
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -103,6 +104,33 @@ def api_supprimer_apprenti(id_apprenti):
     Supprimer un apprenti à partir de son id
     """
     return {"valide": remove_apprenti(id_apprenti)}
+
+
+@api.route("/archiver-cours/<id_cours>", methods=["GET"])
+@admin_login_required
+def api_archiver_cours(id_cours):
+    """
+    Archiver un cours à partir de son id
+    """
+    return {"valide": archiver_cours(id_cours), "retirer": True}
+
+
+@api.route("/desarchiver-cours/<id_cours>", methods=["GET"])
+@admin_login_required
+def api_desarchiver_cours(id_cours):
+    """
+    Désarchiver un cours à partir de son id
+    """
+    return {"valide": archiver_cours(id_cours, archiver=False)}
+
+
+@api.route("/supprimer-cours/<id_cours>", methods=["GET"])
+@admin_login_required
+def api_supprimer_cours(id_cours):
+    """
+    Supprimer un cours à partir de son id
+    """
+    return {"valide": remove_cours(id_cours)}
 
 
 @api.route("/archiver-personnel/<id_personnel>", methods=["GET"])

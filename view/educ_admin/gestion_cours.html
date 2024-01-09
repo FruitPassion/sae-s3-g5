@@ -37,7 +37,7 @@
                     <tr class="text-center fs-1">
                         <th scope="col">Thème</th>
                         <th scope="col">Intitulé</th>
-                        <th scope="col">Durée</th>
+                        <th scope="col">Durée (en semaines)</th>
                         <th scope="col">Formation associée</th>
                         <th scope="col">Modifier</th>
                         <th scope="col">Archiver</th>
@@ -115,14 +115,14 @@
                     <tr class="text-center fs-1">
                         <th scope="col">Thème</th>
                         <th scope="col">Intitulé du cours</th>
-                        <th scope="col">Durée</th>
+                        <th scope="col">Durée (en semaines)</th>
                         <th scope="col">Formation associée</th>
                         <th scope="col">Désarchiver</th>
                         <th scope="col">Supprimer</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for cours in cours_archives %}
+                    {% for cours in coursArchives %}
                         <tr class="text-center" id="arch-ele-{{ cours['id_cours'] }}">
                             <td class="align-middle">{{ cours["theme"] }}</td>
                             <td class="align-middle">{{ cours["cours"] }}</td>

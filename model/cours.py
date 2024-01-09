@@ -109,3 +109,32 @@ def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True)
         logging.error("Erreur lors de la modification du cours")
         logging.error(e)
 
+
+def archiver_cours(id_cours, archiver=True):
+    """
+    Archive un cours en BD
+
+    :return: None
+    """
+    try:
+        cours = Cours.query.filter_by(id_cours=id_cours).first()
+        cours.archive = archiver
+        db.session.commit()
+    except Exception as e:
+        logging.error("Erreur lors de l'archivage du cours")
+        logging.error(e)
+
+
+def remove_cours(id_cours):
+    """
+    Supprime un cours en BD
+
+    :return: None
+    """
+    try:
+        cours = Cours.query.filter_by(id_cours=id_cours).first()
+        db.session.delete(cours)
+        db.session.commit()
+    except Exception as e:
+        logging.error("Erreur lors de la suppression du cours")
+        logging.error(e)
