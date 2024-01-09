@@ -3,7 +3,7 @@ from model.formation import archiver_formation
 from model.apprenti import remove_apprenti
 from model.formation import remove_formation
 from model.cours import add_apprenti_assister
-from model.shared_model import Apprenti, db, Formation, Session
+from model.shared_model import Apprenti, db, Formation, Cours
 
 
 def test_ajouter_formation(client):
@@ -46,7 +46,7 @@ def test_supprimer_formation(client):
     assert db.session.query(Formation).filter(Formation.id_formation == formation.id_formation).first() is None
 
     # Vérification qu'il n'y ait plus de session liée à la formation
-    assert db.session.query(Session).filter(Session.id_formation == formation.id_formation).first() is None
+    assert db.session.query(Cours).filter(Cours.id_formation == formation.id_formation).first() is None
 
     # Suppression de l'apprenti
     remove_apprenti(apprenti.id_apprenti)

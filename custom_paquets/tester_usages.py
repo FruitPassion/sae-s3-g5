@@ -75,8 +75,9 @@ class ApprentiTestModif:
         self.photo = "/url/photo2.jpg"
         self.login = generate_login(self.nom, self.prenom)
         self.password = encrypt_password("121212")
+        self.actif = True
 
-        update_apprenti(self.id_apprenti, self.login, self.nom, self.prenom, self.password, self.photo, commit=False)
+        update_apprenti(self.id_apprenti, self.login, self.nom, self.prenom, self.photo, self.password,self.actif, commit=False)
 
 
 class FormationTest:
