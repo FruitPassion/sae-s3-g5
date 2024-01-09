@@ -56,6 +56,10 @@ function archiver_personnel() {
     archiver("personnel");
 }
 
+function archiver_cours() {
+    archiver("cours");
+}
+
 function archiver(route, elementid = "archiver-value") {
     let id_element = document.getElementById(elementid).value;
     let row = document.getElementById("ele-" + id_element);
@@ -80,6 +84,10 @@ function archiver(route, elementid = "archiver-value") {
                         clone.getElementsByClassName("ele-btn-archiver-arpprenti")[0].outerHTML = "";
                         break;
                     case "personnel":
+                        clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
+                        clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
+                        break;
+                    case "cours":
                         clone.getElementsByClassName("ele-btn-modif")[0].outerHTML = btn_desarchiver;
                         clone.getElementsByClassName("ele-btn-archiver")[0].outerHTML = btn_supprimer;
                         break;

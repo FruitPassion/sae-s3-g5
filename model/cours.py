@@ -114,15 +114,17 @@ def archiver_cours(id_cours, archiver=True):
     """
     Archive un cours en BD
 
-    :return: None
+    :return: un boolean (True si l'archivage s'est bien passé, False sinon)
     """
     try:
         cours = Cours.query.filter_by(id_cours=id_cours).first()
         cours.archive = archiver
         db.session.commit()
+        return True
     except Exception as e:
         logging.error("Erreur lors de l'archivage du cours")
         logging.error(e)
+        return False
 
 
 def remove_cours(id_cours):
