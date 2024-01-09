@@ -9,7 +9,7 @@ from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
-from model.formation import get_all_formation
+from model.formation import get_all_formation, get_formation_id
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.trace import get_commentaires_par_fiche
 
@@ -48,8 +48,8 @@ def choix_formation():
 @educadmin_login_required
 def gestion_cours():
     """
-    Page de gestion des cours.
-    Permet d'ajouter, modifier ou supprimer un cours.
+    Page listant tous les cours et permettant de les supprimer, modifier, archiver et désarchiver.
+    On peux également rajouter des cours.
     
     :return: rendu de la page gestion_cours.html
     """
@@ -61,8 +61,9 @@ def gestion_cours():
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data)
-        return redirect(url_for("educadmin.gestion_cours"), 302)
+        update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data, form_modifier.select_formation.data)
+        return redirect(url_for("educ_admin.gestion_cours"), 302)
+    
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         selected_formation_id = request.form.get('select_formation')
         add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data, selected_formation_id)
