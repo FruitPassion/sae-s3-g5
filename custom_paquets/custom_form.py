@@ -75,7 +75,7 @@ class ModifierPersonnel(FlaskForm):
 
 class ModifierAdmin(FlaskForm):
     """
-    Formulaire de modification de l'admin admin
+    Formulaire de modification de l'admin
     """
     form_identifiant = HiddenField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})

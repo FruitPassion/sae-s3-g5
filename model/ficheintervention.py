@@ -116,9 +116,9 @@ def get_fiches_techniques_finies_par_login(login):
 
 def get_fiche_apprentis_existe(login: str):
     """
-    Verifie si l'apprenti à deja une fiche
+    Vérifie si l'apprenti a déjà une fiche
 
-    :return: Boolean, vrai si il en a faux sinon
+    :return: True s'il en a au moins une, False sinon
     """
     return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login)).count() != 0
 
@@ -148,9 +148,9 @@ def get_dernier_id_fiche_apprenti(login: str):
 
 def copier_fiche(id_fiche: int, login_personnel: str):
     """
-    A partir d'une fiche existante, la duplique et l'assigne a un eleve
+    A partir d'une fiche existante, la duplique et l'assigne a un apprenti
 
-    :param id_fiche: id de la fiche a copier
+    :param id_fiche: id de la fiche à copier
     :param login_personnel: login du personnel
     :return: Code de validation en fonction du résultat
     """
@@ -194,7 +194,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                localisation: str, description_demande: str, degre_urgence: int,
                                couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_cours : str):
     """
-    A partir de la fiche par defaut, la duplique et l'assigne a un eleve
+    A partir de la fiche par defaut, la duplique et l'assigne a un apprenti
 
     :param login_apprenti: login de l'apprenti
     :param login_personnel: login du personnel
@@ -202,17 +202,17 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     :param nom_demandeur: nom du demandeur
     :param localisation: localisation de la demande
     :param description_demande: description de la demande
-    :param degre_urgence: degre d'urgence de la demande
+    :param degre_urgence: degré d'urgence de la demande
     :param couleur_intervention: couleur de l'intervention
     :param nom_intervenant: nom de l'intervenant
-    :param prenom_intervenant: prenom de l'intervenant
+    :param prenom_intervenant: prénom de l'intervenant
     :param id_cours: id du cours
     :return: Code de validation en fonction du résultat
     """
-    # Si l'apprenti a deja une fiche, on copie les elements de la derniere fiche
+    # Si l'apprenti a déjà une fiche, on copie les éléments de la dernière fiche
     if get_fiche_apprentis_existe(login_apprenti):
         composer_fiche = get_composer_presentation(get_dernier_id_fiche_apprenti(login_apprenti))
-    # Sinon on copie les elements de la fiche par defaut
+    # Sinon on copie les éléments de la fiche par défaut
     else:
         composer_fiche = get_composer_presentation()
     numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
@@ -226,7 +226,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
                                        id_apprenti=get_id_apprenti_by_login(login_apprenti), id_cours=id_cours)
     db.session.add(nouvelle_fiche)
     db.session.commit()
-    # On ajoute les elements de la fiche
+    # On ajoute les éléments de la fiche
     for element in composer_fiche:
         element["id_fiche"] = nouvelle_fiche.id_fiche
         composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],

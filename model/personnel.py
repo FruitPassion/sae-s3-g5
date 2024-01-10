@@ -8,7 +8,7 @@ from model.shared_model import db, Personnel, LaisserTrace, EducAdmin, FicheInte
 
 def get_all_personnel(archive=False):
     """
-    Récupère l'id, nom, prenom et role de chaque membre du personnel
+    Récupère l'id, nom, prenom et rôle de chaque membre du personnel
 
     :return: La liste des membres du personnel
     """
@@ -34,7 +34,7 @@ def get_id_personnel_by_login(login: str):
 
 def check_super_admin(login: str):
     """
-    À partir d'un login, verifie si un compte possède le rôle superadmin.
+    À partir d'un login, vérifie si un compte possède le rôle superadmin.
 
     :return: Un booleen vrai si l'username appartient à un compte superadmin
     """
@@ -78,24 +78,24 @@ def check_password(login: str, new_password: str):
     """
     old_password = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
     digest = compare_passwords(new_password, old_password)
-    if digest and get_nbr_essaie_connexion_personnel(login) < 3:
-        reset_nbr_essaies_connexion(login)
-    elif not digest and get_nbr_essaie_connexion_personnel(login) < 3:
-        update_nbr_essaies_connexion(login)
+    if digest and get_nbr_essais_connexion_personnel(login) < 3:
+        reset_nbr_essais_connexion(login)
+    elif not digest and get_nbr_essais_connexion_personnel(login) < 3:
+        update_nbr_essais_connexion(login)
     return digest
 
 
-def get_nbr_essaie_connexion_personnel(login: str):
+def get_nbr_essais_connexion_personnel(login: str):
     """
-    À partir d'un login, recupère le nombre d'essai de connexion d'un personnel
+    À partir d'un login, recupère le nombre d'essais de connexion d'un personnel
 
     :param login: LOGIN (ABC12) d'un personnel
     :return: UN nombre allant de 0 à 3
     """
-    return Personnel.query.filter_by(login=login).first().essaies
+    return Personnel.query.filter_by(login=login).first().essais
 
 
-def update_nbr_essaies_connexion(login: str):
+def update_nbr_essais_connexion(login: str):
     """
     Augmente le nombre d'essais de connexion d'un personnel de 1
     Limité à 3
@@ -103,7 +103,7 @@ def update_nbr_essaies_connexion(login: str):
     :return: Booleen en fonction de la réussite de l'opération
     """
     personnel = Personnel.query.filter_by(login=login).first()
-    personnel.essaies = personnel.essaies + 1
+    personnel.essaies = personnel.essais + 1
     try:
         db.session.commit()
         return True
@@ -111,14 +111,14 @@ def update_nbr_essaies_connexion(login: str):
         return False
 
 
-def reset_nbr_essaies_connexion(login: str):
+def reset_nbr_essais_connexion(login: str):
     """
     Reset le nombre d'essais de connexion d'un personnel à 0
 
     :return: Booleen en fonction de la réussite de l'opération
     """
     personnel = Personnel.query.filter_by(login=login).first()
-    personnel.essaies = 0
+    personnel.essais = 0
     try:
         db.session.commit()
         return True
@@ -160,9 +160,9 @@ def update_personnel(identifiant, login, nom, prenom, email, role, actif=None, p
         if password is not None:
             personnel.mdp = password
         if actif:
-            personnel.essaies = 0
+            personnel.essais = 0
         elif actif == False:
-            personnel.essaies = 3
+            personnel.essais = 3
         if commit:
             db.session.commit()
 
@@ -194,12 +194,12 @@ def archiver_personnel(id_personnel: int, archiver=True, commit=True):
 
 def remove_personnel(id_personnel: int, commit=True):
     """
-    Supprime un membre du personnel en l'anonimisant (dummy)
+    Supprime un membre du personnel en l'anonymisant (dummy)
     Remplace toute les référence à son id en base de données par celle du personnel dummy
 
     :param id_personnel: id du membre du personnel à supprimer
     :param commit: True pour commit, False pour ne pas commit
-    :return: Booleen en fonction de la réussite de l'opération
+    :return: Booléen en fonction de la réussite de l'opération
     """
     try:
         # Retirer le personnel des traces

@@ -13,10 +13,10 @@ def get_all_apprentis(archive=False):
 
     :return: La liste des apprentis
     """
-    apprenti = Apprenti.query.with_entities(
+    apprentis = Apprenti.query.with_entities(
         Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essaies
     ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
-    return convert_to_dict(apprenti)
+    return convert_to_dict(apprentis)
 
 
 def get_adaptation_situation_examen_par_apprenti(login):
@@ -30,7 +30,7 @@ def get_adaptation_situation_examen_par_apprenti(login):
 
 def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_examen):
     """
-    Modifie le commentaire de la CIP (adptation situation d'examen) de l'apprenti identifié par son login
+    Modifie le commentaire de la CIP (adaptation situation d'examen) de l'apprenti identifié par son login
 
     :return: True si l'opération s'est bien déroulée, False sinon
     """
@@ -46,17 +46,17 @@ def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_
 
 def check_password_is_set(login: str):
     """
-    Vérifie si le mot de passe d'un apprenti à bien été paramétré
+    Vérifie si le mot de passe d'un apprenti a bien été paramétré
 
     :param login: Login de l'apprenti
-    :return: Un booleen si le mot de passe à été paramétré
+    :return: Un booleen si le mot de passe a été paramétré
     """
     return Apprenti.query.filter_by(login=login).first().mdp != "0000"
 
 
 def get_apprenti_by_login(login: str):
     """
-    Recupere les informations d'un apprenti à partir de son Login
+    Récupère les informations d'un apprenti à partir de son Login
 
     :return: Les informations de l'apprenti
     """
@@ -80,7 +80,7 @@ def get_login_apprenti_by_id(id_apprenti: str):
 
 def check_apprenti(login: str):
     """
-    À partir d'un login, verifie si un compte apprenti existe
+    À partir d'un login, vérifie si un compte apprenti existe
 
     :return: Un booleen vrai si le compte existe
     """
@@ -104,34 +104,34 @@ def set_password_apprenti(login: str, new_password: str):
 
 def check_password_apprenti(login: str, new_password: str):
     """
-    À partir d'un login et d'un mot de passe, verifie si le mot de passe est valide
-    Si le mot de passe est invalide, augmmente le nombre d'essaie de l'apprenti de 1
+    À partir d'un login et d'un mot de passe, vérifie si le mot de passe est valide
+    Si le mot de passe est invalide, augmente le nombre d'essais de l'apprenti de 1
 
     :return: Ub booleen vrai si le mot de passe est valide
     """
     try:
         old_password = Apprenti.query.with_entities(Apprenti.mdp).filter_by(login=login).first().mdp
         digest = compare_passwords(new_password, old_password)
-        if digest and get_nbr_essaie_connexion_apprenti(login) < 5:
-            reset_nbr_essaies_connexion(login)
-        elif not digest and get_nbr_essaie_connexion_apprenti(login) < 5:
-            update_nbr_essaies_connexion(login)
+        if digest and get_nbr_essais_connexion_apprenti(login) < 5:
+            reset_nbr_essais_connexion(login)
+        elif not digest and get_nbr_essais_connexion_apprenti(login) < 5:
+            update_nbr_essais_connexion(login)
         return digest
     except:
         return False
 
 
-def get_nbr_essaie_connexion_apprenti(login: str):
+def get_nbr_essais_connexion_apprenti(login: str):
     """
-    À partir d'un login, recupère le nombre d'essayer de connexion d'un apprenti
+    À partir d'un login, recupère le nombre de tentatives de connexion d'un apprenti
 
     :param login: LOGIN (ABC12) d'un apprenti
     :return: Un nombre allant de 0 à 5.
     """
-    return Apprenti.query.filter_by(login=login).first().essaies
+    return Apprenti.query.filter_by(login=login).first().essais
 
 
-def update_nbr_essaies_connexion(login: str):
+def update_nbr_essais_connexion(login: str):
     """
     Augmente le nombre d'essais de connexion d'un apprenti de 1
     Limité à cinq essais.
@@ -139,7 +139,7 @@ def update_nbr_essaies_connexion(login: str):
     :return: Booleen en fonction de la réussite de l'opération
     """
     apprenti = Apprenti.query.filter_by(login=login).first()
-    apprenti.essaies = apprenti.essaies + 1
+    apprenti.essais = apprenti.essais + 1
     try:
         db.session.commit()
         return True
@@ -147,7 +147,7 @@ def update_nbr_essaies_connexion(login: str):
         return False
 
 
-def set_nbr_essaies_connexion(login: str, nbr_essaies: int):
+def set_nbr_essais_connexion(login: str, nbr_essais: int):
     """
     Modifie le nombre d'essais de connexion d'un apprenti
     Limité à cinq essais.
@@ -155,7 +155,7 @@ def set_nbr_essaies_connexion(login: str, nbr_essaies: int):
     :return: Booleen en fonction de la réussite de l'opération
     """
     apprenti = Apprenti.query.filter_by(login=login).first()
-    apprenti.essaies = nbr_essaies
+    apprenti.essais = nbr_essais
     try:
         db.session.commit()
         return True
@@ -163,14 +163,14 @@ def set_nbr_essaies_connexion(login: str, nbr_essaies: int):
         return False
 
 
-def reset_nbr_essaies_connexion(login: str):
+def reset_nbr_essais_connexion(login: str):
     """
-    Reset le nombre d'essaie de connexion d'un apprenti a 0
+    Reset le nombre d'essais de connexion d'un apprenti à 0
 
     :return: Booleen en fonction de la réussite de l'opération
     """
     apprenti = Apprenti.query.filter_by(login=login).first()
-    apprenti.essaies = 0
+    apprenti.essais = 0
     try:
         db.session.commit()
         return True
@@ -206,9 +206,9 @@ def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, com
         if password:
             apprenti.mdp = "0000"
         if actif:
-            apprenti.essaies = 0
+            apprenti.essais = 0
         else:
-            apprenti.essaies = 5
+            apprenti.essais = 5
         if commit:
             db.session.commit()
     except Exception as e:
@@ -268,9 +268,12 @@ def remove_apprenti(id_apprenti, commit=True):
         return False
 
 
-def get_apprenti_by_formation(id_formation):
+def get_apprentis_by_formation(id_formation):
+    """
+    Récupère les apprentis d'une formation
+    """
     return Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
 
 
-def get_photo_profil_apprenti(id_apprenti):
+def get_photos_profil_apprenti(id_apprenti):
     return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.photo).first().photo
