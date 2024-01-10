@@ -13,7 +13,7 @@ from custom_paquets.decorateur import logout_required
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
     check_apprenti, check_password_is_set
 from model.cours import get_apprentis_by_formation
-from model.formation import get_all_formation
+from model.formation import get_all_formations
 from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel, \
     get_liste_personnel_non_super
 
@@ -138,7 +138,7 @@ def choix_formation_apprentis():
 
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
-    formations = get_all_formation()
+    formations = get_all_formations()
     return render_template("auth/choix_formation_apprentis.html", formations=formations), 200
 
 
