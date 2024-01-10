@@ -15,12 +15,12 @@ CREATE TABLE Personnel
     mdp          TEXT        NOT NULL,
     role         VARCHAR(50) NOT NULL,
     email        VARCHAR(100),
-    essaies      INT         NOT NULL DEFAULT (0),
+    essais      INT         NOT NULL DEFAULT (0),
     archive      BOOLEAN     NOT NULL DEFAULT (0),
     PRIMARY KEY (id_personnel),
     CONSTRAINT ch_personnel_role CHECK (role IN
                                         ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP', 'dummy')),
-    CONSTRAINT ch_personnel_essaies CHECK (Personnel.essaies >= 0 AND Personnel.essaies <= 3)
+    CONSTRAINT ch_personnel_essais CHECK (Personnel.essais >= 0 AND Personnel.essais <= 3)
 );
 
 CREATE TABLE Apprenti
@@ -31,11 +31,11 @@ CREATE TABLE Apprenti
     login       VARCHAR(50) NOT NULL,
     mdp         TEXT,
     photo       VARCHAR(100),
-    essaies     INT         NOT NULL DEFAULT (0),
+    essais     INT         NOT NULL DEFAULT (0),
     archive     BOOLEAN     NOT NULL DEFAULT (0),
     adaptation_situation_examen TEXT,
     PRIMARY KEY (id_apprenti),
-    CONSTRAINT ch_apprenti_essaies CHECK (Apprenti.essaies >= 0 AND Apprenti.essaies <= 5)
+    CONSTRAINT ch_apprenti_essais CHECK (Apprenti.essais >= 0 AND Apprenti.essais <= 5)
 );
 
 CREATE TABLE Formation
@@ -167,7 +167,7 @@ CREATE TABLE ComposerPresentation
 );
 
 
-INSERT INTO Personnel (nom, prenom, login, mdp, role, email, essaies)
+INSERT INTO Personnel (nom, prenom, login, mdp, role, email, essais)
 VALUES ('Supprimé', 'Utilisateur', 'dummy', 'dummy', 'dummy', NULL, 3),
        ('Dupont', 'Jean', 'JED10',
         '$2b$13$ZV3TQXG81BSnNEDFdSmSp.HnkMVeDlHSRXpT3wc73.OEoQ2v.4ONS',
@@ -196,7 +196,7 @@ VALUES ('Supprimé', 'Utilisateur', 'dummy', 'dummy', 'dummy', NULL, 3),
 
 
 
-INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essaies, adaptation_situation_examen)
+INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essais, adaptation_situation_examen)
 VALUES ('dummy', 'dummy', 'dummy', 'dummy', 'dummy', 0, null),
        ('Jacquard', 'Davy',
         '$2b$13$CmhJy5FUDujfBGZqigN3uuGmDd5pLZBHY1cUxFyXO7zMf7zOEQU9y',
