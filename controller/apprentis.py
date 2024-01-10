@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, session
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from model.apprenti import get_apprenti_by_login
-from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login
+from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id
 
 apprenti = Blueprint('apprenti', __name__, url_prefix="/apprenti")
 
@@ -27,7 +27,7 @@ def redirection_connexion():
     apprenti_infos = get_apprenti_by_login(session["name"])
     fiches = get_fiches_techniques_par_login(session['name'])
     fiches = changer_date(fiches)
-    return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos)
+    return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos, get_nom_cours_by_id=get_nom_cours_by_id)
 
 
 @apprenti.route("/redirection-connexion/suivi", methods=["GET"])

@@ -4,7 +4,7 @@ from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
 from model.trace import get_commentaires_par_fiche
 from model.apprenti import get_apprenti_by_login, get_adaptation_situation_examen_par_apprenti, update_adaptation_situation_examen_par_apprenti
-from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_finies_par_login, get_fiches_techniques_par_login, get_niveau_fiches_par_login, get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login
+from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_finies_par_login, get_fiches_techniques_par_login, get_niveau_fiches_par_login, get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login, get_nom_cours_by_id
 import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
@@ -41,7 +41,7 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
-    return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos, fiches=fiches)
+    return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos, fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
 
 
 @cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
