@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
 from model.trace import get_commentaires_par_fiche
-from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
+from model.apprenti import get_apprenti_by_login, get_adaptation_situation_examen_par_apprenti, update_adaptation_situation_examen_par_apprenti
 from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_finies_par_login, get_fiches_techniques_par_login, get_niveau_fiches_par_login, get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login
 import json
 
@@ -88,12 +88,50 @@ def suivi_progression_apprenti(apprenti):
 
 @cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
 @cip_login_required
-def adaptation_situation_examen(apprenti):
+def affichage_adaptation_situation_examen(apprenti):
     """
     Page de suivi d'adaptation en situation d'examen de l'apprenti sélectionné. 
-    Pour le moment ne fait que valider que l'on consulte l'adaptation en situation d'examen
-    de l'apprenti sélectionné.
     
-    :return: rendu de la page adaptation-situation-examen.html ?
+    :return: rendu de la page adaptation_situation_examen.html
     """
-    return render_template("cip/test.html"), 200
+
+    commentaire = get_adaptation_situation_examen_par_apprenti(apprenti)
+    apprenti = get_apprenti_by_login(apprenti)
+    return render_template("cip/adaptation_situation_examen.html", apprenti = apprenti, commentaire = commentaire), 200
+
+
+@cip.route("/<apprenti>/modifier-commentaire", methods=["GET", "POST"])
+@cip_login_required
+def modifier_commentaire(apprenti):
+    """
+    Page de modification du commentaire sur un apprenti par la CIP
+    
+    :return: la page de modification du commentaire 
+    """
+
+    commentaire = get_adaptation_situation_examen_par_apprenti(apprenti)
+    
+    if request.method == 'POST':
+        adaptation_situation_examen = request.form["commentaire"]
+        update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
+        
+        return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti), 200)
+    apprenti = get_apprenti_by_login(apprenti)
+    return render_template("cip/modifier_adaptation_situation_examen.html", apprenti=apprenti,
+                           commentaire=commentaire), 200
+
+
+@cip.route("/<apprenti>/ajouter-commentaire", methods=["GET", "POST"])
+@cip_login_required
+def ajouter_commentaire(apprenti):
+    """
+    Page d'ajout du commentaire sur un apprenti par la CIP
+    
+    :return: la page d'ajout d'un commentaire 
+    """
+    if request.method == 'POST':
+        adaptation_situation_examen = request.form["commentaire"]
+        update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
+        return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti), 200)
+    apprenti = get_apprenti_by_login(apprenti)
+    return render_template("cip/ajouter_adaptation_situation_examen.html", apprenti=apprenti), 200

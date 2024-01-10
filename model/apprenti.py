@@ -19,6 +19,31 @@ def get_all_apprenti(archive=False):
     return convert_to_dict(apprenti)
 
 
+def get_adaptation_situation_examen_par_apprenti(login):
+    """
+    Récupère le commentaire de la CIP (adptation situation d'examen) de l'apprenti identifié par son login
+
+    :return: Le commentaire de la CIP
+    """
+    return Apprenti.query.filter_by(login=login).with_entities(Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
+
+
+def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_examen):
+    """
+    Modifie le commentaire de la CIP (adptation situation d'examen) de l'apprenti identifié par son login
+
+    :return: True si l'opération s'est bien déroulée, False sinon
+    """
+    id_apprenti = get_id_apprenti_by_login(login)
+    apprenti = Apprenti.query.filter_by(id_apprenti=id_apprenti).first()
+    apprenti.adaptation_situation_examen = adaptation_situation_examen
+    try:
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
 def check_password_is_set(login: str):
     """
     Vérifie si le mot de passe d'un apprenti à bien été paramétré

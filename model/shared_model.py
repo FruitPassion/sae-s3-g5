@@ -17,6 +17,7 @@ class Apprenti(db.Model):
     photo = db.Column(db.String(100))
     essaies = db.Column(db.Integer, nullable=False, default=0)
     archive = db.Column(db.Boolean, nullable=False, default=False)
+    adaptation_situation_examen = db.Column(db.Text)
 
 
 class Assister(db.Model):

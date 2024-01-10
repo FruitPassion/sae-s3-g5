@@ -1,0 +1,23 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Ajout commentaire{% endblock %}
+
+{% block body %}
+    <h1>Ajout commentaire (adaptation situation d'examen) pour {{ apprenti["prenom"] }} {{ apprenti["nom"] }} </h1>
+    <div id="bloc">
+       
+        <form name="ajouter_commentaire" method="post">
+            <p>Commentaire (CIP) : </p>
+            <textarea class="commentaire" name="commentaire" maxlength="500" rows="10" cols="100" class="ajout"></textarea>
+
+            <input type="submit" value="Valider">
+        </form>
+
+        {% include "_partial/_retour_bouton.html" %}
+    </div>
+    
+{% endblock %}

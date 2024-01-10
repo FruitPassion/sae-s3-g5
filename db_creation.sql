@@ -33,6 +33,7 @@ CREATE TABLE Apprenti
     photo       VARCHAR(100),
     essaies     INT         NOT NULL DEFAULT (0),
     archive     BOOLEAN     NOT NULL DEFAULT (0),
+    adaptation_situation_examen TEXT,
     PRIMARY KEY (id_apprenti),
     CONSTRAINT ch_apprenti_essaies CHECK (Apprenti.essaies >= 0 AND Apprenti.essaies <= 5)
 );
@@ -195,26 +196,26 @@ VALUES ('Supprimé', 'Utilisateur', 'dummy', 'dummy', 'dummy', NULL, 3),
 
 
 
-INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essaies)
+INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essaies, adaptation_situation_examen)
 VALUES ('dummy', 'dummy', 'dummy', 'dummy', 'dummy', 0),
        ('Jacquard', 'Davy',
         '$2b$13$CmhJy5FUDujfBGZqigN3uuGmDd5pLZBHY1cUxFyXO7zMf7zOEQU9y',
-        'DAJ12', 'photo_profile/chanteur.png', 0),
+        'DAJ12', 'photo_profile/chanteur.png', 0, "Commentaire de la CIP pour DAJ12"),
        ('Guilbert', 'Ange',
         '$2b$13$gT3r/VI/Aj4uKaKFp6XngeQxG4Jn0G.16r2fog3C376YxemNnTn8S',
         'ANG12', 'photo_profile/chirurgien.png', 0),
        ('Poussin', 'Christian',
         '$2b$13$MS.1zlUo1Bg6ZD36Vim3ZeDtpN6jRM.OJL1ORWwS8pCKCIT6klwnW',
-        'CHP14', 'photo_profile/hippie.png', 5),
+        'CHP14', 'photo_profile/hippie.png', 5, "Commentaire de la CIP pour CHP14"),
        ('Trouvé', 'Éloi',
         '$2b$15$0dBjtHQfz.7ywl0MQQuRsuuUmuViyL0yhm62fTZS9IssfC42.hwIG',
-        'ELT10', 'photo_profile/marin.png', 0),
+        'ELT10', 'photo_profile/marin.png', 0, "Commentaire de la CIP pour ELT10"),
        ('Cordonnier', 'Danny',
         '$2b$13$dRUZ3bHGwXJElbe8mKmH0OhYAMazlsFE4W/gYs5r/q6afcmJtzjBS',
         'DAC15', 'photo_profile/medecin.png', 5),
        ('Massé', 'Xavier',
         '$2b$15$M/ZfpM/S/jnwSQ0ZVCXq2e8WigNP.R02uR53O8pc2OsqrrN6mk4u.',
-        'XAM11', 'photo_profile/pilote.png', 0),
+        'XAM11', 'photo_profile/pilote.png', 0, "Commentaire de la CIP pour XAM11"),
        ('Meissa', 'Abdelkhader',
         '$2b$13$cjnp9R9dx0eTzLzQvBUIyepwAp7x/PSWSx8hpqjWgTafDfigcL5SO',
         'ABM17', 'photo_profile/plongueur.png', 0);
