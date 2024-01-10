@@ -1,11 +1,11 @@
 from model.composer import get_composer_categorie, get_composer_non_categorie, get_elements_base
-from model.pictogramme import get_pictogramme, get_all_pictogrammes
+from model.pictogramme import get_pictogrammes, get_all_pictogrammes
 
 
 def build_categories(id_fiche):
     composer_cat = get_composer_categorie(id_fiche)
     composer_non_cat = get_composer_non_categorie(id_fiche)
-    pictogrammes = get_pictogramme(id_fiche)
+    pictogrammes = get_pictogrammes(id_fiche)
     bases = get_elements_base()
     for i in range(len(composer_cat)):
         composer_cat[i] = composer_cat[i] | get_common_element(composer_cat[i], bases)

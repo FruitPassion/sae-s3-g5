@@ -6,7 +6,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import stocker_photo_profile
 from custom_paquets.gestion_image import stocker_image_formation
-from model.apprenti import add_apprenti, get_all_apprentis, get_photo_profil_apprenti, update_apprenti
+from model.apprenti import add_apprenti, get_all_apprentis, get_photos_profil_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
 from model.formation import get_all_formations, add_formation, update_formation, get_image_formation
 from model.cours import add_apprenti_assister
@@ -109,7 +109,7 @@ def gestion_apprentis():
             f = request.files.get("avatar-modifier")
             chemin_avatar = stocker_photo_profile(f)
         else:
-            chemin_avatar = get_photo_profil_apprenti(identifiant)
+            chemin_avatar = get_photos_profil_apprenti(identifiant)
         actif = (request.form.get("form_actif") == "on")
         reinitialiser_pass = (request.form.get("form_reinitialiser") == "on")
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, chemin_avatar,
