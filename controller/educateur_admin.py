@@ -153,7 +153,7 @@ def personnalisation(id_fiche):
                     "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(id_fiche)
-    fiche = get_fiches_par_id_fiche(id_fiche)
+    fiche = get_fiches_par_id_fiche(get_id_apprenti_by_login(get_proprietaire_fiche_par_id_fiche(id_fiche)))
     if request.method == 'POST':
         modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")
