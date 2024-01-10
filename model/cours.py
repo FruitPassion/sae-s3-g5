@@ -84,11 +84,11 @@ def add_cours(theme, cours, duree, id_formation, commit=True):
 
     :return: id_cours
     """
-    cours = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
-    db.session.add(cours)
+    cours_ajoute = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
+    db.session.add(cours_ajoute)
     if commit:
         db.session.commit()
-    return cours.id_cours
+    return get_cours_id(cours)
 
 
 def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True):
