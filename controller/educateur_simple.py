@@ -57,7 +57,7 @@ def modifier_commentaires(apprenti, fiche):
     """
 
     commentaires = get_commentaires_educ_par_fiche(fiche)
-    fiche = get_fiches_par_id_fiche(fiche)
+    fiche = get_fiches_par_id_fiche(get_id_apprenti_by_login(apprenti))
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
