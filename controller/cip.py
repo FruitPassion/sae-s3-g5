@@ -21,7 +21,7 @@ Préfixe d'URL : /cip/ .
 def affiche_choix(apprenti):
     """
     Page par défaut de la CIP. Une fois authentifiée, la CIP choisit l'action qu'elle souhaite effectuer
-    (visualiser les fiches techniques, suivi de progression ou adaptation aux situations d'examen)
+    (visualiser les fiches techniques, suivi de progression ou adaptation situation d'examen)
 
     :return: rendu de la page choix_operations.html
     """
@@ -32,9 +32,9 @@ def affiche_choix(apprenti):
 @cip_login_required
 def fiches_apprenti(apprenti):
     """
-    Récupère toutes les fiches techniques de l'élève sélectionné et les affiche.
+    Récupère toutes les fiches techniques de l'apprenti sélectionné et les affiche.
 
-    Permet de consulter les commentaires laissés par les éducateurs et l'élève en question. 
+    Permet de consulter les commentaires laissés par les éducateurs et par l'apprenti en question. 
 
     :return: rendu de la page fiches_techniques.html
     """
@@ -64,8 +64,8 @@ def visualiser_commentaires(apprenti, fiche):
 def suivi_progression_apprenti(apprenti):
     """
     Page de suivi de progression de l'apprenti sélectionné. 
-    Pour le moment ne fait que valider que l'on consulte le suivi de progression de l'apprenti sélectionné.
-    
+    Affiche le suivi de progression sous forme de graphique (niveau moyen, nombre de fiches finies, niveau des fiches)
+
     :return: rendu de la page suivi-progression.html
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
@@ -91,6 +91,7 @@ def suivi_progression_apprenti(apprenti):
 def affichage_adaptation_situation_examen(apprenti):
     """
     Page de suivi d'adaptation en situation d'examen de l'apprenti sélectionné. 
+    Affiche le commentaire de la CIP.
     
     :return: rendu de la page adaptation_situation_examen.html
     """

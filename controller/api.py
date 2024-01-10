@@ -47,7 +47,7 @@ def api_set_password_apprenti(user, password):
 @admin_login_required
 def api_archiver_formation(id_formation, commit=True):
     """
-    Archiver une formation à partir de son id
+    Archive une formation à partir de son id
     """
     return {"valide": archiver_formation(id_formation, commit=commit), "retirer": True}
 
@@ -56,7 +56,7 @@ def api_archiver_formation(id_formation, commit=True):
 @admin_login_required
 def api_reinitialiser_formation(id_formation, commit=True):
     """
-    Réinitialiser une formation à partir de son id
+    Réinitialise une formation à partir de son id
 
     :param id_formation:
     :param commit:
@@ -69,7 +69,7 @@ def api_reinitialiser_formation(id_formation, commit=True):
 @admin_login_required
 def api_desarchiver_formation(id_formation):
     """
-    Désarchiver une formation à partir de son id
+    Désarchive une formation à partir de son id
 
     :param id_formation:
     :return: JSON valide
@@ -81,7 +81,7 @@ def api_desarchiver_formation(id_formation):
 @admin_login_required
 def api_supprimer_formation(id_formation):
     """
-    Supprimer une formation à partir de son id
+    Supprime une formation à partir de son id
     """
     return {"valide": remove_formation(id_formation)}
 
@@ -90,7 +90,7 @@ def api_supprimer_formation(id_formation):
 @admin_login_required
 def api_archiver_apprenti(id_apprenti):
     """
-    Archiver un apprenti à partir de son id
+    Archive un apprenti à partir de son id
     """
     return {"valide": archiver_apprenti(id_apprenti), "retirer": True}
 
@@ -99,7 +99,7 @@ def api_archiver_apprenti(id_apprenti):
 @admin_login_required
 def api_desarchiver_apprenti(id_apprenti):
     """
-    Désarchiver un apprenti à partir de son id
+    Désarchive un apprenti à partir de son id
     """
     return {"valide": archiver_apprenti(id_apprenti, archiver=False)}
 
@@ -108,7 +108,7 @@ def api_desarchiver_apprenti(id_apprenti):
 @admin_login_required
 def api_supprimer_apprenti(id_apprenti):
     """
-    Supprimer un apprenti à partir de son id
+    Supprime un apprenti à partir de son id
     """
     return {"valide": remove_apprenti(id_apprenti)}
 
@@ -117,7 +117,7 @@ def api_supprimer_apprenti(id_apprenti):
 @admin_login_required
 def api_archiver_cours(id_cours):
     """
-    Archiver un cours à partir de son id
+    Archive un cours à partir de son id
     """
     return {"valide": archiver_cours(id_cours), "retirer": True}
 
@@ -126,7 +126,7 @@ def api_archiver_cours(id_cours):
 @admin_login_required
 def api_desarchiver_cours(id_cours):
     """
-    Désarchiver un cours à partir de son id
+    Désarchive un cours à partir de son id
     """
     return {"valide": archiver_cours(id_cours, archiver=False)}
 
@@ -135,7 +135,7 @@ def api_desarchiver_cours(id_cours):
 @admin_login_required
 def api_supprimer_cours(id_cours):
     """
-    Supprimer un cours à partir de son id
+    Supprime un cours à partir de son id
     """
     return {"valide": remove_cours(id_cours)}
 
@@ -144,7 +144,7 @@ def api_supprimer_cours(id_cours):
 @admin_login_required
 def api_archiver_personnel(id_personnel):
     """
-    Archiver un personnel à partir de son id
+    Archive un personnel à partir de son id
     """
     return {"valide": archiver_personnel(id_personnel), "retirer": True}
 
@@ -153,7 +153,7 @@ def api_archiver_personnel(id_personnel):
 @admin_login_required
 def api_desarchiver_personnel(id_personnel):
     """
-    Désarchiver un personnel à partir de son id
+    Désarchive un personnel à partir de son id
     """
     return {"valide": archiver_personnel(id_personnel, archiver=False)}
 
@@ -162,6 +162,6 @@ def api_desarchiver_personnel(id_personnel):
 @admin_login_required
 def api_supprimer_personnel(id_personnel):
     """
-    Supprimer un personnel à partir de son id
+    Supprime un personnel à partir de son id
     """
     return {"valide": remove_personnel(id_personnel)}

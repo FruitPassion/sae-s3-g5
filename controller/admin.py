@@ -6,14 +6,13 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import stocker_photo_profile
 from custom_paquets.gestion_image import stocker_image_formation
-from model.apprenti import get_all_apprenti, add_apprenti, get_photo_profil_apprenti, update_apprenti
+from model.apprenti import add_apprenti, get_all_apprentis, get_photo_profil_apprenti, update_apprenti
 from model.personnel import get_all_personnel, add_personnel, update_personnel
-from model.formation import get_all_formation, add_formation, update_formation, get_image_formation
+from model.formation import get_all_formations, add_formation, update_formation, get_image_formation
 from model.cours import add_apprenti_assister
 from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel, ModifierAdmin
 from custom_paquets.custom_form import AjouterPersonnel
 from custom_paquets.custom_form import AjouterFormation, ModifierFormation
-from werkzeug.utils import secure_filename
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -93,14 +92,14 @@ def gestion_personnel():
 @admin_login_required
 def gestion_apprenti():
     """
-    Page listant tous les comptes des apprentis et permettant de supprimer, modifier, archiver et désarchiver leurs
-    comptes.
-    On peux également rajouter des apprentis.
+    Page listant tous les comptes des apprentis et permettant de supprimer, modifier, archiver et désarchiver leur
+    compte.
+    On peux également ajouter des apprentis.
     """
 
-    formations = get_all_formation()
-    apprenti = get_all_apprenti()
-    liste_apprenti_archivee = get_all_apprenti(archive=True)
+    formations = get_all_formations()
+    apprentis = get_all_apprentis()
+    liste_apprentis_archives = get_all_apprentis(archive=True)
     form_ajouter = AjouterApprenti()
     form_modifier = ModifierApprenti()
     if form_modifier.validate_on_submit() and request.method == "POST":
@@ -124,9 +123,9 @@ def gestion_apprenti():
         add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
         return redirect(url_for("admin.gestion_apprenti"), 302)
 
-    return render_template("admin/gestion_apprentis.html", liste_apprenti=apprenti, form_ajouter=form_ajouter,
+    return render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis, form_ajouter=form_ajouter,
                            form_modifier=form_modifier, formations=formations,
-                           liste_apprenti_archivee=liste_apprenti_archivee)
+                           liste_apprentis_archives=liste_apprentis_archives)
 
 
 @admin.route("/gestion-formation", methods=["GET", "POST", "DELETE"])
@@ -136,8 +135,8 @@ def gestion_formation():
     Page listant toutes les formations et permettant de supprimer ou modifier leurs informations
     On peut aussi y rajouter une formation
     """
-    formation = get_all_formation()
-    liste_formation_archivee = get_all_formation(archive=True)
+    formations = get_all_formations()
+    liste_formations_archivees = get_all_formations(archive=True)
     form = AjouterFormation()
     form_modifier = ModifierFormation()
     if form.validate_on_submit() and request.method == "POST":
@@ -160,5 +159,5 @@ def gestion_formation():
                          form_modifier.form_groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formation"))
 
-    return render_template("admin/gestion_formations.html", liste_formation=formation, form=form,
-                           form_modifier=form_modifier, liste_formation_archivee=liste_formation_archivee)
+    return render_template("admin/gestion_formations.html", liste_formations=formations, form=form,
+                           form_modifier=form_modifier, liste_formations_archivees=liste_formations_archivees)

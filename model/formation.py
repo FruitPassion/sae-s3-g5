@@ -6,7 +6,7 @@ from model.apprenti import remove_apprenti, get_apprenti_by_formation
 from model.shared_model import db, Formation, Cours
 
 
-def get_all_formation(archive=False):
+def get_all_formations(archive=False):
     """
     Retourne la liste de toutes les formations
 

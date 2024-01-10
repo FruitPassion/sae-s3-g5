@@ -78,7 +78,7 @@ def gestion_cours():
 def choix_eleve(nom_formation):
     """
     Page d'affichage des apprentis d'une formation sélectionnée.
-    Permet d'accéder aux fiches techniques des apprentis.
+    Permet d'accéder aux fiches techniques des apprentis de cette formation.
 
     :return: rendu de la page choix_apprentis.html
     """
@@ -90,7 +90,7 @@ def choix_eleve(nom_formation):
 @educadmin_login_required
 def fiches_apprenti(apprenti):
     """
-    Récupère toutes les fiches techniques de l'élève sélectionné et les affiche.
+    Récupère toutes les fiches techniques de l'apprenti sélectionné et les affiche.
 
     Permet de sélectionner une fiche technique réalisée par un apprenti. 
 
@@ -106,11 +106,11 @@ def fiches_apprenti(apprenti):
 @educadmin_login_required
 def modifier_fiche(id_fiche):
     """
-    Récupère toutes les fiches techniques de l'élève sélectionné et les affiche.
+    Modifie la fiche d'identifiant id_fiche.
+    Effectue une copie de cette fiche (rendue inutilisable) et redirige vers la page de
+    personnalisation de la fiche.
 
-    Permet de sélectionner une fiche technique réalisée par un apprenti.
-
-    :return: rendu de la page choix_fiches_apprenti.html
+    :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
     id_fiche = copier_fiche(id_fiche, session["name"])
     flash("Fiche copiée avec succès")
@@ -121,9 +121,11 @@ def modifier_fiche(id_fiche):
 @educadmin_login_required
 def ajouter_fiche(apprenti):
     """
-    Page de personnalisation les textes d'une fiche technique.
+    Page d'ajout d'une fiche technique pour un apprenti.
 
-    :return: rendu de la page personnaliser_fiche_texte_champs.html
+    Permet la personnalisation des items.
+
+    :return: rendu de la page ajouter_fiche.html
     """
     form = AjouterFiche()
     cours = get_cours_par_apprenti(get_id_apprenti_by_login(apprenti))
@@ -143,11 +145,11 @@ def ajouter_fiche(apprenti):
 @educadmin_login_required
 def personnalisation(id_fiche):
     """
-    Page de personnalisation les textes d'une fiche technique.
+    Page de personnalisation des textes d'une fiche technique.
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
-    liste_police = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
+    liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
                     "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(id_fiche)
@@ -156,7 +158,7 @@ def personnalisation(id_fiche):
         modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)), 302)
-    return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_police,
+    return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_polices,
                            composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
 
 

@@ -7,7 +7,7 @@ from model.shared_model import db, Assister, ComposerPresentation as Composer, L
     FicheIntervention, Cours
 
 
-def get_all_apprenti(archive=False):
+def get_all_apprentis(archive=False):
     """
     Récupère l'id, nom, prenom et photo de chaque apprenti
 

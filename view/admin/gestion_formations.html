@@ -47,7 +47,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for formation in liste_formation %}
+                    {% for formation in liste_formations %}
                         <tr class="text-center" id="ele-{{ formation["id_formation"] }}">
                             <td id="intitule-{{ formation['id_formation'] }}" class="align-middle">{{formation["intitule"] }}</td>
                             <td id="niveau_qualif-{{ formation['id_formation'] }}" class="align-middle">{{formation["niveau_qualif"] }}</td>
@@ -125,7 +125,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for formation in liste_formation_archivee %}
+                    {% for formation in liste_formations_archivees %}
                         <tr class="text-center" id="arch-ele-{{ formation["id_formation"] }}">
                             <td class="align-middle">{{ formation["intitule"] }}</td>
                             <td class="align-middle">{{ formation["niveau_qualif"] }}</td>
