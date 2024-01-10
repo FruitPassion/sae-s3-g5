@@ -3,7 +3,7 @@ import urllib.parse
 from flask import Blueprint, jsonify
 
 from custom_paquets.decorateur import admin_login_required
-from model.apprenti import check_password_apprenti, get_nbr_essaie_connexion_apprenti, archiver_apprenti, \
+from model.apprenti import check_password_apprenti, get_nbr_essais_connexion_apprenti, archiver_apprenti, \
     remove_apprenti, set_password_apprenti
 from model.formation import archiver_formation, remove_formation, reinitisaliser_formation
 from model.personnel import archiver_personnel, remove_personnel
@@ -23,7 +23,7 @@ def api_check_password_apprenti(user, password):
     """
     Vérifie que le login et le password correspondent bien à ceux de la base de données
     """
-    if get_nbr_essaie_connexion_apprenti(user) != 5:
+    if get_nbr_essais_connexion_apprenti(user) != 5:
         return {"valide": check_password_apprenti(user, password)}
     else:
         return {"blocage": True}
