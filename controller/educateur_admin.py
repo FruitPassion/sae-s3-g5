@@ -8,7 +8,7 @@ from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
-    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login
+    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id
 from model.formation import get_all_formations, get_formation_id
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.trace import get_commentaires_par_fiche
@@ -99,7 +99,7 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_par_login(apprenti)
     fiches = changer_date(fiches)
-    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches)
+    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
 
 
 @educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET"])
