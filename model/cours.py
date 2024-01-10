@@ -135,8 +135,9 @@ def remove_cours(id_cours, commit=True):
     :return: None
     """
     try:
-        assister = Assister.query.filter_by(id_cours=id_cours).first()
-        db.session.delete(assister)
+        assister = Assister.query.filter_by(id_cours=id_cours).all()
+        for a in assister:
+            db.session.delete(assister)
         if commit:
             db.session.commit()
         db.session.delete(Cours.query.filter_by(id_cours=id_cours).first())
