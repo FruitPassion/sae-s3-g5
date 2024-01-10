@@ -1,4 +1,5 @@
 from custom_paquets.tester_usages import CoursTest, CoursTestModif
+from model.cours import archiver_cours
 from model.shared_model import Cours, db
 
 def test_ajouter_cours(client):
@@ -23,3 +24,12 @@ def test_modifier_cours(client):
     assert cours_modif.id_formation == cours_m.id_formation
 
     db.session.rollback()
+
+
+def test_archiver_cours(client):
+    cours_t = CoursTest()
+
+    archiver_cours(cours_t.id_cours, archiver=True, commit=False)
+    assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours, Cours.archive == 1).first() is not None
+    db.session.rollback()
+    assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours, Cours.archive == 1).first() is None
