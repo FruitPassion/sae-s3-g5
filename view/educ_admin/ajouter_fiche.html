@@ -14,7 +14,7 @@
         <form class="fs-2" method="post" name="ajouter">
             {{ form.hidden_tag() }}
             <div class="mb-3">
-                <label for="coursinput" class="form-label">Theme - Cours de la fiche :</label>
+                <label for="coursinput" class="form-label">Thème - Cours de la fiche :</label>
                 <select class="form-select form-select-lg fs-3 form-control mb-3" aria-label=".form-select-lg"
                         name="coursinput">
                     {% for session in sessions %}
@@ -32,7 +32,7 @@
                 {{ form.nomintervenant(class="form-control fs-3") }}
             </div>
             <div class="mb-3">
-                <label for="prenomintervenant" class="form-label">Prenom de l'intervenant :</label>
+                <label for="prenomintervenant" class="form-label">Prénom de l'intervenant :</label>
                 {{ form.prenomintervenant(class="form-control fs-3") }}
             </div>
             <div class="mb-3">
