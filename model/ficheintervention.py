@@ -6,6 +6,7 @@ from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login, get_login_apprenti_by_id
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
+from model.cours import get_nom_cours_by_id
 from model.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti
 
 
@@ -18,7 +19,7 @@ def get_fiches_techniques_par_login(login):
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero,
-        FicheIntervention.date_creation).order_by(asc(FicheIntervention.etat_fiche)).all())
+        FicheIntervention.date_creation, FicheIntervention.id_cours).order_by(asc(FicheIntervention.etat_fiche)).all())
 
 
 def get_proprietaire_fiche_par_id_fiche(id_fiche):
@@ -111,7 +112,7 @@ def get_fiches_techniques_finies_par_login(login):
     id_apprenti = get_id_apprenti_by_login(login)
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero,
-        FicheIntervention.date_creation).filter_by(etat_fiche=True).all())
+        FicheIntervention.date_creation, FicheIntervention.id_cours).filter_by(etat_fiche=True).all())
 
 
 def get_fiche_apprentis_existe(login: str):
