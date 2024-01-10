@@ -1,0 +1,33 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Adaptation en situation d'examen{% endblock %}
+
+{% block body %}
+    <h1>Adaptation en situation d'examen de l'apprenti {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+    <div id="titre">
+    <h2 class="commentaireTitre">Commentaires
+        {% if commentaire|length == 0 %}
+            <a href="{{ url_for('cip.ajouter_commentaire', apprenti = apprenti['login']) }}">
+                <img id="ajouter" class="plus" src="{{ url_for('static', filename='images/cross.png' ) }}" alt="ajouter">
+            </a></div>
+        {% else %}
+            <a href="{{ url_for('cip.modifier_commentaire', apprenti = apprenti['login']) }}">
+                <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' ) }}" alt="modifier">
+            </a>
+        {% endif %}
+    </h2>
+
+    {% if commentaire|length > 0 %}
+        <p class="commentaire">{{ commentaire }}</p>
+    {% else %}
+        <p class="commentaire">Pas encore de commentaire</p>
+    {% endif %}
+
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}
