@@ -6,13 +6,13 @@ function validation_reinitialisation_formation(element) {
 function reinitialiser() {
     let id_element = document.getElementById("reinitialiser-value").value;
 
-    afficher_snack("Reinitialisation en cours...", "info");
+    afficher_snack("Réinitialisation en cours...", "info");
 
     $.getJSON("/api/reinitialiser-formation/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
-            afficher_snack("Reinitialisation réussi !", "success");
+            afficher_snack("Réinitialisation réussie !", "success");
         } else {
-            afficher_snack("Desarchivage échoué.", "error");
+            afficher_snack("Désarchivage échoué.", "error");
         }
     });
 }

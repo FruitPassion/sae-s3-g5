@@ -32,14 +32,14 @@ function get_selecteur_element(position_element) {
 }
 
 function changer_niveau_categorie(position_element) {
-    // Récuperer la valeur du selecteur de niveau
+    // Récupère la valeur du sélecteur de niveau
     let selecteur_niveau = document.getElementById("selecteur-niveau-" + position_element).value;
-    // Récuperer les options du selecteur d'élément
+    // Récupère les options du sélecteur d'élément
     let selecteur_element = get_selecteur_element(position_element);
 
-    // Pour chaque option du selecteur d'élément
+    // Pour chaque option du sélecteur d'élément
     for (let i = 1, iLen = selecteur_element.length; i < iLen; i++) {
-        // Si le selecteur de niveau est différent de 0
+        // Si le sélecteur de niveau est différent de 0
         if (selecteur_niveau !== "0") {
             // Désactiver l'option du sélecteur d'éléments
             selecteur_element[i].setAttribute("disabled", "");
@@ -54,7 +54,7 @@ function changer_niveau_categorie(position_element) {
                 document.getElementById(r + position_element).classList.remove("disabled-text");
             }
 
-            // Appliquer les valeurs du selecteur de niveau au selecteur d'éléments
+            // Appliquer les valeurs du sélecteur de niveau au sélecteur d'éléments
             document.getElementById("selecteur-niveau-" + selecteur_element[i].value).value = selecteur_niveau;
             changer_niveau_individuel(selecteur_element[i].value)
         } else {
@@ -93,10 +93,10 @@ function changer_niveau_individuel(position_element) {
 }
 
 function changer_texte_categorie(position_element) {
-    // Récuperer les options du selecteur d'élément
+    // Récupère les options du sélecteur d'élément
     let selecteur_element = get_selecteur_element(position_element);
 
-    // Pour chaque option du selecteur d'élément
+    // Pour chaque option du sélecteur d'élément
     for (let i = 1, iLen = selecteur_element.length; i < iLen; i++) {
         document.getElementById("selecteur-police-" + selecteur_element[i].value).value = document.getElementById("selecteur-police-" + position_element).value;
         document.getElementById("taille-police-" + selecteur_element[i].value).value = document.getElementById("taille-police-" + position_element).value;
@@ -117,10 +117,10 @@ function changer_fond_categorie(position_element) {
 }
 
 function changer_icone_categorie(position_element) {
-    // Récuperer les options du selecteur d'élément
+    // Récupère les options du sélecteur d'élément
     let selecteur_element = get_selecteur_element(position_element);
 
-    // Pour chaque option du selecteur d'élément
+    // Pour chaque option du sélecteur d'élément
     for (let i = 1, iLen = selecteur_element.length; i < iLen; i++) {
         document.getElementById("couleur-picto-" + selecteur_element[i].value).value = document.getElementById("couleur-picto-" + position_element).value;
         document.getElementById("taille-picto-" + selecteur_element[i].value).value = document.getElementById("taille-picto-" + position_element).value;

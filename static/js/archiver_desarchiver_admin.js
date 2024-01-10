@@ -155,7 +155,7 @@ function desarchiver(route) {
             table.appendChild(clone);
             row.parentElement.removeChild(row);
         } else {
-            afficher_snack("Desarchivage échoué.", "error");
+            afficher_snack("Désarchivage échoué.", "error");
         }
     });
 }

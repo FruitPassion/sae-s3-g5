@@ -30,7 +30,7 @@ function supprimer(route){
 
     $.getJSON("/api/supprimer-"+route+"/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
-            afficher_snack("Suppression réussi !", "success");
+            afficher_snack("Suppression réussie !", "success");
             row.parentElement.removeChild(row);
         } else {
             afficher_snack("Suppression échouée.", "error");
