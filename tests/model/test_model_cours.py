@@ -1,6 +1,6 @@
 from custom_paquets.tester_usages import CoursTest, CoursTestModif
-from model.cours import archiver_cours
-from model.shared_model import Cours, db
+from model.cours import archiver_cours, remove_cours
+from model.shared_model import Cours, Assister, db
 
 def test_ajouter_cours(client):
     cours_t = CoursTest()
@@ -24,8 +24,7 @@ def test_modifier_cours(client):
     assert cours_modif.id_formation == cours_m.id_formation
 
     db.session.rollback()
-
-
+    
 def test_archiver_cours(client):
     cours_t = CoursTest()
 
@@ -33,3 +32,16 @@ def test_archiver_cours(client):
     assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours, Cours.archive == 1).first() is not None
     db.session.rollback()
     assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours, Cours.archive == 1).first() is None
+    
+def test_supprimer_cours(client):
+    cours_t = CoursTest(commit=True)
+    
+    # Vérification que le cours existe
+    assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours).first() is not None
+    
+    # Suppression du cours
+    remove_cours(cours_t.id_cours)
+    
+    # Vérification que le cours n'existe plus
+    assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours).first() is None
+    assert db.session.query(Assister).filter(Assister.id_cours == cours_t.id_cours).first() is None

@@ -135,11 +135,14 @@ def remove_cours(id_cours, commit=True):
     :return: None
     """
     try:
+        assister = Assister.query.filter_by(id_cours=id_cours).first()
+        db.session.delete(assister)
         if commit:
-            cours = Cours.query.filter_by(id_cours=id_cours).first()
-            db.session.delete(cours)
             db.session.commit()
-            return True
+        db.session.delete(Cours.query.filter_by(id_cours=id_cours).first())
+        if commit:
+            db.session.commit()
+        return True
     except Exception as e:
         logging.error("Erreur lors de la suppression du cours")
         logging.error(e)
