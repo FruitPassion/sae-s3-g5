@@ -127,16 +127,19 @@ def archiver_cours(id_cours, archiver=True):
         return False
 
 
-def remove_cours(id_cours):
+def remove_cours(id_cours, commit=True):
     """
     Supprime un cours en BD
 
     :return: None
     """
     try:
-        cours = Cours.query.filter_by(id_cours=id_cours).first()
-        db.session.delete(cours)
-        db.session.commit()
+        if commit:
+            cours = Cours.query.filter_by(id_cours=id_cours).first()
+            db.session.delete(cours)
+            db.session.commit()
+            return True
     except Exception as e:
         logging.error("Erreur lors de la suppression du cours")
         logging.error(e)
+        return False

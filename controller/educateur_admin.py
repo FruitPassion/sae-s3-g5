@@ -44,7 +44,7 @@ def choix_formation():
     return render_template("educ_admin/choix_formation.html", formations=formations), 200
 
 
-@educ_admin.route("/gestion-cours", methods=["GET", "POST"])
+@educ_admin.route("/gestion-cours", methods=["GET", "POST", "DELETE"])
 @educadmin_login_required
 def gestion_cours():
     """

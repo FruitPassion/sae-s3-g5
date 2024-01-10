@@ -16,6 +16,12 @@ function supprimer_personnel(){
     supprimer("personnel");
 }
 
+
+function supprimer_cours(){
+    supprimer("cours");
+}
+
+
 function supprimer(route){
     let id_element = document.getElementById("supprimer-value").value;
     let row = document.getElementById("arch-ele-" + id_element);
