@@ -57,8 +57,8 @@ def choix_type_connexion():
 @logout_required
 def connexion_personnel_pin():
     """
-    Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
-    aura accès à un panneau de possibilités différentes.
+    Page de connexion du personnel via code pin. Une fois authentifié, la personne, en fonction de son rôle
+    aura accès à différentes possibilités.
 
     :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """
@@ -95,8 +95,8 @@ def connexion_personnel_pin():
 @logout_required
 def connexion_personnel_mdp():
     """
-    Page de connexion du personnel. Une fois authentifié, la personne, en fonction de son rôle
-    aura accès à un panneau de possibilités différentes.
+    Page de connexion du personnel via mot de passe. Une fois authentifié, la personne, en fonction de son rôle
+    aura accès à différentes possibilités.
 
     :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """

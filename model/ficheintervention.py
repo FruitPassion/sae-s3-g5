@@ -31,13 +31,13 @@ def get_proprietaire_fiche_par_id_fiche(id_fiche):
         Apprenti.login).first().login
 
 
-def get_fiches_par_id_fiche(id_fiche):
+def get_fiches_par_id_fiche(id_apprenti):
     """
-    Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
+    Récupère les identifiants des fiches techniques associées à un apprenti à partir de son id
 
     :return: Les fiches techniques de l'apprenti
     """
-    return convert_to_dict(FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
+    return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.numero).first())
 
 

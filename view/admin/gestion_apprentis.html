@@ -45,7 +45,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for apprenti in liste_apprenti %}
+                    {% for apprenti in liste_apprentis %}
                         <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
                             id="ele-{{ apprenti['id_apprenti'] }}">
                             <td id="login-{{ apprenti['id_apprenti'] }}"
@@ -139,7 +139,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for apprenti in liste_apprenti_archivee %}
+                    {% for apprenti in liste_apprentis_archives %}
                         <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
                             id="arch-ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
