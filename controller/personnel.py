@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 
-from model.formation import get_all_formation
+from model.formation import get_all_formations
 from model.cours import get_apprentis_by_formation
 from custom_paquets.decorateur import personnel_login_required
 from model.personnel import get_role
@@ -23,7 +23,7 @@ def choix_formation():
     
     :return: rendu de la page choix_formation.html
     """
-    formations = get_all_formation()
+    formations = get_all_formations()
     return render_template("personnel/choix_formation.html", formations=formations), 200
 
 
