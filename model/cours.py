@@ -1,7 +1,5 @@
 import logging
 
-from flask import abort
-
 from model.shared_model import db, Cours, Apprenti, Assister
 from custom_paquets.converter import convert_to_dict
 from model.formation import get_formation_id, get_cours_par_formation
@@ -76,6 +74,15 @@ def get_cours_id(nom_cours: str):
     :return: Un id de cours
     """
     return Cours.query.with_entities(Cours.id_cours).filter_by(cours=nom_cours).first().id_cours
+
+
+def get_nom_cours_by_id(id_cours):
+    """
+    Retourne le nom d'un cours à partir de son id
+
+    :return: Un nom de cours
+    """
+    return Cours.query.with_entities(Cours.cours).filter_by(id_cours=id_cours).first().cours
 
 
 def add_cours(theme, cours, duree, id_formation, commit=True):

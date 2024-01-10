@@ -6,8 +6,8 @@ import subprocess
 
 def checking():
     """
-    Permet de verifier si tous les prerequis sont installés et à la bonne version.
-    En cas d'echec, installe et mets à jour dans les bonnes versions.
+    Permet de vérifier si tous les prérequis sont installés et à la bonne version.
+    En cas d'échec, les installe et les met à jour dans les bonnes versions.
     """
     with open("requirements.txt", "r") as f:
         lines = f.readlines()

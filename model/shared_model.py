@@ -15,7 +15,7 @@ class Apprenti(db.Model):
     login = db.Column(db.String(50), nullable=False)
     mdp = db.Column(db.Text)
     photo = db.Column(db.String(100))
-    essaies = db.Column(db.Integer, nullable=False, default=0)
+    essais = db.Column(db.Integer, nullable=False, default=0)
     archive = db.Column(db.Boolean, nullable=False, default=False)
     adaptation_situation_examen = db.Column(db.Text)
 
@@ -158,7 +158,7 @@ class Personnel(db.Model):
     mdp = db.Column(db.Text)
     role = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    essaies = db.Column(db.Integer, nullable=False, default=False)
+    essais = db.Column(db.Integer, nullable=False, default=False)
     archive = db.Column(db.Boolean, nullable=False, default=False)
 
 

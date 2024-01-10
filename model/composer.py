@@ -5,7 +5,7 @@ from model.shared_model import db, ComposerPresentation as Compo, ElementBase as
 
 def get_composer_presentation(id_fiche=1):
     """
-    Perrmet de recuperer tous les elements d'une fiche
+    Permet de récupérer tous les éléments d'une fiche
 
     :return: liste de dictionnaires
     """
@@ -23,7 +23,7 @@ def get_composer_presentation(id_fiche=1):
 
 def get_composer_categorie(id_fiche=1):
     """
-    Permet de recuperer toutes les catégories d'une fiche
+    Permet de récupérer toutes les catégories d'une fiche
 
     :return: liste de dictionnaires
     """
@@ -37,7 +37,7 @@ def get_composer_categorie(id_fiche=1):
 
 def get_composer_non_categorie(id_fiche=1):
     """
-    Permet tous les elements d'une fiche associés à une catégorie
+    Permet de récupérer tous les éléments d'une fiche associés à une catégorie
 
     :return: liste de dictionnaires
     """
@@ -51,9 +51,9 @@ def get_composer_non_categorie(id_fiche=1):
 
 def get_elements_base():
     """
-    Permet de recuprer les elements de base de la table ComposerPresentation
+    Permet de récupérer les éléments de base de la table ComposerPresentation
 
-    :return: liste de dictionnaires avec l'id, le libelle, le type et l'url audio des elements
+    :return: liste de dictionnaires avec l'id, le libellé, le type et l'url audio des éléments
     """
     return convert_to_dict(Compo.query.with_entities(Elem.id_element, Elem.libelle.label('libelle_elem'),
                                                      Elem.type.label('type_elem'), Elem.text.label('label_elem'),
