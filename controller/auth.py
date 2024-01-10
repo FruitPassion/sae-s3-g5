@@ -10,11 +10,11 @@ from flask import (
 
 from custom_paquets.custom_form import LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
-from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essaie_connexion_apprenti, \
+from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essais_connexion_apprenti, \
     check_apprenti, check_password_is_set
 from model.cours import get_apprentis_by_formation
 from model.formation import get_all_formations
-from model.personnel import check_personnel, check_password, get_role, get_nbr_essaie_connexion_personnel, \
+from model.personnel import check_personnel, check_password, get_role, get_nbr_essais_connexion_personnel, \
     get_liste_personnel_non_super
 
 auth = Blueprint("auth", __name__)
@@ -68,14 +68,14 @@ def connexion_personnel_pin():
         passwd = request.form["code"]
         login = request.form.get('login_select')
         if not check_password(login, passwd):
-            if get_nbr_essaie_connexion_personnel(login) == 3:
+            if get_nbr_essais_connexion_personnel(login) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
-            if get_nbr_essaie_connexion_personnel(login) == 3:
+            if get_nbr_essais_connexion_personnel(login) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
@@ -107,14 +107,14 @@ def connexion_personnel_mdp():
             flash(COMPTE_INCONNU, "error")
             code = 403
         elif not check_password(form.login.data, form.password.data):
-            if get_nbr_essaie_connexion_personnel(form.login.data) == 3:
+            if get_nbr_essais_connexion_personnel(form.login.data) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
-            if get_nbr_essaie_connexion_personnel(form.login.data) == 3:
+            if get_nbr_essais_connexion_personnel(form.login.data) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
@@ -176,7 +176,7 @@ def connexion_apprentis(nom_formation, login_apprenti):
             flash(CONNEXION_REUSSIE)
             return redirect(url_for("apprenti.redirection_connexion"), 302)
         else:
-            if get_nbr_essaie_connexion_apprenti(login) == 5:
+            if get_nbr_essais_connexion_apprenti(login) == 5:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:

@@ -4,7 +4,7 @@ from custom_paquets.tester_usages import connexion_personnel_mdp
 from model.formation import add_formation, get_formation_id
 from model.personnel import get_id_personnel_by_login
 from model.shared_model import Apprenti
-from model.apprenti import add_apprenti, get_id_apprenti_by_login, set_nbr_essaies_connexion
+from model.apprenti import add_apprenti, get_id_apprenti_by_login, set_nbr_essais_connexion
 
 '''
 Test des controller du fichier api.py
@@ -18,7 +18,7 @@ def test_api_check_password_apprenti(client):
     mdp = "12369"
 
     # Blocage d'un apprenti
-    set_nbr_essaies_connexion(apprenti.login, 5)
+    set_nbr_essais_connexion(apprenti.login, 5)
     response = client.get(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp))
 
     # Test d'accès à la route
@@ -28,7 +28,7 @@ def test_api_check_password_apprenti(client):
     assert response.json["blocage"] == True
 
     # Test de déblocage d'un apprenti
-    set_nbr_essaies_connexion(apprenti.login, 0)
+    set_nbr_essais_connexion(apprenti.login, 0)
     response = client.get(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp))
 
     # Test d'accès à la route

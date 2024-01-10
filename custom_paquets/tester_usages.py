@@ -5,12 +5,12 @@ from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 from model.apprenti import add_apprenti, update_apprenti
 from model.formation import add_formation
-from model.personnel import reset_nbr_essaies_connexion, add_personnel, update_personnel
+from model.personnel import reset_nbr_essais_connexion, add_personnel, update_personnel
 from model.cours import add_cours, update_cours
 
 # Fonction de connexion avec un code pin
 def connexion_personnel_pin(client, username, password):
-    reset_nbr_essaies_connexion(username)
+    reset_nbr_essais_connexion(username)
     return client.post("/connexion-personnel-pin", data=dict(
         login_select=username,
         code=password
@@ -19,7 +19,7 @@ def connexion_personnel_pin(client, username, password):
 
 # Fonction de connexion avec un mot de passe
 def connexion_personnel_mdp(client, username, password):
-    reset_nbr_essaies_connexion(username)
+    reset_nbr_essais_connexion(username)
     return client.post("/connexion-personnel-mdp", data=dict(
         login=username,
         password=password
