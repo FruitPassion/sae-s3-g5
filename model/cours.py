@@ -137,7 +137,7 @@ def remove_cours(id_cours, commit=True):
     try:
         assister = Assister.query.filter_by(id_cours=id_cours).all()
         for a in assister:
-            db.session.delete(assister)
+            db.session.delete(a)
         if commit:
             db.session.commit()
         db.session.delete(Cours.query.filter_by(id_cours=id_cours).first())
