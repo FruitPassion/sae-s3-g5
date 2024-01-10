@@ -1,4 +1,4 @@
-from flask import url_for, session
+from flask import url_for
 
 from custom_paquets.tester_usages import connexion_personnel_pin, connexion_personnel_mdp, deconnexion_personnel
 from model.cours import get_apprentis_by_formation

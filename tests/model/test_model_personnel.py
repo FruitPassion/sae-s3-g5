@@ -1,5 +1,5 @@
 from custom_paquets.tester_usages import PersonnelTest, PersonnelTestModif
-from model.personnel import  get_id_personnel_by_login, archiver_personnel
+from model.personnel import archiver_personnel
 from model.shared_model import Personnel, db
 
 
@@ -20,7 +20,7 @@ def test_archiver_personnel(client):
     # Archivage du personnel
     archiver_personnel(personnel.id_personnel, archiver=True, commit=False)
 
-    # Vérification que le personnel a bien été archivé
+    # Vérification de l'archivage du personnel en base de données
     assert db.session.query(Personnel).filter(Personnel.id_personnel == personnel.id_personnel,
                                               Personnel.archive == 1).first() is not None
     db.session.rollback()
@@ -35,7 +35,7 @@ def test_modifier_personnel(client):
     # Modification de tous les champs du personnel
     personnel2 = PersonnelTestModif(personnel.id_personnel)
 
-    # Vérification que le personnel a bien été modifié
+    # Vérification de la modification des informations du personnel en base de données
     mysession = db.session()
     mysession.autoflush = False
     with mysession.no_autoflush:

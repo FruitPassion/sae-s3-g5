@@ -88,9 +88,9 @@ def gestion_personnel():
                            liste_personnel_archive=liste_personnel_archive)
 
 
-@admin.route("/gestion-apprenti", methods=["GET", "POST"])
+@admin.route("/gestion-apprentis", methods=["GET", "POST"])
 @admin_login_required
-def gestion_apprenti():
+def gestion_apprentis():
     """
     Page listant tous les comptes des apprentis et permettant de supprimer, modifier, archiver et désarchiver leur
     compte.
@@ -114,23 +114,23 @@ def gestion_apprenti():
         reinitialiser_pass = (request.form.get("form_reinitialiser") == "on")
         update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, chemin_avatar,
                         reinitialiser_pass, actif)
-        return redirect(url_for("admin.gestion_apprenti"), 302)
+        return redirect(url_for("admin.gestion_apprentis"), 302)
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         f = request.files.get("avatar")
         chemin_avatar = stocker_photo_profile(f)
         id_apprenti = add_apprenti(form_ajouter.nom.data, form_ajouter.prenom.data, login, chemin_avatar)
         add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
-        return redirect(url_for("admin.gestion_apprenti"), 302)
+        return redirect(url_for("admin.gestion_apprentis"), 302)
 
     return render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis, form_ajouter=form_ajouter,
                            form_modifier=form_modifier, formations=formations,
                            liste_apprentis_archives=liste_apprentis_archives)
 
 
-@admin.route("/gestion-formation", methods=["GET", "POST", "DELETE"])
+@admin.route("/gestion-formations", methods=["GET", "POST", "DELETE"])
 @admin_login_required
-def gestion_formation():
+def gestion_formations():
     """
     Page listant toutes les formations et permettant de supprimer ou modifier leurs informations
     On peut aussi y rajouter une formation
@@ -146,7 +146,7 @@ def gestion_formation():
         else:
             chemin_image = "formation_image/" + "defaut_formation.jpg"
         add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
-        return redirect(url_for("admin.gestion_formation"), 302)
+        return redirect(url_for("admin.gestion_formations"), 302)
 
     elif form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
@@ -157,7 +157,7 @@ def gestion_formation():
             chemin_image = get_image_formation(identifiant)
         update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data,
                          form_modifier.form_groupe.data, chemin_image)
-        return redirect(url_for("admin.gestion_formation"))
+        return redirect(url_for("admin.gestion_formations"), 302)
 
     return render_template("admin/gestion_formations.html", liste_formations=formations, form=form,
                            form_modifier=form_modifier, liste_formations_archivees=liste_formations_archivees)

@@ -76,21 +76,17 @@ def test_suivi_progression(client):
     assert response.request.path == f"/cip/{apprenti}/suivi-progression"
 
 
-"""
-A VALIDER UNE FOIS QUE L'ADAPTATION EN SITUATION D'EXAMEN SERA FAIT
-
 # Test de la route de l'adaptation en situation d'examen de l'apprenti 
 def test_adaptation_situation_exam(client):
     # Test connexion CIP
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("cip.suivi_progression_apprenti", apprenti = apprenti))
+    response = client.get(url_for("cip.affichage_suivi_progression_apprenti", apprenti = apprenti))
 
     # Test d'accès à la route
-    assert response.status_code == 302
+    assert response.status_code == 200
     
     # Test de vérification de la route
     assert response.request.path == f"/cip/{apprenti}/adaptation-situation-examen"
-"""
 
 
 # Test de la route de redirection d'affichage des commentaires

@@ -11,7 +11,7 @@ def test_redirection_connexion(client):
     # Test d'accès à la route
     assert response.status_code == 302
 
-    # Test dde vérification de la route
+    # Test de vérification de la route
     assert response.request.path == "/apprenti/redirection-connexion"
     
 # Test de la route de suivi de progression
@@ -21,5 +21,5 @@ def test_suivi_progression(client):
     # Test d'accès à la route
     assert response.status_code == 302
 
-    # Test dde vérification de la route
+    # Test de vérification de la route
     assert response.request.path == "/apprenti/redirection-connexion/suivi"

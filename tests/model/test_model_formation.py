@@ -30,7 +30,7 @@ def test_supprimer_formation(client):
     # Création d'une formation à supprimer
     formation = FormationTest(commit=True)
 
-    # vérification que la formation soit bien dans la base de données
+    # Vérification de l'ajout de la formation
     assert db.session.query(Formation).filter(Formation.id_formation == formation.id_formation).first() is not None
 
     # Ajout d'un apprenti à la formation
@@ -42,14 +42,14 @@ def test_supprimer_formation(client):
     # Suppression de la formation
     remove_formation(formation.id_formation)
 
-    # vérification que la formation soit bien supprimée de la base de données
+    # Vérification de la suppression de la formation dans la base de données
     assert db.session.query(Formation).filter(Formation.id_formation == formation.id_formation).first() is None
 
-    # Vérification qu'il n'y ait plus de session liée à la formation
+    # On vérifie qu'il n'y ait plus de session liée à la formation
     assert db.session.query(Cours).filter(Cours.id_formation == formation.id_formation).first() is None
 
     # Suppression de l'apprenti
     remove_apprenti(apprenti.id_apprenti)
 
-    # Vérification que l'apprenti soit bien supprimé de la base de données
+    # Vérification de la suppression de l'apprenti en BD
     assert db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti.id_apprenti).first() is None

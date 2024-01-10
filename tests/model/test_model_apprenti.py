@@ -1,5 +1,3 @@
-from custom_paquets.converter import generate_login
-from custom_paquets.security import encrypt_password
 from custom_paquets.tester_usages import ApprentiTest, ApprentiTestModif
 from model.apprenti import archiver_apprenti, remove_apprenti
 from model.shared_model import Apprenti, db, FicheIntervention
@@ -32,7 +30,7 @@ def test_modifier_apprenti(client):
     # Modification de l'apprenti
     apprenti2 = ApprentiTestModif(apprenti.id_apprenti)
 
-    # Vérification que l'apprenti soit bien modifé
+    # Vérification de la modification de l'apprenti
     apprenti_modif: Apprenti = db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti2.id_apprenti).first()
     assert apprenti_modif is not None
     assert apprenti_modif.nom == apprenti2.nom

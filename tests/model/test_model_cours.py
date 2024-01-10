@@ -5,7 +5,7 @@ from model.shared_model import Cours, Assister, db
 def test_ajouter_cours(client):
     cours_t = CoursTest()
     
-    # Vérification que le cours existe
+    # Vérification de l'ajout du cours
     assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours).first() is not None
     db.session.rollback()
     assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours).first() is None
@@ -15,7 +15,7 @@ def test_modifier_cours(client):
 
     cours_m = CoursTestModif(cours_t.id_cours)
     
-    # Vérification que le cours soit bien modifé
+    # Vérification de la modification du cours
     cours_modif: Cours = db.session.query(Cours).filter(Cours.id_cours == cours_m.id_cours).first()
     assert cours_modif is not None
     assert cours_modif.theme == cours_m.theme
@@ -36,12 +36,12 @@ def test_archiver_cours(client):
 def test_supprimer_cours(client):
     cours_t = CoursTest(commit=True)
     
-    # Vérification que le cours existe
+    # Vérification de l'ajout du cours
     assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours).first() is not None
     
     # Suppression du cours
     remove_cours(cours_t.id_cours)
     
-    # Vérification que le cours n'existe plus
+    # Vérification de la suppression du cours dans la base de données
     assert db.session.query(Cours).filter(Cours.id_cours == cours_t.id_cours).first() is None
     assert db.session.query(Assister).filter(Assister.id_cours == cours_t.id_cours).first() is None
