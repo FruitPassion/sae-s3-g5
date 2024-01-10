@@ -19,12 +19,12 @@
 
 ### - Utilisation de XAMPP/WAMP  <img src="https://pic.clubic.com/v1/images/1501317/raw" height="21">
 
-L'utilisation de XAMPP est nécessaire, mais uniquement pour faire tourner la base de donnée. Ainsi, il suffit seulement
+L'utilisation de XAMPP est nécessaire, mais uniquement pour faire tourner la base de données. Ainsi, il suffit seulement
 de lancer MySql.
 
 Une fois mysql démaré, on cherchera à executer en tant que root le script `db_creation.sql` en se basant sur
 [ces méthodes](https://dev.mysql.com/doc/refman/8.0/en/mysql-batch-commands.html). Ledit script permet ainsi de créer 
-l'utilisateur nécessaire à la connexion, mais aussi de créer le schéma de la base de donnée.
+l'utilisateur nécessaire à la connexion, mais aussi de créer le schéma de la base de données.
 
 ### - Installation de Python 3.10 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Python_logo_01.svg/1200px-Python_logo_01.svg.png" height="20">
 
@@ -33,7 +33,7 @@ La verison que nous utiliserons ici est la 3.10, elle est installable via
 [ce lien](https://www.python.org/downloads/release/python-31013/)
 
 Pour connaitre la version que l'on possède du langage, il suffit de taper `python --version` dans son terminal.
-Si jamais vous posseder plusieurs versions, il suffit de tapper la version désirée pour la lancer.
+Si jamais vous possédez plusieurs versions, il suffit de taper la version désirée pour la lancer.
 Ainsi, si par exemple, je possède python 3.8 et 3.10, et que je veux lancer la 3.10 je taperai simplement `python3.10`
 dans le terminal pour lancer un programme `.py` avec cette version.
 
@@ -63,7 +63,7 @@ Dans le terminal, devrait alors apparaitre `(.env)` au début de la ligne.
 
 ![img.png](https://imgur.com/he2zP1V.png)
 
-Cela, signifie que l'envrionnement est maintenant activé et que toutes les installations que vous ferez seront stocké
+Cela, signifie que l'envrionnement est maintenant activé et que toutes les installations que vous ferez seront stockées
 dans l'envrionnement et pas directement sur votre machine.
 
 > [!NOTE]  
@@ -72,7 +72,7 @@ dans l'envrionnement et pas directement sur votre machine.
 
 ### - Installation des dépendances/librairies <img src="https://seeklogo.com/images/P/python-package-index-logo-F2EC9F1F8C-seeklogo.com.png" height="20">
 
-Maintenant que notre environnement virtuel est pret, il suffit de lui installer les dépendances et librairies.
+Maintenant que notre environnement virtuel est prêt, il suffit de lui installer les dépendances et librairies.
 Celles-ci sont stockées à la racine du projet dans le fichier `requirements.txt`, ainsi quand vous ajouterez une
 librairie au projet, vous devrez aussi l'ajouter dans le `requirements.txt`.
 
@@ -94,7 +94,7 @@ activé.
 (.env) $ python app.py
 ``` 
 
-On peut ensuite se rendre sur son navigateur web et acceder à l'index via `http://localhost:5000/`
+On peut ensuite se rendre sur son navigateur web et accéder à l'index via `http://localhost:5000/`
 ou `http://127.0.0.1:5000/`
 
 ***
@@ -155,7 +155,7 @@ Ainsi, à la racine du projet, on retrouve plusieurs fichiers et dossiers :
 Les controller comme dit précedement, permettent à partir d'une route donnée par l'utilisateur, d'effectuer des actions
 avec le model et d'afficher une vue.
 
-Dans le fichier `auth.py` par exemple, on retrouve la route **hello-world** dans le navigateur. Cette route est associé
+Dans le fichier `auth.py` par exemple, on retrouve la route **hello-world** dans le navigateur. Cette route est associée
 à la fonction `hello_world()`.
 Ainsi quand on tape `http://localhost:5000/hello-world` dans notre navigateur, Flask effectue la fonction qui suit nommée
 `hello_world()`.
@@ -171,8 +171,8 @@ on voit alors ceci :
 
 ![return-hello](https://imgur.com/viWTeIA.png)
 
-On a aussi dans le fichier `auth.py` une autre route nommée `/`. Celle-ci se réferre à un chemin tel que 
-`http://localhost:5000/`. Elle est rattaché à la fonction `index()`.
+On a aussi dans le fichier `auth.py` une autre route nommée `/`. Celle-ci se réfère à un chemin tel que 
+`http://localhost:5000/`. Elle est rattachée à la fonction `index()`.
 
 ```python
 @auth.route('/')
@@ -182,12 +182,12 @@ def index():
 ```
 
 La fonction `index()` appelle ici la fonction `getAllPersonnel()` et stocke son contenu dans la variable `personnel`.
-`getAllPersonnel()` est issue d'un fichier [model](#model-) et permet de récupérer les noms, prénoms et role de tout les
+`getAllPersonnel()` est issue d'un fichier [model](#model-) et permet de récupérer les noms, prénoms et rôle de tous les
 membres de la table Personel.
 <br>
 On retourne par la suite la fonction `render_template()` à laquelle on passe deux paramètres. Le premier est obligatoire
 et correspond au chemin du fichier HTML (la [vue](#view-)) que l'on veut afficher à l'utilisateur. Après le chemin de la
-vue, on peut passer autant de paramètre que l'on souhaite et qui correpspondront aux variables que l'on stockera dans la
+vue, on peut passer autant de paramètres que l'on souhaite et qui correspondront aux variables que l'on stockera dans la
 session utilisateur. <br>
 Le résultat de ce chemin est le suivant :
 
@@ -195,7 +195,7 @@ Le résultat de ce chemin est le suivant :
 
 ### Custom-Paquets :
 
-Ce dossier contient tous les fichiers python qui ne rentre pas dans les autres dossiers.
+Ce dossier contient tous les fichiers python qui ne rentrent pas dans les autres dossiers.
 
 ### Model :
 
@@ -209,7 +209,7 @@ def getAllPersonnel():
     return convertToDict(personnel)
 ```
 
-La premiere ligne est la définition du nom de la fonction ainsi que les paramètres entre les parenthèses (il n'y en a
+La première ligne est la définition du nom de la fonction ainsi que les paramètres entre les parenthèses (il n'y en a
 pas). La seconde ligne est la query qui pourrait se traduire comme suit en SQL:
 
 ```sql
@@ -228,14 +228,14 @@ utilisé `.count()`
 > Pour plus d'infos, n'hésitez à consulter la [documentation officielle](https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/)
 ou cet article de [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-use-flask-sqlalchemy-to-interact-with-databases-in-a-flask-application)
 
-On stocke le résultat de la query dans une variable `personnel`. Cette variable contient maintenant une liste de classe.
-On la retourne donc en utilisant la fonction `convertToDict()` qui permet de convertir une liste de classe en une liste 
-de dictionnaire (c'est plus simple à utiliser par la suite).
+On stocke le résultat de la query dans une variable `personnel`. Cette variable contient maintenant une liste de classes.
+On la retourne donc en utilisant la fonction `convertToDict()` qui permet de convertir une liste de classes en une liste 
+de dictionnaires (c'est plus simple à utiliser par la suite).
 
 
 ### Model-DB :
 
-Ce dossier contient toutes les structures des tables de la base de donnée translatée en python.
+Ce dossier contient toutes les structures des tables de la base de données translatée en python.
 Cela permet l'utilisation de la librairie SQLAlchemy et ainsi la création des fonctions de 
 [model](#model-).
 
@@ -262,22 +262,22 @@ class Apprenti(db.Model):
 ```
 
 > [!IMPORTANT]   
-> La derniere ligne permet de faire la jointure interne de manière automatique si aucune autre jointure n'est précisée.
+> La dernière ligne permet de faire la jointure interne de manière automatique si aucune autre jointure n'est précisée.
 
 ### Static :
 
 Ce dossier en contient trois autres :
-- **CSS** : pour stocker tout les fichiers CSS
+- **CSS** : pour stocker tous les fichiers CSS
 - **images** : pour stocker toutes les images
-- **JS** : pour stocker tout les fichiers JS
+- **JS** : pour stocker tous les fichiers JS
 
 On pourrait par exemple rajouter le dossier 'audio' pour stocker tous les fichiers audio.
 
 ### app.py :
 
-Fichier à executer pour lancer l'application. Permet d'importer les différents controller ainsi que de préciser
+Fichier à exécuter pour lancer l'application. Permet d'importer les différents controller ainsi que de préciser
 la configuration à utiliser.
 
 ### config.py :
 
-Fichier utilisé pour créer différentes parametrer différentes configurtions pour l'application.
+Fichier utilisé pour créer différentes paramétrer différentes configurations pour l'application.

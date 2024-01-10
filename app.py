@@ -3,10 +3,10 @@ import logging
 from custom_paquets import check_requirements
 from custom_paquets.app_checker import check_config, check_git_branch
 
-# Verification de la présence des dépendances dans l'environnement virtuel
+# Vérification de la présence des dépendances dans l'environnement virtuel
 check_requirements.checking()
 
-# Importation deslibrairies nécessaire
+# Importation des librairies nécessaire
 import json
 import os
 
@@ -20,7 +20,7 @@ from werkzeug.exceptions import HTTPException
 # Paquet gestion d'erreur
 from custom_paquets.gestions_erreur import logging_erreur
 
-# odel de la base de données
+# model de la base de données
 from model.shared_model import db
 
 # Controller
@@ -34,13 +34,13 @@ from controller.personnel import personnel
 from controller.auth import auth
 
 
-# Fonction pour creer une application et la parametrer
+# Fonction pour créer une application et la paramétrer
 def create_app(config=None):
     # Vérification de la configuration demandée.
     # Si aucune configuration n'est demandée, la configuration par défaut est la configuration de développement
     check_config(config)
 
-    # Declaration de l'application
+    # Déclaration de l'application
     # Changement du chemin d'accès des templates
     app = Flask(__name__, template_folder="view")
 
@@ -62,7 +62,7 @@ def create_app(config=None):
     csrf = CSRFProtect()
     csrf.init_app(app)
 
-    # Initialisation du schema de la base de donnée dans l'application
+    # Initialisation du schema de la base de données dans l'application
     db.init_app(app)
 
     """
