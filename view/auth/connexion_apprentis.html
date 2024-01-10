@@ -1,6 +1,6 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Connexion Apprentis{% endblock %}
+{% block title %}Connexion apprentis{% endblock %}
 
 {% block javascripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
@@ -16,7 +16,7 @@
 {% block body %}
     <div id="flashing" style="background-color: #e83c55; color: black; font-size : 35px" hidden="true">
         <ul class="flashes" style="margin-top: revert">
-            <li>Compte bloqué, contacter un admin {% include "_partial/_tts.html" %}</li>
+            <li>Compte bloqué, contactez un admin {% include "_partial/_tts.html" %}</li>
         </ul>
     </div>
     {% if code_set %}

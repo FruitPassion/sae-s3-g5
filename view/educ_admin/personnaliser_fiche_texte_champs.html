@@ -21,17 +21,17 @@
             <h3>Prévisualisation</h3>
             <select id="selecteur_categorie" onchange="changer_preview(this)" class="my-3">
                 {% for categorie in composition %}
-                    <option value="{{ categorie["position_elem"] }}">{{ categorie["libelle_elem"] }}</option>
+                    <option value="{{ categorie['position_elem'] }}">{{ categorie["libelle_elem"] }}</option>
                 {% endfor %}
             </select>
             {% for categorie in composition %}
-                <fieldset id="field-{{ categorie["position_elem"] }}" class="scheduler-border p-2 mr-auto ml-2"
-                          {% if loop.index0 != 0 %}hidden="" {% endif %} style="{{ categorie["couleur_fond"] }}">
+                <fieldset id="field-{{ categorie['position_elem'] }}" class="scheduler-border p-2 mr-auto ml-2"
+                          {% if loop.index0 != 0 %}hidden="" {% endif %} style="{{ categorie['couleur_fond'] }}">
                     <legend>{{ categorie["libelle_elem"] }}</legend>
                     {% for element in categorie["elements"] %}
-                        <label class="mb-2" id="modelem-{{ element["position_elem"] }}">
+                        <label class="mb-2" id="modelem-{{ element['position_elem'] }}">
                             {% if element["pictogramme"] != None %}
-                                <img src="{{ url_for('static', filename='images/icone_fiches/'+element["pictogramme"]) }}"
+                                <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
                                      class="rounded" alt="icone element" onload="chargement_preview(this,
                                         ajout={{ element["taille_pictogramme"] }},
                                         couleur='{{ element["couleur_pictogramme"] }}',
@@ -39,9 +39,9 @@
                                      id="icone-{{ element["position_elem"] }}"
                                      {% if element["niveau"] == 3 %}hidden="" {% endif %}>
                             {% endif %}
-                            <span id="label-{{ element["position_elem"] }}"
-                                  style="font-size: {{ element["taille_texte"] }}px; color: {{ element["couleur"] }};
-                                          font-family: {{ element["police"] }}, 'Sans-Serif light';"
+                            <span id="label-{{ element['position_elem'] }}"
+                                  style="font-size: {{ element['taille_texte'] }}px; color: {{ element['couleur'] }};
+                                          font-family: {{ element['police'] }}, 'Sans-Serif light';"
                                   {% if element["niveau"] == 1 %}hidden=""{% endif %}>{{ element["libelle_elem"] }}</span>
                             {% if element["type_elem"] == "select-time" %}
                                 </label>
@@ -56,19 +56,19 @@
                             {% elif element["type_elem"] == "select-materiel" %}
                                 </label>
                                 <select>
-                                    <option value="mat-1">materiel 1</option>
-                                    <option value="mat-2">materiel 2</option>
+                                    <option value="mat-1">matériel 1</option>
+                                    <option value="mat-2">matériel 2</option>
                                 </select>
                             {% elif element["type_elem"] == "textarea" %}
                                 </label>
                                 <textarea class="form-control"></textarea>
                             {% elif element["type_elem"] in ["radio","checkbox"] %}
-                                <input type="{{ element["type_elem"] }}" name="radio-{{ categorie['position_elem'] }}">
+                                <input type="{{ element['type_elem'] }}" name="radio-{{ categorie['position_elem'] }}">
                                 </label>
                             {% else %}
                                 </label>
                                 <div>
-                                    <input type="{{ element["type_elem"] }}"
+                                    <input type="{{ element['type_elem'] }}"
                                             {% if element["type_elem"] != "checkbox" %}
                                            class="form-control"
                                             {% endif %}>
@@ -89,39 +89,39 @@
                         <select id="selecteur-element-{{ categorie['position_elem'] }}"
                                 name="selecteur-element-{{ categorie['position_elem'] }}"
                                 onchange="changer_element(this)">
-                            <option value="{{ categorie["position_elem"] }}" selected>Catégorie
+                            <option value="{{ categorie['position_elem'] }}" selected>Catégorie
                                 - {{ categorie["libelle_elem"] }}</option>
                             {% for element in categorie["elements"] %}
-                                <option value="{{ element["position_elem"] }}"
+                                <option value="{{ element['position_elem'] }}"
                                         {% if categorie["niveau"] != None %}disabled{% endif %}
                                 >Element - {{ element["libelle_elem"] }}</option>
                             {% endfor %}
                         </select>
 
-                        <!-- Iteration pour la version de la categorie-->
-                        <div id="element-{{ categorie["position_elem"] }}" class="element-hidde">
+                        <!-- Itération pour la version de la catégorie-->
+                        <div id="element-{{ categorie['position_elem'] }}" class="element-hidde">
                             <div>
                                 <h3>Champs</h3>
                                 <div class="form-control">
                                     <!-- Sélection du Niveau -->
                                     <label for="selecteur_niveau">Niveau</label>
-                                    <select id="selecteur-niveau-{{ categorie["position_elem"] }}"
-                                            name="selecteur-niveau-{{ categorie["position_elem"] }}"
-                                            onchange="changer_niveau_categorie({{ categorie["position_elem"] }})">
+                                    <select id="selecteur-niveau-{{ categorie['position_elem'] }}"
+                                            name="selecteur-niveau-{{ categorie['position_elem'] }}"
+                                            onchange="changer_niveau_categorie({{ categorie['position_elem'] }})">
                                         <option value="0" {% if categorie["niveau"] == None %}selected{% endif %}>
                                             # - Niveau individuel pour chaque élément de la catégorie
                                         </option>
                                         <option value="1" {% if categorie["niveau"] == 1 %}selected{% endif %}>1 -
                                             Facile -
-                                            Pictogrammes (appliquer à tout les éléments)
+                                            Pictogrammes (appliquer à tous les éléments)
                                         </option>
                                         <option value="2" {% if categorie["niveau"] == 2 %}selected{% endif %}>2 - Aidé
                                             -
                                             Pictogrammes
-                                            et Texte (appliquer à tout les éléments)
+                                            et Texte (appliquer à tous les éléments)
                                         </option>
                                         <option value="3" {% if categorie["niveau"] == 3 %}selected{% endif %}>3 - Pro -
-                                            Version d'examen (appliquer à tout les éléments)
+                                            Version d'examen (appliquer à tous les éléments)
                                         </option>
                                     </select>
                                 </div>
@@ -129,25 +129,25 @@
                             </div>
                             <div>
                                 <h3>Pictogramme</h3>
-                                <div id="div-picto-{{ categorie["position_elem"] }}"
-                                     class="d-flex form-control modify-text {% if categorie["niveau"] == None %}disabled-text{% endif %}">
+                                <div id="div-picto-{{ categorie['position_elem'] }}"
+                                     class="d-flex form-control modify-text {% if categorie['niveau'] == None %}disabled-text{% endif %}">
                                     <div class="w-50">
                                         <!-- Sélection de la taille de la police d'écriture -->
                                         <label>Taille</label>
                                         <input type="number" min="0" max="100"
-                                               name="taille-picto-{{ categorie["position_elem"] }}"
-                                               id="taille-picto-{{ categorie["position_elem"] }}"
+                                               name="taille-picto-{{ categorie['position_elem'] }}"
+                                               id="taille-picto-{{ categorie['position_elem'] }}"
                                                {% if categorie["niveau"] == None %}disabled{% endif %}
-                                               value="{{ categorie["taille_pictogramme"] }}"
+                                               value="{{ categorie['taille_pictogramme'] }}"
                                                onchange="changer_icone_categorie('{{ categorie["position_elem"] }}')"><br>
                                     </div>
                                     <div class="w-50">
                                         <!-- Sélection de la couleur de la police d'écriture -->
                                         <label>Couleur</label>
                                         <input type="color" class="form-control form-control-color w-100 mt-2"
-                                               name="couleur-picto-{{ categorie["position_elem"] }}"
-                                               id="couleur-picto-{{ categorie["position_elem"] }}"
-                                               value="{{ categorie["couleur_pictogramme"] }}"
+                                               name="couleur-picto-{{ categorie['position_elem'] }}"
+                                               id="couleur-picto-{{ categorie['position_elem'] }}"
+                                               value="{{ categorie['couleur_pictogramme'] }}"
                                                {% if categorie["niveau"] == None %}disabled{% endif %}
                                                onchange="changer_icone_categorie('{{ categorie["position_elem"] }}')">
                                     </div>
@@ -155,13 +155,13 @@
                             </div>
                             <div>
                                 <h3>Texte</h3>
-                                <div id="div-text-{{ categorie["position_elem"] }}"
-                                     class="d-flex form-control modify-text {% if categorie["niveau"] == None %}disabled-text{% endif %}">
+                                <div id="div-text-{{ categorie['position_elem'] }}"
+                                     class="d-flex form-control modify-text {% if categorie['niveau'] == None %}disabled-text{% endif %}">
                                     <div>
                                         <!-- Sélection d'une police d'écriture -->
                                         <label>Police</label>
-                                        <select id="selecteur-police-{{ categorie["position_elem"] }}"
-                                                name="selecteur-police-{{ categorie["position_elem"] }}"
+                                        <select id="selecteur-police-{{ categorie['position_elem'] }}"
+                                                name="selecteur-police-{{ categorie['position_elem'] }}"
                                                 onchange="changer_texte_categorie('{{ categorie["position_elem"] }}')"
                                                 {% if categorie["niveau"] == None %}disabled{% endif %}>
                                             {% for police in polices %}
@@ -177,19 +177,19 @@
                                     <div>
                                         <!-- Sélection de la taille de la police d'écriture -->
                                         <label>Taille</label>
-                                        <input id="taille-police-{{ categorie["position_elem"] }}" type="number"
-                                               name="taille-police-{{ categorie["position_elem"] }}" min="15" max="100"
-                                               value="{{ categorie["taille_texte"] }}"
+                                        <input id="taille-police-{{ categorie['position_elem'] }}" type="number"
+                                               name="taille-police-{{ categorie['position_elem'] }}" min="15" max="100"
+                                               value="{{ categorie['taille_texte'] }}"
                                                onchange="changer_texte_categorie('{{ categorie["position_elem"] }}')"
                                                {% if categorie["niveau"] == None %}disabled{% endif %}><br>
                                     </div>
                                     <div>
                                         <!-- Sélection de la couleur de la police d'écriture -->
                                         <label> Couleur</label>
-                                        <input id="couleur-police-{{ categorie["position_elem"] }}"
-                                               name="couleur-police-{{ categorie["position_elem"] }}"
+                                        <input id="couleur-police-{{ categorie['position_elem'] }}"
+                                               name="couleur-police-{{ categorie['position_elem'] }}"
                                                type="color" class="form-control form-control-color w-100 mt-2"
-                                               value="{{ categorie["couleur"] }}"
+                                               value="{{ categorie['couleur'] }}"
                                                onchange="changer_texte_categorie('{{ categorie["position_elem"] }}')"
                                                {% if categorie["niveau"] == None %}disabled{% endif %}>
                                     </div>
@@ -198,32 +198,32 @@
 
                             <div>
                                 <h3>Couleur de fond</h3>
-                                <div id="div-fond-{{ categorie["position_elem"] }}"
+                                <div id="div-fond-{{ categorie['position_elem'] }}"
                                      class="form-control">
                                     <!-- Sélection de la couleur du fond -->
                                     <label>Couleur</label>
                                     <input type="color" class="form-control form-control-color w-100 mt-2"
-                                           name="couleur-fond-{{ categorie["position_elem"] }}"
-                                           id="couleur-fond-{{ categorie["position_elem"] }}"
-                                           value="{{ categorie["couleur_fond"] }}"
+                                           name="couleur-fond-{{ categorie['position_elem'] }}"
+                                           id="couleur-fond-{{ categorie['position_elem'] }}"
+                                           value="{{ categorie['couleur_fond'] }}"
                                            onchange="changer_fond_categorie({{ categorie["position_elem"] }})">
                                 </div>
                             </div>
                         </div>
 
 
-                        <!-- Iteration par elements dans la categorie-->
+                        <!-- Itération par éléments dans la catégorie-->
                         {% for element in categorie["elements"] %}
-                            <div hidden="" id="element-{{ element["position_elem"] }}" class="element-hidde">
+                            <div hidden="" id="element-{{ element['position_elem'] }}" class="element-hidde">
 
                                 <div>
                                     <h3>Champ</h3>
                                     <div class="form-control">
                                         <div>
                                             <!-- Sélection du Niveau -->
-                                            <label for="selecteur-niveau-{{ element["position_elem"] }}"> Niveau</label>
-                                            <select id="selecteur-niveau-{{ element["position_elem"] }}"
-                                                    name="selecteur-niveau-{{ element["position_elem"] }}"
+                                            <label for="selecteur-niveau-{{ element['position_elem'] }}"> Niveau</label>
+                                            <select id="selecteur-niveau-{{ element['position_elem'] }}"
+                                                    name="selecteur-niveau-{{ element['position_elem'] }}"
                                                     onchange="changer_niveau_individuel('{{ element["position_elem"] }}')">
                                                 <option value="1" {% if element["niveau"] == 1 %}selected{% endif %}>1 -
                                                     Facile - Pictogrammes
@@ -243,7 +243,7 @@
                                     <h3>Pictogramme</h3>
                                     <div class="d-flex form-control modify-text">
                                         <div>
-                                            <label>Icone</label>
+                                            <label>Icône</label>
                                             <select class="selecteur_pictogramme" is="ms-dropdown"
                                                     name="selecteur-picto-{{ element["position_elem"] }}"
                                                     id="selecteur-picto-{{ element["position_elem"] }}"
@@ -254,7 +254,7 @@
                                                             <optgroup
                                                                     label="&nbsp;&nbsp;&nbsp;&nbsp;{{ souscategorie }}">
                                                                 {% for souselement in liste_pictogrammes[categorie][souscategorie] %}
-                                                                    <option value="{{ souselement["url"] }}"
+                                                                    <option value="{{ souselement['url'] }}"
                                                                             data-image="{{ url_for('static',
                                                                             filename='images/icone_fiches/'+souselement['url']) }}"
                                                                             {% if element["pictogramme"] == souselement["url"] %}
@@ -273,23 +273,23 @@
                                             <!-- Sélection de la taille du pictogramme -->
                                             <label>Taille</label>
                                             <input type="number" min="0" max="40"
-                                                   name="taille-picto-{{ element["position_elem"] }}"
-                                                   id="taille-picto-{{ element["position_elem"] }}"
+                                                   name="taille-picto-{{ element['position_elem'] }}"
+                                                   id="taille-picto-{{ element['position_elem'] }}"
                                                    onchange="changer_icone_individuelle('{{ element["position_elem"] }}')"
                                                     {% if element["pictogramme"] == None %}
                                                    disabled value="0"
                                                     {% else %}
-                                                   value="{{ element["taille_pictogramme"] }}"
+                                                   value="{{ element['taille_pictogramme'] }}"
                                                     {% endif %}><br>
                                         </div>
                                         <div>
                                             <!-- Sélection de la couleur du pictogramme -->
                                             <label>Couleur</label>
                                             <input type="color" class="form-control form-control-color w-100 mt-2"
-                                                   name="couleur-picto-{{ element["position_elem"] }}"
-                                                   id="couleur-picto-{{ element["position_elem"] }}"
+                                                   name="couleur-picto-{{ element['position_elem'] }}"
+                                                   id="couleur-picto-{{ element['position_elem'] }}"
                                                    onchange="changer_icone_individuelle('{{ element["position_elem"] }}')"
-                                                   value="{{ element["couleur_pictogramme"] }}">
+                                                   value="{{ element['couleur_pictogramme'] }}">
                                         </div>
                                     </div>
                                 </div>
@@ -299,8 +299,8 @@
                                         <div>
                                             <!-- Sélection d'une police d'écriture -->
                                             <label>Police</label>
-                                            <select id="selecteur-police-{{ element["position_elem"] }}"
-                                                    name="selecteur-police-{{ element["position_elem"] }}"
+                                            <select id="selecteur-police-{{ element['position_elem'] }}"
+                                                    name="selecteur-police-{{ element['position_elem'] }}"
                                                     onchange="changer_texte_individuel('{{ element["position_elem"] }}')">
                                                 {% for police in polices %}
                                                     <option value="{{ police }}" style="font-family: {{ police }}"
@@ -317,18 +317,18 @@
                                             <label>Taille</label>
                                             <input type="number" min="15" max="100"
                                                    onchange="changer_texte_individuel('{{ element["position_elem"] }}')"
-                                                   name="taille-police-{{ element["position_elem"] }}"
-                                                   id="taille-police-{{ element["position_elem"] }}"
-                                                   value="{{ element["taille_texte"] }}"><br>
+                                                   name="taille-police-{{ element['position_elem'] }}"
+                                                   id="taille-police-{{ element['position_elem'] }}"
+                                                   value="{{ element['taille_texte'] }}"><br>
                                         </div>
                                         <div>
                                             <!-- Sélection de la couleur de la police d'écriture -->
                                             <label> Couleur</label>
                                             <input type="color" class="form-control form-control-color w-100 mt-2"
                                                    onchange="changer_texte_individuel('{{ element["position_elem"] }}')"
-                                                   id="couleur-police-{{ element["position_elem"] }}"
-                                                   name="couleur-police-{{ element["position_elem"] }}"
-                                                   value="{{ element["couleur"] }}">
+                                                   id="couleur-police-{{ element['position_elem'] }}"
+                                                   name="couleur-police-{{ element['position_elem'] }}"
+                                                   value="{{ element['couleur'] }}">
                                         </div>
                                     </div>
                                 </div>

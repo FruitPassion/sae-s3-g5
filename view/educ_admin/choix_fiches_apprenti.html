@@ -12,7 +12,7 @@
     <div id="blocFiches">
         <div class="d-block">
             <div class="parent">
-                <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti["login"]) }}">
+                <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti['login']) }}">
                     <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                          alt="fiche finie">
                     <img class="plus" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
@@ -25,7 +25,7 @@
                 <div class="parent">
                     {% if fiche['etat_fiche'] == 0 %}
                         <a class="modifier"
-                           href="{{ url_for('educ_admin.modifier_fiche', id_fiche=fiche["id_fiche"]) }}">
+                           href="{{ url_for('educ_admin.modifier_fiche', id_fiche=fiche['id_fiche']) }}">
                             <i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                     {% else %}
                         <a class="modifier"></a>

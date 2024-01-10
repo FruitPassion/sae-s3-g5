@@ -47,7 +47,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel %}
-                        <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
+                        <tr class="text-center {% if personnel['essais'] == 3 %}table-danger{% endif %}"
                             id="ele-{{ personnel['id_personnel'] }}">
                             <td id="login-{{ personnel['id_personnel'] }}">{{ personnel["login"] }}</td>
                             <td id="nom-{{ personnel['id_personnel'] }}">{{ personnel["nom"] }}</td>
@@ -56,7 +56,7 @@
                             <td id="role-{{ personnel['id_personnel'] }}"
                                 class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
                             <td>
-                                {% if personnel["essaies"] == 3 %}
+                                {% if personnel["essais"] == 3 %}
                                     <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
                                     <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-check" aria-hidden="true"></i>
@@ -156,7 +156,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel_archive %}
-                        <tr class="text-center {% if personnel['essaies'] == 3 %}table-danger{% endif %}"
+                        <tr class="text-center {% if personnel['essais'] == 3 %}table-danger{% endif %}"
                             id="arch-ele-{{ personnel['id_personnel'] }}">
                             <td id="login">{{ personnel["login"] }}</td>
                             <td id="nom">{{ personnel["nom"] }}</td>
@@ -164,7 +164,7 @@
                             <td id="email">{{ personnel["email"] }}</td>
                             <td id="role" class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
                             <td>
-                                {% if personnel["essaies"] == 3 %}
+                                {% if personnel["essais"] == 3 %}
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
                                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -199,7 +199,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="archiver-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver le membre du personnel ?</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver ce membre du personnel ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
@@ -220,7 +220,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="desarchiver-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver le membre du personnel ?</p>
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver ce membre du personnel ?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
@@ -333,7 +333,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="supprimer-value">
-                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer le personnel ? Cette action
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer ce membre du personnel ? Cette action
                         est irréversible et entraînera l'anonymisation de ce personnel en base de données'.</p>
                 </div>
                 <div class="modal-footer">

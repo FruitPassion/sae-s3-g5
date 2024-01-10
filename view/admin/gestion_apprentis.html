@@ -46,7 +46,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprentis %}
-                        <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
+                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
                             id="ele-{{ apprenti['id_apprenti'] }}">
                             <td id="login-{{ apprenti['id_apprenti'] }}"
                                 class="align-middle">{{ apprenti["login"] }}</td>
@@ -58,7 +58,7 @@
                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
                                     alt="photo profile apprenti"></td>
                             <td class="align-middle">
-                                {% if apprenti["essaies"] == 5 %}
+                                {% if apprenti["essais"] == 5 %}
                                     <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-times"
                                        aria-hidden="true"></i>
                                 {% else %}
@@ -140,7 +140,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprentis_archives %}
-                        <tr class="text-center {% if apprenti['essaies'] == 5 %}table-danger{% endif %}"
+                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
                             id="arch-ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
@@ -149,7 +149,7 @@
                                      src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
                                      alt="photo profile apprenti"></td>
                             <td class="align-middle">
-                                {% if apprenti["essaies"] == 5 %}
+                                {% if apprenti["essais"] == 5 %}
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
                                     <i class="fa fa-check" aria-hidden="true"></i>
