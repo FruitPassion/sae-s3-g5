@@ -42,7 +42,7 @@ def get_fiches_par_id_fiche(id_apprenti):
         FicheIntervention.id_fiche, FicheIntervention.numero).first())
 
 
-def get_niveau_fiches_par_login(login):
+def get_niveau_etat_fiches_par_login(login):
     """
     Récupère le total des niveaux de chaque fiche technique associées à un apprenti à partir de son Login
 
@@ -50,7 +50,7 @@ def get_niveau_fiches_par_login(login):
     """
     id_apprenti = get_id_apprenti_by_login(login)
     fiche_niveau = (
-        db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'))
+        db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'), FicheIntervention.etat_fiche)
         .join(ComposerPresentation)
         .join(Apprenti)
         .filter(FicheIntervention.id_apprenti == id_apprenti)

@@ -1,30 +1,32 @@
-function creation_graphique_suivi_progression_cip(niv_fiche, etat_fiches) {
+function creation_graphique_suivi_progression_cip(niv_fiche) {
   var chart_suivi_progression = document.getElementById('suivi_progression_cip');
   var context = chart_suivi_progression.getContext('2d');
   const liste_niv_fiche = [];
   const liste_num_fiche = [];
+  const liste_etat_fiche = [];
   for (const niveau of niv_fiche) {
     liste_niv_fiche.push(niveau["total_niveau"]);
     liste_num_fiche.push(niveau["numero"]);
-  }
-  const liste_etat_fiche = [];
-  for (const etat of etat_fiches) {
-    if (etat === 0){
+    if (niveau["etat_fiche"] === 0){
       const etatEnCours = new Image(30,30);
       etatEnCours.src = "/static/images/pause.png";
       liste_etat_fiche.push(etatEnCours);
     }
-    if (etat === 1){
+    if (niveau["etat_fiche"] === 1){
       const etatFini = new Image(30,30);
       etatFini.src = "/static/images/check.png";
       liste_etat_fiche.push(etatFini);
     }
-    if (etat === 2){
+    if (niveau["etat_fiche"] === 2){
       const etatArret = new Image(30,30);
       etatArret.src = "/static/images/stop.png";
       liste_etat_fiche.push(etatArret);
     }
   }
+  console.log(niv_fiche)
+  console.log(liste_niv_fiche)
+  console.log(liste_num_fiche)
+  console.log(liste_etat_fiche)
   var line_chart = new Chart(context, {
     type: 'line',
     data: {

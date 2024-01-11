@@ -4,7 +4,7 @@ from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
 from model.trace import get_commentaires_par_fiche
 from model.apprenti import get_apprenti_by_login, get_adaptation_situation_examen_par_apprenti, update_adaptation_situation_examen_par_apprenti
-from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_finies_par_login, get_fiches_techniques_par_login, get_niveau_fiches_par_login, get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login, get_nom_cours_by_id
+from model.ficheintervention import get_fiches_techniques_finies_par_login, get_niveau_etat_fiches_par_login, get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login, get_nom_cours_by_id
 import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
@@ -71,19 +71,14 @@ def suivi_progression_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     
     # Récupération des niveaux des fiches
-    niv_fiche = get_niveau_fiches_par_login(apprenti)
+    niv_fiche = get_niveau_etat_fiches_par_login(apprenti)
     for niv in niv_fiche:
         niv["total_niveau"] = str(niv["total_niveau"])
-        
-    # Récupération des états des fiches
-    fiches_techniques = get_fiches_techniques_par_login(apprenti)
-    etat_fiches = []
-    for fiche in fiches_techniques:
-        etat_fiches.append(get_etat_fiche_par_id_fiche(fiche["id_fiche"]))
+    
     niveau_moyen = get_niveau_moyen_champs_par_login(apprenti)
     nb_fiches_finies = get_nombre_fiches_finies_par_login(apprenti)
     
-    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche), niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos, etat_fiches=etat_fiches), 200
+    return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche), niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
 
 
 @cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
