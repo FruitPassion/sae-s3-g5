@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    abort,
     render_template,
     flash,
     redirect,
@@ -13,7 +14,7 @@ from custom_paquets.decorateur import logout_required
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essais_connexion_apprenti, \
     check_apprenti, check_password_is_set
 from model.cours import get_apprentis_by_formation
-from model.formation import get_all_formations
+from model.formation import get_all_formations, get_formation_id
 from model.personnel import check_personnel, check_password, get_role, get_nbr_essais_connexion_personnel, \
     get_liste_personnel_non_super
 
@@ -151,6 +152,9 @@ def choix_eleve_apprentis(nom_formation):
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
+    if not get_formation_id(nom_formation):
+        abort(404)
+        
     apprentis = get_apprentis_by_formation(nom_formation)
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200
 

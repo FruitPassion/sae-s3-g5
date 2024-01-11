@@ -25,8 +25,12 @@ def get_formation_id(nom_formation: str):
 
     :return: Un id de formation
     """
-    return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
-
+    try:
+        return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
+    except Exception as e:
+        logging.error("Erreur lors de la récupération de l'id d'une formation")
+        logging.error(e)
+        return False
 
 def get_nom_formation(id_formation):
     """
