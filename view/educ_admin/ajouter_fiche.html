@@ -17,9 +17,9 @@
                 <label for="coursinput" class="form-label">Thème - Cours de la fiche :</label>
                 <select class="form-select form-select-lg fs-3 form-control mb-3" aria-label=".form-select-lg"
                         name="coursinput">
-                    {% for session in sessions %}
-                        <option class="fs-3" value="{{ session['id_session'] }}">{{ session['theme'] }}
-                            - {{ session['cours'] }}</option>
+                    {% for cour in cours %}
+                        <option class="fs-3" value="{{ cour['id_cours'] }}">{{ cour['theme'] }}
+                            - {{ cour['cours'] }}</option>
                     {% endfor %}
                 </select>
             </div>

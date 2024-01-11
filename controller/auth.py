@@ -154,7 +154,7 @@ def choix_eleve_apprentis(nom_formation):
     """
     if not get_formation_id(nom_formation):
         abort(404)
-        
+    
     apprentis = get_apprentis_by_formation(nom_formation)
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200
 
