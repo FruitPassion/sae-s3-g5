@@ -7,8 +7,9 @@ from custom_paquets.custom_form import AjouterCours
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
-from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiches_par_id_fiche, \
-    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id
+from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiche_par_id_apprenti, \
+    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
+    get_fiche_par_id_fiche
 from model.formation import get_all_formations, get_formation_id
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.trace import get_commentaires_par_fiche
@@ -153,7 +154,7 @@ def personnalisation(id_fiche):
                     "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(id_fiche)
-    fiche = get_fiches_par_id_fiche(get_id_apprenti_by_login(get_proprietaire_fiche_par_id_fiche(id_fiche)))
+    fiche = get_fiche_par_id_fiche(id_fiche)
     if request.method == 'POST':
         modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")

@@ -1,0 +1,48 @@
+#container-principal{
+    margin: 4em 0;
+}
+#caroussel{
+    position: relative;
+    width: 80%;
+    padding: 20px;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.72) 0 0 10px;
+    border-radius: 30px;
+}
+
+.deplacement-fleche{
+    position: absolute;
+    font-size: 3.5em;
+    box-shadow: rgba(0, 0, 0, 0.61) 0 0 5px;
+    background-color: white;
+    width: 85px;
+    text-align: center;
+    border-radius: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+#deplacement-gauche{
+    left: -70px;
+}
+
+#deplacement-droite{
+    right: -70px;
+}
+
+.fdisabled{
+    color: #8c8c8c;
+    cursor: default;
+}
+
+legend{
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sous-field{
+    margin-bottom: 20px;
+    display: block;
+}

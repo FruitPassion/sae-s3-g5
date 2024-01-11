@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiches_par_id_fiche, get_nom_cours_by_id
+from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, get_nom_cours_by_id
 from model.trace import get_commentaires_par_fiche, modifier_commentaire_texte, modifier_evaluation_texte, \
     get_commentaires_educ_par_fiche, ajouter_commentaires_evaluation
     
@@ -57,7 +57,7 @@ def modifier_commentaires(apprenti, fiche):
     """
 
     commentaires = get_commentaires_educ_par_fiche(fiche)
-    fiche = get_fiches_par_id_fiche(get_id_apprenti_by_login(apprenti))
+    fiche = get_fiche_par_id_apprenti(get_id_apprenti_by_login(apprenti))
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
@@ -76,7 +76,7 @@ def ajouter_commentaires(apprenti, fiche):
     :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
     id_apprenti = get_id_apprenti_by_login(apprenti)
-    fiche = get_fiches_par_id_fiche(id_apprenti)
+    fiche = get_fiche_par_id_apprenti(id_apprenti)
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire"]
         eval_texte = request.form["evaluation"]

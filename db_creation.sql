@@ -1,3 +1,4 @@
+-- Active: 1704885236680@@127.0.0.1@3306@db_fiches_dev
 CREATE OR REPLACE USER 'local_user'@'localhost' IDENTIFIED BY 'password';
 DROP DATABASE IF EXISTS db_fiches_dev;
 create database db_fiches_dev;
@@ -267,7 +268,7 @@ VALUES (2, 1),
 
 INSERT INTO ElementBase (libelle, type, text, audio)
 VALUES ('Intervention', 'categorie', NULL, NULL),
-       ('Durée de l\'intervention', 'date', NULL, NULL),
+       ('Date de l\'intervention', 'date', NULL, NULL),
        ('Durée de l\'opération', 'select-time', NULL, NULL),
        ('Confirmation des informations', 'checkbox', NULL, NULL),
        ('Type de Maintenance', 'categorie', NULL, NULL),

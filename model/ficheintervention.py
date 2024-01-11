@@ -32,7 +32,7 @@ def get_proprietaire_fiche_par_id_fiche(id_fiche):
         Apprenti.login).first().login
 
 
-def get_fiches_par_id_fiche(id_apprenti):
+def get_fiche_par_id_apprenti(id_apprenti):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son id
 
@@ -41,6 +41,15 @@ def get_fiches_par_id_fiche(id_apprenti):
     return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
         FicheIntervention.id_fiche, FicheIntervention.numero).first())
 
+
+def get_fiche_par_id_fiche(id_fiche):
+    """
+    Récupère les identifiants des fiches techniques associées à un apprenti à partir de son id
+
+    :return: Les fiches techniques de l'apprenti
+    """
+    return convert_to_dict(FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
+        FicheIntervention.id_fiche, FicheIntervention.numero).first())
 
 def get_niveau_etat_fiches_par_login(login):
     """
@@ -106,6 +115,7 @@ def get_etat_fiche_par_id_fiche(id_fiche):
     return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
         FicheIntervention.etat_fiche).first().etat_fiche
 
+
 def get_fiches_techniques_finies_par_login(login):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son Login
@@ -126,6 +136,20 @@ def get_fiche_apprentis_existe(login: str):
     """
     return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login)).count() != 0
 
+
+def get_id_fiche_apprenti(login: str, numero: int):
+    """
+    Récupère l'id de la fiche d'un apprenti
+
+    :param login: login de l'apprenti
+    :param numero: numéro de la fiche
+    :return: id de la fiche
+    """
+    if get_fiche_apprentis_existe(login):
+        return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login),
+                                                 numero=numero).with_entities(FicheIntervention.id_fiche).first().id_fiche
+    else:
+        return None
 
 def get_dernier_numero_fiche_apprenti(login: str):
     if get_fiche_apprentis_existe(login):

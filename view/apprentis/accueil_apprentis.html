@@ -17,7 +17,11 @@
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">
-                    <a href="" class="bg-modifier">
+                    {% if fiche['etat_fiche'] == 0 %}
+                        <a href="{{ url_for('apprenti.completer_fiche', numero=fiche['numero']) }}" class="bg-modifier">
+                    {% else %}
+                        <a class="bg-modifier">
+                    {% endif %}
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
                         {% if fiche['etat_fiche'] == 1 %}
