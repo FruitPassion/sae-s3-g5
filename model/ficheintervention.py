@@ -79,9 +79,12 @@ def get_niveau_moyen_champs_par_login(login):
     )
     liste_niveau_champ = convert_to_dict(niveau_champ)
     total_niveau_champ = 0
-    for niveau in liste_niveau_champ:
-        total_niveau_champ += niveau["moyenne_niveau"]
-    return int(total_niveau_champ / len(liste_niveau_champ))
+    if len(liste_niveau_champ) == 0:
+        return 0
+    else:
+        for niveau in liste_niveau_champ:
+            total_niveau_champ += niveau["moyenne_niveau"]
+        return int(total_niveau_champ / len(liste_niveau_champ))
 
 
 def get_nombre_fiches_finies_par_login(login):

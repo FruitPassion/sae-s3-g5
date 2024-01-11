@@ -74,6 +74,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
               family: 'Montserrat',
             },
           },
+          min: 22,
           max: 66,
           ticks: {
             stepSize: 1,
