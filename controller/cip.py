@@ -70,7 +70,7 @@ def suivi_progression_apprenti(apprenti):
     """
     apprenti_infos = get_apprenti_by_login(apprenti)
     
-    # Récupération des niveaux des fiches
+    # Récupération des niveaux et états des fiches
     niv_fiche = get_niveau_etat_fiches_par_login(apprenti)
     for niv in niv_fiche:
         niv["total_niveau"] = str(niv["total_niveau"])

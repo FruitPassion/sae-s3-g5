@@ -23,10 +23,6 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
       liste_etat_fiche.push(etatArret);
     }
   }
-  console.log(niv_fiche)
-  console.log(liste_niv_fiche)
-  console.log(liste_num_fiche)
-  console.log(liste_etat_fiche)
   var line_chart = new Chart(context, {
     type: 'line',
     data: {
