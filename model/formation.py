@@ -147,10 +147,6 @@ def reinitisaliser_formation(id_formation, commit=True):
         for apprenti in get_apprentis_by_formation(id_formation):
             remove_apprenti(apprenti.id_apprenti)
 
-        # Suppression des cours
-        for cours in get_cours_par_formation(id_formation):
-            db.session.delete(cours)
-
         if commit:
             db.session.commit()
         return True
