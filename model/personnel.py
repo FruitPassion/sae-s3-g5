@@ -14,7 +14,7 @@ def get_all_personnel(archive=False):
     """
     personnel = Personnel.query.with_entities(
         Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
-        Personnel.essaies).order_by(Personnel.login).filter(Personnel.archive == archive).filter(
+        Personnel.essais).order_by(Personnel.login).filter(Personnel.archive == archive).filter(
         Personnel.role != "dummy").all()
     return convert_to_dict(personnel)
 
@@ -103,7 +103,7 @@ def update_nbr_essais_connexion(login: str):
     :return: Booleen en fonction de la réussite de l'opération
     """
     personnel = Personnel.query.filter_by(login=login).first()
-    personnel.essaies = personnel.essais + 1
+    personnel.essais = personnel.essais + 1
     try:
         db.session.commit()
         return True

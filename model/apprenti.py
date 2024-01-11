@@ -14,7 +14,7 @@ def get_all_apprentis(archive=False):
     :return: La liste des apprentis
     """
     apprentis = Apprenti.query.with_entities(
-        Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essaies
+        Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essais
     ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
     return convert_to_dict(apprentis)
 

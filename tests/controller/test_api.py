@@ -14,7 +14,7 @@ Test des controller du fichier api.py
 # Test de la vérification du mot de passe de l'apprenti
 def test_api_check_password_apprenti(client):
     # Set up d'un apprenti
-    apprenti = Apprenti.query.filter_by(essaies=0).filter(Apprenti.login != 'dummy').first()
+    apprenti = Apprenti.query.filter_by(essais=0).filter(Apprenti.login != 'dummy').first()
     mdp = "12369"
 
     # Blocage d'un apprenti
