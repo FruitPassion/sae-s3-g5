@@ -80,7 +80,7 @@ def test_suivi_progression(client):
 def test_adaptation_situation_exam(client):
     # Test connexion CIP
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("cip.affichage_suivi_progression_apprenti", apprenti = apprenti))
+    response = client.get(url_for("cip.affichage_adaptation_situation_examen", apprenti = apprenti))
 
     # Test d'accès à la route
     assert response.status_code == 200
