@@ -11,17 +11,17 @@ function creation_graphique_suivi_progression_cip(niv_fiche, etat_fiches) {
   for (const etat of etat_fiches) {
     if (etat === 0){
       const etatEnCours = new Image(30,30);
-      etatEnCours.src = "https://www.svgrepo.com/show/51213/video-pause-button.svg";
+      etatEnCours.src = "/static/images/pause.png";
       liste_etat_fiche.push(etatEnCours);
     }
     if (etat === 1){
       const etatFini = new Image(30,30);
-      etatFini.src = "https://imagepng.org/wp-content/uploads/2019/12/check-icone-1-scaled.png";
+      etatFini.src = "/static/images/check.png";
       liste_etat_fiche.push(etatFini);
     }
     if (etat === 2){
       const etatArret = new Image(30,30);
-      etatArret.src = "https://static.vecteezy.com/system/resources/previews/014/361/362/original/red-cross-check-mark-icon-simple-style-vector.jpg";
+      etatArret.src = "./static/images/stop.png";
       liste_etat_fiche.push(etatArret);
     }
   }
