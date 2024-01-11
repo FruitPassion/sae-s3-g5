@@ -21,7 +21,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche, etat_fiches) {
     }
     if (etat === 2){
       const etatArret = new Image(30,30);
-      etatArret.src = "./static/images/stop.png";
+      etatArret.src = "/static/images/stop.png";
       liste_etat_fiche.push(etatArret);
     }
   }
