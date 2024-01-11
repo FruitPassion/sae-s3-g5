@@ -1,6 +1,6 @@
 from custom_paquets.tester_usages import PersonnelTest, PersonnelTestModif
-from model.personnel import archiver_personnel
-from model.shared_model import Personnel, db
+from model.personnel import archiver_personnel, remove_personnel
+from model.shared_model import Personnel, db, FicheIntervention  
 
 
 # Test de l'ajout d'un personnel
@@ -47,3 +47,14 @@ def test_modifier_personnel(client):
         assert personnel_modif.email == personnel2.email
 
     db.session.rollback()
+
+def test_supprimer_personnel(client):
+    # Création d'un personnel à ajouter puis archiver
+    personnel = PersonnelTest()
+
+    # Suppression du personnel
+    remove_personnel(personnel.id_personnel, commit=False)
+    
+    # Vérification de la suppression du personnel en base de données
+    assert db.session.query(Personnel).filter(Personnel.id_personnel == personnel.id_personnel).first() is None
+    assert len(FicheIntervention.query.filter_by(id_personnel=personnel.id_personnel).all()) == 0
