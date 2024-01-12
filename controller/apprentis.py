@@ -60,7 +60,7 @@ def completer_fiche(numero):
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche)
 
-@apprenti.route("/imprimer-pdf", methods=["GET", "POST"])
+@apprenti.route("/imprimer-pdf", methods=["GET"])
 @apprenti_login_required
 def imprimer_pdf():
     """

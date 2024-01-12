@@ -1,0 +1,36 @@
+@media print {
+    main {
+        width: 100%;
+    }
+
+    .colonnePrint {
+        flex-direction: column;
+    }
+
+    .espaceHor {
+        height: 0.5em;
+    }
+
+    fieldset {
+        padding: 0.1em 0;
+    }
+
+    .noPrint {
+        display: none;
+    }
+
+    .demi {
+        flex: 0.25;
+    }
+
+    .border {
+        padding: 0.1em;
+    }
+
+    div,
+    input,
+    select {
+        font-size: 0.8em;
+    }
+
+}
