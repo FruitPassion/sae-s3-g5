@@ -38,7 +38,7 @@ def get_nom_cours_by_id(id_fiche):
     :return: Le nom du cours
     """
     return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Cours).with_entities(
-        Cours.nom).first().nom
+        Cours.cours).first().cours
 
 
 def get_fiche_par_id_apprenti(id_apprenti):
