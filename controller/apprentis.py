@@ -59,3 +59,13 @@ def completer_fiche(numero):
     composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche)
+
+@apprenti.route("/imprimer-pdf", methods=["GET", "POST"])
+@apprenti_login_required
+def imprimer_pdf():
+    """
+    Page d'impression d'une fiche technique par un apprenti
+
+    :return: rendu de la page fiche_pdf.html
+    """
+    return render_template("apprentis/fiche_pdf.html")
