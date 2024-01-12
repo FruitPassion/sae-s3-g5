@@ -16,21 +16,26 @@ li {
     font-size: 30px;
 }
 
-.haut {
-    width: 95%;
-    height: 20%;
-    position: absolute;
-    left: 30px;
-    top: 900px;
-    margin-top: 150px;
+.millieu{
+    width: 90%;
+    display:grid;
+    grid-template-rows: 90% auto;
+    row-gap: 15px;
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 10%;
+}
+
+.valeurs {
+    grid-row: 2;
 }
 
 .diagramme {
-    background-color: white;
-    width: 90%;
-    height: 90%;
-    position: absolute;
-    margin: 5%;
+    width: 100%;
+    height: 100%;
+    grid-row: 1;
+    align-items: center;
 }
 
 #suivi_progression_apprenti {

@@ -8,25 +8,27 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Suivi de progression de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>    
-    <div class="diagramme">
-        <canvas id="suivi_progression_cip" aria-label="chart" role="img" type="module"></canvas>
-        {% block javascripts %}
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
-            <script>
-                window.onload = function() {
-                    creation_graphique_suivi_progression_cip({{ niv_fiche|safe }});
-                }
-            </script>
-        {% endblock %}
-    </div>
-    <div class="haut">
-        <ul>
-            <li>Nombre de fiches finies : <strong>{{ nb_fiches_finies }}</strong></li>
-            <li>Niveau moyen de chaque champ : <strong>{{ niveau_moyen }}</strong></li>
-        </ul>
-    </div>
+    <h1>Suivi de progression de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+    <div class="millieu">   
+        <div class="diagramme">
+            <canvas id="suivi_progression_cip" aria-label="chart" role="img" type="module"></canvas>
+            {% block javascripts %}
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="{{ url_for('static',filename='js/suivi_progression_cip.js') }}"></script>
+                <script>
+                    window.onload = function() {
+                        creation_graphique_suivi_progression_cip({{ niv_fiche|safe }});
+                    }
+                </script>
+            {% endblock %}
+        </div>
+        <div class="valeurs">
+            <ul>
+                <li>Nombre de fiches finies : <strong>{{ nb_fiches_finies }}</strong></li>
+                <li>Niveau moyen de chaque champ : <strong>{{ niveau_moyen }}</strong></li>
+            </ul>
+        </div>
+    </div> 
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('cip.affiche_choix', apprenti=apprenti['login']) }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
