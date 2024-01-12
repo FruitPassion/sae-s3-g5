@@ -21,6 +21,7 @@ def resize_image_profile(img: Image, path: str):
         crop_height = img.size[1]
     else:
         img.save(path)
+        return None
     img = img.crop(((img_width - crop_width) // 2,
                     (img_height - crop_height) // 2,
                     (img_width + crop_width) // 2,
@@ -40,24 +41,26 @@ def resize_image_formation(im: Image, path: str):
 
 
 def stocker_photo_profile(file):
-    if file:
+    try:
         chemin_avatar = "./static/images/photo_profile/" + secure_filename(file.filename)
         file.save(chemin_avatar)
         chemin_avatar = "photo_profile/" + secure_filename(file.filename)
-    else:
-        chemin_avatar = "photo_profile/" + "default_profile.png"
-    img = Image.open(file.stream)
+        img = Image.open(file.stream)
+    except:
+        return "photo_profile/defaut_profile.png"
+
     resize_image_profile(img, "./static/images/" + chemin_avatar)
     return chemin_avatar
 
 
 def stocker_image_formation(file):
-    if file:
+    try:
         chemin_image = "./static/images/formation_image/" + secure_filename(file.filename)
         file.save(chemin_image)
         chemin_image = "formation_image/" + secure_filename(file.filename)
-    else:
-        chemin_image = "formation_image/" + "default_formation.png"
-    img = Image.open(file.stream)
+        img = Image.open(file.stream)
+    except:
+        return "formation_image/default_formation.png"
+
     resize_image_formation(img, "./static/images/" + chemin_image)
     return chemin_image

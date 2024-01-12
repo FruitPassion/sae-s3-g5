@@ -6,8 +6,7 @@ from custom_paquets.converter import convert_to_dict
 from model.apprenti import get_id_apprenti_by_login, get_login_apprenti_by_id
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
-from model.cours import get_nom_cours_by_id
-from model.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti
+from model.shared_model import db, FicheIntervention, ComposerPresentation, Apprenti, Cours
 
 
 def get_fiches_techniques_par_login(login):
@@ -30,6 +29,16 @@ def get_proprietaire_fiche_par_id_fiche(id_fiche):
     """
     return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Apprenti).with_entities(
         Apprenti.login).first().login
+
+
+def get_nom_cours_by_id(id_fiche):
+    """
+    Récupère le nom d'un cours à partir de l'id d'une fiche
+
+    :return: Le nom du cours
+    """
+    return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Cours).with_entities(
+        Cours.nom).first().nom
 
 
 def get_fiche_par_id_apprenti(id_apprenti):

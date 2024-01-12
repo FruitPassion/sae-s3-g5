@@ -144,7 +144,7 @@ def gestion_formations():
         if f:
             chemin_image = stocker_image_formation(f)
         else:
-            chemin_image = "formation_image/" + "defaut_formation.jpg"
+            chemin_image = "formation_image/default_formation.png"
         add_formation(form.intitule.data, form.niveau_qualif.data, form.groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formations"), 302)
 

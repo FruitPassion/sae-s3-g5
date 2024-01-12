@@ -1,6 +1,6 @@
 import logging
 
-from custom_paquets.converter import convert_to_dict
+from custom_paquets.converter import convert_to_dict, generer_xls_apprentis
 from model.apprenti import remove_apprenti, get_apprentis_by_formation
 
 from model.shared_model import db, Formation, Cours
@@ -31,6 +31,7 @@ def get_formation_id(nom_formation: str):
         logging.error("Erreur lors de la récupération de l'id d'une formation")
         logging.error(e)
         return False
+
 
 def get_nom_formation(id_formation):
     """
@@ -140,7 +141,7 @@ def reinitisaliser_formation(id_formation, commit=True):
     """
     try:
         # TODO: appel de la génération des XLS pour les apprentis et les cours
-        # generer_xls_apprentis(id_formation)
+        generer_xls_apprentis(id_formation)
         # generer_xls_cours(id_formation)
 
         # Suppression des apprentis

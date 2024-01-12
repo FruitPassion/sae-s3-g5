@@ -184,7 +184,7 @@ def add_apprenti(nom, prenom, login, photo, commit=True):
 
     :return: id_apprenti
     """
-    apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo)
+    apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo, mdp="0000")
     db.session.add(apprenti)
     if commit:
         db.session.commit()
