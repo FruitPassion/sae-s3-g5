@@ -16,10 +16,14 @@
             <textarea type="text" class="modifiable" id="commentaire_texte" name="commentaire_texte"
                       maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
 
+            <p>Commentaire audio de l'éducateur :</p>
+
             <p>Evaluation de l'éducateur :</p>
             <textarea type="text" class="modifiable" id="eval_texte" name="eval_texte"
                       maxlength="500">{{ commentaires["eval_texte"] }}</textarea>
 
+            <p>Evaluation audio de l'éducateur :</p>
+            
             {% include "_partial/_retour_bouton.html" %}
             <!-- Gestion de la modification du commentaire/évaluation... ? -->
             <input type="submit" value="Enregistrer" id="enregistrer">
