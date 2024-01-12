@@ -17,6 +17,68 @@
                       maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
 
             <p>Commentaire audio de l'éducateur :</p>
+            <button type="button" id="enregistrer_btn">Modifier l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
+
+            <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
+            <audio id="audioPlayer"></audio>
+            <p id="statut"></p>
+            <p id="Time" style="display: none;">Temps écoulé : 0:00</p>
+            
+            <script>
+                let mediaRecorder;
+                let audioChunks = [];
+                let recordingInterval;
+        
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function(stream) {
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        mediaRecorder.ondataavailable = function(event) {
+                            if (event.data.size > 0) {
+                                audioChunks.push(event.data);
+                            }
+                        };
+                        
+                        // Arrêt de l'enregistrement
+                        mediaRecorder.onstop = function() {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            const audioPlayer = document.getElementById('audioPlayer');
+                            audioPlayer.src = audioUrl;
+                            audioPlayer.controls = true;
+                            clearInterval(recordingInterval);
+                            document.getElementById('statut').textContent = 'Enregistrement modifié';
+                            document.getElementById('Time').style.display = 'none';
+                            document.getElementById('enregistrer_btn').style.display = 'none';
+                        };
+                        
+                        // Bouton démarrer/arrêter l'enregistrement
+                        const enregistrer_btn = document.getElementById('enregistrer_btn');
+                        const icon = document.getElementById('icon');
+                        enregistrer_btn.addEventListener('click', function() {
+                            if (mediaRecorder.state === 'inactive') {
+                                mediaRecorder.start();
+                                enregistrer_btn.textContent = 'Arrêter l\'enregistrement';
+                                icon.className = 'fa fa-stop-circle';
+                                document.getElementById('Time').style.display = 'block';
+                                // Mise à jour du temps écoulé pendant l'enregistrement
+                                let startTime = Date.now();
+                                recordingInterval = setInterval(function() {
+                                    const Time = Math.floor((Date.now() - startTime) / 1000);
+                                    const minutes = Math.floor(Time / 60);
+                                    const seconds = Time % 60;
+                                    const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                                    document.getElementById('Time').textContent = `Temps écoulé : ${formattedTime}`;
+                                }, 1000);
+                            } else {
+                                mediaRecorder.stop();
+                            }
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Erreur lors de l\'obtention de l\'accès au microphone:', error);
+                    });
+            </script>
 
             <p>Evaluation de l'éducateur :</p>
             <textarea type="text" class="modifiable" id="eval_texte" name="eval_texte"

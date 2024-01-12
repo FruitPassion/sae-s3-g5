@@ -18,7 +18,9 @@
             <textarea id="commentaire" name="commentaire" maxlength="500" rows="4" cols="30" class="ajout"></textarea>
             
             <p>Commentaire audio de l'éducateur : </p>
-            <button id="startStopBtn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
+            <button typpe="button" id="enregistrer_btn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
+
+            <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
             <audio id="audioPlayer"></audio>
             <p id="statut"></p>
             <p id="Time" style="display: none;">Temps écoulé : 0:00</p>
@@ -48,16 +50,16 @@
                             clearInterval(recordingInterval);
                             document.getElementById('statut').textContent = 'Enregistrement terminé';
                             document.getElementById('Time').style.display = 'none';
-                            document.getElementById('startStopBtn').style.display = 'none';
+                            document.getElementById('enregistrer_btn').style.display = 'none';
                         };
                         
                         // Bouton démarrer/arrêter l'enregistrement
-                        const startStopBtn = document.getElementById('startStopBtn');
+                        const enregistrer_btn = document.getElementById('enregistrer_btn');
                         const icon = document.getElementById('icon');
-                        startStopBtn.addEventListener('click', function() {
+                        enregistrer_btn.addEventListener('click', function() {
                             if (mediaRecorder.state === 'inactive') {
                                 mediaRecorder.start();
-                                startStopBtn.textContent = 'Arrêter l\'enregistrement';
+                                enregistrer_btn.textContent = 'Arrêter l\'enregistrement';
                                 icon.className = 'fa fa-stop-circle';
                                 document.getElementById('Time').style.display = 'block';
                                 // Mise à jour du temps écoulé pendant l'enregistrement

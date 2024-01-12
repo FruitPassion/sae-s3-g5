@@ -5,7 +5,8 @@ from custom_paquets.decorateur import educsimple_login_required
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, get_nom_cours_by_id
 from model.trace import get_commentaires_par_fiche, modifier_commentaire_texte, modifier_evaluation_texte, \
-    get_commentaires_educ_par_fiche, ajouter_commentaires_evaluation
+    get_commentaires_educ_par_fiche, ajouter_commentaires_evaluation, modifier_commentaire_audio, \
+    modifier_eval_audio
     
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 

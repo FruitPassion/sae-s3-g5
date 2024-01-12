@@ -20,3 +20,8 @@
     margin-top:1%;
     padding:0.2%;
 }
+
+#enregistrer_btn {
+    margin: 2%;
+    font-size: 2.5em;   
+}
