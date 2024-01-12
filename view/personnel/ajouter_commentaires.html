@@ -18,10 +18,10 @@
             <textarea id="commentaire" name="commentaire" maxlength="500" rows="4" cols="30" class="ajout"></textarea>
             
             <p>Commentaire audio de l'éducateur : </p>
-            <button id="startStopBtn">Démarrer l'enregistrement</button>
+            <button id="startStopBtn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
             <audio id="audioPlayer"></audio>
-            <p id="status">En attente de l'enregistrement...</p>
-            <p id="elapsedTime">Temps écoulé : 0:00</p>
+            <p id="statut"></p>
+            <p id="Time" style="display: none;">Temps écoulé : 0:00</p>
             
             <script>
                 let mediaRecorder;
@@ -37,7 +37,8 @@
                                 audioChunks.push(event.data);
                             }
                         };
-        
+                        
+                        // Arrêt de l'enregistrement
                         mediaRecorder.onstop = function() {
                             const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                             const audioUrl = URL.createObjectURL(audioBlob);
@@ -45,26 +46,31 @@
                             audioPlayer.src = audioUrl;
                             audioPlayer.controls = true;
                             clearInterval(recordingInterval);
-                            document.getElementById('status').textContent = 'Enregistrement terminé';
+                            document.getElementById('statut').textContent = 'Enregistrement terminé';
+                            document.getElementById('Time').style.display = 'none';
+                            document.getElementById('startStopBtn').style.display = 'none';
                         };
-        
+                        
+                        // Bouton démarrer/arrêter l'enregistrement
                         const startStopBtn = document.getElementById('startStopBtn');
+                        const icon = document.getElementById('icon');
                         startStopBtn.addEventListener('click', function() {
                             if (mediaRecorder.state === 'inactive') {
                                 mediaRecorder.start();
                                 startStopBtn.textContent = 'Arrêter l\'enregistrement';
-                                document.getElementById('status').textContent = 'Enregistrement en cours...';
+                                icon.className = 'fa fa-stop-circle';
+                                document.getElementById('Time').style.display = 'block';
+                                // Mise à jour du temps écoulé pendant l'enregistrement
                                 let startTime = Date.now();
                                 recordingInterval = setInterval(function() {
-                                    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                                    const minutes = Math.floor(elapsedTime / 60);
-                                    const seconds = elapsedTime % 60;
+                                    const Time = Math.floor((Date.now() - startTime) / 1000);
+                                    const minutes = Math.floor(Time / 60);
+                                    const seconds = Time % 60;
                                     const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                                    document.getElementById('elapsedTime').textContent = `Temps écoulé : ${formattedTime}`;
+                                    document.getElementById('Time').textContent = `Temps écoulé : ${formattedTime}`;
                                 }, 1000);
                             } else {
                                 mediaRecorder.stop();
-                                startStopBtn.textContent = 'Démarrer l\'enregistrement';
                             }
                         });
                     })
