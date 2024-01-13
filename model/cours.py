@@ -11,9 +11,13 @@ def get_all_cours(archive=False):
 
     :return: Une liste des cours
     """
-    return convert_to_dict(Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours,
+    try:
+        return convert_to_dict(Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours,
                                                        Cours.duree, Cours.id_formation).filter(
         Cours.archive == archive).all())
+    except Exception as e:
+        logging.error("Erreur lors de la récupération de tous les cours")
+        logging.error(e)
 
 
 def get_apprentis_by_formation(nom_formation: str, archive=False):
@@ -27,7 +31,7 @@ def get_apprentis_by_formation(nom_formation: str, archive=False):
             Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
                                                    Apprenti.photo).filter(Apprenti.archive == archive).all())
     except Exception as e:
-        logging.error("Erreur lors de la récupération des apprentis par formation")
+        logging.error(f"Erreur lors de la récupération des apprentis de la formation {nom_formation}")
         logging.error(e)
 
 
@@ -37,8 +41,12 @@ def get_cours_par_apprenti(id_apprenti):
 
     :return: Une liste de cours
     """
-    return convert_to_dict(Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours).join(Assister).filter_by(
-        id_apprenti=id_apprenti).all())
+    try:
+        return convert_to_dict(Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours).join(Assister).filter_by(
+            id_apprenti=id_apprenti).all())
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des cours de l'apprenti {id_apprenti}")
+        logging.error(e)
 
 
 def add_apprenti_assister(id_apprenti, id_formation):
@@ -47,11 +55,15 @@ def add_apprenti_assister(id_apprenti, id_formation):
 
     :return: None
     """
-    cours = get_cours_par_formation(id_formation)
-    for unCours in cours:
-        assister = Assister(id_apprenti=id_apprenti, id_cours=unCours.id_cours)
-        db.session.add(assister)
-    db.session.commit()
+    try:
+        cours = get_cours_par_formation(id_formation)
+        for unCours in cours:
+            assister = Assister(id_apprenti=id_apprenti, id_cours=unCours.id_cours)
+            db.session.add(assister)
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de l'ajout de l'apprenti {id_apprenti} à la formation {id_formation}")
+        logging.error(e)
 
 
 def get_id_cours_by_theme(theme):
@@ -73,8 +85,12 @@ def get_cours_id(nom_cours: str):
 
     :return: Un id de cours
     """
-    return Cours.query.with_entities(Cours.id_cours).filter_by(cours=nom_cours).first().id_cours
-
+    try:
+        return Cours.query.with_entities(Cours.id_cours).filter_by(cours=nom_cours).first().id_cours
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'id du cours {nom_cours}")
+        logging.error(e)
+    
 
 def get_nom_cours_by_id(id_cours):
     """
@@ -82,7 +98,11 @@ def get_nom_cours_by_id(id_cours):
 
     :return: Un nom de cours
     """
-    return Cours.query.with_entities(Cours.cours).filter_by(id_cours=id_cours).first().cours
+    try:
+        return Cours.query.with_entities(Cours.cours).filter_by(id_cours=id_cours).first().cours
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération du nom du cours {id_cours}")
+        logging.error(e)
 
 
 def add_cours(theme, cours, duree, id_formation, commit=True):
@@ -91,11 +111,15 @@ def add_cours(theme, cours, duree, id_formation, commit=True):
 
     :return: id_cours
     """
-    cours_ajoute = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
-    db.session.add(cours_ajoute)
-    if commit:
-        db.session.commit()
-    return get_cours_id(cours)
+    try:
+        cours_ajoute = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
+        db.session.add(cours_ajoute)
+        if commit:
+            db.session.commit()
+        return get_cours_id(cours)
+    except Exception as e:
+        logging.error(f"Erreur lors de l'ajout du cours {cours}")
+        logging.error(e)
 
 
 def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True):
@@ -113,7 +137,7 @@ def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True)
         if commit:
             db.session.commit()
     except Exception as e:
-        logging.error("Erreur lors de la modification du cours")
+        logging.error(f"Erreur lors de la modification du cours {intitule}")
         logging.error(e)
 
 
@@ -130,7 +154,7 @@ def archiver_cours(id_cours, archiver=True, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error("Erreur lors de l'archivage du cours")
+        logging.error(f"Erreur lors de l'archivage du cours {id_cours}")
         logging.error(e)
         return False
 
@@ -152,6 +176,6 @@ def remove_cours(id_cours, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error("Erreur lors de la suppression du cours")
+        logging.error(f"Erreur lors de la suppression du cours {id_cours}")
         logging.error(e)
         return False

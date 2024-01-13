@@ -13,10 +13,15 @@ def get_all_apprentis(archive=False):
 
     :return: La liste des apprentis
     """
-    apprentis = Apprenti.query.with_entities(
-        Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essais
-    ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
-    return convert_to_dict(apprentis)
+
+    try:
+        apprentis = Apprenti.query.with_entities(
+            Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essais
+        ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
+        return convert_to_dict(apprentis)
+    except Exception as e:
+        logging.error("Erreur lors de la récupération des apprentis")
+        logging.error(e)
 
 
 def get_adaptation_situation_examen_par_apprenti(login):
@@ -25,7 +30,11 @@ def get_adaptation_situation_examen_par_apprenti(login):
 
     :return: Le commentaire de la CIP
     """
-    return Apprenti.query.filter_by(login=login).with_entities(Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
+    try:
+        return Apprenti.query.filter_by(login=login).with_entities(Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'adaptation situation d'examen de l'apprenti {login}")
+        logging.error(e)
 
 
 def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_examen):
@@ -60,22 +69,34 @@ def get_apprenti_by_login(login: str):
 
     :return: Les informations de l'apprenti
     """
-    return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
+    try:
+        return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
                                                                                Apprenti.login).all())[0]
-
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'apprenti {login}")
+        logging.error(e)
+    
 
 def get_id_apprenti_by_login(login: str):
     """
     Renvoie l'id_apprenti à partir du login
     """
-    return Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first().id_apprenti
-
+    try:
+        return Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first().id_apprenti
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'id de l'apprenti {login}")
+        logging.error(e)
+    
 
 def get_login_apprenti_by_id(id_apprenti: str):
     """
     Renvoie l'id_apprenti à partir du login
     """
-    return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.login).first().login
+    try:
+        return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.login).first().login
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'id de l'apprenti {id_apprenti}")
+        logging.error(e)
 
 
 def check_apprenti(login: str):
@@ -128,7 +149,11 @@ def get_nbr_essais_connexion_apprenti(login: str):
     :param login: LOGIN (ABC12) d'un apprenti
     :return: Un nombre allant de 0 à 5.
     """
-    return Apprenti.query.filter_by(login=login).first().essais
+    try:
+        return Apprenti.query.filter_by(login=login).first().essais
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération du nombre d'essais de connexion de l'apprenti {login}")
+        logging.error(e)
 
 
 def update_nbr_essais_connexion(login: str):
@@ -184,11 +209,15 @@ def add_apprenti(nom, prenom, login, photo, commit=True):
 
     :return: id_apprenti
     """
-    apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo, mdp="0000")
-    db.session.add(apprenti)
-    if commit:
-        db.session.commit()
-    return get_id_apprenti_by_login(login)
+    try:
+        apprenti = Apprenti(nom=nom, prenom=prenom, login=login, photo=photo, mdp="0000")
+        db.session.add(apprenti)
+        if commit:
+            db.session.commit()
+        return get_id_apprenti_by_login(login)
+    except Exception as e:
+        logging.error(f"Erreur lors de l'ajout de l'apprenti {prenom} {nom}")
+        logging.error(e)
 
 
 def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, commit=True):
@@ -212,7 +241,7 @@ def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, com
         if commit:
             db.session.commit()
     except Exception as e:
-        logging.error("Erreur lors de la modification de l'apprenti")
+        logging.error(f"Erreur lors de la modification de l'apprenti {identifiant}")
         logging.error(e)
 
 
@@ -232,7 +261,7 @@ def archiver_apprenti(id_apprenti, archiver=True, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error("Erreur lors de l'archivage d'un apprenti")
+        logging.error(f"Erreur lors de l'archivage de l'apprenti {id_apprenti}")
         logging.error(e)
         return False
 
@@ -263,7 +292,7 @@ def remove_apprenti(id_apprenti, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error("Erreur lors de la suppression d'un apprenti")
+        logging.error(f"Erreur lors de la suppression de l'apprenti {id_apprenti}")
         logging.error(e)
         return False
 
@@ -272,8 +301,16 @@ def get_apprentis_by_formation(id_formation):
     """
     Récupère les apprentis d'une formation
     """
-    return Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
+    try:
+        return Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des apprentis de la formation {id_formation}")
+        logging.error(e)
 
 
 def get_photos_profil_apprenti(id_apprenti):
-    return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.photo).first().photo
+    try:
+        return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.photo).first().photo
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de la photo de profil de l'apprenti {id_apprenti}")
+        logging.error(e)

@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from custom_paquets.converter import convert_to_dict
 from model.personnel import get_id_personnel_by_login
 from model.shared_model import db, LaisserTrace
@@ -11,12 +12,16 @@ def get_commentaires_par_fiche(id_fiche):
     :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
     et l'identifiant de l'éducateur ayant créé la trace
     """
-    return convert_to_dict(
-        LaisserTrace.query.filter_by(
-            id_fiche=id_fiche).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
-                                             LaisserTrace.eval_texte, LaisserTrace.horodatage,
-                                             LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
-                                             LaisserTrace.id_personnel).all())
+    try:
+        return convert_to_dict(
+            LaisserTrace.query.filter_by(
+                id_fiche=id_fiche).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
+                                                LaisserTrace.eval_texte, LaisserTrace.horodatage,
+                                                LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
+                                                LaisserTrace.id_personnel).all())
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
+        logging.error(e)
 
 
 def get_commentaires_educ_par_fiche(id_fiche):
@@ -26,12 +31,16 @@ def get_commentaires_educ_par_fiche(id_fiche):
     :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
     et l'identifiant de l'éducateur ayant créé la trace
     """
-    return convert_to_dict(
-        LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti="0"
-                                     ).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
-                                                     LaisserTrace.eval_texte, LaisserTrace.horodatage,
-                                                     LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
-                                                     LaisserTrace.id_personnel).first())
+    try:
+        return convert_to_dict(
+            LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti="0"
+                                        ).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
+                                                        LaisserTrace.eval_texte, LaisserTrace.horodatage,
+                                                        LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
+                                                        LaisserTrace.id_personnel).first())
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des commentaires de l'éducateur de la fiche {id_fiche}")
+        logging.error(e)
 
 
 def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
@@ -41,10 +50,13 @@ def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
 
     :return: None
     """
-
-    trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
-    trace.commentaire_texte = commentaire_texte
-    db.session.commit()
+    try:
+        trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
+        trace.commentaire_texte = commentaire_texte
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de la modification du commentaire textuel de la fiche {id_fiche} du {horodatage}")
+        logging.error(e)
 
 
 def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio):
@@ -53,9 +65,13 @@ def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio):
     Modifie le (chemin ?) commentaire audio  avec commentaire_audio
     :return: None
     """
-    trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
-    trace.commentaire_audio = commentaire_audio
-    db.session.commit()
+    try:
+        trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
+        trace.commentaire_audio = commentaire_audio
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
+        logging.error(e)
 
 
 def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
@@ -65,9 +81,13 @@ def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
 
     :return: None
     """
-    trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
-    trace.eval_texte = evaluation_texte
-    db.session.commit()
+    try:
+        trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
+        trace.eval_texte = evaluation_texte
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de la modification de l'évaluation textuelle de la fiche {id_fiche} du {horodatage}")
+        logging.error(e)
 
 
 def modifier_eval_audio(id_fiche, horodatage, eval_audio):
@@ -77,9 +97,13 @@ def modifier_eval_audio(id_fiche, horodatage, eval_audio):
 
     :return: None
     """
-    trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
-    trace.eval_audio = eval_audio
-    db.session.commit()
+    try:
+        trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage).first()
+        trace.eval_audio = eval_audio
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de la modification de l'évaluation audio de la fiche {id_fiche} du {horodatage}")
+        logging.error(e)
 
 # jsp si ça marche malheureusement
 def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login, intitule):
@@ -88,10 +112,14 @@ def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, com
 
     :return: None
     """
-    id_personnel = get_id_personnel_by_login(login)
-    horodatage = datetime.now()
-    trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
-                         commentaire_texte=commentaire_texte, eval_texte=eval_texte, commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti="0", intitule=intitule)
-    db.session.add(trace)
-    db.session.commit()
+    try:
+        id_personnel = get_id_personnel_by_login(login)
+        horodatage = datetime.now()
+        trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
+                            commentaire_texte=commentaire_texte, eval_texte=eval_texte, commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti="0", intitule=intitule)
+        db.session.add(trace)
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de l'ajout des commentaires et évaluations de la fiche {id_fiche}")
+        logging.error(e)
     

@@ -12,25 +12,36 @@ def get_all_personnel(archive=False):
 
     :return: La liste des membres du personnel
     """
-    personnel = Personnel.query.with_entities(
-        Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
-        Personnel.essais).order_by(Personnel.login).filter(Personnel.archive == archive).filter(
-        Personnel.role != "dummy").all()
-    return convert_to_dict(personnel)
+    try:
+        personnel = Personnel.query.with_entities(
+            Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
+            Personnel.essais).order_by(Personnel.login).filter(Personnel.archive == archive).filter(
+            Personnel.role != "dummy").all()
+        return convert_to_dict(personnel)
+    except Exception as e:
+        logging.error("Erreur lors de la récupération de la liste de tout le personnel")
+        logging.error(e)
 
 
 def get_liste_personnel_non_super(archive=False):
-    return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
-        Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).filter(
-        Personnel.role != "dummy").all())
+    try:
+        return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
+            Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).filter(
+            Personnel.role != "dummy").all())
+    except Exception as e:
+        logging.error("Erreur lors de la récupération de la liste du personnel sans l'admin")
+        logging.error(e)
 
 
 def get_id_personnel_by_login(login: str):
     """
     Renvoie l'id_personnel à partir du login
     """
-    return Personnel.query.filter_by(login=login).with_entities(Personnel.id_personnel).first().id_personnel
-
+    try:
+        return Personnel.query.filter_by(login=login).with_entities(Personnel.id_personnel).first().id_personnel
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'id_personnel de {login}")
+        logging.error(e)
 
 def check_super_admin(login: str):
     """
@@ -66,7 +77,7 @@ def get_role(login: str):
             Personnel.role
         ).first().role
     except AttributeError as e:
-        logging.error("Erreur lors de la récupération du role")
+        logging.error(f"Erreur lors de la récupération du role de {login}")
         return None
 
 
@@ -76,14 +87,17 @@ def check_password(login: str, new_password: str):
 
     :return: Un booleen vrai si le mot de passe est valide
     """
-    old_password = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
-    digest = compare_passwords(new_password, old_password)
-    if digest and get_nbr_essais_connexion_personnel(login) < 3:
-        reset_nbr_essais_connexion(login)
-    elif not digest and get_nbr_essais_connexion_personnel(login) < 3:
-        update_nbr_essais_connexion(login)
-    return digest
-
+    try:
+        old_password = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
+        digest = compare_passwords(new_password, old_password)
+        if digest and get_nbr_essais_connexion_personnel(login) < 3:
+            reset_nbr_essais_connexion(login)
+        elif not digest and get_nbr_essais_connexion_personnel(login) < 3:
+            update_nbr_essais_connexion(login)
+        return digest
+    except Exception as e:
+        logging.error(f"Erreur lors de la vérification du mot de passe de {login}")
+        logging.error(e)
 
 def get_nbr_essais_connexion_personnel(login: str):
     """
@@ -92,7 +106,11 @@ def get_nbr_essais_connexion_personnel(login: str):
     :param login: LOGIN (ABC12) d'un personnel
     :return: UN nombre allant de 0 à 3
     """
-    return Personnel.query.filter_by(login=login).first().essais
+    try:
+        return Personnel.query.filter_by(login=login).first().essais
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération du nombre d'essais de connexion de {login}")
+        logging.error(e)
 
 
 def update_nbr_essais_connexion(login: str):
@@ -139,7 +157,7 @@ def add_personnel(login, nom, prenom, email, password, role, commit=True):
             db.session.commit()
         return get_id_personnel_by_login(login)
     except Exception as e:
-        logging.error("Erreur lors de l'ajout d'un membre du personnel")
+        logging.error(f"Erreur lors de l'ajout de {prenom} {nom}")
         logging.error(e)
 
 
@@ -167,7 +185,7 @@ def update_personnel(identifiant, login, nom, prenom, email, role, actif=None, p
             db.session.commit()
 
     except Exception as e:
-        logging.error("Erreur lors de la modification d'un membre du personnel")
+        logging.error(f"Erreur lors de la modification de {prenom} {nom}")
         logging.error(e)
 
 
@@ -187,7 +205,7 @@ def archiver_personnel(id_personnel: int, archiver=True, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error("Erreur lors de l'archivage d'un membre du personnel")
+        logging.error(f"Erreur lors de l'archivage du personnel {id_personnel}")
         logging.error(e)
         return False
 
@@ -232,8 +250,6 @@ def remove_personnel(id_personnel: int, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error("Erreur lors de la suppression d'un membre du personnel")
+        logging.error(f"Erreur lors de la suppression du personnel {id_personnel}")
         logging.error(e)
         return False
-
-
