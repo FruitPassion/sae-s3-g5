@@ -1,6 +1,7 @@
 import logging
 
 from custom_paquets.converter import convert_to_dict
+from generation_xls import generer_xls_apprentis
 from model.apprenti import remove_apprenti, get_apprentis_by_formation
 
 from model.shared_model import db, Formation, Cours
@@ -160,16 +161,16 @@ def reinitisaliser_formation(id_formation, commit=True):
     :return: True si la réinitialisation s'est bien passée, False sinon
     """
     try:
-        # TODO: appel de la génération des XLS pour les apprentis et les cours
-        # generer_xls_apprentis(id_formation)
-        # generer_xls_cours(id_formation)
-
+        # Suppression des cours
+        generer_xls_apprentis(id_formation)
+        """
         # Suppression des apprentis
         for apprenti in get_apprentis_by_formation(id_formation):
             remove_apprenti(apprenti.id_apprenti)
 
         if commit:
             db.session.commit()
+        """
         return True
     except Exception as e:
         logging.error(f"Erreur lors de la réinitisalisation de la formation {id_formation}")

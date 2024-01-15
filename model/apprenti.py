@@ -308,6 +308,19 @@ def get_apprentis_by_formation(id_formation):
         logging.error(e)
 
 
+def get_apprentis_for_xls(id_formation):
+    """
+    Récupère les apprentis d'une formation
+    """
+    try:
+        return convert_to_dict(Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, 
+                                            Apprenti.adaptation_situation_examen).join(
+                                                Assister).join(Cours).filter_by(id_formation=id_formation).distinct().all())
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des apprentis de la formation {id_formation}")
+        logging.error(e)
+
+
 def get_photos_profil_apprenti(id_apprenti):
     try:
         return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.photo).first().photo

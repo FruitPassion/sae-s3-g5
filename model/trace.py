@@ -18,7 +18,7 @@ def get_commentaires_par_fiche(id_fiche):
                 id_fiche=id_fiche).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
                                                 LaisserTrace.eval_texte, LaisserTrace.horodatage,
                                                 LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
-                                                LaisserTrace.id_personnel).all())
+                                                LaisserTrace.id_personnel, LaisserTrace.id_fiche).all())
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
         logging.error(e)

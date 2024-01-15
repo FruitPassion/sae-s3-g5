@@ -11,8 +11,9 @@ function reinitialiser() {
     $.getJSON("/api/reinitialiser-formation/" + encodeURIComponent(id_element), function (data) {
         if (data["valide"]) {
             afficher_snack("Réinitialisation réussie !", "success");
+            $("#modal-lien").modal("toggle");
         } else {
-            afficher_snack("Désarchivage échoué.", "error");
+            afficher_snack("Réinitialisation échouée.", "error");
         }
     });
 }
