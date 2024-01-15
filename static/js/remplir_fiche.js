@@ -13,27 +13,42 @@ function changement_caroussel(ajout, element) {
     let visibleFieldset = caroussel.querySelector("fieldset:not([hidden])");
     let visibleFieldsetNumber = parseInt(visibleFieldset.id.match(/\d+/)[0])+ajout;
 
-    if ((element.id === "deplacement-gauche" && visibleFieldsetNumber === 0) ||
-    element.id === "deplacement-droite" && visibleFieldsetNumber === 60) {
+    if ((element.id === "deplacement-gauche" && visibleFieldsetNumber < 0) ||
+    element.id === "deplacement-droite" && visibleFieldsetNumber === 70) {
         return;
     } 
 
     visibleFieldset.hidden = true;
     
-    if (visibleFieldsetNumber == 10) {
+    if (visibleFieldsetNumber == "00") {
         deplacementG.classList.add("fdisabled");
-    } else if (visibleFieldsetNumber != 10) {
+    } else if (visibleFieldsetNumber != "00") {
         deplacementG.classList.remove("fdisabled");
     }
 
-    if (visibleFieldsetNumber == 50) {
+    if (visibleFieldsetNumber == 60) {
         // enelever class fdisabled
         deplacementD.classList.add("fdisabled");
-    } else if (visibleFieldsetNumber != 50) {
+    } else if (visibleFieldsetNumber != 60) {
         // ajouter class fdisabled
         deplacementD.classList.remove("fdisabled");
     }
 
     let nextFieldset = caroussel.querySelector("#field-" + (visibleFieldsetNumber));
     nextFieldset.hidden = false;
+}
+
+function displaySelectedImage(event, elementId) {
+    const selectedImage = document.getElementById(elementId);
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            selectedImage.src = e.target.result;
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+    }
 }

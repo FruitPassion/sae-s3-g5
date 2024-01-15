@@ -33,6 +33,16 @@ class Assister(db.Model):
                             backref='assistes')
 
 
+class Materiel(db.Model):
+    __tablename__ = 'Materiel'
+    __table_args__ = {'schema': 'db_fiches_dev'}
+
+    id_materiel = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nom = db.Column(db.String(50), nullable=False)
+    categorie = db.Column(db.String(50), nullable=False)
+    lien = db.Column(db.String(100), nullable=False)
+
+
 class ComposerPresentation(db.Model):
     __tablename__ = 'ComposerPresentation'
     __table_args__ = {'schema': 'db_fiches_dev'}
@@ -51,6 +61,7 @@ class ComposerPresentation(db.Model):
     id_pictogramme = db.Column(db.ForeignKey('db_fiches_dev.Pictogramme.id_pictogramme'), index=True)
     taille_pictogramme = db.Column(db.Integer)
     couleur_pictogramme = db.Column(db.String(7))
+    id_materiel = db.Column(db.ForeignKey('db_fiches_dev.Materiel.id_materiel'), index=True)
 
     ElementBase = db.relationship('ElementBase',
                                   primaryjoin='ComposerPresentation.id_element == ElementBase.id_element',

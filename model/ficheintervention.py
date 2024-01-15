@@ -75,7 +75,10 @@ def get_fiche_par_id_fiche(id_fiche):
     """
     try:
         return convert_to_dict(FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
-            FicheIntervention.id_fiche, FicheIntervention.numero).first())
+            FicheIntervention.id_fiche, FicheIntervention.numero, FicheIntervention.nom_du_demandeur,
+            FicheIntervention.date_demande, FicheIntervention.description_demande, FicheIntervention.localisation,
+            FicheIntervention.degre_urgence, FicheIntervention.photo_avant, FicheIntervention.photo_apres,
+            FicheIntervention.nom_intervenant, FicheIntervention.prenom_intervenant).first())
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des fiches techniques de l'apprenti {id_fiche}")
         logging.error(e)

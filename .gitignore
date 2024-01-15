@@ -9,6 +9,8 @@ __pycache__
 *.loo
 *.lo1
 
+.trunk
+
 .pytest_cache
 
 .scannerwork

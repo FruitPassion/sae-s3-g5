@@ -24,9 +24,28 @@
             <div id="deplacement-droite" class="deplacement-fleche" onclick="changement_caroussel('10', this)">
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
             </div>
+            <fieldset id="field-0" class="scheduler-border p-2 mr-auto ml-2"
+            style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-7 }}px">
+                <p>Intervenant : {{ fiche["prenom_intervenant"] }} {{ fiche["nom_intervenant"] }} {% include "_partial/_tts.html" %}</p>
+                <p>Localisation : {{ fiche["localisation"] }} {% include "_partial/_tts.html" %}</p>
+                <p>Description de la demande : {{ fiche["description_demande"] }} {% include "_partial/_tts.html" %}</p>
+                <p>Image avant l'intervention : {% include "_partial/_tts.html" %}</p>
+                <div>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img id="selectedAvant" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                        alt="Image avant intervention" style="width: 300px;" />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-primary btn-rounded">
+                            <label class="form-label text-white m-1" for="image-avant">Choisir une image</label>
+                            <input type="file" class="form-control d-none" id="image-avant" onchange="displaySelectedImage(event, 'selectedAvant')" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
             {% for categorie in composition %}
                 <fieldset id="field-{{ categorie['position_elem'] }}" class="scheduler-border p-2 mr-auto ml-2"
-                          {% if loop.index0 != 0 %}hidden="" {% endif %} style="{{ categorie['couleur_fond'] }}">
+                          hidden="" style="background-color: {{ categorie['couleur_fond'] }};">
                     <legend>{{ categorie["libelle_elem"] }} {% include "_partial/_tts.html" %}</legend>
                     {% for element in categorie["elements"] %}
                         <div class="sous-field"
@@ -105,6 +124,22 @@
                     {% endfor %}
                 </fieldset>
             {% endfor %}
+            <fieldset id="field-60" class="scheduler-border p-2 mr-auto ml-2" hidden=""
+            style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
+            <p>Image après l'intervention : {% include "_partial/_tts.html" %}</p>    
+            <div>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img id="selectedApres" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                        alt="Image apres intervention" style="width: 300px;" />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-primary btn-rounded">
+                            <label class="form-label text-white m-1" for="image-apres">Choisir une image</label>
+                            <input type="file" class="form-control d-none" id="image-apres" onchange="displaySelectedImage(event, 'selectedApres')" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
         </div>
     </div>
 {% endblock %}
