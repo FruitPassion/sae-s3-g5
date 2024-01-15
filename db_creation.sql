@@ -305,8 +305,13 @@ VALUES ('Intervention', 'categorie', NULL, NULL),
        ('Materiel 7', 'select-materiel', NULL, NULL),
        ('Materiel 8', 'select-materiel', NULL, NULL),
        ('Materiel 9', 'select-materiel', NULL, NULL),
-       ('Materiel 10', 'select-materiel', NULL, NULL);
-
+       ('Materiel 10', 'select-materiel', NULL, NULL),
+       ('Evaluation personnel','categorie',NULL,NULL),
+       ('Très bien','radio',NULL,NULL),
+       ('Bien','radio',NULL,NULL),
+       ('Assez bien','radio',NULL,NULL),
+       ('Moyen','radio',NULL,NULL),
+       ('Pas bien','radio',NULL,NULL);
 INSERT INTO FicheIntervention (id_fiche, numero, nom_du_demandeur, date_demande, localisation, description_demande,
                                degre_urgence, couleur_intervention, etat_fiche, date_creation, id_personnel,
                                id_apprenti, nom_intervenant, prenom_intervenant, id_cours)
@@ -357,7 +362,12 @@ VALUES ('Ajouter', 'ajouter.png', 'Matériaux utilisés', 'ajouter'),
        ('Prise', 'prise.png', 'Nature Intervention', 'electrique'),
        ('Valider', 'valider.png', 'Autre', NULL),
        ('Materiel', 'materiel.png', 'Matériaux utilisés', 'choix materiel'),
-       ('Nouvelle', 'nouvelle.png', 'Description du travail', 'nouvelle');
+       ('Nouvelle', 'nouvelle.png', 'Description du travail', 'nouvelle'),
+       ('Tres bien','tres_bien.png','Evaluation personnel','tres bien'),
+       ('Bien','bien.png','Evaluation personnel','bien'),
+       ('Assez bien','assez_bien.png','Evaluation personnel','assez bien'),
+       ('Moyen','moyen.png','Evaluation personnel','moyen'),
+       ('Pas bien','pas_bien.png','Evaluation personnel','pas bien');
 
 
 INSERT INTO ComposerPresentation (id_element, id_fiche, taille_texte, audio, police, couleur, couleur_fond,
