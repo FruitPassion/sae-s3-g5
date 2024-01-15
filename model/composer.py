@@ -1,4 +1,4 @@
-import logging
+import logging, sys, os
 from custom_paquets.converter import convert_to_dict
 from model.pictogramme import get_pictogramme_by_url
 from model.shared_model import db, ComposerPresentation as Compo, ElementBase as Elem
@@ -112,3 +112,35 @@ def modifier_composition_par_element(composition, key, value):
     except Exception as e:
         logging.error(f"Erreur lors de la modification de la composition de la fiche")
         logging.error(e)
+
+
+
+def maj_contenu_fiche(majs: dict, id_fiche: str):
+    """
+        
+    """
+    try:
+        compositions = Compo.query.filter_by(id_fiche=id_fiche).all()
+        for element in compositions:
+            print(element)
+            print(element.text)
+            print(majs.keys())
+            print(element.position_elem)
+            print(majs[f'{element.position_elem}'])
+            if element.position_elem in majs.keys():
+                element.text = majs[f'{element.position_elem}']
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de l'enregistrement des modifications de la fiche.")
+        e_type, e_object, e_traceback = sys.exc_info()
+
+        e_filename = os.path.split(
+            e_traceback.tb_frame.f_code.co_filename
+        )[1]
+
+        e_message = str(e)
+
+        e_line_number = e_traceback.tb_lineno
+        logging.error(e_type)
+        logging.error(e_message)
+        logging.error(e_line_number)
