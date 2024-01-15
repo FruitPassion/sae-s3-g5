@@ -11,7 +11,7 @@
 
     <div id="bloc">
 
-        <form name="modifier" id="modifier" method="POST">
+        <form name="modifier" id="modifier" enctype="multipart/form-data" method="POST">
             <p>Commentaire de l'éducateur :</p>
             <textarea type="text" class="modifiable" id="commentaire_texte" name="commentaire_texte"
                       maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
@@ -20,7 +20,7 @@
             <button type="button" id="enregistrer_btn">Modifier l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
 
             <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
-            <audio id="audioPlayer"></audio>
+            <audio id="audioPlayer" name="test"></audio>
             <p id="statut"></p>
             <p id="Time" style="display: none;">Temps écoulé : 0:00</p>
             
@@ -41,17 +41,28 @@
                         
                         // Arrêt de l'enregistrement
                         mediaRecorder.onstop = function() {
-                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
                             const audioUrl = URL.createObjectURL(audioBlob);
                             const audioPlayer = document.getElementById('audioPlayer');
                             audioPlayer.src = audioUrl;
+                            //const form = new FormData();
                             audioPlayer.controls = true;
                             clearInterval(recordingInterval);
                             document.getElementById('statut').textContent = 'Enregistrement modifié';
                             document.getElementById('Time').style.display = 'none';
                             document.getElementById('enregistrer_btn').style.display = 'none';
-                        };
-                        
+                            /**
+                            document.getElementById('commentaire_audio').value=audioUrl;
+                            
+                            formData.append('audio', blob);
+                                fetch('modifier-commentaires', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => { console.log('upload success');})
+                                .catch(error => {console.log('error');}) */
+                        }
+
                         // Bouton démarrer/arrêter l'enregistrement
                         const enregistrer_btn = document.getElementById('enregistrer_btn');
                         const icon = document.getElementById('icon');
@@ -83,10 +94,12 @@
             <p>Evaluation de l'éducateur :</p>
             <textarea type="text" class="modifiable" id="eval_texte" name="eval_texte"
                       maxlength="500">{{ commentaires["eval_texte"] }}</textarea>
-
+            
             <p>Evaluation audio de l'éducateur :</p>
             
-            {% include "_partial/_retour_bouton.html" %}
+            <div class="fixed-bottom bg-light">
+                <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+            </div>
             <!-- Gestion de la modification du commentaire/évaluation... ? -->
             <input type="submit" value="Enregistrer" id="enregistrer">
 
