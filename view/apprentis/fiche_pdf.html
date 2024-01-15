@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Fiche d'intervention n° {{ fiche["numero"] }}</h1>
-    <!-- {% for categorie in composition %}
+    {% for categorie in composition %}
         <fieldset>
             <legend>{{ categorie["libelle_elem"] }}</legend>
             {% for element in categorie["elements"] %}
@@ -12,7 +12,7 @@
                 <div>{{ element["text"] }}</div>
             {% endfor %}
         </fieldset>
-    {% endfor %} -->
+    {% endfor %}
     <form>
         <div class="espaceHor"></div>
         <fieldset>
