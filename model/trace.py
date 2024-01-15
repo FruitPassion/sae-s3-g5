@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 from custom_paquets.converter import convert_to_dict
+from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.personnel import get_id_personnel_by_login
 from model.shared_model import db, LaisserTrace
 
@@ -43,6 +44,13 @@ def get_commentaires_educ_par_fiche(id_fiche):
         logging.error(e)
 
 
+def get_audio_commentaire(id_fiche):
+    try:
+        return LaisserTrace.query.filter_by(id_fiche=id_fiche).with_entities(LaisserTrace.audio).first().audio
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de l'audio {id_fiche}")
+        logging.error(e)
+        
 def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
     """
     Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
@@ -73,7 +81,7 @@ def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio):
         logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
         logging.error(e)
 
-
+    
 def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
     """
     Récupère l'évaluation textuelle du horodatage (date/heure) de la fiche id_fiche
