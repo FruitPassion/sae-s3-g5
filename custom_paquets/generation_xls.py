@@ -7,7 +7,7 @@ from model.trace import get_commentaires_par_fiche
 
 
 def generer_xls_apprentis(id_formation):
-    workbook = xlsxwriter.Workbook('static/files/apprentis.xlsx')
+    workbook = xlsxwriter.Workbook('../static/files/apprentis.xlsx')
     cell_format = workbook.add_format({'bold': True, 'font_color': 'red'})
     apprentis = get_apprentis_for_xls(id_formation)
 

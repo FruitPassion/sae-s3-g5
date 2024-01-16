@@ -1,7 +1,6 @@
 import logging
 
-from custom_paquets.converter import convert_to_dict
-from generation_xls import generer_xls_apprentis
+from custom_paquets.generation_xls import generer_xls_apprentis
 from model.apprenti import remove_apprenti, get_apprentis_by_formation
 
 from model.shared_model import db, Formation, Cours
