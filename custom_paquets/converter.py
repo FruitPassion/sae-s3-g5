@@ -1,13 +1,14 @@
 from unidecode import unidecode
 
-def convert_to_dict(posts):
-    post_list = []
-    if str(type(posts)) == "<class 'sqlalchemy.engine.row.Row'>":
-        post_list = posts._asdict()
+
+def convert_to_dict(classes):
+    classes_list = []
+    if str(type(classes)) == "<class 'sqlalchemy.engine.row.Row'>":
+        classes_list = classes._asdict()
     else:
-        for post in posts:
-            post_list.append(post._asdict())
-    return post_list
+        for classe in classes:
+            classes_list.append(classe._asdict())
+    return classes_list
 
 
 def generate_login(nom, prenom):
@@ -18,5 +19,5 @@ def generate_login(nom, prenom):
 
 def changer_date(fiches):
     for fiche in fiches:
-        fiche["date_creation"] = fiche["date_creation"].strftime("%d/%m/%Y")
+        fiche.date_creation = fiche.date_creation.strftime("%d/%m/%Y")
     return fiches

@@ -15,15 +15,15 @@
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">
-                    <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche['id_fiche']) }}">
+                    <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche.id_fiche) }}">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
                         <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
                     </a>
                 </div>
-                <p class="text-center fs-1">Fiche n°{{ fiche["numero"] }}</p>
-                <p class="text-center fs-2">{{ get_nom_cours_by_id(fiche["id_cours"]) }}</p>
-                <p class="text-center fs-3">{{ fiche["date_creation"] }}</p>
+                <p class="text-center fs-1">Fiche n°{{ fiche.numero }}</p>
+                <p class="text-center fs-2">{{ get_nom_cours_by_id(fiche.id_cours) }}</p>
+                <p class="text-center fs-3">{{ fiche.date_creation }}</p>
             </div>
         {% endfor %}
     </div>

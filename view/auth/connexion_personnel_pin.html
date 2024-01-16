@@ -29,7 +29,7 @@
                         name="login_select">
                             {% for personnel in personnels %}
                                 <option class="fs-5"
-                                        value="{{ personnel['login'] }}">{{ personnel["login"] }}</option>
+                                        value="{{ personnel.login }}">{{ personnel.login }}</option>
                             {% endfor %}
                         </select>
                         <div class="form-group mb-5 mt-1">

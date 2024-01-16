@@ -49,7 +49,8 @@ def gestion_personnel():
     form_modifier_admin = ModifierAdmin()
     REDIRECTION = "admin.gestion_personnel"
 
-    if form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin' in request.form.values():
+    if (form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin'
+            in request.form.values()):
         role = "SuperAdministrateur"
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
@@ -83,8 +84,9 @@ def gestion_personnel():
         add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
         return redirect(url_for(REDIRECTION), 302)
 
-    return render_template("admin/gestion_personnel.html", liste_personnel=personnel, form_ajouter=form_ajouter,
-                           form_modifier=form_modifier, form_modifier_admin=form_modifier_admin, couleurs=couleurs,
+    return render_template("admin/gestion_personnel.html", liste_personnel=personnel,
+                           form_ajouter=form_ajouter, form_modifier=form_modifier,
+                           form_modifier_admin=form_modifier_admin, couleurs=couleurs,
                            liste_personnel_archive=liste_personnel_archive)
 
 
@@ -120,11 +122,11 @@ def gestion_apprentis():
         f = request.files.get("avatar")
         chemin_avatar = stocker_photo_profile(f)
         id_apprenti = add_apprenti(form_ajouter.nom.data, form_ajouter.prenom.data, login, chemin_avatar)
-        add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1]["id_formation"])
+        add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1].id_formation)
         return redirect(url_for("admin.gestion_apprentis"), 302)
 
-    return render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis, form_ajouter=form_ajouter,
-                           form_modifier=form_modifier, formations=formations,
+    return render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis,
+                           form_ajouter=form_ajouter, form_modifier=form_modifier, formations=formations,
                            liste_apprentis_archives=liste_apprentis_archives)
 
 

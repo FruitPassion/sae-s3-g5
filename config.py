@@ -24,7 +24,8 @@ class DevConfig:
     SESSION_PERMANENT = False
     WTF_CSRF_ENABLED = False
     SESSION_TYPE = "filesystem"
-    SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
+    DB_SCHEMA = "db_fiches_dev"
+    SQLALCHEMY_DATABASE_URI = f'mariadb://local_user:password@localhost:3306/{DB_SCHEMA}'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {
@@ -35,7 +36,7 @@ class DevConfig:
     SESSION_COOKIE_SAMESITE = 'Lax'
 
 
-class ProdConfig:
+class MainConfig:
     """
     Configuration de l'application en mode production
     """
@@ -46,7 +47,8 @@ class ProdConfig:
     DEBUG = False
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"
-    SQLALCHEMY_DATABASE_URI = 'mariadb://local_user:password@localhost:3306/db_fiches_dev'
+    DB_SCHEMA = "db_fiches_prod"
+    SQLALCHEMY_DATABASE_URI = f'mariadb://local_user:password@localhost:3306/{DB_SCHEMA}'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {

@@ -1,12 +1,12 @@
 import logging
 
 from custom_paquets import check_requirements
-from custom_paquets.app_checker import check_config, check_git_branch
+from custom_paquets.app_checker import check_git_branch
 
 # Vérification de la présence des dépendances dans l'environnement virtuel
 check_requirements.checking()
 
-# Importation des librairies nécessaire
+# Importation des librairies nécessaires
 import json
 import os
 
@@ -18,7 +18,7 @@ from werkzeug.exceptions import HTTPException
 # Paquets git
 
 # Paquet gestion d'erreur
-from custom_paquets.gestions_erreur import logging_erreur
+from custom_paquets.gestions_erreur import logging_erreur, LogOpeningError
 
 # model de la base de données
 from model.shared_model import db
@@ -35,18 +35,18 @@ from controller.auth import auth
 
 
 # Fonction pour créer une application et la paramétrer
-def create_app(config=None):
-    # Vérification de la configuration demandée.
-    # Si aucune configuration n'est demandée, la configuration par défaut est la configuration de développement
-    check_config(config)
-
+def create_app():
     # Déclaration de l'application
     # Changement du chemin d'accès des templates
     app = Flask(__name__, template_folder="view")
 
-    # Vérification de la branche du Git
+    # Remise à zéro du fichier de log
+    if open('app.log', 'w').close():
+        raise LogOpeningError("Impossible d'ouvrir le fichier de log")
+
+    # Vérification de la branche du Git pour charger la bonne configuration
     # Utilisable uniquement dans la branche main ou dev
-    check_git_branch(config, app)
+    check_git_branch(app)
 
     # Enregistrement des controller
     app.register_blueprint(auth)

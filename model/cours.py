@@ -2,7 +2,7 @@ import logging
 
 from model.shared_model import db, Cours, Apprenti, Assister
 from custom_paquets.converter import convert_to_dict
-from model.formation import get_formation_id, get_cours_par_formation
+from model.formation import get_formation_id_par_nom_formation, get_cours_par_formation
 
 
 def get_all_cours(archive=False):
@@ -12,9 +12,8 @@ def get_all_cours(archive=False):
     :return: Une liste des cours
     """
     try:
-        return convert_to_dict(Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours,
-                                                       Cours.duree, Cours.id_formation).filter(
-        Cours.archive == archive).all())
+        return Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours, Cours.duree,
+                                         Cours.id_formation).filter(Cours.archive == archive).all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de tous les cours")
         logging.error(e)
@@ -27,9 +26,9 @@ def get_apprentis_by_formation(nom_formation: str, archive=False):
     :return: Une liste d'apprentis
     """
     try:
-        return convert_to_dict(Cours.query.distinct().filter_by(id_formation=get_formation_id(nom_formation)).join(
+        return Cours.query.distinct().filter_by(id_formation=get_formation_id_par_nom_formation(nom_formation)).join(
             Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
-                                                   Apprenti.photo).filter(Apprenti.archive == archive).all())
+                                                   Apprenti.photo).filter(Apprenti.archive == archive).all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des apprentis de la formation {nom_formation}")
         logging.error(e)
@@ -42,8 +41,8 @@ def get_cours_par_apprenti(id_apprenti):
     :return: Une liste de cours
     """
     try:
-        return convert_to_dict(Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours).join(Assister).filter_by(
-            id_apprenti=id_apprenti).all())
+        return Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours).join(Assister).filter_by(
+                id_apprenti=id_apprenti).all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des cours de l'apprenti {id_apprenti}")
         logging.error(e)
@@ -77,7 +76,7 @@ def get_id_cours_by_theme(theme):
     except Exception as e:
         logging.error("Erreur lors de la récupération de l'id du cours")
         logging.error(e)
-        
+
 
 def get_cours_id(nom_cours: str):
     """
@@ -90,7 +89,7 @@ def get_cours_id(nom_cours: str):
     except Exception as e:
         logging.error(f"Erreur lors de la récupération de l'id du cours {nom_cours}")
         logging.error(e)
-    
+
 
 def get_nom_cours_by_id(id_cours):
     """
@@ -129,7 +128,7 @@ def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True)
     :return: None
     """
     try:
-        cours = Cours.query.filter_by(id_cours = identifiant).first()
+        cours = Cours.query.filter_by(id_cours=identifiant).first()
         cours.theme = theme
         cours.cours = intitule
         cours.duree = duree

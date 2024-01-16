@@ -18,13 +18,12 @@ def get_fiches_techniques_par_login(login):
     """
     try:
         id_apprenti = get_id_apprenti_by_login(login)
-        return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-            FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero,
-            FicheIntervention.date_creation, FicheIntervention.id_cours).order_by(asc(FicheIntervention.etat_fiche)).all())
+        return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).order_by(asc(
+            FicheIntervention.etat_fiche)).all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des fiches techniques de l'apprenti {login}")
         logging.error(e)
-    
+
 
 def get_proprietaire_fiche_par_id_fiche(id_fiche):
     """
@@ -53,6 +52,7 @@ def get_nom_cours_by_id(id_fiche):
         logging.error(f"Erreur lors de la récupération du nom du cours de la fiche {id_fiche}")
         logging.error(e)
 
+
 def get_fiche_par_id_apprenti(id_apprenti):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son id
@@ -60,8 +60,8 @@ def get_fiche_par_id_apprenti(id_apprenti):
     :return: Les fiches techniques de l'apprenti
     """
     try:
-        return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-            FicheIntervention.id_fiche, FicheIntervention.numero).first())
+        return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
+            FicheIntervention.id_fiche, FicheIntervention.numero).first()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des fiches techniques de l'apprenti {id_apprenti}")
         logging.error(e)
@@ -74,11 +74,7 @@ def get_fiche_par_id_fiche(id_fiche):
     :return: Les fiches techniques de l'apprenti
     """
     try:
-        return convert_to_dict(FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
-            FicheIntervention.id_fiche, FicheIntervention.numero, FicheIntervention.nom_du_demandeur,
-            FicheIntervention.date_demande, FicheIntervention.description_demande, FicheIntervention.localisation,
-            FicheIntervention.degre_urgence, FicheIntervention.photo_avant, FicheIntervention.photo_apres,
-            FicheIntervention.nom_intervenant, FicheIntervention.prenom_intervenant).first())
+        return FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des fiches techniques de l'apprenti {id_fiche}")
         logging.error(e)
@@ -86,20 +82,17 @@ def get_fiche_par_id_fiche(id_fiche):
 
 def get_niveau_etat_fiches_par_login(login):
     """
-    Récupère le total des niveaux de chaque fiche technique associées à un apprenti à partir de son Login
+    Récupère le total des niveaux de chaque fiche technique associé à un apprenti à partir de son Login
 
     :return: Les niveaux des fiches techniques de l'apprenti
     """
     try:
         id_apprenti = get_id_apprenti_by_login(login)
         fiche_niveau = (
-            db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'), FicheIntervention.etat_fiche)
-            .join(ComposerPresentation)
-            .join(Apprenti)
+            db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'),
+                             FicheIntervention.etat_fiche).join(ComposerPresentation).join(Apprenti)
             .filter(FicheIntervention.id_apprenti == id_apprenti)
-            .filter(~ComposerPresentation.position_elem.like('%0%'))
-            .group_by(FicheIntervention.id_fiche)
-            .all()
+            .filter(~ComposerPresentation.position_elem.like('%0%')).group_by(FicheIntervention.id_fiche).all()
         )
         return convert_to_dict(fiche_niveau)
     except Exception as e:
@@ -124,16 +117,17 @@ def get_niveau_moyen_champs_par_login(login):
             .group_by(FicheIntervention.id_fiche)
             .all()
         )
-        liste_niveau_champ = convert_to_dict(niveau_champ)
+        liste_niveau_champ = niveau_champ
         total_niveau_champ = 0
         if len(liste_niveau_champ) == 0:
             return 0
         else:
             for niveau in liste_niveau_champ:
-                total_niveau_champ += niveau["moyenne_niveau"]
+                total_niveau_champ += niveau.moyenne_niveau
             return int(total_niveau_champ / len(liste_niveau_champ))
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des niveaux moyens des champs des fiches techniques de l'apprenti {login}")
+        logging.error(
+            f"Erreur lors de la récupération des niveaux moyens des champs des fiches techniques de l'apprenti {login}")
         logging.error(e)
 
 
@@ -160,7 +154,7 @@ def get_etat_fiche_par_id_fiche(id_fiche):
     try:
         return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
             FicheIntervention.etat_fiche).first().etat_fiche
-    except Exception as e: 
+    except Exception as e:
         logging.error(f"Erreur lors de la récupération de l'état de la fiche {id_fiche}")
         logging.error(e)
 
@@ -173,9 +167,7 @@ def get_fiches_techniques_finies_par_login(login):
     """
     try:
         id_apprenti = get_id_apprenti_by_login(login)
-        return convert_to_dict(FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-            FicheIntervention.id_fiche, FicheIntervention.etat_fiche, FicheIntervention.numero,
-            FicheIntervention.date_creation, FicheIntervention.id_cours).filter_by(etat_fiche=True).all())
+        return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).filter_by(etat_fiche=True).all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des fiches techniques finies de l'apprenti {login}")
         logging.error(e)
@@ -205,12 +197,14 @@ def get_id_fiche_apprenti(login: str, numero: int):
     try:
         if get_fiche_apprentis_existe(login):
             return FicheIntervention.query.filter_by(id_apprenti=get_id_apprenti_by_login(login),
-                                                    numero=numero).with_entities(FicheIntervention.id_fiche).first().id_fiche
+                                                     numero=numero).with_entities(
+                FicheIntervention.id_fiche).first().id_fiche
         else:
             return None
     except Exception as e:
         logging.error(f"Erreur lors de la récupération de l'id de la fiche de l'apprenti {login}")
         logging.error(e)
+
 
 def get_dernier_numero_fiche_apprenti(login: str):
     try:
@@ -238,7 +232,7 @@ def get_dernier_id_fiche_apprenti(login: str):
         else:
             return None
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération du dernier id de la fiche de l'apprenti {login}")        
+        logging.error(f"Erreur lors de la récupération du dernier id de la fiche de l'apprenti {login}")
         logging.error(e)
 
 
@@ -256,18 +250,18 @@ def copier_fiche(id_fiche: int, login_personnel: str):
         login_apprenti = get_login_apprenti_by_id(fiche_a_copier.id_apprenti)
         numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
         nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=fiche_a_copier.nom_du_demandeur,
-                                        date_demande=fiche_a_copier.date_demande,
-                                        localisation=fiche_a_copier.localisation,
-                                        description_demande=fiche_a_copier.description_demande,
-                                        degre_urgence=fiche_a_copier.degre_urgence,
-                                        couleur_intervention=fiche_a_copier.couleur_intervention,
-                                        etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
-                                        photo_avant=None, photo_apres=None,
-                                        nom_intervenant=fiche_a_copier.nom_intervenant,
-                                        prenom_intervenant=fiche_a_copier.prenom_intervenant,
-                                        id_personnel=get_id_personnel_by_login(login_personnel),
-                                        id_apprenti=get_id_apprenti_by_login(login_apprenti),
-                                        id_cours=fiche_a_copier.id_cours)
+                                           date_demande=fiche_a_copier.date_demande,
+                                           localisation=fiche_a_copier.localisation,
+                                           description_demande=fiche_a_copier.description_demande,
+                                           degre_urgence=fiche_a_copier.degre_urgence,
+                                           couleur_intervention=fiche_a_copier.couleur_intervention,
+                                           etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                                           photo_avant=None, photo_apres=None,
+                                           nom_intervenant=fiche_a_copier.nom_intervenant,
+                                           prenom_intervenant=fiche_a_copier.prenom_intervenant,
+                                           id_personnel=get_id_personnel_by_login(login_personnel),
+                                           id_apprenti=get_id_apprenti_by_login(login_apprenti),
+                                           id_cours=fiche_a_copier.id_cours)
         db.session.add(nouvelle_fiche)
         db.session.commit()
         composer_fiche = get_composer_presentation(id_fiche)
@@ -285,14 +279,14 @@ def copier_fiche(id_fiche: int, login_personnel: str):
             db.session.add(composer)
         db.session.commit()
         return nouvelle_fiche.id_fiche
-    except Exception as e: 
+    except Exception as e:
         logging.error(f"Erreur lors de la copie de la fiche {id_fiche}")
         logging.error(e)
 
 
 def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_demande: date, nom_demandeur: str,
                                localisation: str, description_demande: str, degre_urgence: int,
-                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_cours : str):
+                               couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_cours: str):
     """
     A partir de la fiche par defaut, la duplique et l'assigne a un apprenti
 
@@ -319,13 +313,13 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
             composer_fiche = get_composer_presentation()
         numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
         nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=nom_demandeur, date_demande=date_demande,
-                                        localisation=localisation, description_demande=description_demande,
-                                        degre_urgence=degre_urgence, couleur_intervention=couleur_intervention,
-                                        etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
-                                        photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
-                                        prenom_intervenant=prenom_intervenant,
-                                        id_personnel=get_id_personnel_by_login(login_personnel),
-                                        id_apprenti=get_id_apprenti_by_login(login_apprenti), id_cours=id_cours)
+                                           localisation=localisation, description_demande=description_demande,
+                                           degre_urgence=degre_urgence, couleur_intervention=couleur_intervention,
+                                           etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                                           photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
+                                           prenom_intervenant=prenom_intervenant,
+                                           id_personnel=get_id_personnel_by_login(login_personnel),
+                                           id_apprenti=get_id_apprenti_by_login(login_apprenti), id_cours=id_cours)
         db.session.add(nouvelle_fiche)
         db.session.commit()
         # On ajoute les éléments de la fiche
@@ -344,7 +338,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
         db.session.commit()
 
         return nouvelle_fiche.id_fiche
-        
+
     except Exception as e:
         logging.error(f"Erreur lors de l'assignation de la fiche à l'apprenti {login_apprenti}")
         logging.error(e)

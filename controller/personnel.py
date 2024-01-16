@@ -4,7 +4,7 @@ from model.formation import get_all_formations
 from model.cours import get_apprentis_by_formation
 from model.ficheintervention import get_nom_cours_by_id
 from custom_paquets.decorateur import personnel_login_required
-from model.personnel import get_role
+from model.personnel import get_role_by_login
 
 personnel = Blueprint("personnel", __name__, url_prefix="/personnel")
 
@@ -50,7 +50,7 @@ def redirection_fiches(apprenti):
     ou éducateur admin.
     """
 
-    role = get_role(session.get("name"))
+    role = get_role_by_login(session.get("name"))
     if role == "Educateur Administrateur":
         return redirect(url_for('educ_admin.accueil_educadmin', apprenti=apprenti))
     elif role == "Educateur":

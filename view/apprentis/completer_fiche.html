@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Fiche numéro {{ fiche["numero"] }} {% include "_partial/_tts.html" %}</h1>
+    <h1>Fiche numéro {{ fiche.numero }} {% include "_partial/_tts.html" %}</h1>
 
     <div id="container-principal" class="px-4">
         <form method="POST" name="completer-fiche"  enctype="multipart/form-data">
@@ -28,9 +28,9 @@
                 <input type="hidden" name="avancee" value="">
                 <fieldset id="field-0" class="scheduler-border p-2 mr-auto ml-2"
                 style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                    <p>Intervenant : {{ fiche["prenom_intervenant"] }} {{ fiche["nom_intervenant"] }} {% include "_partial/_tts.html" %}</p>
-                    <p>Localisation : {{ fiche["localisation"] }} {% include "_partial/_tts.html" %}</p>
-                    <p>Description de la demande : {{ fiche["description_demande"] }} {% include "_partial/_tts.html" %}</p>
+                    <p>Intervenant : {{ fiche.prenom_intervenant }} {{ fiche.nom_intervenant }} {% include "_partial/_tts.html" %}</p>
+                    <p>Localisation : {{ fiche.localisation }} {% include "_partial/_tts.html" %}</p>
+                    <p>Description de la demande : {{ fiche.description_demande }} {% include "_partial/_tts.html" %}</p>
                     <p>Image avant l'intervention : {% include "_partial/_tts.html" %}</p>
                     <div>
                         <div class="mb-4 d-flex justify-content-center">

@@ -7,10 +7,10 @@ from custom_paquets.custom_form import AjouterCours
 from custom_paquets.decorateur import educadmin_login_required
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
-from model.ficheintervention import assigner_fiche_dummy_eleve, get_fiche_par_id_apprenti, \
+from model.ficheintervention import assigner_fiche_dummy_eleve, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
     get_fiche_par_id_fiche
-from model.formation import get_all_formations, get_formation_id
+from model.formation import get_all_formations
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.trace import get_commentaires_par_fiche
 
@@ -62,16 +62,18 @@ def gestion_cours():
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data, form_modifier.select_formation.data)
+        update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data,
+                     form_modifier.form_duree.data, form_modifier.select_formation.data)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
-    
+
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         selected_formation_id = request.form.get('select_formation')
         add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data, selected_formation_id)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
-    
+
     return render_template("educ_admin/gestion_cours.html", cours=cours,
-                           form_modifier = form_modifier, form_ajouter=form_ajouter, coursArchives = coursArchives, formations = formations), 200
+                           form_modifier=form_modifier, form_ajouter=form_ajouter, coursArchives=coursArchives,
+                           formations=formations), 200
 
 
 @educ_admin.route("/choix-eleve/<nom_formation>", methods=["GET"])
@@ -100,7 +102,8 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_par_login(apprenti)
     fiches = changer_date(fiches)
-    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
+    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos,
+                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
 
 
 @educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET"])
@@ -150,15 +153,17 @@ def personnalisation(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
-    liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans",
-                    "Lato", "Oswald", "Poppins"]
+    liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto",
+                     "Open Sans",
+                     "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(id_fiche)
     fiche = get_fiche_par_id_fiche(id_fiche)
     if request.method == 'POST':
         modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")
-        return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)), 302)
+        return redirect(url_for("educ_admin.fiches_apprenti", apprenti=get_proprietaire_fiche_par_id_fiche(id_fiche)),
+                        302)
     return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_polices,
                            composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
 
@@ -171,8 +176,6 @@ def visualiser_commentaires(apprenti, fiche):
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-
     commentaires = get_commentaires_par_fiche(fiche)
     return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
-    

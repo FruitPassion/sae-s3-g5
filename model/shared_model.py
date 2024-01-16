@@ -1,13 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from custom_paquets.app_checker import get_current_config
 db = SQLAlchemy()
 
-FICHE_PERSONNEL = 'db_fiches_dev.Personnel.id_personnel'
+DB_SCHEMA = f"db_fiches_{get_current_config().lower()}"
 
 
 class Apprenti(db.Model):
     __tablename__ = 'Apprenti'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_apprenti = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom = db.Column(db.String(50), nullable=False)
@@ -22,10 +22,10 @@ class Apprenti(db.Model):
 
 class Assister(db.Model):
     __tablename__ = 'Assister'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
-    id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), primary_key=True)
-    id_cours = db.Column(db.ForeignKey('db_fiches_dev.Cours.id_cours'), primary_key=True)
+    id_apprenti = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Apprenti.id_apprenti'), primary_key=True)
+    id_cours = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Cours.id_cours'), primary_key=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='Assister.id_apprenti == Apprenti.id_apprenti',
                                backref='assistes')
@@ -33,9 +33,20 @@ class Assister(db.Model):
                             backref='assistes')
 
 
+class Pictogramme(db.Model):
+    __tablename__ = 'Pictogramme'
+    __table_args__ = {'schema': DB_SCHEMA}
+
+    id_pictogramme = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    label = db.Column(db.String(50), nullable=False)
+    url = db.Column(db.String(100), nullable=False)
+    categorie = db.Column(db.String(50), nullable=False)
+    souscategorie = db.Column(db.String(50), nullable=False)
+
+
 class Materiel(db.Model):
     __tablename__ = 'Materiel'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_materiel = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom = db.Column(db.String(50), nullable=False)
@@ -45,10 +56,10 @@ class Materiel(db.Model):
 
 class ComposerPresentation(db.Model):
     __tablename__ = 'ComposerPresentation'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
-    id_element = db.Column(db.ForeignKey('db_fiches_dev.ElementBase.id_element'), primary_key=True)
-    id_fiche = db.Column(db.ForeignKey('db_fiches_dev.FicheIntervention.id_fiche'), primary_key=True)
+    id_element = db.Column(db.ForeignKey(f'{DB_SCHEMA}.ElementBase.id_element'), primary_key=True)
+    id_fiche = db.Column(db.ForeignKey(f'{DB_SCHEMA}.FicheIntervention.id_fiche'), primary_key=True)
     text = db.Column(db.String(50))
     taille_texte = db.Column(db.String(50))
     audio = db.Column(db.String(50))
@@ -58,10 +69,10 @@ class ComposerPresentation(db.Model):
     niveau = db.Column(db.Integer)
     position_elem = db.Column(db.String(50))
     ordre_saisie_focus = db.Column(db.String(50))
-    id_pictogramme = db.Column(db.ForeignKey('db_fiches_dev.Pictogramme.id_pictogramme'), index=True)
+    id_pictogramme = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Pictogramme.id_pictogramme'), index=True)
     taille_pictogramme = db.Column(db.Integer)
     couleur_pictogramme = db.Column(db.String(7))
-    id_materiel = db.Column(db.ForeignKey('db_fiches_dev.Materiel.id_materiel'), index=True)
+    id_materiel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Materiel.id_materiel'), index=True)
 
     ElementBase = db.relationship('ElementBase',
                                   primaryjoin='ComposerPresentation.id_element == ElementBase.id_element',
@@ -76,9 +87,9 @@ class ComposerPresentation(db.Model):
 
 class EducAdmin(db.Model):
     __tablename__ = 'EducAdmin'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
-    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), primary_key=True)
+    id_personnel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Personnel.id_personnel'), primary_key=True)
 
     Personnel = db.relationship('Personnel', primaryjoin='EducAdmin.id_personnel == Personnel.id_personnel',
                                 backref='educadmins')
@@ -86,7 +97,7 @@ class EducAdmin(db.Model):
 
 class ElementBase(db.Model):
     __tablename__ = 'ElementBase'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_element = db.Column(db.Integer, primary_key=True, autoincrement=True)
     libelle = db.Column(db.String(50), nullable=False)
@@ -97,7 +108,7 @@ class ElementBase(db.Model):
 
 class FicheIntervention(db.Model):
     __tablename__ = 'FicheIntervention'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_fiche = db.Column(db.Integer, primary_key=True, autoincrement=True)
     numero = db.Column(db.Integer, nullable=False)
@@ -113,9 +124,9 @@ class FicheIntervention(db.Model):
     photo_apres = db.Column(db.String(150))
     nom_intervenant = db.Column(db.String(50), nullable=False)
     prenom_intervenant = db.Column(db.String(50), nullable=False)
-    id_apprenti = db.Column(db.ForeignKey('db_fiches_dev.Apprenti.id_apprenti'), nullable=False, index=True)
-    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), nullable=False, index=True)
-    id_cours = db.Column(db.ForeignKey('db_fiches_dev.Cours.id_cours'), nullable=False, index=True)
+    id_apprenti = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Apprenti.id_apprenti'), nullable=False, index=True)
+    id_personnel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Personnel.id_personnel'), nullable=False, index=True)
+    id_cours = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Cours.id_cours'), nullable=False, index=True)
 
     Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
                                backref='fiches')
@@ -127,7 +138,7 @@ class FicheIntervention(db.Model):
 
 class Formation(db.Model):
     __tablename__ = 'Formation'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_formation = db.Column(db.Integer, primary_key=True, autoincrement=True)
     intitule = db.Column(db.String(50), nullable=False)
@@ -139,9 +150,9 @@ class Formation(db.Model):
 
 class LaisserTrace(db.Model):
     __tablename__ = 'LaisserTrace'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
-    id_personnel = db.Column(db.ForeignKey(FICHE_PERSONNEL), primary_key=True)
+    id_personnel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Personnel.id_personnel'), primary_key=True)
     horodatage = db.Column(db.DateTime, primary_key=True)
     intitule = db.Column(db.String(50), nullable=False)
     eval_texte = db.Column(db.Text, nullable=False)
@@ -149,7 +160,7 @@ class LaisserTrace(db.Model):
     eval_audio = db.Column(db.String(255))
     commentaire_audio = db.Column(db.String(50))
     apprenti = db.Column(db.Integer, nullable=True)
-    id_fiche = db.Column(db.ForeignKey('db_fiches_dev.FicheIntervention.id_fiche'), nullable=False, index=True)
+    id_fiche = db.Column(db.ForeignKey(f'{DB_SCHEMA}.FicheIntervention.id_fiche'), nullable=False, index=True)
 
     FicheIntervention = db.relationship('FicheIntervention',
                                         primaryjoin='LaisserTrace.id_fiche == FicheIntervention.id_fiche',
@@ -160,7 +171,7 @@ class LaisserTrace(db.Model):
 
 class Personnel(db.Model):
     __tablename__ = 'Personnel'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_personnel = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom = db.Column(db.String(50), nullable=False)
@@ -173,27 +184,16 @@ class Personnel(db.Model):
     archive = db.Column(db.Boolean, nullable=False, default=False)
 
 
-class Pictogramme(db.Model):
-    __tablename__ = 'Pictogramme'
-    __table_args__ = {'schema': 'db_fiches_dev'}
-
-    id_pictogramme = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    label = db.Column(db.String(50), nullable=False)
-    url = db.Column(db.String(100), nullable=False)
-    categorie = db.Column(db.String(50), nullable=False)
-    souscategorie = db.Column(db.String(50), nullable=False)
-
-
 class Cours(db.Model):
     __tablename__ = 'Cours'
-    __table_args__ = {'schema': 'db_fiches_dev'}
+    __table_args__ = {'schema': DB_SCHEMA}
 
     id_cours = db.Column(db.Integer, primary_key=True, autoincrement=True)
     theme = db.Column(db.String(50), nullable=False)
     cours = db.Column(db.String(50), nullable=False)
     duree = db.Column(db.Integer)
     archive = db.Column(db.Boolean, nullable=False, default=False)
-    id_formation = db.Column(db.ForeignKey('db_fiches_dev.Formation.id_formation'), nullable=False, index=True)
+    id_formation = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Formation.id_formation'), nullable=False, index=True)
 
     Formation = db.relationship('Formation', primaryjoin='Cours.id_formation == Formation.id_formation',
                                 backref='cours')

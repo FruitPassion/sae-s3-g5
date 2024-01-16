@@ -2,7 +2,7 @@ from functools import wraps
 
 from flask import session, redirect, url_for, abort
 
-from model.personnel import check_super_admin, get_role
+from model.personnel import check_super_admin, get_role_by_login
 
 ACTION_INDEX = "auth.choix_connexion"
 
@@ -38,7 +38,7 @@ def personnel_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if (session.get("name") is None) and (
-                get_role(session.get("name")) not in ["Educateur Administrateur", "Educateur", "CIP"]):
+                get_role_by_login(session.get("name")) not in ["Educateur Administrateur", "Educateur", "CIP"]):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
     return decorated_function
@@ -47,7 +47,7 @@ def personnel_login_required(func):
 def cip_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if (session.get("name") is None) and (get_role(session.get("name")) != "CIP"):
+        if (session.get("name") is None) and (get_role_by_login(session.get("name")) != "CIP"):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
     return decorated_function
@@ -56,7 +56,7 @@ def cip_login_required(func):
 def educadmin_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if (session.get("name") is None) and (get_role(session.get("name")) != "Educateur Administrateur"):
+        if (session.get("name") is None) and (get_role_by_login(session.get("name")) != "Educateur Administrateur"):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
     return decorated_function
@@ -65,7 +65,7 @@ def educadmin_login_required(func):
 def educsimple_login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if (session.get("name") is None) and (get_role(session.get("name")) != "Educateur"):
+        if (session.get("name") is None) and (get_role_by_login(session.get("name")) != "Educateur"):
             return redirect(url_for(ACTION_INDEX))
         return func(*args, **kwargs)
     return decorated_function

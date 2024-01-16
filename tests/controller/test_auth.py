@@ -111,7 +111,7 @@ def test_choix_formation_apprentis(client):
     formations = get_all_formations()
     html = response.get_data(as_text=True)
     for formation in formations:
-        assert formation["intitule"] in html
+        assert formation.intitule in html
 
 
 # Test de la route affichant la liste des apprentis en fonction d'une formation
@@ -129,7 +129,7 @@ def test_choix_eleve_apprentis(client):
     apprentis = get_apprentis_by_formation(nom_formation)
     html = response.get_data(as_text=True)
     for apprenti in apprentis:
-        assert 'class="libelle">' + apprenti["prenom"] + ' ' + apprenti["nom"] in html
+        assert 'class="libelle">' + apprenti.prenom + ' ' + apprenti.nom in html
 
     nom_formation = "Page erreur"
     response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=nom_formation))

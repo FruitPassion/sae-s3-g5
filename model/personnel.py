@@ -13,11 +13,8 @@ def get_all_personnel(archive=False):
     :return: La liste des membres du personnel
     """
     try:
-        personnel = Personnel.query.with_entities(
-            Personnel.id_personnel, Personnel.login, Personnel.nom, Personnel.prenom, Personnel.role, Personnel.email,
-            Personnel.essais).order_by(Personnel.login).filter(Personnel.archive == archive).filter(
-            Personnel.role != "dummy").all()
-        return convert_to_dict(personnel)
+        return Personnel.query.order_by(Personnel.login).filter(
+            Personnel.archive == archive).filter(Personnel.role != "dummy").all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de la liste de tout le personnel")
         logging.error(e)
@@ -25,9 +22,9 @@ def get_all_personnel(archive=False):
 
 def get_liste_personnel_non_super(archive=False):
     try:
-        return convert_to_dict(Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
+        return Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
             Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).filter(
-            Personnel.role != "dummy").all())
+            Personnel.role != "dummy").all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de la liste du personnel sans l'admin")
         logging.error(e)
@@ -42,6 +39,7 @@ def get_id_personnel_by_login(login: str):
     except Exception as e:
         logging.error(f"Erreur lors de la récupération de l'id_personnel de {login}")
         logging.error(e)
+
 
 def check_super_admin(login: str):
     """
@@ -66,7 +64,7 @@ def check_personnel(login: str):
     return Personnel.query.filter_by(login=login).count() == 1
 
 
-def get_role(login: str):
+def get_role_by_login(login: str):
     """
     À partir d'un login récupère le rôle
 
@@ -74,8 +72,7 @@ def get_role(login: str):
     """
     try:
         return Personnel.query.filter_by(login=login).with_entities(
-            Personnel.role
-        ).first().role
+            Personnel.role).first().role
     except AttributeError as e:
         logging.error(f"Erreur lors de la récupération du role de {login}")
         return None
@@ -98,6 +95,7 @@ def check_password(login: str, new_password: str):
     except Exception as e:
         logging.error(f"Erreur lors de la vérification du mot de passe de {login}")
         logging.error(e)
+
 
 def get_nbr_essais_connexion_personnel(login: str):
     """

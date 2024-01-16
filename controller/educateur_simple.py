@@ -5,10 +5,9 @@ from custom_paquets.decorateur import educsimple_login_required
 from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, get_nom_cours_by_id
-from model.trace import get_commentaires_par_fiche, modifier_commentaire_texte, modifier_evaluation_texte, \
-    get_commentaires_educ_par_fiche, ajouter_commentaires_evaluation, modifier_commentaire_audio, \
-    modifier_eval_audio, get_audio_commentaire
-    
+from model.trace import ajouter_commentaires_evaluation, modifier_commentaire_texte, modifier_evaluation_texte, \
+    modifier_commentaire_audio, get_audio_commentaire, get_commentaires_educ_par_fiche, get_commentaires_par_fiche
+
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
 '''
@@ -31,7 +30,8 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
-    return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
+    return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos,
+                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
 
 
 @educ_simple.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
@@ -42,7 +42,6 @@ def visualiser_commentaires(apprenti, fiche):
     
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-
     commentaires = get_commentaires_par_fiche(fiche)
     return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
@@ -57,7 +56,6 @@ def modifier_commentaires(apprenti, fiche):
     
     :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
-
     commentaires = get_commentaires_educ_par_fiche(fiche)
     fiche = get_fiche_par_id_apprenti(get_id_apprenti_by_login(apprenti))
     if request.method == 'POST':
@@ -69,13 +67,13 @@ def modifier_commentaires(apprenti, fiche):
             f = request.files.get("commentaire_audio")
             chemin_audio = stocker_audio_commentaire(f)
             if chemin_audio:
-                modifier_commentaire_audio(fiche["id_fiche"], commentaires["horodatage"], chemin_audio)                        
+                modifier_commentaire_audio(fiche["id_fiche"], commentaires.horodatage, chemin_audio)
         else:
             chemin_audio = get_audio_commentaire(commentaire_audio)
-        modifier_commentaire_texte(fiche["id_fiche"], commentaires["horodatage"], commentaire_texte)
-        modifier_evaluation_texte(fiche["id_fiche"], commentaires["horodatage"], eval_texte)
+        modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte)
+        modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte)
         
-        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]), 200)
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche.id_fiche), 200)
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
 
@@ -95,6 +93,6 @@ def ajouter_commentaires(apprenti, fiche):
         eval_texte = request.form["evaluation"]
         intitule = request.form["intitule"]
         ajouter_commentaires_evaluation(fiche["id_fiche"], commentaire_texte, eval_texte, None, None, session.get("name"), intitule)
-        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche["id_fiche"]), 200)
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche.id_fiche), 200)
     return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200
 

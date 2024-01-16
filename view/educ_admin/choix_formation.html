@@ -14,11 +14,11 @@
         {% for formation in formations %}
             <div class="container d-flex form-card mt-5">
                 <div class="lien-formation">
-                    <a  href="{{ url_for('educ_admin.choix_eleve', nom_formation=formation['intitule']) }}">
+                    <a  href="{{ url_for('educ_admin.choix_eleve', nom_formation=formation.intitule) }}">
                         <div class="container">
                             <img class="img-formation" alt="image fond"
-                                 src="{{ url_for('static', filename='images/'+formation['image']) }}">
-                            <p class="formation-txt">{{ formation["intitule"] }}</p>
+                                 src="{{ url_for('static', filename='images/'+formation.image) }}">
+                            <p class="formation-txt">{{ formation.intitule }}</p>
                         </div>
                     </a>
                 </div>

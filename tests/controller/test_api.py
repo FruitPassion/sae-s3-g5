@@ -1,7 +1,7 @@
 from flask import url_for
 from custom_paquets.converter import generate_login
 from custom_paquets.tester_usages import connexion_personnel_mdp
-from model.formation import add_formation, get_formation_id
+from model.formation import add_formation, get_formation_id_par_nom_formation
 from model.personnel import get_id_personnel_by_login
 from model.shared_model import Apprenti
 from model.apprenti import add_apprenti, get_id_apprenti_by_login, set_nbr_essais_connexion
@@ -50,7 +50,7 @@ def test_api_archiver_formation(client):
     add_formation(intitule, niveau_qualification, groupe, image, commit=False)
 
     # Set up d'une formation
-    id_formation = get_formation_id(intitule)
+    id_formation = get_formation_id_par_nom_formation(intitule)
 
     # Connexion en tant que superadmin
     superadmin = "JED10"

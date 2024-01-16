@@ -14,8 +14,8 @@ from custom_paquets.decorateur import logout_required
 from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essais_connexion_apprenti, \
     check_apprenti, check_password_is_set
 from model.cours import get_apprentis_by_formation
-from model.formation import get_all_formations, get_formation_id
-from model.personnel import check_personnel, check_password, get_role, get_nbr_essais_connexion_personnel, \
+from model.formation import get_all_formations, get_formation_id_par_nom_formation
+from model.personnel import check_personnel, check_password, get_role_by_login, get_nbr_essais_connexion_personnel, \
     get_liste_personnel_non_super
 
 auth = Blueprint("auth", __name__)
@@ -81,7 +81,7 @@ def connexion_personnel_pin():
                 code = 403
             else:
                 session["name"] = login
-                session["role"] = get_role(login)
+                session["role"] = get_role_by_login(login)
                 flash(CONNEXION_REUSSIE)
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"), 302)
@@ -120,7 +120,7 @@ def connexion_personnel_mdp():
                 code = 403
             else:
                 session["name"] = form.login.data
-                session["role"] = get_role(form.login.data)
+                session["role"] = get_role_by_login(form.login.data)
                 flash(CONNEXION_REUSSIE)
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"), 302)
@@ -152,7 +152,7 @@ def choix_eleve_apprentis(nom_formation):
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
-    if not get_formation_id(nom_formation):
+    if not get_formation_id_par_nom_formation(nom_formation):
         abort(404)
     
     apprentis = get_apprentis_by_formation(nom_formation)

@@ -15,32 +15,32 @@ def build_categories(id_fiche):
                 elements_non_cat = elements_non_cat | get_common_element(elements_non_cat, bases)
                 composer_cat[i]["elements"].append(elements_non_cat)
             for pict in pictogrammes:
-                if pict["id_pictogramme"] == elements_non_cat["pictogramme"]:
-                    elements_non_cat["pictogramme"] = pict["url"]
+                if pict.id_pictogramme == elements_non_cat["pictogramme"]:
+                    elements_non_cat["pictogramme"] = pict.url
     return composer_cat
 
 
 def build_pictogrammes():
-    pictos = get_all_pictogrammes()
+    pictogrammes = get_all_pictogrammes()
     to_return = {}
-    for dico in pictos:
-        to_return[dico["categorie"]] = {}
+    for picto in pictogrammes:
+        to_return[picto.categorie] = {}
     for key in to_return:
-        for dico in pictos:
-            if dico["categorie"] == key and dico["categorie"] != "Autre":
-                to_return[key][dico["souscategorie"]] = []
+        for picto in pictogrammes:
+            if picto.categorie == key and picto.categorie != "Autre":
+                to_return[key][picto.souscategorie] = []
             to_return["Autre"]["Autre"] = []
-        build_elements(key, to_return, pictos)
+        build_elements(key, to_return, pictogrammes)
     return to_return
 
 
-def build_elements(key, to_return, pictos):
+def build_elements(key, to_return, pictogrammes):
     for element in to_return[key].keys():
-        for dico in pictos:
-            _ = {"url": dico["url"], "label": dico["label"], "id": dico["id_pictogramme"]}
-            if dico["souscategorie"] == element and dico["categorie"] != "Autre":
-                to_return[key][dico["souscategorie"]].append(_)
-            elif dico["categorie"] == "Autre" and _ not in to_return["Autre"]["Autre"]:
+        for picto in pictogrammes:
+            _ = {"url": picto.url, "label": picto.label, "id": picto.id_pictogramme}
+            if picto.souscategorie == element and picto.categorie != "Autre":
+                to_return[key][picto.souscategorie].append(_)
+            elif picto.categorie == "Autre" and _ not in to_return["Autre"]["Autre"]:
                 to_return["Autre"]["Autre"].append(_)
 
 

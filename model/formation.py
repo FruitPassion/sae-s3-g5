@@ -15,16 +15,13 @@ def get_all_formations(archive=False):
     :return: Une liste de formations
     """
     try:
-        return convert_to_dict(
-            Formation.query.with_entities(Formation.id_formation, Formation.intitule, Formation.niveau_qualif,
-                                        Formation.groupe, Formation.image).filter(
-                Formation.archive == archive).all())
+        return Formation.query.filter(Formation.archive == archive).all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de la liste de toutes les formations")
         logging.error(e)
 
 
-def get_formation_id(nom_formation: str):
+def get_formation_id_par_nom_formation(nom_formation: str):
     """
     Retourne l'id d'une formation à partir de son nom
 
@@ -70,7 +67,7 @@ def add_formation(intitule, niveau_qualif, groupe, image, commit=True):
         db.session.add(formation)
         if commit:
             db.session.commit()
-        return get_formation_id(intitule)
+        return get_formation_id_par_nom_formation(intitule)
     except Exception as e:
         logging.error(f"Erreur lors de l'ajout de la formation {intitule}")
         logging.error(e)

@@ -54,7 +54,6 @@ def visualiser_commentaires(apprenti, fiche):
     
     :return: rendu de la page commentaires.html
     """
-
     commentaires = get_commentaires_par_fiche(fiche)
     return render_template("cip/commentaires.html", commentaires=commentaires, apprenti=apprenti), 200
 

@@ -1,7 +1,5 @@
 from datetime import datetime
 import logging
-from custom_paquets.converter import convert_to_dict
-from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.personnel import get_id_personnel_by_login
 from model.shared_model import db, LaisserTrace
 
@@ -14,12 +12,7 @@ def get_commentaires_par_fiche(id_fiche):
     et l'identifiant de l'éducateur ayant créé la trace
     """
     try:
-        return convert_to_dict(
-            LaisserTrace.query.filter_by(
-                id_fiche=id_fiche).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
-                                                LaisserTrace.eval_texte, LaisserTrace.horodatage,
-                                                LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
-                                                LaisserTrace.id_personnel, LaisserTrace.id_fiche).all())
+        return LaisserTrace.query.filter_by(id_fiche=id_fiche).all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
         logging.error(e)
@@ -33,12 +26,7 @@ def get_commentaires_educ_par_fiche(id_fiche):
     et l'identifiant de l'éducateur ayant créé la trace
     """
     try:
-        return convert_to_dict(
-            LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti="0"
-                                        ).with_entities(LaisserTrace.commentaire_texte, LaisserTrace.intitule,
-                                                        LaisserTrace.eval_texte, LaisserTrace.horodatage,
-                                                        LaisserTrace.commentaire_audio, LaisserTrace.eval_audio,
-                                                        LaisserTrace.id_personnel).first())
+        return LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti="0").first()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des commentaires de l'éducateur de la fiche {id_fiche}")
         logging.error(e)
@@ -50,7 +38,8 @@ def get_audio_commentaire(id_fiche):
     except Exception as e:
         logging.error(f"Erreur lors de la récupération de l'audio {id_fiche}")
         logging.error(e)
-        
+
+
 def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte):
     """
     Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
@@ -81,7 +70,7 @@ def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio):
         logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
         logging.error(e)
 
-    
+
 def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
     """
     Récupère l'évaluation textuelle du horodatage (date/heure) de la fiche id_fiche
@@ -94,7 +83,8 @@ def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte):
         trace.eval_texte = evaluation_texte
         db.session.commit()
     except Exception as e:
-        logging.error(f"Erreur lors de la modification de l'évaluation textuelle de la fiche {id_fiche} du {horodatage}")
+        logging.error(
+            f"Erreur lors de la modification de l'évaluation textuelle de la fiche {id_fiche} du {horodatage}")
         logging.error(e)
 
 
@@ -113,8 +103,10 @@ def modifier_eval_audio(id_fiche, horodatage, eval_audio):
         logging.error(f"Erreur lors de la modification de l'évaluation audio de la fiche {id_fiche} du {horodatage}")
         logging.error(e)
 
+
 # jsp si ça marche malheureusement
-def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login, intitule):
+def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login,
+                                    intitule):
     """
     Ajoute les commentaires et évaluations d'une fiche technique d'un apprenti
 
@@ -124,10 +116,11 @@ def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, com
         id_personnel = get_id_personnel_by_login(login)
         horodatage = datetime.now()
         trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
-                            commentaire_texte=commentaire_texte, eval_texte=eval_texte, commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti="0", intitule=intitule)
+                             commentaire_texte=commentaire_texte, eval_texte=eval_texte,
+                             commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti="0",
+                             intitule=intitule)
         db.session.add(trace)
         db.session.commit()
     except Exception as e:
         logging.error(f"Erreur lors de l'ajout des commentaires et évaluations de la fiche {id_fiche}")
         logging.error(e)
-    

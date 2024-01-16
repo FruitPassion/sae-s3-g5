@@ -4,6 +4,7 @@ import pkg_resources
 import sys
 import subprocess
 
+
 def checking():
     """
     Permet de vérifier si tous les prérequis sont installés et à la bonne version.

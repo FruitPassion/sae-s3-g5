@@ -1,6 +1,6 @@
 from flask import url_for
 from custom_paquets.tester_usages import connexion_personnel_pin
-from model.formation import get_formation_id
+from model.formation import get_formation_id_par_nom_formation
 
 '''
 Test des controller du fichier personnel.py

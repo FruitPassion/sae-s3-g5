@@ -113,8 +113,7 @@
                                     <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                     </option>
                                     {% for formation in formations %}
-                                        <option value="{{ formation['id_formation'] }}"
-                                        >{{ formation["intitule"] }}</option>
+                                        <option value="{{ formation.id_formation }}">{{ formation.intitule }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

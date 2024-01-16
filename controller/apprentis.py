@@ -30,7 +30,8 @@ def redirection_connexion():
     apprenti_infos = get_apprenti_by_login(session["name"])
     fiches = get_fiches_techniques_par_login(session['name'])
     fiches = changer_date(fiches)
-    return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos, get_nom_cours_by_id=get_nom_cours_by_id)
+    return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos,
+                           get_nom_cours_by_id=get_nom_cours_by_id)
 
 
 @apprenti.route("/redirection-connexion/suivi", methods=["GET"])
@@ -44,7 +45,7 @@ def suivi_progression():
     fiches_apprenti = get_fiches_techniques_par_login(session['name'])
     etat_fiches = {}
     for fiche in fiches_apprenti:
-        etat_fiches[fiche["id_fiche"]] = get_etat_fiche_par_id_fiche(fiche["id_fiche"])
+        etat_fiches[fiche.id_fiche] = get_etat_fiche_par_id_fiche(fiche.id_fiche)
     return render_template("apprentis/suivi_progression_apprenti.html", etat_fiches=etat_fiches)
 
 
@@ -79,9 +80,8 @@ def completer_fiche(numero):
             else:
                 completer_fiche[f"{element}"] = element_data
                 
-        maj_contenu_fiche(completer_fiche, fiche["id_fiche"])
-                
-        
+        maj_contenu_fiche(completer_fiche, fiche.id_fiche)
+
     return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche)
 
 

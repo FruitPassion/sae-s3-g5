@@ -9,9 +9,9 @@
 {% block body %}
     <h1>Commentaires</h1><br><br>
     {% for commentaire in commentaires %}
-        <h2 class="commentaireTitre">{{ commentaire["intitule"] }}</h2>
-        <p class="commentaire">Commentaire : {{ commentaire["commentaire_texte"] }}</p>
-        <p class="commentaire">Evaluation : {{ commentaire["eval_texte"] }}</p>
+        <h2 class="commentaireTitre">{{ commentaire.intitule }}</h2>
+        <p class="commentaire">Commentaire : {{ commentaire.commentaire_texte }}</p>
+        <p class="commentaire">Evaluation : {{ commentaire.eval_texte }}</p>
     {% endfor %}
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('cip.fiches_apprenti', apprenti=apprenti) }}">{% include "_partial/_retour_bouton.html" %}</a>

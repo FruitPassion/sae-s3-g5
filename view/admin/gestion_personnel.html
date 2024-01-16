@@ -47,22 +47,22 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel %}
-                        <tr class="text-center {% if personnel['essais'] == 3 %}table-danger{% endif %}"
-                            id="ele-{{ personnel['id_personnel'] }}">
-                            <td id="login-{{ personnel['id_personnel'] }}">{{ personnel["login"] }}</td>
-                            <td id="nom-{{ personnel['id_personnel'] }}">{{ personnel["nom"] }}</td>
-                            <td id="prenom-{{ personnel['id_personnel'] }}">{{ personnel["prenom"] }}</td>
-                            <td id="email-{{ personnel['id_personnel'] }}">{{ personnel["email"] }}</td>
-                            <td id="role-{{ personnel['id_personnel'] }}"
-                                class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
+                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                            id="ele-{{ personnel.id_personnel }}">
+                            <td id="login-{{ personnel.id_personnel }}">{{ personnel.login }}</td>
+                            <td id="nom-{{ personnel.id_personnel }}">{{ personnel.nom }}</td>
+                            <td id="prenom-{{ personnel.id_personnel }}">{{ personnel.prenom }}</td>
+                            <td id="email-{{ personnel.id_personnel }}">{{ personnel.email }}</td>
+                            <td id="role-{{ personnel.id_personnel }}"
+                                class="{{ couleurs[personnel.role] }}">{{ personnel.role }}</td>
                             <td>
-                                {% if personnel["essais"] == 3 %}
-                                    <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-times" aria-hidden="true"></i>
+                                {% if personnel.essais == 3 %}
+                                    <i id="actif-{{ personnel.id_personnel }}" class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
-                                    <i id="actif-{{ personnel['id_personnel'] }}" class="fa fa-check" aria-hidden="true"></i>
+                                    <i id="actif-{{ personnel.id_personnel }}" class="fa fa-check" aria-hidden="true"></i>
                                 {% endif %}
                             </td>
-                            {% if personnel["role"] != "SuperAdministrateur" %}
+                            {% if personnel.role != "SuperAdministrateur" %}
                                 <th scope="row" onclick="passer_parametre_form(this, 'personnel')"
                                     class="align-middle ele-btn-modif" data-bs-toggle="modal"
                                     data-bs-target="#modal-modifier">
@@ -79,7 +79,7 @@
                             <th scope="row" class="align-middl ele-btn-archiver"
                                 onclick="validation_archivage(this)" data-bs-toggle="modal"
                                 data-bs-target="#modal-archiver">
-                                {% if personnel["role"] != "SuperAdministrateur" %}
+                                {% if personnel.role != "SuperAdministrateur" %}
                                     <button><i class="fa fa-archive" aria-hidden="true"></i></button>
                                 {% endif %}
                             </th>
@@ -156,15 +156,15 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel_archive %}
-                        <tr class="text-center {% if personnel['essais'] == 3 %}table-danger{% endif %}"
-                            id="arch-ele-{{ personnel['id_personnel'] }}">
-                            <td id="login">{{ personnel["login"] }}</td>
-                            <td id="nom">{{ personnel["nom"] }}</td>
-                            <td id="prenom">{{ personnel["prenom"] }}</td>
-                            <td id="email">{{ personnel["email"] }}</td>
-                            <td id="role" class="{{ couleurs[personnel['role']] }}">{{ personnel["role"] }}</td>
+                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                            id="arch-ele-{{ personnel.id_personnel }}">
+                            <td id="login">{{ personnel.login }}</td>
+                            <td id="nom">{{ personnel.nom }}</td>
+                            <td id="prenom">{{ personnel.prenom }}</td>
+                            <td id="email">{{ personnel.email }}</td>
+                            <td id="role" class="{{ couleurs[personnel.role] }}">{{ personnel.role }}</td>
                             <td>
-                                {% if personnel["essais"] == 3 %}
+                                {% if personnel.essais == 3 %}
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 {% else %}
                                     <i class="fa fa-check" aria-hidden="true"></i>

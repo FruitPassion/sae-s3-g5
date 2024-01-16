@@ -7,14 +7,14 @@
 {% block title %}Modification commentaire{% endblock %}
 
 {% block body %}
-    <h1>Modification commentaire éducateur de la fiche n°{{ fiche["numero"] }} de {{ apprenti }} </h1>
+    <h1>Modification commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
 
     <div id="bloc">
 
         <form name="modifier" id="modifier" enctype="multipart/form-data" method="POST">
             <p>Commentaire de l'éducateur :</p>
             <textarea type="text" class="modifiable" id="commentaire_texte" name="commentaire_texte"
-                      maxlength="500">{{ commentaires["commentaire_texte"] }}</textarea>
+                      maxlength="500">{{ commentaires.commentaire_texte }}</textarea>
 
             <p>Commentaire audio de l'éducateur :</p>
             <button type="button" id="enregistrer_btn">Modifier l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
@@ -93,7 +93,7 @@
 
             <p>Evaluation de l'éducateur :</p>
             <textarea type="text" class="modifiable" id="eval_texte" name="eval_texte"
-                      maxlength="500">{{ commentaires["eval_texte"] }}</textarea>
+                      maxlength="500">{{ commentaires.eval_texte }}</textarea>
             
             <p>Evaluation audio de l'éducateur :</p>
             
