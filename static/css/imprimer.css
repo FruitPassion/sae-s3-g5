@@ -54,7 +54,7 @@ textarea {
     width: 100%;
 }
 
-.button {
+#button {
     background-color: #96DBF2;
     border: none;
     color: black;
