@@ -8,17 +8,15 @@
 
 {% block body %}
     <h1>Ajout commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
-    <div id="bloc">
+    <div>
        
         <form name="ajouter_commentaire" method="post">
-            <p>Intitulé : </p>
-            <input type="text" name="intitule" id="intitule" class="ajout">
 
             <p>Commentaire de l'éducateur : </p>
-            <textarea id="commentaire" name="commentaire" maxlength="500" rows="4" cols="30" class="ajout"></textarea>
+            <textarea name="commentaire" maxlength="500" rows="4" cols="30" class="ajout commentaire"></textarea>
             
             <p>Commentaire audio de l'éducateur : </p>
-            <button typpe="button" id="enregistrer_btn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
+            <button type="button" id="enregistrer_btn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
 
             <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
             <audio id="audioPlayer"></audio>
@@ -86,10 +84,11 @@
             
             <p>Evaluation audio de l'éducateur : </p>
             <input type="submit" value="Valider">
+            
+            <input type="button" value="Enregistrer" id="enregistrer">
         </form>
 
         {% include "_partial/_retour_bouton.html" %}
-        <input type="button" value="Enregistrer" id="enregistrer">
     </div>
     
 {% endblock %}

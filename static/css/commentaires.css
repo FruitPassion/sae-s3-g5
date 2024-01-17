@@ -9,11 +9,11 @@
     margin-left:2%;
 }
 
-#modifier {
+.modifier {
     height:1em;
 }
 
-#titre a img {
+.commentaireTitre a img {
     position: absolute;
     margin-left: 1%;
     height: 85px;

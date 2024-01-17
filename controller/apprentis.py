@@ -1,10 +1,13 @@
-from flask import Blueprint, render_template, session, request
+from flask import Blueprint, redirect, render_template, session, request, url_for
 
 from custom_paquets.builder import build_categories
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
+from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
+from model.composer import get_composer_presentation, get_composer_presentation_par_apprenti, maj_contenu_fiche
 from model.apprenti import get_apprenti_by_login
 from model.composer import get_composer_presentation, maj_contenu_fiche, get_checkbox_on
+from model.trace import ajouter_commentaires_evaluation, get_commentaires_par_fiche
 from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
    get_id_fiche_apprenti, get_fiche_par_id_fiche
 
@@ -100,5 +103,19 @@ def imprimer_pdf(numero):
     """
     # En attente de la complétion de la fiche
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
-    composer_fiche = get_composer_presentation(get_id_fiche_apprenti(session['name'], numero))
+    composer_fiche = get_composer_presentation_par_apprenti(get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche)
+
+
+@apprenti.route("/<id_fiche>/commentaires", methods=["GET"])
+@apprenti_login_required
+def afficher_commentaires(id_fiche):
+    """
+    Page d'affichage des commentaires par un apprenti de la fiche technique id_fiche
+
+    :return: rendu de la page commentaires.html
+    """
+    
+    commentaires = get_commentaires_par_fiche(id_fiche)
+    return render_template("apprentis/commentaires.html", apprenti=apprenti, id_fiche=id_fiche,
+                           commentaires=commentaires), 200

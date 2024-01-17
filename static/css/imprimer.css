@@ -9,6 +9,7 @@ form {
     display: flex;
     flex: 1;
     justify-content: center;
+    background-color: #e7e7e7;
 }
 
 .colonne,
@@ -54,7 +55,7 @@ textarea {
     width: 100%;
 }
 
-.button {
+#button {
     background-color: #96DBF2;
     border: none;
     color: black;
