@@ -25,7 +25,7 @@
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
                         {% if fiche.etat_fiche == 1 %}
-                            <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                            <a href="{{ url_for('apprenti.afficher_commentaires', id_fiche=fiche.id_fiche) }}"><img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini"></a>
                         {% elif fiche.etat_fiche == 2 %}
                             <img class="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
                         {% else %}
