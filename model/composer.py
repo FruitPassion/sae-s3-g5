@@ -37,12 +37,13 @@ def get_composer_non_categorie(id_fiche=1):
     :return: liste de dictionnaires
     """
     try:
-        return db.session.query(Compo.id_element, Compo.text, Compo.taille_texte, Compo.police, Compo.audio,
-                                Compo.police, Compo.couleur, Compo.couleur_fond, Compo.niveau, Compo.position_elem,
-                                Compo.taille_pictogramme, Compo.ordre_saisie_focus,
-                                Compo.id_pictogramme.label("pictogramme"), Compo.taille_pictogramme,
-                                Compo.couleur_pictogramme).filter_by(id_fiche=id_fiche).join(Elem).filter(
-            Elem.type != "categorie").all()
+        return convert_to_dict(Compo.query.with_entities(Compo.id_element, Compo.text, Compo.taille_texte, Compo.police, Compo.audio,
+                                         Compo.police, Compo.couleur, Compo.couleur_fond, Compo.niveau,
+                                         Compo.position_elem,
+                                         Compo.taille_pictogramme, Compo.ordre_saisie_focus,
+                                         Compo.id_pictogramme.label("pictogramme"), Compo.taille_pictogramme,
+                                         Compo.couleur_pictogramme).filter_by(id_fiche=id_fiche).join(Elem).filter(
+            Elem.type != "categorie").all())
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des éléments d'un catérgorie de la fiche {id_fiche}")
         logging.error(e)

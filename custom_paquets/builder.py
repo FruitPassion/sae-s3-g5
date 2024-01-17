@@ -5,6 +5,7 @@ from model.pictogramme import get_pictogrammes, get_all_pictogrammes
 def build_categories(id_fiche):
     composer_cat = get_composer_categorie(id_fiche)
     composer_non_cat = get_composer_non_categorie(id_fiche)
+
     pictogrammes = get_pictogrammes(id_fiche)
     bases = get_elements_base()
     for i in range(len(composer_cat)):

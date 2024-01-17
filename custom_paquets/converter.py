@@ -1,14 +1,18 @@
 from unidecode import unidecode
 
 
-def convert_to_dict(classes):
-    classes_list = []
-    if str(type(classes)) == "<class 'sqlalchemy.engine.row.Row'>":
-        classes_list = classes._asdict()
+def convert_to_dict(elements):
+    element_list = []
+    if str(type(elements)) == "<class 'sqlalchemy.engine.row.Row'>":
+        element_list = elements.__dict__
     else:
-        for classe in classes:
-            classes_list.append(classe._asdict())
-    return classes_list
+        try:
+            for element in elements:
+                element_list.append(element.__dict__)
+        except:
+            for element in elements:
+                element_list.append(element._asdict())
+    return element_list
 
 
 def generate_login(nom, prenom):
