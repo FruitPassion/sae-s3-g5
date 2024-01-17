@@ -50,7 +50,11 @@
                                 class="align-middle">{{ cour.theme }}</td>
                             <td id="cours-{{ cour.id_cours }}" class="align-middle">{{ cour.cours }}</td>
                             <td id="duree-{{ cour.id_cours }}" class="align-middle">{{ cour.duree }}</td>
-                            <td id="formation-{{ cour.id_cours }}">{{ cour.id_formation }}</td>
+                            {% for formation in formations %}
+                                {% if formation.id_formation == cour.id_formation %}
+                                    <td id="duree-{{ formation.intitule }}" class="align-middle">{{ formation.intitule }}</td>
+                                {% endif %}
+                            {% endfor %}
                             <th scope="row" onclick="passer_parametre_form(this, 'cours')"
                                 class="align-middle ele-btn-modif" data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
