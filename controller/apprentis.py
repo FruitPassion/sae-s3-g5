@@ -1,15 +1,16 @@
 from flask import Blueprint, redirect, render_template, session, request, url_for
+from werkzeug.utils import secure_filename
 
 from custom_paquets.builder import build_categories
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
-from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
-from model.composer import get_composer_presentation, get_composer_presentation_par_apprenti, maj_contenu_fiche
+from custom_paquets.gestion_image import process_photo
+from model.composer import get_composer_presentation_par_apprenti
 from model.apprenti import get_apprenti_by_login
-from model.composer import get_composer_presentation, maj_contenu_fiche, get_checkbox_on
-from model.trace import ajouter_commentaires_evaluation, get_commentaires_par_fiche
+from model.composer import maj_contenu_fiche, get_checkbox_on
+from model.trace import get_commentaires_par_fiche
 from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
-   get_id_fiche_apprenti, get_fiche_par_id_fiche
+    get_id_fiche_apprenti, get_fiche_par_id_fiche, definir_photo
 
 apprenti = Blueprint('apprenti', __name__, url_prefix="/apprenti")
 
@@ -67,9 +68,14 @@ def completer_fiche(numero):
     if request.method == 'POST':
         avancee = request.form.get("avancee")
         completer_fiche = {}
-        
-        completer_fiche["photo_avant"] = request.files.get("photo-avant")
-        completer_fiche["photo_apres"] = request.files.get("photo-apres")
+
+        photo_avant = request.files.get("photo-avant")
+        photo_apres = request.files.get("photo-apres")
+
+        process_photo(photo_avant, fiche.photo_avant, fiche.id_fiche)
+        process_photo(photo_apres, fiche.photo_apres, fiche.id_fiche)
+
+        definir_photo([photo_avant, photo_apres], fiche.id_fiche)
 
         checkboxes = get_checkbox_on(fiche.id_fiche)
         for checkbox in checkboxes:
@@ -85,7 +91,6 @@ def completer_fiche(numero):
                 element_data = None
                 
             completer_fiche[f"{element}"] = element_data
-
         maj_contenu_fiche(completer_fiche, fiche.id_fiche)
         composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
 

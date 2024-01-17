@@ -64,3 +64,16 @@ def stocker_image_formation(file):
 
     resize_image_formation(img, "./static/images/" + chemin_image)
     return chemin_image
+
+
+def process_photo(photo, existing_photo, id_fiche):
+    if photo.filename == "" and not existing_photo:
+        photo.filename = None
+    else:
+        save_photo(photo, id_fiche)
+
+
+def save_photo(photo, id_fiche):
+    filename = secure_filename(f"{id_fiche}_{photo.filename}")
+    photo.save(f"./static/images/photo_fiche/{filename}")
+

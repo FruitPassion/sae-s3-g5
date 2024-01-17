@@ -342,3 +342,19 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     except Exception as e:
         logging.error(f"Erreur lors de l'assignation de la fiche à l'apprenti {login_apprenti}")
         logging.error(e)
+
+
+def definir_photo(photos, id_fiche):
+    """
+    Définit la photo avant et la photo après de la fiche
+    """
+    try:
+        fiche = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
+        if len(photos[0].filename) != 0:
+            fiche.photo_avant = f'{id_fiche}_{photos[0].filename}'
+        if len(photos[1].filename) != 0:
+            fiche.photo_apres = f'{id_fiche}_{photos[1].filename}'
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de la définition des photos de la fiche {id_fiche}")
+        logging.error(e)

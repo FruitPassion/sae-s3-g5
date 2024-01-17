@@ -27,14 +27,20 @@
                 </div>
                 <input type="hidden" id="avancee" name="avancee" value="">
                 <fieldset hidden="" id="field-0" class="scheduler-border p-2 mr-auto ml-2" style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px" >
+                    <legend>Informations de l'intervention {% include "_partial/_tts.html" %}</legend>
                     <p>Intervenant : {{ fiche.prenom_intervenant }} {{ fiche.nom_intervenant }} {% include "_partial/_tts.html" %}</p>
                     <p>Localisation : {{ fiche.localisation }} {% include "_partial/_tts.html" %}</p>
                     <p>Description de la demande : {{ fiche.description_demande }} {% include "_partial/_tts.html" %}</p>
                     <p>Image avant l'intervention : {% include "_partial/_tts.html" %}</p>
                     <div>
                         <div class="mb-4 d-flex justify-content-center">
-                            <img id="selectedAvant" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
-                            alt="Image avant intervention" style="width: 300px;" />
+                            {%  if fiche.photo_avant != None %}
+                                <img id="selectedAvant" src="{{ url_for('static', filename='images/photo_fiche/'+fiche.photo_avant) }}"
+                                alt="Image avant intervention" style="width: 50%;" />
+                            {% else %}
+                                <img id="selectedAvant" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                                alt="Image avant intervention" style="width: 50%;" />
+                            {% endif %}
                         </div>
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-primary btn-rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
@@ -60,7 +66,10 @@
                                         <!-- Ici on retrouve l'icone de l'element -->
                                         {% if element["pictogramme"] != None %}
                                             <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
-                                                class="rounded my-auto mx-2" alt="icone element"
+                                                class="rounded my-auto mx-2" alt="icone element" onload="chargement_preview(this,
+                                                    ajout={{ element["taille_pictogramme"] }},
+                                                    couleur='{{ element["couleur_pictogramme"] }}',
+                                                    position_element='{{ element["position_elem"] }}')"
                                                 id="icone-{{ element["position_elem"] }}"
                                                 {% if element["niveau"] == 3 %}hidden="" {% endif %}>
                                         {% endif %}
@@ -113,7 +122,7 @@
                                             {% endif %}</textarea>
                                         {% include "_partial/_tts_textarea.html" %}
                                     </div>
-                                <!-- Quatrième type : input de checkbox ou radio -->
+                                <!-- Quatrième type : input de checkbox-->
                                 {% elif element["type_elem"] == "checkbox" %}
                                     <div>
                                         <input type="{{ element['type_elem'] }}" name="{{ element['position_elem'] }}"
@@ -133,17 +142,18 @@
                         {% endfor %}
                     </fieldset>
                 {% endfor %}
-                <fieldset id="field-60" class="scheduler-border p-2 mr-auto ml-2" hidden=""
-                style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                    <p>A completer</p>
-                </fieldset>
                 <fieldset id="field-70" class="scheduler-border p-2 mr-auto ml-2" hidden=""
                 style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
                 <p>Image après l'intervention : {% include "_partial/_tts.html" %}</p>    
                 <div>
                         <div class="mb-4 d-flex justify-content-center">
-                            <img id="selectedApres" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
-                            alt="Image apres intervention" style="width: 300px;" />
+                            {%  if fiche.photo_apres != None %}
+                                <img id="selectedApres" src="{{ url_for('static', filename='images/photo_fiche/'+fiche.photo_apres) }}"
+                                alt="Image apres intervention" style="width: 50%;" />
+                            {% else %}
+                                <img id="selectedApres" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                                alt="Image apres intervention" style="width: 50%;" />
+                            {% endif %}
                         </div>
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-primary btn-rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
@@ -160,7 +170,7 @@
                 style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
                     <div class="d-flex justify-content-center  bg-primary rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
                     <a href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero ) }}"  style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;"
-                       class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Imprimer la fiche</a>
+                       class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Finir la fiche</a>
                         {% include "_partial/_tts_hidden_invert.html" %}
                     </div>
                 </fieldset>
