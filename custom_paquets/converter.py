@@ -19,5 +19,5 @@ def generate_login(nom, prenom):
 
 def changer_date(fiches):
     for fiche in fiches:
-        fiche.date_creation = fiche.date_creation.strftime("%d/%m/%Y")
+        fiche.date_convertis = fiche.date_creation.strftime("%d/%m/%Y")
     return fiches
