@@ -96,4 +96,4 @@ def imprimer_pdf(numero):
     # En attente de la complétion de la fiche
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
     composer_fiche = get_composer_presentation(get_id_fiche_apprenti(session['name'], numero))
-    return render_template("apprentis/fiche_pdf_2.html", composition=composer_fiche, fiche=fiche)
+    return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche)
