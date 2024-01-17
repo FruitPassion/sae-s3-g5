@@ -130,3 +130,13 @@ def maj_contenu_fiche(majs: dict, id_fiche: str):
         logging.error(e_type)
         logging.error(e_message)
         logging.error(e_line_number)
+
+def get_composer_presentation_par_apprenti(id_fiche):
+    """
+    Permet de récupérer ce que l'apprenti a complété dans une fiche
+    """
+    presentation_fiche = Compo.query.filter_by(id_fiche=id_fiche).all()
+    composer_fiche = []
+    for element in presentation_fiche:
+        composer_fiche.append(element.ElementBase)
+    return composer_fiche
