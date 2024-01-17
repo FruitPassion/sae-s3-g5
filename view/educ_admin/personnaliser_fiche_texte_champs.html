@@ -62,8 +62,8 @@
                             {% elif element["type_elem"] == "textarea" %}
                                 </label>
                                 <textarea class="form-control"></textarea>
-                            {% elif element["type_elem"] in ["radio","checkbox"] %}
-                                <input type="{{ element['type_elem'] }}" name="radio-{{ categorie['position_elem'] }}">
+                            {% elif element["type_elem"] == "checkbox" %}
+                                <input type="{{ element['type_elem'] }}" name="{{ categorie['position_elem'] }}">
                                 </label>
                             {% else %}
                                 </label>

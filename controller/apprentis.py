@@ -4,7 +4,7 @@ from custom_paquets.builder import build_categories
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from model.apprenti import get_apprenti_by_login
-from model.composer import get_composer_presentation, maj_contenu_fiche
+from model.composer import get_composer_presentation, maj_contenu_fiche, get_checkbox_on
 from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
    get_id_fiche_apprenti, get_fiche_par_id_fiche
 
@@ -58,31 +58,36 @@ def completer_fiche(numero):
     :param numero: id de la fiche technique
     :return: rendu de la page completer_fiche.html
     """
+    avancee = "0"
     composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
     if request.method == 'POST':
+        avancee = request.form.get("avancee")
         completer_fiche = {}
         
         completer_fiche["photo_avant"] = request.files.get("photo-avant")
         completer_fiche["photo_apres"] = request.files.get("photo-apres")
-            
+
+        checkboxes = get_checkbox_on(fiche.id_fiche)
+        for checkbox in checkboxes:
+            if checkbox.position_elem not in request.form.keys():
+                completer_fiche[f"{checkbox.position_elem}"] = None
+
         for element in request.form:
             if element == "avancee":
                 continue
-            
             if len(request.form.get(f"{element}")) != 0:
                 element_data = request.form.get(f"{element}")
             else:
                 element_data = None
                 
-            if "radio-" in element:
-                completer_fiche[f"{element_data}"] = "checked"
-            else:
-                completer_fiche[f"{element}"] = element_data
-                
-        maj_contenu_fiche(completer_fiche, fiche.id_fiche)
+            completer_fiche[f"{element}"] = element_data
 
-    return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche)
+        maj_contenu_fiche(completer_fiche, fiche.id_fiche)
+        composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
+
+    return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
+                           avancee=avancee)
 
 
 @apprenti.route("/imprimer-pdf/<numero>", methods=["GET"]) # Pour tester

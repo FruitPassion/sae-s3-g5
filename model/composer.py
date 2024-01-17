@@ -108,11 +108,6 @@ def maj_contenu_fiche(majs: dict, id_fiche: str):
     try:
         compositions = Compo.query.filter_by(id_fiche=id_fiche).all()
         for element in compositions:
-            print(element)
-            print(element.text)
-            print(majs.keys())
-            print(element.position_elem)
-            print(majs[f'{element.position_elem}'])
             if element.position_elem in majs.keys():
                 element.text = majs[f'{element.position_elem}']
         db.session.commit()
@@ -130,3 +125,16 @@ def maj_contenu_fiche(majs: dict, id_fiche: str):
         logging.error(e_type)
         logging.error(e_message)
         logging.error(e_line_number)
+
+def get_checkbox_on(id_fiche):
+    """
+    Permet de récupérer les checkbox cochées de la fiche
+
+    :param id_fiche:
+    :return:
+    """
+    try:
+        return Compo.query.filter_by(text="on", id_fiche=id_fiche).all()
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des checkbox de la fiche {id_fiche}")
+        logging.error(e)

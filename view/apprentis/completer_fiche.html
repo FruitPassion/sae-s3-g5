@@ -25,9 +25,8 @@
                 <div id="deplacement-droite" class="deplacement-fleche" onclick="changement_caroussel('10', this)">
                     <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </div>
-                <input type="hidden" name="avancee" value="">
-                <fieldset id="field-0" class="scheduler-border p-2 mr-auto ml-2"
-                style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
+                <input type="hidden" id="avancee" name="avancee" value="">
+                <fieldset hidden="" id="field-0" class="scheduler-border p-2 mr-auto ml-2" style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px" >
                     <p>Intervenant : {{ fiche.prenom_intervenant }} {{ fiche.nom_intervenant }} {% include "_partial/_tts.html" %}</p>
                     <p>Localisation : {{ fiche.localisation }} {% include "_partial/_tts.html" %}</p>
                     <p>Description de la demande : {{ fiche.description_demande }} {% include "_partial/_tts.html" %}</p>
@@ -92,7 +91,7 @@
                                                 {% for m in range(0, 60, 15) %}
                                                     {% set formatted_minutes = "%02d"|format(m) %}
                                                     {% if h+m != 0 %}
-                                                        <option value="" {% if element['text'] == h|string()+"h"+formatted_minutes|string()  %} selected {% endif %}>
+                                                        <option value="{{ h }}h{{ formatted_minutes }}" {% if element['text'] == h|string()+"h"+formatted_minutes|string()  %} selected {% endif %}>
                                                             {{ h }}h{{ formatted_minutes }}
                                                         </option>
                                                     {% endif %}
@@ -111,20 +110,25 @@
                                 <!-- Troisième type : input text area pour les longs commentaires -->
                                 {% elif element["type_elem"] == "textarea" %}
                                     <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
-                                        <textarea class="form-control" name="{{ element['position_elem'] }}">{% if element['text'] != None  %} {{ element['text'] }} {% endif %}</textarea>
+                                        <textarea class="form-control" name="{{ element['position_elem'] }}">
+                                            {%- if element['text'] -%}
+                                                {{ element['text'] }}
+                                            {% endif %}</textarea>
                                         {% include "_partial/_tts_textarea.html" %}
                                     </div>
                                 <!-- Quatrième type : input de checkbox ou radio -->
-                                {% elif element["type_elem"] in ["radio","checkbox"] %}
+                                {% elif element["type_elem"] == "checkbox" %}
                                     <div>
-                                        <input type="{{ element['type_elem'] }}" name="radio-{{ categorie['position_elem'] }}" value="{{ element['position_elem'] }}"
+                                        <input type="{{ element['type_elem'] }}" name="{{ element['position_elem'] }}"
                                         style="width: {{ element['taille_texte'] }}px; height: {{ element['taille_texte'] }}px;"
                                         {% if element['text'] != None  %} checked {% endif %}>
                                     </div>
                                 <!-- Cinquième type : tout les autres input (date, text, number, etc...) -->
                                 {% else %}
                                     <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
-                                        <input type="{{ element['type_elem'] }}" class="fs-4 my-3 form-control" name="{{ element['position_elem'] }}">
+                                        <input type="{{ element['type_elem'] }}" class="fs-4 my-3 form-control"
+                                               value="{{ element['text'] }}"
+                                               name="{{ element['position_elem'] }}">
                                         {% include "_partial/_tts_date.html" %}
                                     </div>
                                 {% endif %}
@@ -161,4 +165,15 @@
             </div>
         </form>
     </div>
+
+    <script defer>
+        document.getElementById("avancee").value = '{{ avancee }}';
+        document.getElementById("field-{{ avancee }}").hidden = false;
+
+        let visibleFieldset = document.getElementById("caroussel").querySelector("fieldset:not([hidden])");
+        let visibleFieldsetNumber = parseInt(visibleFieldset.id.match(/\d+/)[0])
+
+        gererFleches(visibleFieldsetNumber);
+
+    </script>
 {% endblock %}
