@@ -26,12 +26,7 @@ def generer_xls_apprentis(id_formation):
     for i in range(len(apprentis)):
 
         worksheet = workbook.add_worksheet(apprentis[i].prenom + ' ' + apprentis[i].nom)
-
-        worksheet.set_column('D:D', 20)
-        worksheet.set_column('F:F', 20)
-        worksheet.set_column('G:G', 20)
-        worksheet.set_column('H:H', 20)
-
+        
         fiches = get_fiches_techniques_par_login(apprentis[i].login)
         fiches = changer_date(fiches)
 
@@ -70,5 +65,7 @@ def generer_xls_apprentis(id_formation):
         worksheet.write('G2', nb_fiches_en_cours, cell_format)
         worksheet.write('H2', nb_fiches_finies, cell_format)
         worksheet.write('I2', len(fiches), cell_format)
+
+        worksheet.autofit()
 
     workbook.close()
