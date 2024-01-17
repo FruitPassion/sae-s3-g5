@@ -15,11 +15,15 @@
     <script src="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/js/dd.min.js"></script>
 {% endblock %}
 
+{% block title %}
+    Remplir une fiche
+{% endblock %}
+
 {% block body %}
     <h1>Fiche numéro {{ fiche.numero }} {% include "_partial/_tts.html" %}</h1>
 
     <div id="container-principal" class="px-4">
-        <form method="POST" name="completer-fiche" enctype="multipart/form-data">
+        <form method="POST" name="completer-fiche" enctype="multipart/form-data" class="mb-5">
             <div id="caroussel">
                 <input type="hidden" id="avancee" name="avancee" value="">
                 <fieldset hidden="" id="field-0" class="scheduler-border p-2 mr-auto ml-2"
@@ -43,9 +47,10 @@
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div class="btn btn-primary btn-rounded"
+                            <div class="btn btn-primary rounded-4"
                                  style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
-                                <label class="form-label text-white m-1" for="image-avant">Choisir une image</label>
+                                <label class="form-label text-white m-1" for="image-avant">
+                                    <i class="fa fa-search" aria-hidden="true"></i> Choisir une image</label>
                                 <input type="file" class="form-control d-none" id="image-avant" name="photo-avant"
                                        onchange="displaySelectedImage(event, 'selectedAvant')"/>
                                 <a hidden="" class="text-light">
@@ -69,7 +74,7 @@
                                             <!-- Ici on retrouve l'icone de l'element -->
                                             {% if element["pictogramme"] != None %}
                                                 <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
-                                                     class="rounded my-auto mx-2" alt="icone element"
+                                                     class="rounded-4 my-auto mx-2" alt="icone element"
                                                         {% if element["type_elem"] == "radio" %}
                                                      onload="changeSize(this, ajout={{ element["taille_pictogramme"] }});"
                                                         {% else %}
@@ -196,9 +201,10 @@
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div class="btn btn-primary btn-rounded"
+                            <div class="btn btn-primary rounded-4"
                                  style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
-                                <label class="form-label text-white m-1" for="image-apres">Choisir une image</label>
+                                <label class="form-label text-white m-1" for="image-apres">
+                                    <i class="fa fa-search" aria-hidden="true"></i> Choisir une image</label>
                                 <input type="file" class="form-control d-none" name="photo-apres"
                                        id="image-apres" onchange="displaySelectedImage(event, 'selectedApres')"/>
                                 <a hidden="" class="text-light">
@@ -210,19 +216,18 @@
                 </fieldset>
                 <fieldset id="field-80" class="scheduler-border p-2 mr-auto ml-2" hidden=""
                           style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                    <div class="d-flex justify-content-center  bg-primary rounded"
+                    <div class="d-flex justify-content-center  bg-primary rounded-4"
                          style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
                         <a href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero ) }}"
                            style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;"
-                           class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Finir la fiche</a>
+                           class="btn btn-primary"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Finir la fiche</a>
                         {% include "_partial/_tts_hidden_invert.html" %}
                     </div>
                 </fieldset>
-                <div class="mt-5 bg-primary d-flex justify-content-center rounded"
+                <div class="mt-5 bg-primary d-flex justify-content-center rounded-4"
                      style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
-                    <button class="btn btn-primary" style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;"
-                            type="submit">
-                        Sauvegarder
+                    <button class="btn btn-primary" style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;" type="submit">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i> Sauvegarder
                     </button>
                     <a hidden="" class="text-light">
                         Sauvegarder la progression</a>{% include "_partial/_tts_hidden_invert.html" %}
@@ -237,6 +242,15 @@
                 </div>
             </div>
         </form>
+        <div class="bg-danger w-75 m-auto text-center rounded-4"
+             style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
+            <a href="{{ url_for('apprenti.redirection_connexion') }}">
+                <button class="btn btn-danger" style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
+                    <i class="fa fa-times" aria-hidden="true"></i> Quitter
+                </button>
+            </a>
+            {% include "_partial/_tts_hidden_invert.html" %}
+        </div>
     </div>
 
     <script defer>
