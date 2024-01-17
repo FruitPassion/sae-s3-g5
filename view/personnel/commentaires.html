@@ -10,11 +10,11 @@
     <h1>Commentaires de la fiche technique {{ fiche }} de {{ apprenti }} </h1>
     <h2 class="commentaireTitre">Commentaires intervenant
         {% if commentaires|length == 0 %}
-            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, fiche = fiche) }}">
+            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'educateur') }}" >
                 <img id="ajouter" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
             </a>
         {% else %}
-            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche) }}">
+            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'educateur') }}" name="commentaire_educateur">
                 <img class="modifier" src="{{ url_for('static', filename='images/modifier.png') }}" alt="modifier">
             </a>
         {% endif %}
@@ -31,11 +31,11 @@
 
     <h2 class="commentaireTitre">Commentaires apprenti
         {% if commentaires|length == 0 %}
-            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, fiche = fiche) }}">
+            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'apprenti') }}">
                 <img id="ajouter" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
             </a>
         {% else %}
-            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche) }}">
+            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'apprenti') }}">
                 <img class="modifier" src="{{ url_for('static', filename='images/modifier.png') }}" alt="modifier">
             </a>
         {% endif %}

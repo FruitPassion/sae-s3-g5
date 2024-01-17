@@ -7,15 +7,30 @@
 {% block title %}Ajouter des commentaires{% endblock %}
 
 {% block body %}
-    <h1>Ajout commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% if typeCommentaire =="educateur" %}
+        <h1>Ajout commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% else %}
+        <h1>Ajout commentaire apprenti de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% endif %}
     <div>
        
         <form name="ajouter_commentaire" method="post">
 
-            <p>Commentaire de l'éducateur : </p>
+            <p>Intitulé : </p>
+            <input type="text" name="intitule" id="intitule" class="ajout">
+
+            {% if typeCommentaire =="educateur" %}
+                <p>Commentaire de l'éducateur : </p>
+            {% else %}
+                <p>Commentaire de l'apprenti : </p>
+            {% endif %}
             <textarea name="commentaire" maxlength="500" rows="4" cols="30" class="ajout commentaire"></textarea>
             
-            <p>Commentaire audio de l'éducateur : </p>
+            {% if typeCommentaire =="educateur" %}
+                <p>Commentaire audio de l'éducateur : </p>
+            {% else %}
+                <p>Commentaire audio de l'apprenti : </p>
+            {% endif %}
             <button type="button" id="enregistrer_btn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
 
             <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
@@ -79,10 +94,18 @@
                     });
             </script>
 
-            <p>Evaluation de l'éducateur : </p>
+            {% if typeCommentaire =="educateur" %}
+                <p>Evaluation de l'éducateur : </p>
+            {% else %}
+                <p>Evaluation de l'apprenti : </p>
+            {% endif %}
             <textarea id="evaluation" name="evaluation" maxlength="500" rows="4" cols="30" class="ajout"></textarea>
             
-            <p>Evaluation audio de l'éducateur : </p>
+            {% if typeCommentaire =="educateur" %}
+                <p>Evaluation audio de l'éducateur : </p>
+            {% else %}
+                <p>Evaluation audio de l'apprenti : </p>
+            {% endif %}
             <input type="submit" value="Valider">
             
             <input type="button" value="Enregistrer" id="enregistrer">

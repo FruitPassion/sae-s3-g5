@@ -7,16 +7,29 @@
 {% block title %}Modification commentaire{% endblock %}
 
 {% block body %}
-    <h1>Modification commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+   
+    {% if typeCommentaire =="educateur"%}
+        <h1>Modification commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% else %}
+        <h1>Modification commentaire apprenti de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% endif %}
 
     <div id="bloc">
 
         <form name="modifier" id="modifier" enctype="multipart/form-data" method="POST">
-            <p>Commentaire de l'éducateur :</p>
+            {% if typeCommentaire =="educateur"%}
+                <p>Commentaire de l'éducateur :</p>
+            {% else %}
+                <p>Commentaire de l'apprenti :</p>
+            {% endif %}
             <textarea type="text" class="modifiable" id="commentaire_texte" name="commentaire_texte"
                       maxlength="500">{{ commentaires.commentaire_texte }}</textarea>
 
-            <p>Commentaire audio de l'éducateur :</p>
+            {% if typeCommentaire =="educateur"%}
+                <p>Commentaire audio de l'éducateur :</p>
+            {% else %}
+                <p>Commentaire audio de l'apprenti :</p>
+            {% endif %}
             <button type="button" id="enregistrer_btn">Modifier l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
 
             <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
@@ -91,18 +104,25 @@
                     });
             </script>
 
-            <p>Evaluation de l'éducateur :</p>
+            {% if typeCommentaire =="educateur"%}
+                <p>Evaluation de l'éducateur :</p>
+            {% else %}
+                <p>Evaluation de l'apprenti :</p>
+            {% endif %}
             <textarea type="text" class="modifiable" id="eval_texte" name="eval_texte"
                       maxlength="500">{{ commentaires.eval_texte }}</textarea>
             
-            <p>Evaluation audio de l'éducateur :</p>
+            {% if typeCommentaire =="educateur"%}
+                <p>Evaluation audio de l'éducateur :</p>
+            {% else %}
+                <p>Evaluation audio de l'apprenti :</p>
+            {% endif %}
             
-            <div class="fixed-bottom bg-light">
-                <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
-            </div>
             <!-- Gestion de la modification du commentaire/évaluation... ? -->
             <input type="submit" value="Enregistrer" id="enregistrer">
 
         </form>
+        
     </div>
+    <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
 {% endblock %}

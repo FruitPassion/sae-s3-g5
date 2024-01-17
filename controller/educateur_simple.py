@@ -5,8 +5,7 @@ from custom_paquets.decorateur import educsimple_login_required
 from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, get_nom_cours_by_id
-from model.trace import ajouter_commentaires_evaluation, modifier_commentaire_texte, modifier_evaluation_texte, \
-    modifier_commentaire_audio, get_audio_commentaire, get_commentaires_educ_par_fiche, get_commentaires_par_fiche
+from model.trace import ajouter_commentaires_evaluation, get_audio_commentaire, get_commentaires_apprenti_par_fiche, get_commentaires_educ_par_fiche, get_commentaires_par_fiche, modifier_commentaire_audio, modifier_commentaire_texte, modifier_evaluation_texte, modifier_commentaire_audio, get_audio_commentaire, get_commentaires_educ_par_fiche, get_commentaires_par_fiche
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
@@ -47,22 +46,26 @@ def visualiser_commentaires(apprenti, fiche):
                            commentaires=commentaires), 200
 
 
-@educ_simple.route("/<apprenti>/<fiche>/modifier-commentaires", methods=["GET", "POST"])
+@educ_simple.route("/<apprenti>/<fiche>/modifier-commentaires-<typeCommentaire>", methods=["GET", "POST"])
 @educsimple_login_required
-def modifier_commentaires(apprenti, fiche):
+def modifier_commentaires(apprenti, fiche, typeCommentaire):
     """
     Page de modification des commentaires éducateur de la fiche d'identifiant fiche de l'apprenti 
     au login apprenti
     
     :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
-    commentaires = get_commentaires_educ_par_fiche(fiche)
+    commentaires = get_commentaires_apprenti_par_fiche(fiche, apprenti = "1")
+    
+    if typeCommentaire=="educateur":
+        commentaires = get_commentaires_educ_par_fiche(fiche)
+ 
     fiche = get_fiche_par_id_apprenti(get_id_apprenti_by_login(apprenti))
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
         commentaire_audio = request.form.get("commentaire_audio")
-        print(request.form)
+        
         if commentaire_audio in request.files and len(request.files.get("commentaire_audio").filename) != 0: 
             f = request.files.get("commentaire_audio")
             chemin_audio = stocker_audio_commentaire(f)
@@ -70,12 +73,14 @@ def modifier_commentaires(apprenti, fiche):
                 modifier_commentaire_audio(fiche["id_fiche"], commentaires.horodatage, chemin_audio)
         else:
             chemin_audio = get_audio_commentaire(commentaire_audio)
-        modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte)
-        modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte)
+        modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte, 
+                                   typeCommentaire = typeCommentaire)
+        modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte, 
+                                  typeCommentaire = typeCommentaire)
         
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche.id_fiche), 200)
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
-                           commentaires=commentaires), 200
+                           commentaires=commentaires, typeCommentaire = typeCommentaire), 200
 
 
 @educ_simple.route("/<apprenti>/<fiche>/ajouter-commentaires", methods=["POST", "GET"])
