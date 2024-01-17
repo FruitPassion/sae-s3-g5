@@ -55,8 +55,8 @@
                         // Arrêt de l'enregistrement
                         mediaRecorder.onstop = function() {
                             const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                            
-                            /**
+                            const audioUrl = URL.createObjectURL(audioBlob);
+
                             const formData = new FormData();
                             formData.append('audio', audioBlob);
                             
@@ -68,7 +68,7 @@
                             .then(data => {
                                 console.log(data);
                                 const audioPlayer = document.getElementById('audioPlayer');
-                                audioPlayer.src = data.audio_url;
+                                audioPlayer.src = audioUrl;
                                 audioPlayer.controls = true;
                                 clearInterval(recordingInterval);
                                 document.getElementById('statut').textContent = 'Enregistrement modifié';
@@ -79,17 +79,6 @@
                             .catch(error => {
                                 console.error('Erreur lors de l\'enregistrement audio sur le serveur:', error);
                             });
-                            */
-                            
-                            // Télécharger l'audio
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            const a = document.createElement('a');
-                            document.body.appendChild(a);
-                            a.style = 'display: none';
-                            a.href = audioUrl;
-                            a.download = 'test.mp3';
-                            a.click();
-                            window.URL.revokeObjectURL(audioUrl);
                         }
 
                         // Bouton démarrer/arrêter l'enregistrement
