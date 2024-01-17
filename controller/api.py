@@ -1,13 +1,14 @@
-import urllib.parse
+import urllib.parse, uuid, os
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
-from custom_paquets.decorateur import admin_login_required
+from custom_paquets.decorateur import admin_login_required, personnel_login_required
 from model.apprenti import check_password_apprenti, get_nbr_essais_connexion_apprenti, archiver_apprenti, \
     remove_apprenti, set_password_apprenti
 from model.formation import archiver_formation, remove_formation, reinitisaliser_formation
 from model.personnel import archiver_personnel, remove_personnel
 from model.cours import archiver_cours, remove_cours
+from model.trace import modifier_commentaire_audio
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -165,3 +166,16 @@ def api_supprimer_personnel(id_personnel):
     Supprime un personnel à partir de son id
     """
     return {"valide": remove_personnel(id_personnel)}
+
+
+@api.route("/save_audio/<id_personnel>", methods=['POST'])
+@personnel_login_required
+def save_audio(id_personnel, id_fiche, horodatage, commentaire_audio):
+    if 'commentaire_audio' in request.files:
+        audio_file = request.files['commentaire_audio']
+        if audio_file.filename != '':
+            filename = f"{id_fiche}.{id_personnel}.mp3"
+            commentaire_audio = os.path.join('static/audio', filename)
+            audio_file.save(commentaire_audio)
+
+    return {"valide": modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio)}

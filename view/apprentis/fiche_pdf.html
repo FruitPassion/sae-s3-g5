@@ -87,49 +87,86 @@
                     <div class="colonne listeCheckbox">
                         <fieldset class=" colonne">
                             <legend>Type de Maintenance</legend>
-                            {% for i in range(5,8) %}
-                                {% if composition[i].text==None %}
-                                    <div>
-                                        <div class="demi">
-                                            <input type="checkbox">
-                                        </div>
-                                        <div class="droite"> <label>{{ composition[i].libelle }}</label>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <div>
-                                        <div class="demi">
-                                            <input checked type="checkbox">
-                                        </div>
-                                        <div class="droite"> <label>{{ composition[i].libelle }}</label>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+                            <div>
+                                <div class="demi">
+                                    {% if composition[5].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>améliorative</label></div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    {% if composition[6].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>préventive</label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    {% if composition[7].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>corrective</label>
+                                </div>
+                            </div>
                         </fieldset>
                     </div>
                     <div class="colonne listeCheckbox">
                         <fieldset class=" colonne">
                             <legend>Nature de l'intervention</legend>
-                            {% for i in range(9,13) %}
-                                {% if composition[i].text==None %}
-                                    <div>
-                                        <div class="demi">
-                                            <input type="checkbox">
-                                        </div>
-                                        <div class="droite"> <label>{{ composition[i].libelle }}</label>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <div>
-                                        <div class="demi">
-                                            <input checked type="checkbox">
-                                        </div>
-                                        <div class="droite"> <label>{{ composition[i].libelle }}</label>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+                            <div>
+                                <div class="demi">
+                                    {% if composition[9].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>Aménagement</label></div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    {% if composition[10].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>Finitions</label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    {% if composition[11].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>Installation sanitaire</label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    {% if composition[12].text==None %}
+                                        <input type="checkbox">
+                                    {% else %}
+                                        <input checked type="checkbox">
+                                    {% endif %}
+                                </div>
+                                <div class="droite"> <label>Installation électrique</label>
+                                </div>
+                            </div>
                         </fieldset>
                     </div>
                 </div>
@@ -157,19 +194,15 @@
                 </div>
                 <div>
                     <div class="noPrint "></div>
-                    {% if composition[16].text==None %}
-                        <div class="check">
+                    <div class="check">
+                        {% if composition[16].text==None %}
                             <input type="checkbox">
-                        </div>
-                        <div class="droite"> <label>{{ composition[16].libelle }}</label>
-                        </div>
-                    {% else %}
-                        <div class="check">
+                        {% else %}
                             <input checked type="checkbox">
-                        </div>
-                        <div class="droite"> <label>{{ composition[16].libelle }}</label>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
+                    </div>
                 </div>
                 <div class="espaceHor"></div>
                 <div>

@@ -55,25 +55,41 @@
                         // Arrêt de l'enregistrement
                         mediaRecorder.onstop = function() {
                             const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            const audioPlayer = document.getElementById('audioPlayer');
-                            audioPlayer.src = audioUrl;
-                            //const form = new FormData();
-                            audioPlayer.controls = true;
-                            clearInterval(recordingInterval);
-                            document.getElementById('statut').textContent = 'Enregistrement modifié';
-                            document.getElementById('Time').style.display = 'none';
-                            document.getElementById('enregistrer_btn').style.display = 'none';
-                            /**
-                            document.getElementById('commentaire_audio').value=audioUrl;
                             
-                            formData.append('audio', blob);
-                                fetch('modifier-commentaires', {
-                                    method: 'POST',
-                                    body: formData
-                                })
-                                .then(response => { console.log('upload success');})
-                                .catch(error => {console.log('error');}) */
+                            /**
+                            const formData = new FormData();
+                            formData.append('audio', audioBlob);
+                            
+                            fetch('/api/save_audio/{{ id_personnel }}', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                console.log(data);
+                                const audioPlayer = document.getElementById('audioPlayer');
+                                audioPlayer.src = data.audio_url;
+                                audioPlayer.controls = true;
+                                clearInterval(recordingInterval);
+                                document.getElementById('statut').textContent = 'Enregistrement modifié';
+                                document.getElementById('Time').style.display = 'none';
+                                document.getElementById('enregistrer_btn').style.display = 'none';
+                                document.getElementById('commentaire_audio').value=audioUrl;
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors de l\'enregistrement audio sur le serveur:', error);
+                            });
+                            */
+                            
+                            // Télécharger l'audio
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            const a = document.createElement('a');
+                            document.body.appendChild(a);
+                            a.style = 'display: none';
+                            a.href = audioUrl;
+                            a.download = 'test.mp3';
+                            a.click();
+                            window.URL.revokeObjectURL(audioUrl);
                         }
 
                         // Bouton démarrer/arrêter l'enregistrement
@@ -117,7 +133,11 @@
             {% else %}
                 <p>Evaluation audio de l'apprenti :</p>
             {% endif %}
-            
+            <button type="button" id="enregistrer_btn">Modifier l'évaluation audio <i id='icon' class="fa fa-play-circle"></i></button>
+
+            <input type="hidden" name="eval_audio" id="commentaire_audio" />
+            <br>
+
             <!-- Gestion de la modification du commentaire/évaluation... ? -->
             <input type="submit" value="Enregistrer" id="enregistrer">
 
