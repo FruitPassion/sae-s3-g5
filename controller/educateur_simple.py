@@ -7,6 +7,7 @@ from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, get_nom_cours_by_id
 from model.trace import ajouter_commentaires_evaluation, modifier_commentaire_texte, modifier_evaluation_texte, \
     modifier_commentaire_audio, get_audio_commentaire, get_commentaires_educ_par_fiche, get_commentaires_par_fiche
+from model.personnel import get_id_personnel_by_login
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
@@ -56,6 +57,7 @@ def modifier_commentaires(apprenti, fiche):
     
     :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
+    id_personnel = get_id_personnel_by_login(session.get("name"))
     commentaires = get_commentaires_educ_par_fiche(fiche)
     fiche = get_fiche_par_id_apprenti(get_id_apprenti_by_login(apprenti))
     if request.method == 'POST':
@@ -75,7 +77,7 @@ def modifier_commentaires(apprenti, fiche):
         
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, fiche=fiche.id_fiche), 200)
     return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
-                           commentaires=commentaires), 200
+                           commentaires=commentaires, id_personnel=id_personnel), 200
 
 
 @educ_simple.route("/<apprenti>/<fiche>/ajouter-commentaires", methods=["POST", "GET"])
