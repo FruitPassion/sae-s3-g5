@@ -157,11 +157,19 @@
                 </div>
                 <div>
                     <div class="noPrint "></div>
-                    <div class="check">
-                        <input type="checkbox">
-                    </div>
-                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
-                    </div>
+                    {% if composition[16].text==None %}
+                        <div class="check">
+                            <input type="checkbox">
+                        </div>
+                        <div class="droite"> <label>{{ composition[16].libelle }}</label>
+                        </div>
+                    {% else %}
+                        <div class="check">
+                            <input checked type="checkbox">
+                        </div>
+                        <div class="droite"> <label>{{ composition[16].libelle }}</label>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="espaceHor"></div>
                 <div>
@@ -172,48 +180,18 @@
                 </div>
                 <div class="espaceHor"></div>
                 <div>
-                    <div class="selectADupliquer">
-                        <select>
-                            <option>{{ composition[18].text }}</option>
-                        </select>
-                    </div>
-                    <div class="demi"></div>
-                    <div class="selectADupliquer">
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-                <div>
-                    <div class="selectADupliquer">
-
-                    </div>
-                    <div class="demi"></div>
-                    <div class="selectADupliquer">
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-                <div>
-                    <div class="selectADupliquer">
-                    </div>
-                    <div class="demi"></div>
-                    <div class="selectADupliquer">
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-                <div>
-                    <div class="selectADupliquer">
-                    </div>
-                    <div class="demi"></div>
-                    <div class="selectADupliquer">
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-                <div>
-                    <div class="selectADupliquer">
-                    </div>
-                    <div class="demi"></div>
-                    <div class="selectADupliquer">
-                    </div>
-                </div>
+                    {% for i in range(18,28) %}
+                        {% if composition[i].text!=None %}
+                            <div class="selectADupliquer">
+                                <select>
+                                    <option>{{ composition[i].text }}</option>
+                                </select>
+                            </div>
+                            <div class="demi"></div>
+                            <div class="selectADupliquer">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
             </fieldset>
             <div class="espaceHor"></div>
             <div class="espaceHor"></div>
