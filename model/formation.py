@@ -159,14 +159,14 @@ def reinitisaliser_formation(id_formation, commit=True):
     try:
         # Suppression des cours
         generer_xls_apprentis(id_formation)
-        """
+        
         # Suppression des apprentis
         for apprenti in get_apprentis_by_formation(id_formation):
             remove_apprenti(apprenti.id_apprenti)
 
         if commit:
             db.session.commit()
-        """
+        
         return True
     except Exception as e:
         logging.error(f"Erreur lors de la réinitisalisation de la formation {id_formation}")

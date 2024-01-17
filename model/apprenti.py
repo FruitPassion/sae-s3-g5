@@ -313,9 +313,9 @@ def get_apprentis_for_xls(id_formation):
     Récupère les apprentis d'une formation
     """
     try:
-        return convert_to_dict(Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, 
+        return Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, 
                                             Apprenti.adaptation_situation_examen).join(
-                                                Assister).join(Cours).filter_by(id_formation=id_formation).distinct().all())
+                                                Assister).join(Cours).filter_by(id_formation=id_formation).distinct().all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des apprentis de la formation {id_formation}")
         logging.error(e)
