@@ -130,11 +130,9 @@ def get_composer_presentation_par_apprenti(id_fiche):
     """
     Permet de récupérer ce que l'apprenti a complété dans une fiche
     """
-    presentation_fiche = Compo.query.filter_by(id_fiche=id_fiche).all()
-    composer_fiche = []
-    for element in presentation_fiche:
-        composer_fiche.append(element.ElementBase)
-    return composer_fiche
+    presentation_fiche = db.session.query(Compo).filter_by(id_fiche=id_fiche).join(Elem).all()
+    return presentation_fiche
+
 def get_checkbox_on(id_fiche):
     """
     Permet de récupérer les checkbox cochées de la fiche
