@@ -12,7 +12,7 @@ function changement_caroussel(ajout, element) {
     let visibleFieldsetNumber = parseInt(visibleFieldset.id.match(/\d+/)[0])+ajout;
 
     if ((element.id === "deplacement-gauche" && visibleFieldsetNumber < 0) ||
-    element.id === "deplacement-droite" && visibleFieldsetNumber === 70) {
+    element.id === "deplacement-droite" && visibleFieldsetNumber === 90) {
         return;
     } 
 
@@ -36,10 +36,10 @@ function gererFleches(visibleFieldsetNumber) {
         deplacementG.classList.remove("fdisabled");
     }
 
-    if (visibleFieldsetNumber === 60) {
+    if (visibleFieldsetNumber === 80) {
         // enelever class fdisabled
         deplacementD.classList.add("fdisabled");
-    } else if (visibleFieldsetNumber !== 60) {
+    } else if (visibleFieldsetNumber !== 80) {
         // ajouter class fdisabled
         deplacementD.classList.remove("fdisabled");
     }
