@@ -1,11 +1,11 @@
 from flask import Blueprint, redirect, render_template, session, request, url_for
 from werkzeug.utils import secure_filename
 
-from custom_paquets.builder import build_categories
+from custom_paquets.builder import build_categories, build_materiel
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
-from model.composer import get_composer_presentation_par_apprenti
+from model.composer import get_composer_presentation_par_apprenti, get_radio_radioed, maj_materiaux_fiche
 from model.apprenti import get_apprenti_by_login
 from model.composer import maj_contenu_fiche, get_checkbox_on
 from model.trace import get_commentaires_par_fiche
@@ -64,27 +64,55 @@ def completer_fiche(numero):
     """
     avancee = "0"
     composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
+    materiaux = build_materiel()
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
+
     if request.method == 'POST':
         avancee = request.form.get("avancee")
         completer_fiche = {}
+        ajouter_materiel = {}
 
+        # Gestion des photos
         photo_avant = request.files.get("photo-avant")
         photo_apres = request.files.get("photo-apres")
 
-        process_photo(photo_avant, fiche.photo_avant, fiche.id_fiche)
-        process_photo(photo_apres, fiche.photo_apres, fiche.id_fiche)
+        if photo_avant.filename != "":
+            process_photo(photo_avant, fiche.photo_avant, fiche.id_fiche, 'photo-avant')
+            definir_photo(photo_avant, fiche.id_fiche, avant_apres=False)  # False pour avant
+        if photo_apres.filename != "":
+            process_photo(photo_apres, fiche.photo_apres, fiche.id_fiche, 'photo-apres')
+            definir_photo(photo_apres, fiche.id_fiche, avant_apres=True)  # True pour apres
 
-        definir_photo([photo_avant, photo_apres], fiche.id_fiche)
-
+        # Gestion des checkbox
         checkboxes = get_checkbox_on(fiche.id_fiche)
         for checkbox in checkboxes:
             if checkbox.position_elem not in request.form.keys():
                 completer_fiche[f"{checkbox.position_elem}"] = None
 
+        # Gestion des radios
         for element in request.form:
-            if element == "avancee":
+            if "radio-" in element:
+                element = request.form.get(f"{element}")
+                completer_fiche[f"{element}"] = "radioed"
+        radios = get_radio_radioed(fiche.id_fiche)
+        for radio in radios:
+            if radio.position_elem not in completer_fiche.keys():
+                completer_fiche[f"{radio.position_elem}"] = None
+
+        # Gestion des matériaux
+        for element in request.form:
+            if "selecteur-" in element and len(request.form.get(f"{element}")) != 0:
+                ajouter_materiel[f"{element.replace('selecteur-','')}"] = request.form.get(f"{element}")
+            elif "selecteur-" in element:
+                ajouter_materiel[f"{element.replace('selecteur-','')}"] = None
+        if len(ajouter_materiel) != 0:
+            maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
+
+        # Gestion des autres éléments
+        for element in request.form:
+            if element == "avancee" or "radio-" in element:
                 continue
+
             if len(request.form.get(f"{element}")) != 0:
                 element_data = request.form.get(f"{element}")
             else:
@@ -95,7 +123,7 @@ def completer_fiche(numero):
         composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
 
     return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
-                           avancee=avancee)
+                           avancee=avancee, materiaux=materiaux)
 
 
 @apprenti.route("/imprimer-pdf/<numero>", methods=["GET"]) # Pour tester
@@ -106,10 +134,11 @@ def imprimer_pdf(numero):
 
     :return: rendu de la page fiche_pdf.html
     """
-    # En attente de la complétion de la fiche
+    materiaux = build_materiel()
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
     composer_fiche = get_composer_presentation_par_apprenti(fiche.id_fiche)
-    return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche)
+    return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche,
+                           materiaux=materiaux)
 
 
 @apprenti.route("/<id_fiche>/commentaires", methods=["GET"])

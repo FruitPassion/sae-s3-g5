@@ -307,11 +307,12 @@ VALUES ('Intervention', 'categorie', NULL, NULL),
        ('Materiel 9', 'select-materiel', NULL, NULL),
        ('Materiel 10', 'select-materiel', NULL, NULL),
        ('Ressenti','categorie',NULL,NULL),
-       ('Très bien','checkbox',NULL,NULL),
-       ('Bien','checkbox',NULL,NULL),
-       ('Assez bien','checkbox',NULL,NULL),
-       ('Moyen','checkbox',NULL,NULL),
-       ('Pas bien','checkbox',NULL,NULL);
+       ('Très mauvais','radio',NULL,NULL),
+       ('Mauvais','radio',NULL,NULL),
+       ('Moyen','radio',NULL,NULL),
+       ('Assez bien','radio',NULL,NULL),
+       ('Bien','radio',NULL,NULL);
+
 INSERT INTO FicheIntervention (id_fiche, numero, nom_du_demandeur, date_demande, localisation, description_demande,
                                degre_urgence, couleur_intervention, etat_fiche, date_creation, id_personnel,
                                id_apprenti, nom_intervenant, prenom_intervenant, id_cours)

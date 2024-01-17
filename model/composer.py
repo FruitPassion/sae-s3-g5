@@ -1,5 +1,6 @@
 import logging, sys, os
 from custom_paquets.converter import convert_to_dict
+from custom_paquets.gestions_erreur import suplement_erreur
 from model.pictogramme import get_pictogramme_by_url
 from model.shared_model import db, ComposerPresentation as Compo, ElementBase as Elem
 
@@ -37,13 +38,14 @@ def get_composer_non_categorie(id_fiche=1):
     :return: liste de dictionnaires
     """
     try:
-        return convert_to_dict(Compo.query.with_entities(Compo.id_element, Compo.text, Compo.taille_texte, Compo.police, Compo.audio,
-                                         Compo.police, Compo.couleur, Compo.couleur_fond, Compo.niveau,
-                                         Compo.position_elem,
-                                         Compo.taille_pictogramme, Compo.ordre_saisie_focus,
-                                         Compo.id_pictogramme.label("pictogramme"), Compo.taille_pictogramme,
-                                         Compo.couleur_pictogramme).filter_by(id_fiche=id_fiche).join(Elem).filter(
-            Elem.type != "categorie").all())
+        return convert_to_dict(
+            Compo.query.with_entities(Compo.id_element, Compo.text, Compo.taille_texte, Compo.police, Compo.audio,
+                                      Compo.police, Compo.couleur, Compo.couleur_fond, Compo.niveau,
+                                      Compo.position_elem,
+                                      Compo.taille_pictogramme, Compo.ordre_saisie_focus,
+                                      Compo.id_pictogramme.label("pictogramme"), Compo.taille_pictogramme,
+                                      Compo.couleur_pictogramme, Compo.id_materiel).filter_by(
+                id_fiche=id_fiche).join(Elem).filter(Elem.type != "categorie").all())
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des éléments d'un catérgorie de la fiche {id_fiche}")
         logging.error(e)
@@ -101,9 +103,31 @@ def modifier_composition_par_element(composition, key, value):
         logging.error(e)
 
 
+def maj_materiaux_fiche(majs: dict, id_fiche: str):
+    """
+    Permet de mettre à jour les matériaux d'une fiche
+
+    :param majs: dictionnaire contenant les matériaux à mettre à jour
+    :param id_fiche: id de la fiche à mettre à jour
+    :return: None
+    """
+    try:
+        compositions = Compo.query.filter_by(id_fiche=id_fiche).all()
+        for element in compositions:
+            if element.position_elem in majs.keys():
+                element.id_materiel = majs[f'{element.position_elem}']
+        db.session.commit()
+    except Exception as e:
+        suplement_erreur(e, message="Erreur lors de l'enregistrement des modifications de la fiche.")
+
+
 def maj_contenu_fiche(majs: dict, id_fiche: str):
     """
-        
+    Permet de mettre à jour le contenu d'une fiche
+
+    :param majs: dictionnaire contenant les éléments à mettre à jour
+    :param id_fiche: id de la fiche à mettre à jour
+    :return:
     """
     try:
         compositions = Compo.query.filter_by(id_fiche=id_fiche).all()
@@ -112,19 +136,8 @@ def maj_contenu_fiche(majs: dict, id_fiche: str):
                 element.text = majs[f'{element.position_elem}']
         db.session.commit()
     except Exception as e:
-        logging.error(f"Erreur lors de l'enregistrement des modifications de la fiche.")
-        e_type, e_object, e_traceback = sys.exc_info()
+        suplement_erreur(e, message="Erreur lors de l'enregistrement des modifications de la fiche.")
 
-        e_filename = os.path.split(
-            e_traceback.tb_frame.f_code.co_filename
-        )[1]
-
-        e_message = str(e)
-
-        e_line_number = e_traceback.tb_lineno
-        logging.error(e_type)
-        logging.error(e_message)
-        logging.error(e_line_number)
 
 def get_composer_presentation_par_apprenti(id_fiche):
     """
@@ -132,6 +145,7 @@ def get_composer_presentation_par_apprenti(id_fiche):
     """
     presentation_fiche = db.session.query(Compo).filter_by(id_fiche=id_fiche).join(Elem).all()
     return presentation_fiche
+
 
 def get_checkbox_on(id_fiche):
     """
@@ -142,6 +156,20 @@ def get_checkbox_on(id_fiche):
     """
     try:
         return Compo.query.filter_by(text="on", id_fiche=id_fiche).all()
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération des checkbox de la fiche {id_fiche}")
+        logging.error(e)
+
+
+def get_radio_radioed(id_fiche):
+    """
+    Permet de récupérer les radios cochées de la fiche
+
+    :param id_fiche:
+    :return:
+    """
+    try:
+        return Compo.query.filter_by(text="radioed", id_fiche=id_fiche).all()
     except Exception as e:
         logging.error(f"Erreur lors de la récupération des checkbox de la fiche {id_fiche}")
         logging.error(e)

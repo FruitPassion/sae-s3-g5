@@ -4,12 +4,14 @@
     <link rel="stylesheet" type="text/css"
           href="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/css/dd.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/remplir_fiche.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/custom_ms_dropdown.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static',filename='css/completer_fiche_ms_dropdown.css') }}">
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ url_for('static',filename='js/color_generator.js') }}"></script>
     <script src="{{ url_for('static',filename='js/remplir_fiche.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/tts.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/js/dd.min.js"></script>
 {% endblock %}
 
@@ -17,169 +19,221 @@
     <h1>Fiche numéro {{ fiche.numero }} {% include "_partial/_tts.html" %}</h1>
 
     <div id="container-principal" class="px-4">
-        <form method="POST" name="completer-fiche"  enctype="multipart/form-data">
+        <form method="POST" name="completer-fiche" enctype="multipart/form-data">
             <div id="caroussel">
-                <div id="deplacement-gauche" class="deplacement-fleche fdisabled" onclick="changement_caroussel('-10', this)">
-                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                </div>
-                <div id="deplacement-droite" class="deplacement-fleche" onclick="changement_caroussel('10', this)">
-                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                </div>
                 <input type="hidden" id="avancee" name="avancee" value="">
-                <fieldset hidden="" id="field-0" class="scheduler-border p-2 mr-auto ml-2" style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px" >
+                <fieldset hidden="" id="field-0" class="scheduler-border p-2 mr-auto ml-2"
+                          style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
                     <legend>Informations de l'intervention {% include "_partial/_tts.html" %}</legend>
-                    <p>Intervenant : {{ fiche.prenom_intervenant }} {{ fiche.nom_intervenant }} {% include "_partial/_tts.html" %}</p>
+                    <p>Intervenant
+                        : {{ fiche.prenom_intervenant }} {{ fiche.nom_intervenant }} {% include "_partial/_tts.html" %}</p>
                     <p>Localisation : {{ fiche.localisation }} {% include "_partial/_tts.html" %}</p>
-                    <p>Description de la demande : {{ fiche.description_demande }} {% include "_partial/_tts.html" %}</p>
+                    <p>Description de la demande
+                        : {{ fiche.description_demande }} {% include "_partial/_tts.html" %}</p>
                     <p>Image avant l'intervention : {% include "_partial/_tts.html" %}</p>
                     <div>
-                        <div class="mb-4 d-flex justify-content-center">
-                            {%  if fiche.photo_avant != None %}
-                                <img id="selectedAvant" src="{{ url_for('static', filename='images/photo_fiche/'+fiche.photo_avant) }}"
-                                alt="Image avant intervention" style="width: 50%;" />
+                        <div class="mb-4 d-flex justify-content-around">
+                            {% if fiche.photo_avant != None %}
+                                <img id="selectedAvant"
+                                     src="{{ url_for('static', filename='images/photo_fiche/'+fiche.photo_avant) }}"
+                                     alt="Image avant intervention" style="width: 50%;"/>
                             {% else %}
                                 <img id="selectedAvant" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
-                                alt="Image avant intervention" style="width: 50%;" />
+                                     alt="Image avant intervention" style="width: 50%;"/>
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div class="btn btn-primary btn-rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
+                            <div class="btn btn-primary btn-rounded"
+                                 style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
                                 <label class="form-label text-white m-1" for="image-avant">Choisir une image</label>
                                 <input type="file" class="form-control d-none" id="image-avant" name="photo-avant"
-                                onchange="displaySelectedImage(event, 'selectedAvant')" />
+                                       onchange="displaySelectedImage(event, 'selectedAvant')"/>
                                 <a hidden="" class="text-light">
-                                    Choisir une image pour montrer avant l'intervention</a>{% include "_partial/_tts_hidden_invert.html" %}
+                                    Choisir une image pour montrer avant
+                                    l'intervention</a>{% include "_partial/_tts_hidden_invert.html" %}
                             </div>
                         </div>
                     </div>
                 </fieldset>
                 {% for categorie in composition %}
                     <fieldset id="field-{{ categorie['position_elem'] }}" class="scheduler-border p-2 mr-auto ml-2"
-                            hidden="" style="background-color: {{ categorie['couleur_fond'] }};">
+                              hidden="" style="background-color: {{ categorie['couleur_fond'] }};">
                         <legend>{{ categorie["libelle_elem"] }} {% include "_partial/_tts.html" %}</legend>
-                        {% for element in categorie["elements"] %}
-                            <div class="sous-field"
-                                {% if loop.index0 != 0 and element["type_elem"] == "select-materiel" %}hidden=""{% endif %} >
-                                <label id="modelem-{{ element['position_elem'] }}">
-                                    <div class="d-flex">
-                                        
-                                        <!-- Ici on retrouve l'icone de l'element -->
-                                        {% if element["pictogramme"] != None %}
-                                            <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
-                                                class="rounded my-auto mx-2" alt="icone element" onload="chargement_preview(this,
-                                                    ajout={{ element["taille_pictogramme"] }},
-                                                    couleur='{{ element["couleur_pictogramme"] }}',
-                                                    position_element='{{ element["position_elem"] }}')"
-                                                id="icone-{{ element["position_elem"] }}"
-                                                {% if element["niveau"] == 3 %}hidden="" {% endif %}>
-                                        {% endif %}
-                                        
-                                        <!-- Ici on retrouve le libelle de l'element -->
-                                        <span id="label-{{ element['position_elem'] }}"
-                                            style="font-size: {{ element['taille_texte'] }}px; color: {{ element['couleur'] }};
-                                                    font-family: {{ element['police'] }}, 'Sans-Serif light';"
-                                            {% if element["niveau"] == 1 %}hidden=""{% endif %}
-                                                class="my-auto">{{ element["libelle_elem"] }}</span>
-                                        
-                                        <!-- Ici se trouve le haut parleur pour traduire les le libelle de l'element -->
-                                        <div style="font-size: {{ element['taille_texte'] }}px;" class="mx-2 my-auto">
-                                            <a hidden="">{{ element["libelle_elem"] }}</a> {% include "_partial/_tts_hidden.html" %}
+                        <div {% if categorie["elements"][0]["type_elem"] in ["radio", "checkbox"] %}
+                            class="d-flex flex-wrap justify-content-around " {% endif %}>
+                            {% for element in categorie["elements"] %}
+                                <div class="sous-field">
+                                    <label id="modelem-{{ element['position_elem'] }}">
+                                        <div class="d-flex">
+
+                                            <!-- Ici on retrouve l'icone de l'element -->
+                                            {% if element["pictogramme"] != None %}
+                                                <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
+                                                     class="rounded my-auto mx-2" alt="icone element"
+                                                        {% if element["type_elem"] == "radio" %}
+                                                     onload="changeSize(this, ajout={{ element["taille_pictogramme"] }});"
+                                                        {% else %}
+                                                     onload="chargement_preview(this,
+                                                             ajout={{ element["taille_pictogramme"] }},
+                                                             couleur='{{ element["couleur_pictogramme"] }}',
+                                                             position_element='{{ element["position_elem"] }}')"
+                                                     id="icone-{{ element["position_elem"] }}"
+                                                        {% endif %}
+                                                     {% if element["niveau"] == 3 %}hidden="" {% endif %}>
+                                            {% endif %}
+
+                                            <!-- Ici on retrouve le libelle de l'element -->
+                                            <span id="label-{{ element['position_elem'] }}"
+                                                  style="font-size: {{ element['taille_texte'] }}px; color: {{ element['couleur'] }};
+                                                          font-family: {{ element['police'] }}, 'Sans-Serif light';"
+                                                  {% if element["niveau"] == 1 %}hidden=""{% endif %}
+                                                  class="my-auto">{{ element["libelle_elem"] }}</span>
+
+                                            <!-- Ici se trouve le haut parleur pour traduire les le libelle de l'element -->
+                                            <div style="font-size: {{ element['taille_texte'] }}px;"
+                                                 class="mx-2 my-auto">
+                                                <a hidden="">{{ element["libelle_elem"] }}</a> {% include "_partial/_tts_hidden.html" %}
+                                            </div>
                                         </div>
-                                    </div>
-                                </label>
-                                
-                                <!-- Ici on va mettre les différents types d'input
-                                Premier type : input de selection du temps -->
-                                {% if element["type_elem"] == "select-time" %}
-                                    <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
-                                        <select class="fs-4 my-3 form-select" name="{{ element['position_elem'] }}">
-                                            {% for h in range(0, 5) %}
-                                                {% for m in range(0, 60, 15) %}
-                                                    {% set formatted_minutes = "%02d"|format(m) %}
-                                                    {% if h+m != 0 %}
-                                                        <option value="{{ h }}h{{ formatted_minutes }}" {% if element['text'] == h|string()+"h"+formatted_minutes|string()  %} selected {% endif %}>
-                                                            {{ h }}h{{ formatted_minutes }}
-                                                        </option>
-                                                    {% endif %}
+                                    </label>
+
+                                    <!-- Ici on va mettre les différents types d'input
+                                    Premier type : input de selection du temps -->
+                                    {% if element["type_elem"] == "select-time" %}
+                                        <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
+                                            <select class="fs-4 my-3 form-select" name="{{ element['position_elem'] }}">
+                                                {% for h in range(0, 5) %}
+                                                    {% for m in range(0, 60, 15) %}
+                                                        {% set formatted_minutes = "%02d"|format(m) %}
+                                                        {% if h+m != 0 %}
+                                                            <option value="{{ h }}h{{ formatted_minutes }}"
+                                                                    {% if element['text'] == h|string()+"h"+formatted_minutes|string() %}
+                                                                    selected {% endif %}>
+                                                                {{ h }}h{{ formatted_minutes }}
+                                                            </option>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 {% endfor %}
-                                            {% endfor %}
-                                        </select>
-                                        {% include "_partial/_tts_temps.html" %}
-                                    </div>
-                                <!-- Deuxième type : input de selection de matériel -->
-                                {% elif element["type_elem"] == "select-materiel" %}
-                                    <div>
-                                        <select class="fs-4 my-3 form-select" name="{{ element['position_elem'] }}"> 
-                                            <option value="mat-1" disabled>-- Ajouter du materiel --</option>
-                                        </select>
-                                    </div>
-                                <!-- Troisième type : input text area pour les longs commentaires -->
-                                {% elif element["type_elem"] == "textarea" %}
-                                    <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
-                                        <textarea class="form-control" name="{{ element['position_elem'] }}">
-                                            {%- if element['text'] -%}
-                                                {{ element['text'] }}
-                                            {% endif %}</textarea>
-                                        {% include "_partial/_tts_textarea.html" %}
-                                    </div>
-                                <!-- Quatrième type : input de checkbox-->
-                                {% elif element["type_elem"] == "checkbox" %}
-                                    <div>
-                                        <input type="{{ element['type_elem'] }}" name="{{ element['position_elem'] }}"
-                                        style="width: {{ element['taille_texte'] }}px; height: {{ element['taille_texte'] }}px;"
-                                        {% if element['text'] != None  %} checked {% endif %}>
-                                    </div>
-                                <!-- Cinquième type : tout les autres input (date, text, number, etc...) -->
-                                {% else %}
-                                    <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
-                                        <input type="{{ element['type_elem'] }}" class="fs-4 my-3 form-control"
-                                               value="{{ element['text'] }}"
-                                               name="{{ element['position_elem'] }}">
-                                        {% include "_partial/_tts_date.html" %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
+                                            </select>
+                                            {% include "_partial/_tts_temps.html" %}
+                                        </div>
+                                        <!-- Deuxième type : input de selection de matériel -->
+                                    {% elif element["type_elem"] == "select-materiel" %}
+                                        <div style="font-size: {{ element['taille_texte']|int + 10 }}px;"
+                                             class="d-flex position-relative">
+                                            <select is="ms-dropdown"
+                                                    name="selecteur-{{ element["position_elem"] }}">
+                                                <option value="">Selecteur de materiel</option>
+                                                {% for categorie in materiaux %}
+                                                    <optgroup label="{{ categorie['nom'] }}">
+                                                        {% for materiel in categorie["elements"] %}
+                                                            <option value="{{ materiel['id_materiel'] }}"
+                                                                    data-image="{{ url_for('static', filename='images/materiel/'+materiel['lien']) }}"
+                                                                    {% if element['id_materiel'] == materiel['id_materiel'] %} selected {% endif %}>
+                                                                {{ materiel["nom"] }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </optgroup>
+                                                {% endfor %}
+                                            </select>
+                                            {% include "_partial/_tts_hidden_dropdown.html" %}
+                                        </div>
+                                        <!-- Troisième type : input text area pour les longs commentaires -->
+                                    {% elif element["type_elem"] == "textarea" %}
+                                        <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
+                                            <textarea class="form-control" name="{{ element['position_elem'] }}">
+                                                {%- if element['text'] -%}
+                                                    {{ element['text'] }}
+                                                {% endif %}</textarea>
+                                            {% include "_partial/_tts_textarea.html" %}
+                                        </div>
+                                        <!-- Quatrième type : input de checkbox-->
+                                    {% elif element["type_elem"] == "checkbox" %}
+                                        <div {% if categorie["elements"][0]["type_elem"] == "checkbox" %}
+                                            class="text-center"{% endif %}>
+                                            <input type="{{ element['type_elem'] }}"
+                                                   name="{{ element['position_elem'] }}"
+                                                   style="width: {{ element['taille_texte'] }}px; height: {{ element['taille_texte'] }}px;"
+                                                    {% if element['text'] != None %} checked {% endif %}>
+                                        </div>
+
+                                        <!-- Cinquième type : input de radio-->
+                                    {% elif element["type_elem"] == "radio" %}
+                                        <div class="text-center">
+                                            <input type="{{ element['type_elem'] }}"
+                                                   value="{{ element['position_elem'] }}"
+                                                   name="radio-{{ categorie['position_elem'] }}"
+                                                   style="width: {{ element['taille_texte'] }}px; height: {{ element['taille_texte'] }}px;"
+                                                    {% if element['text'] != None %} checked {% endif %}>
+                                        </div>
+                                        <!-- Sixieme type : tout les autres input (date, text, number, etc...) -->
+                                    {% else %}
+                                        <div style="font-size: {{ element['taille_texte'] }}px;" class="d-flex">
+                                            <input type="{{ element['type_elem'] }}" class="fs-4 my-3 form-control"
+                                                   value="{{ element['text'] }}"
+                                                   name="{{ element['position_elem'] }}">
+                                            {% include "_partial/_tts_date.html" %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </fieldset>
                 {% endfor %}
+
                 <fieldset id="field-70" class="scheduler-border p-2 mr-auto ml-2" hidden=""
-                style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                <p>Image après l'intervention : {% include "_partial/_tts.html" %}</p>    
-                <div>
+                          style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
+                    <p>Image après l'intervention : {% include "_partial/_tts.html" %}</p>
+                    <div>
                         <div class="mb-4 d-flex justify-content-center">
-                            {%  if fiche.photo_apres != None %}
-                                <img id="selectedApres" src="{{ url_for('static', filename='images/photo_fiche/'+fiche.photo_apres) }}"
-                                alt="Image apres intervention" style="width: 50%;" />
+                            {% if fiche.photo_apres != None %}
+                                <img id="selectedApres"
+                                     src="{{ url_for('static', filename='images/photo_fiche/'+fiche.photo_apres) }}"
+                                     alt="Image apres intervention" style="width: 50%;"/>
                             {% else %}
                                 <img id="selectedApres" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
-                                alt="Image apres intervention" style="width: 50%;" />
+                                     alt="Image apres intervention" style="width: 50%;"/>
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div class="btn btn-primary btn-rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
+                            <div class="btn btn-primary btn-rounded"
+                                 style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
                                 <label class="form-label text-white m-1" for="image-apres">Choisir une image</label>
                                 <input type="file" class="form-control d-none" name="photo-apres"
-                                id="image-apres" onchange="displaySelectedImage(event, 'selectedApres')" />
+                                       id="image-apres" onchange="displaySelectedImage(event, 'selectedApres')"/>
                                 <a hidden="" class="text-light">
-                                    Choisir une image pour montrer après l'intervention</a>{% include "_partial/_tts_hidden_invert.html" %}
+                                    Choisir une image pour montrer après
+                                    l'intervention</a>{% include "_partial/_tts_hidden_invert.html" %}
                             </div>
                         </div>
                     </div>
                 </fieldset>
                 <fieldset id="field-80" class="scheduler-border p-2 mr-auto ml-2" hidden=""
-                style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                    <div class="d-flex justify-content-center  bg-primary rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
-                    <a href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero ) }}"  style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;"
-                       class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Finir la fiche</a>
+                          style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
+                    <div class="d-flex justify-content-center  bg-primary rounded"
+                         style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
+                        <a href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero ) }}"
+                           style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;"
+                           class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Finir la fiche</a>
                         {% include "_partial/_tts_hidden_invert.html" %}
                     </div>
                 </fieldset>
-                <div class="mt-5 bg-primary d-flex justify-content-center rounded" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;">
-                    <button class="btn btn-primary" style="font-size: {{ composition[0]['taille_texte']|int+15 }}px;" type="submit">
-                        Sauvegarder la progression
+                <div class="mt-5 bg-primary d-flex justify-content-center rounded"
+                     style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
+                    <button class="btn btn-primary" style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;"
+                            type="submit">
+                        Sauvegarder
                     </button>
                     <a hidden="" class="text-light">
                         Sauvegarder la progression</a>{% include "_partial/_tts_hidden_invert.html" %}
+                </div>
+
+                <div id="deplacement-gauche" class="deplacement-fleche fdisabled"
+                     onclick="changement_caroussel('-10', this)">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </div>
+                <div id="deplacement-droite" class="deplacement-fleche" onclick="changement_caroussel('10', this)">
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </div>
             </div>
         </form>

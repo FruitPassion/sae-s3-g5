@@ -1,4 +1,5 @@
 from model.composer import get_composer_categorie, get_composer_non_categorie, get_elements_base
+from model.materiel import get_all_materiel
 from model.pictogramme import get_pictogrammes, get_all_pictogrammes
 
 
@@ -19,6 +20,22 @@ def build_categories(id_fiche):
                 if pict.id_pictogramme == elements_non_cat["pictogramme"]:
                     elements_non_cat["pictogramme"] = pict.url
     return composer_cat
+
+
+def build_materiel():
+    materiaux = get_all_materiel()
+    to_return = []
+    for materiel in materiaux:
+        # check if categorie already in one of to_return dictionnaries at key "nom"
+        if materiel.categorie not in [categorie["nom"] for categorie in to_return]:
+            to_return.append({"nom": f"{materiel.categorie}", "elements": []})
+
+    for categorie in to_return:
+        for materiel in materiaux:
+            if materiel.categorie == categorie["nom"]:
+                categorie["elements"].append({"nom": materiel.nom, "id_materiel": materiel.id_materiel,
+                                              "lien": materiel.lien})
+    return to_return
 
 
 def build_pictogrammes():

@@ -66,14 +66,14 @@ def stocker_image_formation(file):
     return chemin_image
 
 
-def process_photo(photo, existing_photo, id_fiche):
+def process_photo(photo, existing_photo, id_fiche, filename):
     if photo.filename == "" and not existing_photo:
         photo.filename = None
     else:
-        save_photo(photo, id_fiche)
+        save_photo(photo, id_fiche, filename)
 
 
-def save_photo(photo, id_fiche):
-    filename = secure_filename(f"{id_fiche}_{photo.filename}")
+def save_photo(photo, id_fiche, filename):
+    filename = secure_filename(f"{id_fiche}_{filename}.jpg")
     photo.save(f"./static/images/photo_fiche/{filename}")
 

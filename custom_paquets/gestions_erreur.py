@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 
 
 def logging_erreur(e, message='Exception occurred : '):
@@ -16,6 +18,19 @@ def logging_erreur(e, message='Exception occurred : '):
             mess = mess + line.strip() + '<br>'
     f.close()
     return mess
+
+
+def suplement_erreur(e, message='Exception occurred : '):
+    logging.error(message)
+
+    e_type, e_object, e_traceback = sys.exc_info()
+
+    e_message = str(e)
+    e_line_number = e_traceback.tb_lineno
+
+    logging.error(e_type)
+    logging.error(e_message)
+    logging.error(e_traceback.tb_frame.f_code.co_filename+" ligne : "+str(e_line_number))
 
 
 class ProjectError(Exception):

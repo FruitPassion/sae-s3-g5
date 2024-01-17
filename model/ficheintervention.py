@@ -4,6 +4,7 @@ from sqlalchemy import func, asc
 from time import strftime, localtime
 
 from custom_paquets.converter import convert_to_dict
+from custom_paquets.gestions_erreur import suplement_erreur
 from model.apprenti import get_id_apprenti_by_login, get_login_apprenti_by_id
 from model.composer import get_composer_presentation
 from model.personnel import get_id_personnel_by_login
@@ -344,17 +345,16 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
         logging.error(e)
 
 
-def definir_photo(photos, id_fiche):
+def definir_photo(photos, id_fiche, avant_apres):
     """
     Définit la photo avant et la photo après de la fiche
     """
     try:
         fiche = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
-        if len(photos[0].filename) != 0:
-            fiche.photo_avant = f'{id_fiche}_{photos[0].filename}'
-        if len(photos[1].filename) != 0:
-            fiche.photo_apres = f'{id_fiche}_{photos[1].filename}'
+        if avant_apres:
+            fiche.photo_apres = f'{id_fiche}_photo-avant.jpg'
+        else:
+            fiche.photo_avant = f'{id_fiche}_photo-apres.jpg'
         db.session.commit()
     except Exception as e:
-        logging.error(f"Erreur lors de la définition des photos de la fiche {id_fiche}")
-        logging.error(e)
+        suplement_erreur(e, f"Erreur lors de la définition des photos de la fiche {id_fiche}")
