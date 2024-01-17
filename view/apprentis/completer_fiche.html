@@ -60,10 +60,7 @@
                                         <!-- Ici on retrouve l'icone de l'element -->
                                         {% if element["pictogramme"] != None %}
                                             <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
-                                                class="rounded my-auto mx-2" alt="icone element" onload="chargement_preview(this,
-                                                    ajout={{ element["taille_pictogramme"] }},
-                                                    couleur='{{ element["couleur_pictogramme"] }}',
-                                                    position_element='{{ element["position_elem"] }}')"
+                                                class="rounded my-auto mx-2" alt="icone element"
                                                 id="icone-{{ element["position_elem"] }}"
                                                 {% if element["niveau"] == 3 %}hidden="" {% endif %}>
                                         {% endif %}
