@@ -31,10 +31,9 @@
             {% else %}
                 <p>Commentaire audio de l'apprenti : </p>
             {% endif %}
-            <button type="button" id="enregistrer_btn">Démarrer l'enregistrement <i id='icon' class="fa fa-play-circle"></i></button>
-
+            <button type="button" id="enregistrer_btn">Enregistrer le commentaire audio <i id='icon' class="fa fa-play-circle"></i></button>
             <input type="hidden" name="commentaire_audio" id="commentaire_audio" />
-            <audio id="audioPlayer"></audio>
+            <audio id="audioPlayer" name="test"></audio>
             <p id="statut"></p>
             <p id="Time" style="display: none;">Temps écoulé : 0:00</p>
             
@@ -55,17 +54,33 @@
                         
                         // Arrêt de l'enregistrement
                         mediaRecorder.onstop = function() {
-                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
                             const audioUrl = URL.createObjectURL(audioBlob);
-                            const audioPlayer = document.getElementById('audioPlayer');
-                            audioPlayer.src = audioUrl;
-                            audioPlayer.controls = true;
-                            clearInterval(recordingInterval);
-                            document.getElementById('statut').textContent = 'Enregistrement terminé';
-                            document.getElementById('Time').style.display = 'none';
-                            document.getElementById('enregistrer_btn').style.display = 'none';
-                        };
-                        
+
+                            const formData = new FormData();
+                            formData.append('audio', audioBlob);
+                            
+                            fetch('/api/save_audio/{{ id_personnel }}', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                console.log(data);
+                                const audioPlayer = document.getElementById('audioPlayer');
+                                audioPlayer.src = audioUrl;
+                                audioPlayer.controls = true;
+                                clearInterval(recordingInterval);
+                                document.getElementById('statut').textContent = 'Enregistrement modifié';
+                                document.getElementById('Time').style.display = 'none';
+                                document.getElementById('enregistrer_btn').style.display = 'none';
+                                document.getElementById('commentaire_audio').value=audioUrl;
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors de l\'enregistrement audio sur le serveur:', error);
+                            });
+                        }
+
                         // Bouton démarrer/arrêter l'enregistrement
                         const enregistrer_btn = document.getElementById('enregistrer_btn');
                         const icon = document.getElementById('icon');
@@ -106,6 +121,9 @@
             {% else %}
                 <p>Evaluation audio de l'apprenti : </p>
             {% endif %}
+            <button type="button" id="enregistrer_btn">Enregistrer l'évaluation audio <i id='icon' class="fa fa-play-circle"></i></button>
+            <input type="hidden" name="eval_audio" id="eval_audio" />
+
             <input type="submit" value="Valider">
             
             <input type="button" value="Enregistrer" id="enregistrer">

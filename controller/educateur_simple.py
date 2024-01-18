@@ -6,7 +6,8 @@ from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, get_nom_cours_by_id
 from model.trace import ajouter_commentaires_evaluation, modifier_commentaire_texte, modifier_evaluation_texte, \
-    modifier_commentaire_audio, get_audio_commentaire, get_commentaires_educ_par_fiche, get_commentaires_par_fiche
+    modifier_commentaire_audio, get_audio_commentaire, get_commentaires_educ_par_fiche, get_commentaires_par_fiche, \
+    modifier_eval_audio
 from model.personnel import get_id_personnel_by_login
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
@@ -68,12 +69,20 @@ def modifier_commentaires(apprenti, fiche, typeCommentaire):
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
         commentaire_audio = request.form.get("commentaire_audio")
+        eval_audio = request.form.get("eval_audio")
         
         if commentaire_audio in request.files and len(request.files.get("commentaire_audio").filename) != 0: 
             f = request.files.get("commentaire_audio")
             chemin_audio = stocker_audio_commentaire(f)
             if chemin_audio:
                 modifier_commentaire_audio(fiche["id_fiche"], commentaires.horodatage, chemin_audio)
+                
+        elif eval_audio in request.files and len(request.files.get("eval_audio").filename) != 0: 
+            f = request.files.get("eval_audio")
+            chemin_eval_audio = stocker_audio_commentaire(f)
+            if chemin_eval_audio:
+                modifier_eval_audio(fiche["id_fiche"], commentaires.horodatage, chemin_eval_audio)
+                
         else:
             chemin_audio = get_audio_commentaire(commentaire_audio)
         modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte, 
