@@ -49,6 +49,17 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
         legend: {
           display: false,
         },
+        zoom : {
+          zoom : {
+            wheel: {
+              enabled: true,
+            },
+            pinch : {
+              enabled : true
+            },
+            mode: 'xy',
+          }
+        }
       },
       responsive: true,
       hover: {
@@ -83,4 +94,14 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
       },
     },    
   });
+  return line_chart;
 }
+
+window.onload = function () {
+  var chart = creation_graphique_suivi_progression_cip(niv_fiche);
+
+  // Ajoutez un écouteur d'événement de redimensionnement
+  window.addEventListener('resize', function () {
+    chart.resize();
+  });
+};
