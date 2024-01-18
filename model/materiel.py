@@ -1,3 +1,4 @@
+import logging
 from custom_paquets.gestions_erreur import suplement_erreur
 from model.shared_model import Materiel, db
 
@@ -47,3 +48,20 @@ def get_photo_materiel(id_materiel):
         return Materiel.query.filter_by(id_materiel=id_materiel).with_entities(Materiel.lien).first().lien
     except Exception as e:
         suplement_erreur(e, message=f"Erreur lors de la récupération du lien de la photo du matériel {id_materiel}.")
+
+
+def remove_materiel(id_materiel, commit=True):
+    """
+    Supprime une materiel en BD
+
+    :param id_materiel: id de la materiel à supprimer
+    :return: None
+    """
+    try:
+        db.session.delete(Materiel.query.filter_by(id_materiel=id_materiel).first())
+        if commit:
+            db.session.commit()
+        return True
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la suppression du matériel {id_materiel}.")
+        return False

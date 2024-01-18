@@ -6,6 +6,7 @@ from custom_paquets.decorateur import admin_login_required, personnel_login_requ
 from model.apprenti import check_password_apprenti, get_nbr_essais_connexion_apprenti, archiver_apprenti, \
     remove_apprenti, set_password_apprenti
 from model.formation import archiver_formation, remove_formation, reinitisaliser_formation
+from model.materiel import remove_materiel
 from model.personnel import archiver_personnel, remove_personnel
 from model.cours import archiver_cours, remove_cours
 from model.trace import modifier_commentaire_audio
@@ -85,6 +86,15 @@ def api_supprimer_formation(id_formation):
     Supprime une formation à partir de son id
     """
     return {"valide": remove_formation(id_formation)}
+
+
+@api.route("/supprimer-materiel/<id_materiel>", methods=["GET"])
+@admin_login_required
+def api_supprimer_materiel(id_materiel):
+    """
+    Supprime un mat"riel à partir de son id
+    """
+    return {"valide": remove_materiel(id_materiel)}
 
 
 @api.route("/archiver-apprenti/<id_apprenti>", methods=["GET"])

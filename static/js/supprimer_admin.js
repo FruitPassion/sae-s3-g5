@@ -17,6 +17,16 @@ function supprimer_personnel(){
 }
 
 
+function supprimer_materiel(){
+    supprimer("materiel");
+}
+
+
+function supprimer_picto(){
+    supprimer("picto");
+}
+
+
 function supprimer_cours(){
     supprimer("cours");
 }

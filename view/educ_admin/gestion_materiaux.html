@@ -40,8 +40,7 @@
                     </thead>
                     <tbody>
                     {% for materiel in materiaux %}
-                        <tr class="text-center"
-                            id="ele-{{ materiel['id_materiel'] }}">
+                        <tr class="text-center" id="arch-ele-{{ materiel['id_materiel'] }}">
                             <td id="nom-{{ materiel['id_materiel'] }}" class="align-middle">{{ materiel["nom"] }}</td>
                             <td id="categorie-{{ materiel['id_materiel'] }}"
                                 class="align-middle">{{ materiel["categorie"] }}</td>
@@ -56,7 +55,7 @@
                             <th scope="row" class="align-middle ele-btn-supprimer" onclick="validation_suppression(this)"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal-supprimer">
-                                <button><i class="fa" aria-hidden="true"></i></button>
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </th>
                         </tr>
                     {% endfor %}
@@ -96,6 +95,8 @@
             </div>
         </div>
     </div>
+
+    <div id="snackbar">.</div>
 
     <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -161,7 +162,7 @@
     </div>
 
 
-    <div class="fixed-bottom bg-light">
+    <div class="bg-light">
         <a href="{{ url_for('educ_admin.accueil_educadmin') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
 {% endblock %}

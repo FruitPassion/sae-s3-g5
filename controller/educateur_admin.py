@@ -65,7 +65,6 @@ def gestion_images():
             chemin_materiel = stocker_photo_materiel(f, categorie = form_modifier.form_modifier_categorie.data)
         else:
             chemin_materiel = get_photo_materiel(identifiant)
-        print(chemin_materiel)
         update_materiel(identifiant, form_modifier.form_modifier_nom.data, form_modifier.form_modifier_categorie.data,
                      chemin_materiel)
         return redirect(url_for("educ_admin.gestion_images"), 302)
