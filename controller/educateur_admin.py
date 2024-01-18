@@ -10,12 +10,13 @@ from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, \
     get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
-    get_fiche_par_id_fiche
-from model.formation import get_all_formations
+    get_fiche_par_id_fiche, get_id_fiche_apprenti
+from model.formation import get_all_formations, get_formation_par_apprenti
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.materiel import add_materiel, get_all_materiel, get_photo_materiel, update_materiel
+from model.personnel import get_id_personnel_by_login
 from model.pictogramme import add_picto, get_all_pictogrammes, get_photo_picto_by_id, update_picto
-from model.trace import get_commentaires_par_fiche
+from model.trace import get_commentaires_par_fiche, get_commentaires_type_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
@@ -57,27 +58,26 @@ def gestion_images():
     materiaux = get_all_materiel()
     form_ajouter = AjouterMateriel()
     form_modifier = ModifierMateriel()
-    
+
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
         if len(request.files.get("materiel-modifier").filename) != 0:
             f = request.files.get("materiel-modifier")
-            chemin_materiel = stocker_photo_materiel(f, categorie = form_modifier.form_modifier_categorie.data)
+            chemin_materiel = stocker_photo_materiel(f, categorie=form_modifier.form_modifier_categorie.data)
         else:
             chemin_materiel = get_photo_materiel(identifiant)
         update_materiel(identifiant, form_modifier.form_modifier_nom.data, form_modifier.form_modifier_categorie.data,
-                     chemin_materiel)
+                        chemin_materiel)
         return redirect(url_for("educ_admin.gestion_images"), 302)
-    
+
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         f = request.files.get("materiel")
-        chemin_materiel = stocker_photo_materiel(f, categorie = form_ajouter.categorie.data)
+        chemin_materiel = stocker_photo_materiel(f, categorie=form_ajouter.categorie.data)
         add_materiel(form_ajouter.nom.data, form_ajouter.categorie.data, chemin_materiel)
         return redirect(url_for("educ_admin.gestion_images"), 302)
-      
-    return render_template("educ_admin/gestion_materiaux.html", materiaux = materiaux, 
-                           form_ajouter = form_ajouter, form_modifier = form_modifier), 200
 
+    return render_template("educ_admin/gestion_materiaux.html", materiaux=materiaux,
+                           form_ajouter=form_ajouter, form_modifier=form_modifier), 200
 
 
 @educ_admin.route("/gestion-pictos", methods=["GET", "POST"])
@@ -90,13 +90,13 @@ def gestion_pictos():
 
     form_ajouter = AjouterPicto()
     form_modifier = ModifierPicto()
-    
+
     if form_ajouter.validate_on_submit() and request.method == "POST":
         f = request.files.get("picto")
         chemin_picto = stocker_picto(f)
         add_picto(form_ajouter.label.data, form_ajouter.categorie.data, form_ajouter.souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
-    
+
     elif form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")[5:]
 
@@ -108,9 +108,9 @@ def gestion_pictos():
         update_picto(identifiant, form_modifier.form_modifier_label.data, form_modifier.form_modifier_categorie.data,
                      form_modifier.form_modifier_souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
-    
-    return render_template("educ_admin/gestion_pictos.html", pictos = pictos, form_modifier = form_modifier,
-                           form_ajouter = form_ajouter), 200
+
+    return render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier,
+                           form_ajouter=form_ajouter), 200
 
 
 @educ_admin.route("/gestion-cours", methods=["GET", "POST", "DELETE"])
@@ -167,11 +167,12 @@ def fiches_apprenti(apprenti):
 
     :return: rendu de la page choix_fiches_apprenti.html
     """
+    formation = get_formation_par_apprenti(apprenti)
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_par_login(apprenti)
     fiches = changer_date(fiches)
     return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos,
-                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
+                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id, formation=formation)
 
 
 @educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET"])
@@ -204,7 +205,8 @@ def ajouter_fiche(apprenti):
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
         id_cours = request.form.get('coursinput')
-        id_fiche = assigner_fiche_dummy_eleve(apprenti, session["name"], form.dateinput.data, form.nominput.data,
+        id_personnel = get_id_personnel_by_login(session["name"])
+        id_fiche = assigner_fiche_dummy_eleve(apprenti, id_personnel, form.dateinput.data, form.nominput.data,
                                               form.lieuinput.data, form.decriptioninput.data, degres.index(degres) + 1,
                                               degres, form.nomintervenant.data, form.prenomintervenant.data, id_cours)
         flash("Fiche enregistrée avec succès")
@@ -236,14 +238,15 @@ def personnalisation(id_fiche):
                            composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
 
 
-@educ_admin.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
+@educ_admin.route("/<apprenti>/<numero>/commentaires", methods=["GET"])
 @educadmin_login_required
-def visualiser_commentaires(apprenti, fiche):
+def visualiser_commentaires(apprenti, numero):
     """
     Page d'affichage des commentaires de la fiche d'identifiant fiche de l'apprenti au login apprenti
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-    commentaires = get_commentaires_par_fiche(fiche)
-    return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
-                           commentaires=commentaires), 200
+    commentaires_educ = get_commentaires_type_par_fiche((get_id_fiche_apprenti(apprenti, numero)))
+    commentaires_appr = get_commentaires_type_par_fiche((get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
+    return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
+                           commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200

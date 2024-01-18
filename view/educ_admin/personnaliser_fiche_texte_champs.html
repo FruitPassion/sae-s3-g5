@@ -29,7 +29,10 @@
                           {% if loop.index0 != 0 %}hidden="" {% endif %} style="{{ categorie['couleur_fond'] }}">
                     <legend>{{ categorie["libelle_elem"] }}</legend>
                     {% if categorie["libelle_elem"] == "Matériaux utilisés" %}
-                        <a href="{{ url_for('educ_admin.ajouter_materiel') }}"><img src="{{ url_for('static', filename='images/cross.png') }}" height="40" align="middle"></a>
+                        <a href="{{ url_for('educ_admin.gestion_images') }}" >
+                            <button class="btn btn-primary form-control" type="button">Gestion du materiel
+                            <i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </a>
                     {% endif %}
                     {% for element in categorie["elements"] %}
                         <label class="mb-2" id="modelem-{{ element['position_elem'] }}">

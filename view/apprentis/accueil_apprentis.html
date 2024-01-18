@@ -17,15 +17,25 @@
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">
+                    {% if fiche.etat_fiche == 1 %}
+                        <a class="modifier" target="_blank"
+                           href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero) }}">
+                            <i class="fa fa-print" aria-hidden="true"></i></a>
+                    {% else %}
+                        <a class="modifier"></a>
+                    {% endif %}
+
                     {% if fiche.etat_fiche == 0 %}
                         <a href="{{ url_for('apprenti.completer_fiche', numero=fiche.numero) }}" class="bg-modifier">
+                    {% elif fiche.etat_fiche == 1 %}
+                        <a href="{{ url_for('apprenti.afficher_commentaires', numero=fiche.numero) }}" class="bg-modifier">
                     {% else %}
                         <a class="bg-modifier">
                     {% endif %}
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
                         {% if fiche.etat_fiche == 1 %}
-                            <a href="{{ url_for('apprenti.afficher_commentaires', id_fiche=fiche.id_fiche) }}"><img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini"></a>
+                            <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
                         {% elif fiche.etat_fiche == 2 %}
                             <img class="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
                         {% else %}

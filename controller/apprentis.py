@@ -10,7 +10,7 @@ from model.apprenti import get_apprenti_by_login
 from model.composer import maj_contenu_fiche, get_checkbox_on
 from model.trace import get_commentaires_par_fiche
 from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
-    get_id_fiche_apprenti, get_fiche_par_id_fiche, definir_photo
+    get_id_fiche_apprenti, get_fiche_par_id_fiche, definir_photo, valider_fiche
 
 apprenti = Blueprint('apprenti', __name__, url_prefix="/apprenti")
 
@@ -134,22 +134,38 @@ def imprimer_pdf(numero):
 
     :return: rendu de la page fiche_pdf.html
     """
-    materiaux = build_materiel()
+    # verifier que fiche finie
     fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
+    valider_fiche(fiche.id_fiche)
+
+    materiaux = build_materiel()
     composer_fiche = get_composer_presentation_par_apprenti(fiche.id_fiche)
     return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche,
                            materiaux=materiaux)
 
 
-@apprenti.route("/<id_fiche>/commentaires", methods=["GET"])
+@apprenti.route("/valider/<numero>", methods=["GET"])
 @apprenti_login_required
-def afficher_commentaires(id_fiche):
+def valider(numero):
+    """
+    Page de validation d'une fiche technique par un apprenti
+
+    :return: rendu de la page valider.html
+    """
+    fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
+    valider_fiche(fiche.id_fiche)
+    return redirect(url_for("apprenti.redirection_connexion"))
+
+
+@apprenti.route("/<numero>/commentaires", methods=["GET"])
+@apprenti_login_required
+def afficher_commentaires(numero):
     """
     Page d'affichage des commentaires par un apprenti de la fiche technique id_fiche
 
     :return: rendu de la page commentaires.html
     """
     
-    commentaires = get_commentaires_par_fiche(id_fiche)
-    return render_template("apprentis/commentaires.html", apprenti=apprenti, id_fiche=id_fiche,
+    commentaires = get_commentaires_par_fiche(get_id_fiche_apprenti(session['name'], numero))
+    return render_template("apprentis/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires=commentaires), 200

@@ -8,8 +8,7 @@ def get_commentaires_par_fiche(id_fiche):
     """
     Récupère les commentaires de la fiche id_fiche d'un apprenti
 
-    :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
-    et l'identifiant de l'éducateur ayant créé la trace
+    :return: Tous les commentaires
     """
     try:
         return LaisserTrace.query.filter_by(id_fiche=id_fiche).all()
@@ -18,7 +17,7 @@ def get_commentaires_par_fiche(id_fiche):
         logging.error(e)
 
 
-def get_commentaires_educ_par_fiche(id_fiche, apprenti="0"):
+def get_commentaires_type_par_fiche(id_fiche, apprenti="0"):
     
     """
     Récupère les commentaires de la fiche id_fiche d'un apprenti
@@ -55,7 +54,6 @@ def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte, typeComm
             db.session.commit()
         else:
             trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
-            print(commentaire_texte)
             trace.commentaire_texte = commentaire_texte
             db.session.commit()
     except Exception as e:
@@ -123,9 +121,8 @@ def modifier_eval_audio(id_fiche, horodatage, eval_audio, typeCommentaire):
         logging.error(e)
 
 
-# jsp si ça marche malheureusement
 def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login,
-                                    intitule):
+                                    intitule, type_c):
     """
     Ajoute les commentaires et évaluations d'une fiche technique d'un apprenti
 
@@ -136,7 +133,7 @@ def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, com
         horodatage = datetime.now()
         trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
                              commentaire_texte=commentaire_texte, eval_texte=eval_texte,
-                             commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti="0",
+                             commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti=type_c,
                              intitule=intitule)
         db.session.add(trace)
         db.session.commit()

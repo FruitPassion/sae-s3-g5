@@ -7,45 +7,42 @@
 {% block title %}Commentaires{% endblock %}
 
 {% block body %}
-    <h1>Commentaires de la fiche technique {{ fiche }} de {{ apprenti }} </h1>
+    <h1>Commentaires de la fiche technique numero {{ numero }} de {{ apprenti }} </h1>
+
     <h2 class="commentaireTitre">Commentaires intervenant
-        {% if commentaires|length == 0 %}
-            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'educateur') }}" >
-                <img id="ajouter" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
+        {% if commentaires_educ  == None %}
+            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'educateur') }}" >
+                <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'educateur') }}" name="commentaire_educateur">
-                <img class="modifier" src="{{ url_for('static', filename='images/modifier.png') }}" alt="modifier">
+            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'educateur') }}" name="commentaire_educateur">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </a>
         {% endif %}
     </h2>
 
-    {% if commentaires|length > 0 %}
-        <p class="commentaire">Commentaire : {{ commentaires[0].commentaire_texte }}</p>
-        <p class="commentaire">Commentaire audio : {{ commentaires[0].commentaire_audio }}</p>
-        <p class="commentaire">Evaluation : {{ commentaires[0].eval_texte }}</p>
-        <p class="commentaire">Evaluation audio : {{ commentaires[0].eval_audio }}</p>
+    {% if commentaires_educ != None %}
+        <p class="commentaire">Commentaire : {{ commentaires_educ.commentaire_texte }}</p>
+        <p class="commentaire">Evaluation : {{ commentaires_educ.eval_texte }}</p>
     {% else %}
         <p class="commentaire">Pas encore de commentaire de l'éducateur</p>
     {% endif %}
 
     <h2 class="commentaireTitre">Commentaires apprenti
-        {% if commentaires|length == 0 %}
-            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'apprenti') }}">
-                <img id="ajouter" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">
+        {% if commentaires_appr  == None %}
+            <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, numero = numero, type_commentaire ='apprenti') }}">
+                <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
         {% else %}
-            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, fiche = fiche, typeCommentaire = 'apprenti') }}">
-                <img class="modifier" src="{{ url_for('static', filename='images/modifier.png') }}" alt="modifier">
+            <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'apprenti') }}">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </a>
         {% endif %}
     </h2>
 
-    {% if commentaires|length > 1 %}
-        <p class="commentaire">Commentaire : {{ commentaires[1].commentaire_texte }}</p>
-        <p class="commentaire">Commentaire audio : {{ commentaires[1].commentaire_audio }}</p>
-        <p class="commentaire">Evaluation : {{ commentaires[1].eval_texte }}</p>
-        <p class="commentaire">Evaluation audio : {{ commentaires[1].eval_audio }}</p>
+    {% if commentaires_appr != None %}
+        <p class="commentaire">Commentaire : {{ commentaires_appr.commentaire_texte }}</p>
+        <p class="commentaire">Evaluation : {{ commentaires_appr.eval_texte }}</p>
     {% else %}
         <p class="commentaire">Pas encore de commentaire de l'apprenti</p>
     {% endif %}
@@ -53,7 +50,15 @@
 
     <div style="height: 200px"> </div>
 
+    {% if session["role"] == "Educateur Administrateur" %}
     <div class="fixed-bottom bg-light">
-        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+        <a href="{{ url_for("educ_admin.fiches_apprenti", apprenti=apprenti) }}">
+            {% include "_partial/_retour_bouton.html" %}</a>
     </div>
+    {% else %}
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for("educ_simple.fiches_apprenti", apprenti=apprenti) }}">
+            {% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+    {% endif %}
 {% endblock %}

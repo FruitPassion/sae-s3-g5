@@ -12,8 +12,7 @@
     <title>Fiche Intervention N°{{ fiche.numero }}</title>
 </head>
 
-{% block body %}
-    <body class="colonne centre">
+<body class="colonne centre">
     <main class="colonne">
         <div class="titre border">FICHE D'INTERVENTION N°{{ fiche.numero }}</div>
         <form>
@@ -46,7 +45,7 @@
                 <div class="colonnePrint">
                     <div class="titre demi">Description de la demande</div>
                     <div> <textarea disabled>{{ fiche.description_demande }}
-                    </textarea>
+                        </textarea>
                     </div>
                 </div>
                 <div class="espaceHor"></div>
@@ -259,17 +258,16 @@
             <div class="espaceHor"></div>
             <div class="espaceHor"></div>
 
-            <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
-            <div class="noPrint">
-                <div></div>
-                <button id="button">Imprimer</button>
-                <div></div>
+            <div class="centre noPrint" style="margin-bottom: 20px">Click sur imprimer quand vous avez tout terminé</div>
+            <div class="noPrint" style="margin-bottom: 50px">
+                <div>
+                    <button id="button">Imprimer</button>
+                    <div class="demi"></div>
+                </div>
             </div>
         </form>
     </main>
-    </body>
-    {% block javascripts %}
-        <script src="{{ url_for('static',filename='js/export_pdf.js') }}"></script>
-    {% endblock %}
+</body>
 
-{% endblock %}
+<script src="{{ url_for('static',filename='js/export_pdf.js') }}"></script>
+</html>

@@ -32,7 +32,7 @@
                     {% endif %}
                     <a {% if fiche.etat_fiche == 1 %}
                         href="{{ url_for('educ_admin.visualiser_commentaires', apprenti=apprenti.login,
-                        fiche = fiche.id_fiche) }}" {% endif %}
+                        numero = fiche.numero) }}" {% endif %}
                         class="bg-modifier">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
@@ -52,7 +52,9 @@
         {% endfor %}
     </div>
 
+    <div style="height: 200px"> </div>
     <div class="fixed-bottom bg-light">
-        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+        <a href="{{ url_for("educ_admin.choix_eleve", nom_formation=formation) }}">
+            {% include "_partial/_retour_bouton.html" %}</a>
     </div>
 {% endblock %}

@@ -132,6 +132,22 @@ def get_niveau_moyen_champs_par_login(login):
         logging.error(e)
 
 
+def valider_fiche(id_fiche):
+    """
+    Valide une fiche
+
+    :param id_fiche: id de la fiche à valider
+    :return: Code de validation en fonction du résultat
+    """
+    try:
+        fiche = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
+        fiche.etat_fiche = 1
+        db.session.commit()
+    except Exception as e:
+        logging.error(f"Erreur lors de la validation de la fiche {id_fiche}")
+        logging.error(e)
+
+
 def get_nombre_fiches_finies_par_login(login):
     """
     Récupère le nombre de fiches finies par un apprenti à partir de son Login
@@ -274,14 +290,14 @@ def copier_fiche(id_fiche: int, login_personnel: str):
         logging.error(e)
 
 
-def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_demande: date, nom_demandeur: str,
+def assigner_fiche_dummy_eleve(login_apprenti: str, id_personnel: str, date_demande: date, nom_demandeur: str,
                                localisation: str, description_demande: str, degre_urgence: int,
                                couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_cours: str):
     """
     A partir de la fiche par defaut, la duplique et l'assigne a un apprenti
 
     :param login_apprenti: login de l'apprenti
-    :param login_personnel: login du personnel
+    :param id_personnel: login du personnel
     :param date_demande: date de la demande
     :param nom_demandeur: nom du demandeur
     :param localisation: localisation de la demande
@@ -294,28 +310,30 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
     :return: Code de validation en fonction du résultat
     """
     try:
-
         # Si l'apprenti a déjà une fiche, on copie les éléments de la dernière fiche
         if get_fiche_apprentis_existe(login_apprenti):
             composer_fiche = get_composer_presentation(get_dernier_id_fiche_apprenti(login_apprenti))
         # Sinon on copie les éléments de la fiche par défaut
         else:
             composer_fiche = get_composer_presentation()
+
         numero = get_dernier_numero_fiche_apprenti(login_apprenti) + 1
+
+        print(id_personnel)
         nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=nom_demandeur, date_demande=date_demande,
                                            localisation=localisation, description_demande=description_demande,
                                            degre_urgence=degre_urgence, couleur_intervention=couleur_intervention,
                                            etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
                                            photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
                                            prenom_intervenant=prenom_intervenant,
-                                           id_personnel=get_id_personnel_by_login(login_personnel),
+                                           id_personnel=id_personnel,
                                            id_apprenti=get_id_apprenti_by_login(login_apprenti), id_cours=id_cours)
         db.session.add(nouvelle_fiche)
         db.session.commit()
         # On ajoute les éléments de la fiche
         remplir_fiche(composer_fiche, nouvelle_fiche)
 
-        return nouvelle_fiche.id_fiche
+        return get_dernier_id_fiche_apprenti(login_apprenti)
 
     except Exception as e:
         logging.error(f"Erreur lors de l'assignation de la fiche à l'apprenti {login_apprenti}")
@@ -354,9 +372,9 @@ def definir_photo(id_fiche, avant_apres):
     try:
         fiche = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
         if avant_apres:
-            fiche.photo_apres = f'{id_fiche}_photo-avant.jpg'
+            fiche.photo_apres = f'{id_fiche}_photo-apres.jpg'
         else:
-            fiche.photo_avant = f'{id_fiche}_photo-apres.jpg'
+            fiche.photo_avant = f'{id_fiche}_photo-avant.jpg'
         db.session.commit()
     except Exception as e:
         suplement_erreur(e, f"Erreur lors de la définition des photos de la fiche {id_fiche}")

@@ -7,14 +7,12 @@
 {% block title %}Commentaires{% endblock %}
 
 {% block body %}
-    <h1>Commentaires de la fiche technique {{ id_fiche }} {% include "_partial/_tts.html" %}</h1>
+    <h1>Commentaires de la fiche technique numero {{ numero }} {% include "_partial/_tts.html" %}</h1>
     <h2 class="commentaireTitre">Commentaires intervenant {% include "_partial/_tts.html" %}</h2>
 
     {% if commentaires|length > 0 %}
         <p class="commentaire">Commentaire : {{ commentaires[0].commentaire_texte }} {% include "_partial/_tts.html" %}</p>
-        <p class="commentaire">Commentaire audio : {{ commentaires[0].commentaire_audio }}</p>
         <p class="commentaire">Evaluation : {{ commentaires[0].eval_texte }} {% include "_partial/_tts.html" %}</p>
-        <p class="commentaire">Evaluation audio : {{ commentaires[0].eval_audio }}</p>
     {% else %}
         <p>Pas encore de commentaire de l'éducateur {% include "_partial/_tts.html" %}</p>
     {% endif %}
@@ -22,9 +20,7 @@
     <h2 class="commentaireTitre">Commentaires apprenti {% include "_partial/_tts.html" %}</h2>
     {% if commentaires|length > 1 %}
         <p class="commentaire">Commentaire : {{ commentaires[1].commentaire_texte }} {% include "_partial/_tts.html" %}</p>
-        <p class="commentaire">Commentaire audio : {{ commentaires[1].commentaire_audio }}</p>
         <p class="commentaire">Evaluation : {{ commentaires[1].eval_texte }} {% include "_partial/_tts.html" %}</p>
-        <p class="commentaire">Evaluation audio : {{ commentaires[1].eval_audio }}</p>
     {% else %}
         <p class="commentaire">Pas encore de commentaire de l'apprenti {% include "_partial/_tts.html" %}</p>
     {% endif %}
