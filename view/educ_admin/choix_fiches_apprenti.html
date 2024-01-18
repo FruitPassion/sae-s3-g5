@@ -7,12 +7,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+    <h1>Fiches techniques de {{ apprenti.prenom }} {{ apprenti.nom }}</h1>
 
     <div id="blocFiches">
         <div class="d-block">
             <div class="parent">
-                <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti['login']) }}">
+                <a href="{{ url_for('educ_admin.ajouter_fiche', apprenti=apprenti.login) }}">
                     <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                          alt="fiche finie">
                     <img class="plus" src="{{ url_for('static', filename='images/cross.png') }}" alt="ajouter">

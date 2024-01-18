@@ -1,6 +1,7 @@
 import logging
 
 from custom_paquets.converter import convert_to_dict
+from custom_paquets.gestions_erreur import suplement_erreur
 from custom_paquets.security import compare_passwords, encrypt_password
 
 from model.shared_model import db, Assister, ComposerPresentation as Composer, LaisserTrace, Apprenti, \
@@ -20,8 +21,7 @@ def get_all_apprentis(archive=False):
         ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
         return convert_to_dict(apprentis)
     except Exception as e:
-        logging.error("Erreur lors de la récupération des apprentis")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des apprentis.")
 
 
 def get_adaptation_situation_examen_par_apprenti(login):
@@ -31,10 +31,10 @@ def get_adaptation_situation_examen_par_apprenti(login):
     :return: Le commentaire de la CIP
     """
     try:
-        return Apprenti.query.filter_by(login=login).with_entities(Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
+        return Apprenti.query.filter_by(login=login).with_entities(
+            Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération de l'adaptation situation d'examen de l'apprenti {login}")
-        logging.error(e)
+        suplement_erreur(e, message=f"Erreur lors de la récupération de l'adaptation situation d'examen de l'apprenti {login}")
 
 
 def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_examen):
@@ -43,13 +43,14 @@ def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_
 
     :return: True si l'opération s'est bien déroulée, False sinon
     """
-    id_apprenti = get_id_apprenti_by_login(login)
-    apprenti = Apprenti.query.filter_by(id_apprenti=id_apprenti).first()
-    apprenti.adaptation_situation_examen = adaptation_situation_examen
     try:
+        id_apprenti = get_id_apprenti_by_login(login)
+        apprenti = Apprenti.query.filter_by(id_apprenti=id_apprenti).first()
+        apprenti.adaptation_situation_examen = adaptation_situation_examen
         db.session.commit()
         return True
-    except:
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la modification de l'adaptation situation d'examen de l'apprenti {login}")
         return False
 
 
@@ -60,7 +61,11 @@ def check_password_is_set(login: str):
     :param login: Login de l'apprenti
     :return: Un booleen si le mot de passe a été paramétré
     """
-    return Apprenti.query.filter_by(login=login).first().mdp != "0000"
+    try:
+        return Apprenti.query.filter_by(login=login).first().mdp != "0000"
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la vérification du mot de passe de l'apprenti {login}")
+        return False
 
 
 def get_apprenti_by_login(login: str):
@@ -70,12 +75,11 @@ def get_apprenti_by_login(login: str):
     :return: Les informations de l'apprenti
     """
     try:
-        return convert_to_dict(Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
-                                                                               Apprenti.login).all())[0]
+        return Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
+                                                                   Apprenti.login).first()
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération de l'apprenti {login}")
-        logging.error(e)
-    
+        suplement_erreur(e, message=f"Erreur lors de la récupération de l'apprenti {login}")
+
 
 def get_id_apprenti_by_login(login: str):
     """
@@ -84,9 +88,8 @@ def get_id_apprenti_by_login(login: str):
     try:
         return Apprenti.query.filter_by(login=login).with_entities(Apprenti.id_apprenti).first().id_apprenti
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération de l'id de l'apprenti {login}")
-        logging.error(e)
-    
+        suplement_erreur(e, message=f"Erreur lors de la récupération de l'id de l'apprenti {login}")
+
 
 def get_login_apprenti_by_id(id_apprenti: str):
     """
@@ -95,8 +98,7 @@ def get_login_apprenti_by_id(id_apprenti: str):
     try:
         return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.login).first().login
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération de l'id de l'apprenti {id_apprenti}")
-        logging.error(e)
+        suplement_erreur(e, message=f"Erreur lors de la récupération du login de l'apprenti {id_apprenti}")
 
 
 def check_apprenti(login: str):
@@ -105,7 +107,11 @@ def check_apprenti(login: str):
 
     :return: Un booleen vrai si le compte existe
     """
-    return Apprenti.query.filter_by(login=login).count() == 1
+    try:
+        return Apprenti.query.filter_by(login=login).count() == 1
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la vérification de l'existence de l'apprenti {login}")
+        return False
 
 
 def set_password_apprenti(login: str, new_password: str):
@@ -119,7 +125,8 @@ def set_password_apprenti(login: str, new_password: str):
         apprenti.mdp = encrypt_password(new_password)
         db.session.commit()
         return True
-    except:
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la modification du mot de passe de l'apprenti {login}")
         return False
 
 
@@ -138,7 +145,8 @@ def check_password_apprenti(login: str, new_password: str):
         elif not digest and get_nbr_essais_connexion_apprenti(login) < 5:
             update_nbr_essais_connexion(login)
         return digest
-    except:
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la vérification du mot de passe de l'apprenti {login}")
         return False
 
 
@@ -152,8 +160,8 @@ def get_nbr_essais_connexion_apprenti(login: str):
     try:
         return Apprenti.query.filter_by(login=login).first().essais
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération du nombre d'essais de connexion de l'apprenti {login}")
-        logging.error(e)
+        suplement_erreur(e,
+                         message=f"Erreur lors de la récupération du nombre d'essais de connexion de l'apprenti {login}")
 
 
 def update_nbr_essais_connexion(login: str):
@@ -163,12 +171,14 @@ def update_nbr_essais_connexion(login: str):
 
     :return: Booleen en fonction de la réussite de l'opération
     """
-    apprenti = Apprenti.query.filter_by(login=login).first()
-    apprenti.essais = apprenti.essais + 1
     try:
+        apprenti = Apprenti.query.filter_by(login=login).first()
+        apprenti.essais = apprenti.essais + 1
         db.session.commit()
         return True
-    except:
+    except Exception as e:
+        suplement_erreur(e,
+                         message=f"Erreur lors de la modification du nombre d'essais de connexion de l'apprenti {login}")
         return False
 
 
@@ -179,12 +189,14 @@ def set_nbr_essais_connexion(login: str, nbr_essais: int):
 
     :return: Booleen en fonction de la réussite de l'opération
     """
-    apprenti = Apprenti.query.filter_by(login=login).first()
-    apprenti.essais = nbr_essais
     try:
+        apprenti = Apprenti.query.filter_by(login=login).first()
+        apprenti.essais = nbr_essais
         db.session.commit()
         return True
-    except:
+    except Exception as e:
+        suplement_erreur(e,
+                         message=f"Erreur lors de la modification du nombre d'essais de connexion de l'apprenti {login}")
         return False
 
 
@@ -194,12 +206,14 @@ def reset_nbr_essais_connexion(login: str):
 
     :return: Booleen en fonction de la réussite de l'opération
     """
-    apprenti = Apprenti.query.filter_by(login=login).first()
-    apprenti.essais = 0
     try:
+        apprenti = Apprenti.query.filter_by(login=login).first()
+        apprenti.essais = 0
         db.session.commit()
         return True
-    except:
+    except Exception as e:
+        suplement_erreur(e,
+                         message=f"Erreur lors de la réinitialisation du nombre d'essais de connexion de l'apprenti {login}")
         return False
 
 
@@ -216,8 +230,7 @@ def add_apprenti(nom, prenom, login, photo, commit=True):
             db.session.commit()
         return get_id_apprenti_by_login(login)
     except Exception as e:
-        logging.error(f"Erreur lors de l'ajout de l'apprenti {prenom} {nom}")
-        logging.error(e)
+        suplement_erreur(e, message=f"Erreur lors de l'ajout de l'apprenti {prenom} {nom}")
 
 
 def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, commit=True):
@@ -241,8 +254,7 @@ def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, com
         if commit:
             db.session.commit()
     except Exception as e:
-        logging.error(f"Erreur lors de la modification de l'apprenti {identifiant}")
-        logging.error(e)
+        suplement_erreur(e, message=f"Erreur lors de la modification de l'apprenti {prenom} {nom}")
 
 
 def archiver_apprenti(id_apprenti, archiver=True, commit=True):
@@ -261,8 +273,7 @@ def archiver_apprenti(id_apprenti, archiver=True, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error(f"Erreur lors de l'archivage de l'apprenti {id_apprenti}")
-        logging.error(e)
+        suplement_erreur(e, message=f"Erreur lors de l'archivage de l'apprenti {id_apprenti}")
         return False
 
 
@@ -292,8 +303,7 @@ def remove_apprenti(id_apprenti, commit=True):
             db.session.commit()
         return True
     except Exception as e:
-        logging.error(f"Erreur lors de la suppression de l'apprenti {id_apprenti}")
-        logging.error(e)
+        suplement_erreur(e, message=f"Erreur lors de la suppression de l'apprenti {id_apprenti}")
         return False
 
 
@@ -304,8 +314,7 @@ def get_apprentis_by_formation(id_formation):
     try:
         return Apprenti.query.join(Assister).join(Cours).filter_by(id_formation=id_formation).all()
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des apprentis de la formation {id_formation}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des apprentis de la formation.")
 
 
 def get_apprentis_for_xls(id_formation):
@@ -313,17 +322,15 @@ def get_apprentis_for_xls(id_formation):
     Récupère les apprentis d'une formation
     """
     try:
-        return Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, 
+        return Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
                                             Apprenti.adaptation_situation_examen).join(
-                                                Assister).join(Cours).filter_by(id_formation=id_formation).distinct().all()
+            Assister).join(Cours).filter_by(id_formation=id_formation).distinct().all()
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des apprentis de la formation {id_formation}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des apprentis de la formation.")
 
 
 def get_photos_profil_apprenti(id_apprenti):
     try:
         return Apprenti.query.filter_by(id_apprenti=id_apprenti).with_entities(Apprenti.photo).first().photo
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération de la photo de profil de l'apprenti {id_apprenti}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération de la photo de profil de l'apprenti.")

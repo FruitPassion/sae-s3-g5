@@ -4,12 +4,12 @@ import sys
 
 
 def logging_erreur(e, message='Exception occurred : '):
-    f = open("app.log", "r")
+    f = open("logs/error.log", "r")
     ligne_depart = len(f.readlines())+1
     logging.exception(message+str(e))
     ligne_fin = ligne_depart+(len(f.readlines())-1)
     f.close()
-    f = open("app.log", "r")
+    f = open("logs/error.log", "r")
     mess = ''
     for i, line in enumerate(f):
         if "^^^^^" in line.strip():

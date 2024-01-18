@@ -78,10 +78,10 @@ def completer_fiche(numero):
 
         if photo_avant.filename != "":
             process_photo(photo_avant, fiche.photo_avant, fiche.id_fiche, 'photo-avant')
-            definir_photo(photo_avant, fiche.id_fiche, avant_apres=False)  # False pour avant
+            definir_photo(fiche.id_fiche, avant_apres=False)  # False pour avant
         if photo_apres.filename != "":
             process_photo(photo_apres, fiche.photo_apres, fiche.id_fiche, 'photo-apres')
-            definir_photo(photo_apres, fiche.id_fiche, avant_apres=True)  # True pour apres
+            definir_photo(fiche.id_fiche, avant_apres=True)  # True pour apres
 
         # Gestion des checkbox
         checkboxes = get_checkbox_on(fiche.id_fiche)

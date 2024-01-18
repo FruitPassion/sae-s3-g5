@@ -9,7 +9,7 @@
 
 
 {% block body %}
-    <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+    <h1>Fiches techniques de {{ apprenti.prenom }} {{ apprenti.nom }}</h1>
 
     <div id="blocFiches">
         {% if fiches|length == 0 %}
@@ -19,7 +19,7 @@
             <div class="d-block">
                 <div class="parent">
                     <a class="bg-modifier"
-                       href="{{ url_for('educ_simple.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche.id_fiche) }}">
+                       href="{{ url_for('educ_simple.visualiser_commentaires', apprenti=apprenti.login, fiche = fiche.id_fiche) }}">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche">
                         <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">

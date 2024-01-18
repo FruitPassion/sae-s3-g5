@@ -7,19 +7,20 @@
 {% block title %}Adaptation en situation d'examen{% endblock %}
 
 {% block body %}
-    <h1>Adaptation en situation d'examen de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+    <h1>Adaptation en situation d'examen de {{ apprenti.prenom }} {{ apprenti.nom }}</h1>
     <div id="titre">
     <h2 class="commentaireTitre">Commentaire
         {% if commentaire|length == 0 %}
-            <a href="{{ url_for('cip.ajouter_commentaire', apprenti = apprenti['login']) }}">
+            <a href="{{ url_for('cip.ajouter_commentaire', apprenti = apprenti.login) }}">
                 <img id="ajouter" class="plus" src="{{ url_for('static', filename='images/cross.png' ) }}" alt="ajouter">
-            </a></div>
+            </a>
         {% else %}
-            <a href="{{ url_for('cip.modifier_commentaire', apprenti = apprenti['login']) }}">
+            <a href="{{ url_for('cip.modifier_commentaire', apprenti = apprenti.login) }}">
                 <img id="modifier" src="{{ url_for('static', filename='images/modifier.png' ) }}" alt="modifier">
             </a>
         {% endif %}
     </h2>
+    </div>
 
     {% if commentaire|length > 0 %}
         <p class="commentaire">{{ commentaire }}</p>

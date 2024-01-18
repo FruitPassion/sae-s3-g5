@@ -266,19 +266,8 @@ def copier_fiche(id_fiche: int, login_personnel: str):
         db.session.add(nouvelle_fiche)
         db.session.commit()
         composer_fiche = get_composer_presentation(id_fiche)
-        for element in composer_fiche:
-            element["id_fiche"] = nouvelle_fiche.id_fiche
-            composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
-                                            id_pictogramme=element["id_pictogramme"],
-                                            taille_pictogramme=element["taille_pictogramme"],
-                                            couleur_pictogramme=element["couleur_pictogramme"],
-                                            text=None, taille_texte=element["taille_texte"], audio=None,
-                                            police=element["police"], couleur=element["couleur"],
-                                            couleur_fond=element["couleur_fond"], niveau=element["niveau"],
-                                            position_elem=element["position_elem"],
-                                            ordre_saisie_focus=element["ordre_saisie_focus"])
-            db.session.add(composer)
-        db.session.commit()
+        remplir_fiche(composer_fiche, nouvelle_fiche)
+
         return nouvelle_fiche.id_fiche
     except Exception as e:
         logging.error(f"Erreur lors de la copie de la fiche {id_fiche}")
@@ -324,19 +313,7 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
         db.session.add(nouvelle_fiche)
         db.session.commit()
         # On ajoute les éléments de la fiche
-        for element in composer_fiche:
-            element["id_fiche"] = nouvelle_fiche.id_fiche
-            composer = ComposerPresentation(id_element=element["id_element"], id_fiche=element["id_fiche"],
-                                            id_pictogramme=element["id_pictogramme"],
-                                            taille_pictogramme=element["taille_pictogramme"],
-                                            couleur_pictogramme=element["couleur_pictogramme"],
-                                            text=None, taille_texte=element["taille_texte"], audio=None,
-                                            police=element["police"], couleur=element["couleur"],
-                                            couleur_fond=element["couleur_fond"], niveau=element["niveau"],
-                                            position_elem=element["position_elem"],
-                                            ordre_saisie_focus=element["ordre_saisie_focus"])
-            db.session.add(composer)
-        db.session.commit()
+        remplir_fiche(composer_fiche, nouvelle_fiche)
 
         return nouvelle_fiche.id_fiche
 
@@ -345,7 +322,32 @@ def assigner_fiche_dummy_eleve(login_apprenti: str, login_personnel: str, date_d
         logging.error(e)
 
 
-def definir_photo(photos, id_fiche, avant_apres):
+def remplir_fiche(composer_fiche, fiche):
+    """
+    Remplit la fiche avec les éléments de la fiche par défaut
+
+    :param composer_fiche: éléments de la fiche par défaut
+    :param fiche: fiche à remplir
+    :return:
+    """
+    try:
+        for element in composer_fiche:
+            composer = ComposerPresentation(id_element=element.id_element, id_fiche=fiche.id_fiche,
+                                            id_pictogramme=element.id_pictogramme,
+                                            taille_pictogramme=element.taille_pictogramme,
+                                            couleur_pictogramme=element.couleur_pictogramme,
+                                            text=None, taille_texte=element.taille_texte, audio=None,
+                                            police=element.police, couleur=element.couleur,
+                                            couleur_fond=element.couleur_fond, niveau=element.niveau,
+                                            position_elem=element.position_elem,
+                                            ordre_saisie_focus=element.ordre_saisie_focus)
+            db.session.add(composer)
+        db.session.commit()
+    except Exception as e:
+        suplement_erreur(e, f"Erreur lors du remplissage de la fiche {fiche.id_fiche}")
+
+
+def definir_photo(id_fiche, avant_apres):
     """
     Définit la photo avant et la photo après de la fiche
     """

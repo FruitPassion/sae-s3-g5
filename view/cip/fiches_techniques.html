@@ -8,14 +8,14 @@
 
 {% block body %}
 
-    <h1>Fiches techniques de {{ apprenti["prenom"] }} {{ apprenti["nom"] }}</h1>
+    <h1>Fiches techniques de {{ apprenti.prenom }} {{ apprenti.nom }}</h1>
 
     <div id="blocFiches">
 
         {% for fiche in fiches %}
             <div class="d-block">
                 <div class="parent">
-                    <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti['login'], fiche = fiche.id_fiche) }}">
+                    <a href="{{ url_for('cip.visualiser_commentaires', apprenti=apprenti.login, fiche = fiche.id_fiche) }}">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
                         <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
@@ -29,6 +29,6 @@
     </div>
 
     <div class="fixed-bottom bg-light">
-        <a href="{{ url_for('cip.affiche_choix', apprenti=apprenti['login']) }}">{% include "_partial/_retour_bouton.html" %}</a>
+        <a href="{{ url_for('cip.affiche_choix', apprenti=apprenti.login) }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
 {% endblock %}

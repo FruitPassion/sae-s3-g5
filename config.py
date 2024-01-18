@@ -5,12 +5,30 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
-# Configuration du logger
-logging.basicConfig(level=logging.ERROR,
-                    filename='app.log',
-                    filemode='a',
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+
+LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+LOG_NAME = ''
+LOG_FILE_INFO = 'logs/access.log'
+LOG_FILE_ERROR = 'logs/error.log'
+log = logging.getLogger(LOG_NAME)
+log_formatter = logging.Formatter(LOG_FORMAT)
+
+# comment this to suppress console output
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(log_formatter)
+log.addHandler(stream_handler)
+
+file_handler_info = logging.FileHandler(LOG_FILE_INFO, mode='a')
+file_handler_info.setFormatter(log_formatter)
+file_handler_info.setLevel(logging.INFO)
+log.addHandler(file_handler_info)
+
+file_handler_error = logging.FileHandler(LOG_FILE_ERROR, mode='a')
+file_handler_error.setFormatter(log_formatter)
+file_handler_error.setLevel(logging.ERROR)
+log.addHandler(file_handler_error)
+
+log.setLevel(logging.INFO)
 
 
 class DevConfig:

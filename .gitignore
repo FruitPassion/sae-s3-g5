@@ -9,15 +9,13 @@ __pycache__
 *.loo
 *.lo1
 
+*.log
+
 .trunk
-
 .pytest_cache
-
 .scannerwork
-
 .coverage
 
-app.log
 
 
 # Flask stuff:

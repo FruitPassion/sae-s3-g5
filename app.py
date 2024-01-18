@@ -41,7 +41,9 @@ def create_app():
     app = Flask(__name__, template_folder="view")
 
     # Remise à zéro du fichier de log
-    if open('app.log', 'w').close():
+    if open('logs/error.log', 'w').close():
+        raise LogOpeningError("Impossible d'ouvrir le fichier de log")
+    if open('logs/access.log', 'w').close():
         raise LogOpeningError("Impossible d'ouvrir le fichier de log")
 
     # Vérification de la branche du Git pour charger la bonne configuration

@@ -12,10 +12,9 @@ def get_composer_presentation(id_fiche=1):
     :return: liste de dictionnaires
     """
     try:
-        return convert_to_dict(Compo.query.filter_by(id_fiche=id_fiche).all())
+        return Compo.query.filter_by(id_fiche=id_fiche).all()
     except Exception as e:
-        logging.error(e)
-        logging.error(f"Erreur lors de la récupération des éléments de la fiche {id_fiche}")
+        suplement_erreur(e, message="Erreur lors de la récupération des éléments de la fiche.")
 
 
 def get_composer_categorie(id_fiche=1):
@@ -27,8 +26,7 @@ def get_composer_categorie(id_fiche=1):
     try:
         return convert_to_dict(Compo.query.filter_by(id_fiche=id_fiche).join(Elem).filter_by(type="categorie").all())
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des catégories de la fiche {id_fiche}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des catégories de la fiche.")
 
 
 def get_composer_non_categorie(id_fiche=1):
@@ -47,8 +45,7 @@ def get_composer_non_categorie(id_fiche=1):
                                       Compo.couleur_pictogramme, Compo.id_materiel).filter_by(
                 id_fiche=id_fiche).join(Elem).filter(Elem.type != "categorie").all())
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des éléments d'un catérgorie de la fiche {id_fiche}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des éléments de la fiche.")
 
 
 def get_elements_base():
@@ -62,8 +59,7 @@ def get_elements_base():
                                                          Elem.type.label('type_elem'), Elem.text.label('label_elem'),
                                                          Elem.audio.label('audio_elem')).all())
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des éléments de base")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des éléments de base.")
 
 
 def modifier_composition(form_data, id_fiche):
@@ -75,8 +71,7 @@ def modifier_composition(form_data, id_fiche):
                     modifier_composition_par_element(composition, key, value)
         db.session.commit()
     except Exception as e:
-        logging.error(f"Erreur lors de la modification de la composition de la fiche {id_fiche}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la modification de la composition de la fiche.")
 
 
 def modifier_composition_par_element(composition, key, value):
@@ -99,8 +94,7 @@ def modifier_composition_par_element(composition, key, value):
             composition.couleur_pictogramme = value
 
     except Exception as e:
-        logging.error(f"Erreur lors de la modification de la composition de la fiche")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la modification de la composition de la fiche.")
 
 
 def maj_materiaux_fiche(majs: dict, id_fiche: str):
@@ -143,8 +137,10 @@ def get_composer_presentation_par_apprenti(id_fiche):
     """
     Permet de récupérer ce que l'apprenti a complété dans une fiche
     """
-    presentation_fiche = db.session.query(Compo).filter_by(id_fiche=id_fiche).join(Elem).all()
-    return presentation_fiche
+    try:
+        return db.session.query(Compo).filter_by(id_fiche=id_fiche).join(Elem).all()
+    except Exception as e:
+        suplement_erreur(e, message="Erreur lors de la récupération des éléments de la fiche.")
 
 
 def get_checkbox_on(id_fiche):
@@ -157,8 +153,7 @@ def get_checkbox_on(id_fiche):
     try:
         return Compo.query.filter_by(text="on", id_fiche=id_fiche).all()
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des checkbox de la fiche {id_fiche}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des checkbox de la fiche.")
 
 
 def get_radio_radioed(id_fiche):
@@ -171,5 +166,4 @@ def get_radio_radioed(id_fiche):
     try:
         return Compo.query.filter_by(text="radioed", id_fiche=id_fiche).all()
     except Exception as e:
-        logging.error(f"Erreur lors de la récupération des checkbox de la fiche {id_fiche}")
-        logging.error(e)
+        suplement_erreur(e, message="Erreur lors de la récupération des radios de la fiche.")
