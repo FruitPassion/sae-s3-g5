@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
-from custom_paquets.custom_form import AjouterFiche, ModifierCours
+from custom_paquets.custom_form import AjouterFiche, ModifierCours, ModifierMateriel
 from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
 from custom_paquets.gestion_image import stocker_photo_materiel
@@ -13,7 +13,8 @@ from model.ficheintervention import assigner_fiche_dummy_eleve, \
     get_fiche_par_id_fiche
 from model.formation import get_all_formations
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
-from model.materiel import add_materiel
+from model.materiel import add_materiel, get_all_materiel, get_photo_materiel, update_materiel
+from model.pictogramme import get_all_pictogrammes
 from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -45,6 +46,50 @@ def choix_formation():
     """
     formations = get_all_formations()
     return render_template("educ_admin/choix_formation.html", formations=formations), 200
+
+
+@educ_admin.route("/gestion-images", methods=["GET", "POST"])
+@educadmin_login_required
+def gestion_images():
+    """
+    Page du choix de gestion des images des matériaux
+    """
+    materiaux = get_all_materiel()
+    form_ajouter = AjouterMateriel()
+    form_modifier = ModifierMateriel()
+    
+    if form_modifier.validate_on_submit() and request.method == "POST":
+        identifiant = request.form.get("id-element")
+        if len(request.files.get("materiel-modifier").filename) != 0:
+            f = request.files.get("materiel-modifier")
+            chemin_materiel = stocker_photo_materiel(f, categorie = form_modifier.form_modifier_categorie.data)
+        else:
+            chemin_materiel = get_photo_materiel(identifiant)
+        print(chemin_materiel)
+        update_materiel(identifiant, form_modifier.form_modifier_nom.data, form_modifier.form_modifier_categorie.data,
+                     chemin_materiel)
+        return redirect(url_for("educ_admin.gestion_images"), 302)
+    
+    elif form_ajouter.validate_on_submit() and request.method == "POST":
+        f = request.files.get("materiel")
+        chemin_materiel = stocker_photo_materiel(f, categorie = form_ajouter.categorie.data)
+        add_materiel(form_ajouter.nom.data, form_ajouter.categorie.data, chemin_materiel)
+        return redirect(url_for("educ_admin.gestion_images"), 302)
+      
+    return render_template("educ_admin/gestion_materiaux.html", materiaux = materiaux, 
+                           form_ajouter = form_ajouter, form_modifier = form_modifier), 200
+
+
+
+@educ_admin.route("/gestion-pictos", methods=["GET"])
+@educadmin_login_required
+def gestion_pictos():
+    """
+    Page du choix de gestion des images des matériaux
+    """
+    pictos = get_all_pictogrammes()
+    return render_template("educ_admin/gestion_pictos.html", pictos = pictos), 200
+
 
 
 @educ_admin.route("/gestion-cours", methods=["GET", "POST", "DELETE"])
@@ -181,22 +226,3 @@ def visualiser_commentaires(apprenti, fiche):
     commentaires = get_commentaires_par_fiche(fiche)
     return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
-
-
-@educ_admin.route("/ajouter-materiel", methods=["GET", "POST"])
-@educadmin_login_required
-def ajouter_materiel():
-    """
-    Page d'ajout de materiel en BD
-
-    :return: la page d'ajout de materiel
-    """
-    form_ajouter = AjouterMateriel()
-    
-    if form_ajouter.validate_on_submit() and request.method == "POST":
-        f = request.files.get("materiel")
-        chemin_materiel = stocker_photo_materiel(f, categorie = form_ajouter.categorie.data)
-        add_materiel(form_ajouter.nom.data, form_ajouter.categorie.data, chemin_materiel)
-        return redirect(url_for("educ_admin.accueil_educadmin"), 302)
-      
-    return render_template("educ_admin/ajouter_materiel.html", form_ajouter = form_ajouter), 200

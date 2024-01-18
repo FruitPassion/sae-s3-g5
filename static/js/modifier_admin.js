@@ -58,6 +58,11 @@ function passer_parametre_form(element, nom_form){
             document.getElementById("form_duree").value       = document.getElementById("duree-"+id_element).innerText;
             document.getElementById("select_formation").value = document.getElementById("formation-"+id_element).innerText;
             break;
+
+        case "materiel":
+            document.getElementById("form_modifier_nom").value         = document.getElementById("nom-"+id_element).innerText;
+            document.getElementById("form_modifier_categorie").value   = document.getElementById("categorie-"+id_element).innerText;
+            break;
     }
 }
 
