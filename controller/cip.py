@@ -118,7 +118,7 @@ def modifier_commentaire(apprenti):
         adaptation_situation_examen = request.form["commentaire"]
         update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
 
-        return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti), 200)
+        return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti))
     apprenti = get_apprenti_by_login(apprenti)
     return render_template("cip/modifier_adaptation_situation_examen.html", apprenti=apprenti,
                            commentaire=commentaire), 200
@@ -135,6 +135,6 @@ def ajouter_commentaire(apprenti):
     if request.method == 'POST':
         adaptation_situation_examen = request.form["commentaire"]
         update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
-        return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti), 200)
+        return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti))
     apprenti = get_apprenti_by_login(apprenti)
     return render_template("cip/ajouter_adaptation_situation_examen.html", apprenti=apprenti), 200

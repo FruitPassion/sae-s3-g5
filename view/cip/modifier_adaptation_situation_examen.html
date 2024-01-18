@@ -9,14 +9,17 @@
 {% block body %}
     <h1>Modification commentaire (adaptation situation d'examen) pour {{ apprenti.prenom }} {{ apprenti.nom }} </h1>
 
-    <div id="bloc">
+    <div class="w-75 m-auto mt-5">
         <form name="modifier" id="modifier" method="POST">
             <p>Commentaire (CIP) :</p>
-            <textarea type="text" class="modifiable" id="commentaire" name="commentaire"
+            <textarea class="modifiable form-control" id="commentaire" name="commentaire"
                       maxlength="500">{{ commentaire }}</textarea>
+            <input class=" btn btn-primary form-control" type="submit" value="Enregistrer" id="enregistrer">
 
-            {% include "_partial/_retour_bouton.html" %}
-            <input type="submit" value="Enregistrer" id="enregistrer">
+            <div class="fixed-bottom bg-light">
+                <a href="{{ url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti.login) }}">
+                    {% include "_partial/_retour_bouton.html" %}</a>
+            </div>
         </form>
     </div>
 {% endblock %}

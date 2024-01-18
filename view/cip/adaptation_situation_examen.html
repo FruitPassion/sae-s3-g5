@@ -29,6 +29,7 @@
     {% endif %}
 
     <div class="fixed-bottom bg-light">
-        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+        <a href="{{ url_for('cip.affiche_choix', apprenti=apprenti.login) }}">
+            {% include "_partial/_retour_bouton.html" %}</a>
     </div>
 {% endblock %}
