@@ -125,7 +125,7 @@ def get_niveau_moyen_champs_par_login(login):
         else:
             for niveau in liste_niveau_champ:
                 total_niveau_champ += niveau.moyenne_niveau
-            return int(total_niveau_champ / len(liste_niveau_champ))
+            return round(total_niveau_champ / len(liste_niveau_champ), 2)
     except Exception as e:
         logging.error(
             f"Erreur lors de la récupération des niveaux moyens des champs des fiches techniques de l'apprenti {login}")

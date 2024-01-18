@@ -86,7 +86,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
             },
           },
           min: 22,
-          max: 66,
+          max: 88,
           ticks: {
             stepSize: 1,
           },
