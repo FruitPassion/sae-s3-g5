@@ -28,15 +28,18 @@
                 <fieldset id="field-{{ categorie['position_elem'] }}" class="scheduler-border p-2 mr-auto ml-2"
                           {% if loop.index0 != 0 %}hidden="" {% endif %} style="{{ categorie['couleur_fond'] }}">
                     <legend>{{ categorie["libelle_elem"] }}</legend>
+                    {% if categorie["libelle_elem"] == "Matériaux utilisés" %}
+                        <a href="{{ url_for('educ_admin.ajouter_materiel') }}"><img src="{{ url_for('static', filename='images/cross.png') }}" height="40" align="middle"></a>
+                    {% endif %}
                     {% for element in categorie["elements"] %}
                         <label class="mb-2" id="modelem-{{ element['position_elem'] }}">
                             {% if element["pictogramme"] != None %}
                                 <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
                                      class="rounded" alt="icone element" onload="chargement_preview(this,
-                                        ajout={{ element["taille_pictogramme"] }},
+                                        ajout={{ element['taille_pictogramme'] }},
                                         couleur='{{ element["couleur_pictogramme"] }}',
                                         position_element='{{ element["position_elem"] }}')"
-                                     id="icone-{{ element["position_elem"] }}"
+                                     id="icone-{{ element['position_elem'] }}"
                                      {% if element["niveau"] == 3 %}hidden="" {% endif %}>
                             {% endif %}
                             <span id="label-{{ element['position_elem'] }}"

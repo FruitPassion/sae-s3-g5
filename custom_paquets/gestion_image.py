@@ -40,6 +40,14 @@ def resize_image_formation(im: Image, path: str):
     im.save(path)
 
 
+def resize_image_materiel(im: Image, path: str):
+    size = 400, im.size[1] - 393
+    im = im.convert('RGB')
+    im.thumbnail(size, Image.Resampling.LANCZOS)
+    im = im.crop((0, 0, 400, 393))
+    im.save(path)
+
+
 def stocker_photo_profile(file):
     try:
         chemin_avatar = "./static/images/photo_profile/" + secure_filename(file.filename)
@@ -51,6 +59,26 @@ def stocker_photo_profile(file):
 
     resize_image_profile(img, "./static/images/" + chemin_avatar)
     return chemin_avatar
+
+
+def stocker_photo_materiel(file, categorie):
+    try:
+        chemin_materiel = "./static/images/materiel/"
+        if categorie == "Electrique":
+            categorie = "elec/"
+        elif categorie == "Plomberie":
+            categorie = "plomb/"
+        elif categorie == "General":
+            categorie = "general/"
+        
+        chemin_materiel = chemin_materiel + categorie + secure_filename(file.filename)
+        file.save(chemin_materiel)
+        chemin_materiel = categorie + secure_filename(file.filename)
+        img = Image.open(file.stream)
+        resize_image_materiel(img, "./static/images/materiel/" + chemin_materiel)
+        return chemin_materiel
+    except:
+        return "default_materiel.png"
 
 
 def stocker_image_formation(file):

@@ -3,8 +3,9 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import AjouterFiche, ModifierCours
-from custom_paquets.custom_form import AjouterCours
+from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
+from custom_paquets.gestion_image import stocker_photo_materiel
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, \
@@ -12,6 +13,7 @@ from model.ficheintervention import assigner_fiche_dummy_eleve, \
     get_fiche_par_id_fiche
 from model.formation import get_all_formations
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
+from model.materiel import add_materiel
 from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -179,3 +181,22 @@ def visualiser_commentaires(apprenti, fiche):
     commentaires = get_commentaires_par_fiche(fiche)
     return render_template("personnel/commentaires.html", apprenti=apprenti, fiche=fiche,
                            commentaires=commentaires), 200
+
+
+@educ_admin.route("/ajouter-materiel", methods=["GET", "POST"])
+@educadmin_login_required
+def ajouter_materiel():
+    """
+    Page d'ajout de materiel en BD
+
+    :return: la page d'ajout de materiel
+    """
+    form_ajouter = AjouterMateriel()
+    
+    if form_ajouter.validate_on_submit() and request.method == "POST":
+        f = request.files.get("materiel")
+        chemin_materiel = stocker_photo_materiel(f, categorie = form_ajouter.categorie.data)
+        add_materiel(form_ajouter.nom.data, form_ajouter.categorie.data, chemin_materiel)
+        return redirect(url_for("educ_admin.accueil_educadmin"), 302)
+      
+    return render_template("educ_admin/ajouter_materiel.html", form_ajouter = form_ajouter), 200

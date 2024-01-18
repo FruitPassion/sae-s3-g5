@@ -1,6 +1,5 @@
 import logging
 
-from custom_paquets.converter import convert_to_dict
 from custom_paquets.security import compare_passwords
 
 from model.shared_model import db, Personnel, LaisserTrace, EducAdmin, FicheIntervention

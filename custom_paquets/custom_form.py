@@ -126,3 +126,12 @@ class ModifierCours(FlaskForm):
     form_duree = IntegerField(widget=NumberInput(min = 1))
     select_formation = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
     form_submit = SubmitField("Modifier")
+
+
+class AjouterMateriel(FlaskForm):
+    """
+    Formulaire d'ajout d'un matériel
+    """
+    nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Chalumeau"})
+    categorie = StringField(validators=[InputRequired()], render_kw={"placeholder": "Plomberie"})
+    submit = SubmitField("Ajouter")
