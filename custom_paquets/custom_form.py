@@ -145,3 +145,25 @@ class ModifierMateriel(FlaskForm):
     form_modifier_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Chalumeau"})
     form_modifier_categorie = StringField(validators=[InputRequired()], render_kw={"placeholder": "Plomberie"})
     form_modifier_submit = SubmitField("Valider")
+
+
+
+class AjouterPicto(FlaskForm):
+    """
+    Formulaire d'ajout d'un matériel
+    """
+    label = StringField(render_kw={"placeholder": "Calendrier"})
+    categorie = StringField(render_kw={"placeholder": "Matériaux utilisés"})
+    souscategorie = StringField(render_kw={"placeholder": "ajouter"})
+    submit = SubmitField("Ajouter")
+
+
+class ModifierPicto(FlaskForm):
+    """
+    Formulaire de modification d'un matériel
+    """
+    form_identifiant = HiddenField()
+    form_modifier_label = StringField(render_kw={"placeholder": "Calendrier"})
+    form_modifier_categorie = StringField(render_kw={"placeholder": "Matériaux utilisés"})
+    form_modifier_souscategorie = StringField(render_kw={"placeholder": "ajouter"})
+    form_modifier_submit = SubmitField("Valider")

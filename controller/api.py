@@ -9,6 +9,7 @@ from model.formation import archiver_formation, remove_formation, reinitisaliser
 from model.materiel import remove_materiel
 from model.personnel import archiver_personnel, remove_personnel
 from model.cours import archiver_cours, remove_cours
+from model.pictogramme import remove_picto
 from model.trace import modifier_commentaire_audio
 
 api = Blueprint('api', __name__, url_prefix="/api")
@@ -92,9 +93,18 @@ def api_supprimer_formation(id_formation):
 @admin_login_required
 def api_supprimer_materiel(id_materiel):
     """
-    Supprime un mat"riel à partir de son id
+    Supprime un matériel à partir de son id
     """
     return {"valide": remove_materiel(id_materiel)}
+
+
+@api.route("/supprimer-picto/<id_pictogramme>", methods=["GET"])
+@admin_login_required
+def api_supprimer_picto(id_pictogramme):
+    """
+    Supprime un pictogramme à partir de son id
+    """
+    return {"valide": remove_picto(id_pictogramme)}
 
 
 @api.route("/archiver-apprenti/<id_apprenti>", methods=["GET"])

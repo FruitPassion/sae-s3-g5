@@ -1,4 +1,3 @@
-import logging
 from custom_paquets.gestions_erreur import suplement_erreur
 from model.shared_model import Materiel, db
 
@@ -28,7 +27,7 @@ def add_materiel(nom, categorie, lien, commit=True):
 
 def update_materiel(identifiant, nom, categorie, lien, commit=True):
     """
-    Ajoute un matériel en BD
+    Modifie un matériel en BD
 
     """
     try:
@@ -52,7 +51,7 @@ def get_photo_materiel(id_materiel):
 
 def remove_materiel(id_materiel, commit=True):
     """
-    Supprime une materiel en BD
+    Supprime un materiel en BD
 
     :param id_materiel: id de la materiel à supprimer
     :return: None

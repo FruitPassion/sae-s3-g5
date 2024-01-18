@@ -2,10 +2,10 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
-from custom_paquets.custom_form import AjouterFiche, ModifierCours, ModifierMateriel
+from custom_paquets.custom_form import AjouterFiche, AjouterPicto, ModifierCours, ModifierMateriel, ModifierPicto
 from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
-from custom_paquets.gestion_image import stocker_photo_materiel
+from custom_paquets.gestion_image import stocker_photo_materiel, stocker_photo_profile, stocker_picto
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, \
@@ -14,7 +14,7 @@ from model.ficheintervention import assigner_fiche_dummy_eleve, \
 from model.formation import get_all_formations
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.materiel import add_materiel, get_all_materiel, get_photo_materiel, update_materiel
-from model.pictogramme import get_all_pictogrammes
+from model.pictogramme import add_picto, get_all_pictogrammes, get_photo_picto_by_id, update_picto
 from model.trace import get_commentaires_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -80,15 +80,37 @@ def gestion_images():
 
 
 
-@educ_admin.route("/gestion-pictos", methods=["GET"])
+@educ_admin.route("/gestion-pictos", methods=["GET", "POST"])
 @educadmin_login_required
 def gestion_pictos():
     """
     Page du choix de gestion des images des matériaux
     """
     pictos = get_all_pictogrammes()
-    return render_template("educ_admin/gestion_pictos.html", pictos = pictos), 200
 
+    form_ajouter = AjouterPicto()
+    form_modifier = ModifierPicto()
+    
+    if form_ajouter.validate_on_submit() and request.method == "POST":
+        f = request.files.get("picto")
+        chemin_picto = stocker_picto(f)
+        add_picto(form_ajouter.label.data, form_ajouter.categorie.data, form_ajouter.souscategorie.data, chemin_picto)
+        return redirect(url_for("educ_admin.gestion_pictos"), 302)
+    
+    elif form_modifier.validate_on_submit() and request.method == "POST":
+        identifiant = request.form.get("id-element")[5:]
+
+        if len(request.files.get("picto-modifier").filename) != 0:
+            f = request.files.get("picto-modifier")
+            chemin_picto = stocker_picto(f)
+        else:
+            chemin_picto = get_photo_picto_by_id(identifiant)
+        update_picto(identifiant, form_modifier.form_modifier_label.data, form_modifier.form_modifier_categorie.data,
+                     form_modifier.form_modifier_souscategorie.data, chemin_picto)
+        return redirect(url_for("educ_admin.gestion_pictos"), 302)
+    
+    return render_template("educ_admin/gestion_pictos.html", pictos = pictos, form_modifier = form_modifier,
+                           form_ajouter = form_ajouter), 200
 
 
 @educ_admin.route("/gestion-cours", methods=["GET", "POST", "DELETE"])

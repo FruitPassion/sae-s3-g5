@@ -40,6 +40,15 @@ def resize_image_formation(im: Image, path: str):
     im.save(path)
 
 
+def resize_image_picto(im: Image, path: str):
+    """Resize l'image pour qu'elle soit carrée et de taille 400x400"""
+    size = 512, 512
+    im = im.convert('RGB')
+    im.thumbnail(size, Image.Resampling.LANCZOS)
+    im = im.crop((0, 0, 512, 512))
+    im.save(path)
+
+
 def resize_image_materiel(im: Image, path: str):
     size = 400, im.size[1] - 393
     im = im.convert('RGB')
@@ -59,6 +68,18 @@ def stocker_photo_profile(file):
 
     resize_image_profile(img, "./static/images/" + chemin_avatar)
     return chemin_avatar
+
+
+def stocker_picto(file):
+    try:
+        chemin_picto = "./static/images/icone_fiches/" + secure_filename(file.filename)
+        file.save(chemin_picto)
+        chemin_picto = secure_filename(file.filename)
+        img = Image.open(file.stream)
+        resize_image_picto(img, "./static/images/" + chemin_picto)
+        return chemin_picto
+    except Exception as e:
+        print(e)
 
 
 def stocker_photo_materiel(file, categorie):

@@ -60,8 +60,17 @@ function passer_parametre_form(element, nom_form){
             break;
 
         case "materiel":
+        
+            id_element = element.parentElement.id.replace('arch-ele-','');
             document.getElementById("form_modifier_nom").value         = document.getElementById("nom-"+id_element).innerText;
             document.getElementById("form_modifier_categorie").value   = document.getElementById("categorie-"+id_element).innerText;
+            break;
+
+        case "picto":
+            id_element = element.parentElement.id.replace('arch-ele-','');
+            document.getElementById("form_modifier_label").value            = document.getElementById("label-"+id_element).innerText;
+            document.getElementById("form_modifier_categorie").value        = document.getElementById("categorie-"+id_element).innerText;
+            document.getElementById("form_modifier_souscategorie").value    = document.getElementById("souscategorie-"+id_element).innerText;
             break;
     }
 }
