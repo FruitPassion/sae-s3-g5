@@ -33,7 +33,7 @@
                     <tr class="text-center fs-1">
                         <th scope="col">Nom</th>
                         <th scope="col">Catégorie</th>
-                        <th scope="col">Lien</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Modifier</th>
                         <th scope="col">Supprimer</th>
                     </tr>
@@ -44,9 +44,10 @@
                             <td id="nom-{{ materiel['id_materiel'] }}" class="align-middle">{{ materiel["nom"] }}</td>
                             <td id="categorie-{{ materiel['id_materiel'] }}"
                                 class="align-middle">{{ materiel["categorie"] }}</td>
-                            <td id="lien-{{ materiel['id_materiel'] }}"
-                                class="align-middle">{{ materiel["lien"] }}</td>
                             
+                            <td id="lien-{{ materiel['id_materiel'] }}" value="{{ materiel['lien'] }}">
+                                <img src="{{ url_for('static', filename='images/materiel/'+materiel['lien']) }}" alt="photo matériel" style="width:120px;">
+                            </td>
                             <th scope="row" onclick="passer_parametre_form(this, 'materiel')"
                                 class="align-middle ele-btn-modif" data-bs-toggle="modal"
                                 data-bs-target="#modal-modifier">
