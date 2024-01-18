@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
+from model.formation import get_formation_par_apprenti
 from model.trace import get_commentaires_par_fiche
 from model.apprenti import get_apprenti_by_login, get_adaptation_situation_examen_par_apprenti, \
     update_adaptation_situation_examen_par_apprenti
@@ -27,7 +28,9 @@ def affiche_choix(apprenti):
 
     :return: rendu de la page choix_operations.html
     """
-    return render_template("cip/choix_operations.html", apprenti=apprenti), 200
+    formation = get_formation_par_apprenti(apprenti)
+    return render_template("cip/choix_operations.html", apprenti=apprenti,
+                           formation=formation), 200
 
 
 @cip.route("/<apprenti>/fiches", methods=["GET"])

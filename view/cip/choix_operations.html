@@ -19,8 +19,10 @@
                 href="{{ url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti) }}">Adaptation situation
             d'examen</a></li>
     </ol>
-
     <div class="fixed-bottom bg-light">
         <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('personnel.choix_eleve', nom_formation=formation) }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
 {% endblock %}

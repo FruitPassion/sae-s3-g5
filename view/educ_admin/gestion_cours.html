@@ -52,7 +52,8 @@
                             <td id="duree-{{ cour.id_cours }}" class="align-middle">{{ cour.duree }}</td>
                             {% for formation in formations %}
                                 {% if formation.id_formation == cour.id_formation %}
-                                    <td id="duree-{{ formation.intitule }}" class="align-middle">{{ formation.intitule }}</td>
+                                    <td id="duree-{{ formation.intitule }}"
+                                        class="align-middle">{{ formation.intitule }}</td>
                                 {% endif %}
                             {% endfor %}
                             <th scope="row" onclick="passer_parametre_form(this, 'cours')"
@@ -242,7 +243,8 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Formation associée :</h3>
-                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select" required>
+                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select"
+                                    required>
                                 <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                 </option>
                                 {% for formation in formations %}

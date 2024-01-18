@@ -3,7 +3,7 @@ import logging
 from custom_paquets.generation_xls import generer_xls_apprentis
 from model.apprenti import remove_apprenti, get_apprentis_by_formation
 
-from model.shared_model import db, Formation, Cours
+from model.shared_model import db, Formation, Cours, Apprenti, Assister
 
 
 def get_all_formations(archive=False):
@@ -17,6 +17,20 @@ def get_all_formations(archive=False):
         return Formation.query.filter(Formation.archive == archive).all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de la liste de toutes les formations")
+        logging.error(e)
+
+
+def get_formation_par_apprenti(login_apprenti):
+    """
+    Retourne la formation d'un apprenti à partir de son login
+
+    :return: Une formation
+    """
+    try:
+        return Formation.query.with_entities(Formation.intitule).join(Cours).join(Assister).join(Apprenti).filter_by(
+            login=login_apprenti).first().intitule
+    except Exception as e:
+        logging.error(f"Erreur lors de la récupération de la formation de l'apprenti {login_apprenti}")
         logging.error(e)
 
 
