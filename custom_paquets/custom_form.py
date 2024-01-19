@@ -151,7 +151,6 @@ class AjouterPicto(FlaskForm):
     Formulaire d'ajout d'un matériel
     """
     label = StringField(render_kw={"placeholder": "Calendrier"})
-    categorie = StringField(render_kw={"placeholder": "Matériaux utilisés"})
     souscategorie = StringField(render_kw={"placeholder": "ajouter"})
     submit = SubmitField("Ajouter")
 

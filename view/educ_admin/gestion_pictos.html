@@ -81,7 +81,11 @@
                                 <h3 class="fs-1 my-3">Catégorie :</h3>
                             </div>
                             <div>
-                                {{ form_ajouter.categorie(class="form-control fs-1 my-3") }}
+                                <select class="form-select fs-1 my-3" id="categorie-ajouter" name="categorie-ajouter">
+                                    {% for categorie in categories %}
+                                        <option value="{{ categorie }}">{{ categorie }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="m-4 w-50">

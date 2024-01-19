@@ -98,7 +98,9 @@ def gestion_pictos():
     if form_ajouter.validate_on_submit() and request.method == "POST":
         f = request.files.get("picto")
         chemin_picto = stocker_picto(f)
-        add_picto(form_ajouter.label.data, form_ajouter.categorie.data, form_ajouter.souscategorie.data, chemin_picto)
+        categorie = request.form.get("categorie-ajouter")
+        print(categorie)
+        add_picto(form_ajouter.label.data, categorie, form_ajouter.souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
 
     elif form_modifier.validate_on_submit() and request.method == "POST":
