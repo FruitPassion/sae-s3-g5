@@ -12,12 +12,23 @@ def get_all_cours(archive=False):
     :return: Une liste des cours
     """
     try:
-        return Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours, Cours.duree,
-                                         Cours.id_formation).filter(Cours.archive == archive).all()
+        return Cours.query.filter(Cours.archive == archive).all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de tous les cours")
         logging.error(e)
 
+
+def get_liste_cours(archive=False):
+    """
+    Retourne la liste de tous les cours
+
+    :return: Une liste des cours
+    """
+    try:
+        return Cours.query.with_entities(Cours.theme).filter(Cours.archive == archive).distinct().all()
+    except Exception as e:
+        logging.error("Erreur lors de la récupération de tous les cours")
+        logging.error(e)
 
 def get_apprentis_by_formation(nom_formation: str, archive=False):
     """

@@ -2,7 +2,19 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    width: 95%;
+    margin: 30px auto auto;
+    background-color: #e5e3e3;
+    border-radius: 20px;
+}
 
+#selectCours{
+    width: 95%;
+margin: 30px auto auto;
+}
+
+.block-fiche {
+    margin: 0 20px 20px;
 }
 
 .parent {
@@ -36,17 +48,19 @@
 }
 
 #suivi_progression {
-    border: 1px solid black;
     border-radius: 10px;
-    width: fit-content;
+    width: 75%;
     padding: 10px;
     margin: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 #suivi_progression a {
     height: 8%;
-    font-size: 30px;
+    font-size: 35px;
     top: 100%;
+    filter: invert(100%);
 }
 
 #suivi_progression img[alt*="progression"] {
@@ -54,10 +68,17 @@
 }
 
 .modifier {
+    right: 15%;
+}
+
+.modifier2 {
+    right: 40%;
+}
+
+.modifier, .modifier2 {
     position: absolute;
     z-index: 1;
     top: 5%;
-    right: 15%;
     font-size: 70px;
 }
 

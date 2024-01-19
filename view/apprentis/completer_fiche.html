@@ -74,7 +74,7 @@
                                             <!-- Ici on retrouve l'icone de l'element -->
                                             {% if element["pictogramme"] != None %}
                                                 <img src="{{ url_for('static', filename='images/icone_fiches/'+element['pictogramme']) }}"
-                                                     class="rounded-4 my-auto mx-2" alt="icone element"
+                                                     class="my-auto mx-2" alt="icone element"
                                                         {% if element["type_elem"] == "radio" %}
                                                      onload="changeSize(this, ajout={{ element["taille_pictogramme"] }});"
                                                         {% else %}
