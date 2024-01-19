@@ -8,11 +8,14 @@
 
 {% block body %}
     <h1>Commentaires</h1><br><br>
+    <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
     {% for commentaire in commentaires %}
         <h2 class="commentaireTitre">{{ commentaire.intitule }}</h2>
         <p class="commentaire">Commentaire : {{ commentaire.commentaire_texte }}</p>
         <p class="commentaire">Evaluation : {{ commentaire.eval_texte }}</p>
     {% endfor %}
+    </div>
+    <div style="height: 200px"></div>
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('cip.fiches_apprenti', apprenti=apprenti) }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>

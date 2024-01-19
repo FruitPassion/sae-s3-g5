@@ -821,16 +821,12 @@ VALUES (1, 1, 20, NULL, 'Montserrat', '#000000', '#FFFFFF', NULL, '10', NULL, NU
 
 INSERT IGNORE INTO LaisserTrace (id_personnel, horodatage, intitule, eval_texte, commentaire_texte, eval_audio,
                                  commentaire_audio, apprenti, id_fiche)
-VALUES (3, '2023-03-17 12:30:00', 'Commentaire intervenant', 'Eval ipsum, ca s\'est bien passé',
-        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 0, 2),
-       (3, '2023-05-20 07:12:01', 'Commentaire intervenant', 'Eval ipsum, ca s\'est plutot bien passé',
+VALUES (3, '2023-05-20 07:12:01', 'Commentaire intervenant', 'Eval ipsum, ca s\'est plutot bien passé',
         'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 0, 3),
        (3, '2023-08-21 14:34:01', 'Commentaire intervenant', 'Eval ipsum, ca s\'est assez bien passé',
         'Commentaire ipsum, ca s\'est assez bien passé', NULL, NULL, 0, 4),
        (3, '2023-12-17 01:01:01', 'Commentaire intervenant', 'Eval ipsum, ca s\'est quand meme bien passé',
         'Commentaire ipsum, ca s\'est quand meme bien passé', NULL, NULL, 0, 5),
-       (3, '2023-03-17 12:30:00', 'Commentaire apprentis', 'Eval ipsum, ca s\'est bien passé',
-        'Commentaire ipsum, ca s\'est bien passé', NULL, NULL, 1, 2),
        (3, '2023-05-20 07:13:01', 'Commentaire apprentis', 'Eval ipsum, ca s\'est plutot bien passé',
         'Commentaire ipsum, ca s\'est plutot bien passé', NULL, NULL, 1, 3),
        (3, '2023-08-21 14:35:01', 'Commentaire apprentis', 'Eval ipsum, ca s\'est assez bien passé',
