@@ -21,8 +21,8 @@
     <p>
         {% for e in emoji[5]['elements'] %}
             {% if e['text']!=None %}
-                <img src="{{ url_for('static',filename='images/icone_fiches/'+e['pictogramme']) }}">
-                <p>{{ e['libelle_elem'] }}</p>
+                <img class="commentaire" src="{{ url_for('static',filename='images/icone_fiches/'+e['pictogramme']) }}">
+                <p class="commentaire">{{ e['libelle_elem'] }}</p>
             {% endif %}
         {% endfor %}
     </p>
