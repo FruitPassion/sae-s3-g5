@@ -167,5 +167,6 @@ def afficher_commentaires(numero):
     """
     
     commentaires = get_commentaires_par_fiche(get_id_fiche_apprenti(session['name'], numero))
+    emoji = build_categories(get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/commentaires.html", apprenti=apprenti, numero=numero,
-                           commentaires=commentaires), 200
+                           commentaires=commentaires, emoji=emoji), 200
