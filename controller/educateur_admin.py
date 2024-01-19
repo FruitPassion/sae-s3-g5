@@ -108,7 +108,7 @@ def gestion_pictos():
         f = request.files.get("picto")
         chemin_picto = stocker_picto(f)
         categorie = request.form.get("categorie-ajouter")
-        print(categorie)
+
         add_picto(form_ajouter.label.data, categorie, form_ajouter.souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
 
