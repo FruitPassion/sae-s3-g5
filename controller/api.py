@@ -89,24 +89,6 @@ def api_supprimer_formation(id_formation):
     return {"valide": remove_formation(id_formation)}
 
 
-@api.route("/supprimer-materiel/<id_materiel>", methods=["GET"])
-@admin_login_required
-def api_supprimer_materiel(id_materiel):
-    """
-    Supprime un matériel à partir de son id
-    """
-    return {"valide": remove_materiel(id_materiel)}
-
-
-@api.route("/supprimer-picto/<id_pictogramme>", methods=["GET"])
-@admin_login_required
-def api_supprimer_picto(id_pictogramme):
-    """
-    Supprime un pictogramme à partir de son id
-    """
-    return {"valide": remove_picto(id_pictogramme)}
-
-
 @api.route("/archiver-apprenti/<id_apprenti>", methods=["GET"])
 @admin_login_required
 def api_archiver_apprenti(id_apprenti):

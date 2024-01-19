@@ -64,3 +64,14 @@ def remove_materiel(id_materiel, commit=True):
     except Exception as e:
         suplement_erreur(e, message=f"Erreur lors de la suppression du matériel {id_materiel}.")
         return False
+
+
+def get_all_categories_materiel():
+    """
+    Récupère toutes les catégories du matériel
+
+    """
+    try:
+        return Materiel.query.with_entities(Materiel.categorie).distinct().all()
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la récupération des catégories du matériel")

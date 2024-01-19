@@ -60,22 +60,30 @@ function passer_parametre_form(element, nom_form){
             break;
 
         case "materiel":
-        
             id_element = element.parentElement.id.replace('arch-ele-','');
             document.getElementById("form_modifier_nom").value         = document.getElementById("nom-"+id_element).innerText;
             document.getElementById("form_modifier_categorie").value   = document.getElementById("categorie-"+id_element).innerText;
+            let categoriesMateriel       = document.getElementById("categorie-modifier-materiel");
+            let ancienneCategorieMateriel  = document.getElementById("categorie-" + id_element).innerText;
+
+            for (let i = 0; i < categoriesMateriel.length ; i++) {
+                if (categoriesMateriel.options[i].value === ancienneCategorieMateriel) {
+                    categoriesMateriel[i].setAttribute("selected", "selected");
+                    break; // Sortie de la boucle une fois l'option trouvée
+                }
+            }
             break;
 
         case "picto":
             id_element = element.parentElement.id.replace('arch-ele-','');
             document.getElementById("form_modifier_label").value            = document.getElementById("label-"+id_element).innerText;
             document.getElementById("form_modifier_souscategorie").value    = document.getElementById("souscategorie-"+id_element).innerText;
-            let categories       = document.getElementById("categorie-modifier");
-            let ancienneCategorie  = document.getElementById("categorie-" + id_element).innerText;
+            let categoriesPicto       = document.getElementById("categorie-modifier");
+            let ancienneCategoriePicto  = document.getElementById("categorie-" + id_element).innerText;
 
-            for (let i = 0; i < categories.length ; i++) {
-                if (categories.options[i].value === ancienneCategorie) {
-                    categories[i].setAttribute("selected", "selected");
+            for (let i = 0; i < categoriesPicto.length ; i++) {
+                if (categoriesPicto.options[i].value === ancienneCategoriePicto) {
+                    categoriesPicto[i].setAttribute("selected", "selected");
                     break; // Sortie de la boucle une fois l'option trouvée
                 }
             }
