@@ -18,17 +18,19 @@ def get_all_cours(archive=False):
         logging.error(e)
 
 
-def get_liste_cours(archive=False):
+def get_liste_cours_assister(id_apprenti, archive=False):
     """
     Retourne la liste de tous les cours
 
     :return: Une liste des cours
     """
     try:
-        return Cours.query.with_entities(Cours.theme).filter(Cours.archive == archive).distinct().all()
+        return Cours.query.with_entities(Cours.cours).filter(Cours.archive == archive).join(
+            Assister).filter_by(id_apprenti=id_apprenti).distinct().all()
     except Exception as e:
         logging.error("Erreur lors de la récupération de tous les cours")
         logging.error(e)
+
 
 def get_apprentis_by_formation(nom_formation: str, archive=False):
     """

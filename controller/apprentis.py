@@ -8,10 +8,10 @@ from custom_paquets.gestion_image import process_photo
 from model.composer import get_composer_presentation_par_apprenti, get_radio_radioed, maj_materiaux_fiche
 from model.apprenti import get_apprenti_by_login
 from model.composer import maj_contenu_fiche, get_checkbox_on
-from model.cours import get_liste_cours
+from model.cours import get_liste_cours_assister, get_nom_cours_by_id
 from model.trace import get_commentaires_par_fiche
-from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
-    get_id_fiche_apprenti, get_fiche_par_id_fiche, definir_photo, valider_fiche, get_theme_cours_by_id
+from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, \
+    get_id_fiche_apprenti, get_fiche_par_id_fiche, definir_photo, valider_fiche
 
 apprenti = Blueprint('apprenti', __name__, url_prefix="/apprenti")
 
@@ -35,10 +35,9 @@ def redirection_connexion():
     apprenti_infos = get_apprenti_by_login(session["name"])
     fiches = get_fiches_techniques_par_login(session['name'])
     fiches = changer_date(fiches)
-    cours = get_liste_cours()
+    cours = get_liste_cours_assister(apprenti_infos.id_apprenti)
     return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos,
-                           get_nom_cours_by_id=get_nom_cours_by_id, get_theme_cours_by_id=get_theme_cours_by_id,
-                           cours=cours)
+                           get_nom_cours_by_id=get_nom_cours_by_id, cours=cours)
 
 
 @apprenti.route("/redirection-connexion/suivi", methods=["GET"])

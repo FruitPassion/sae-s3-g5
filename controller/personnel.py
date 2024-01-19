@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, session, redirect, url_for
 
 from model.formation import get_all_formations
 from model.cours import get_apprentis_by_formation
-from model.ficheintervention import get_nom_cours_by_id
 from custom_paquets.decorateur import personnel_login_required
 from model.personnel import get_role_by_login
 

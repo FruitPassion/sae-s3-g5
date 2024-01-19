@@ -76,7 +76,7 @@ def get_apprenti_by_login(login: str):
     """
     try:
         return Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
-                                                                   Apprenti.login).first()
+                                                                   Apprenti.login, Apprenti.id_apprenti).first()
     except Exception as e:
         suplement_erreur(e, message=f"Erreur lors de la récupération de l'apprenti {login}")
 

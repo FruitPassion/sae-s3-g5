@@ -9,10 +9,11 @@ from custom_paquets.gestion_image import stocker_photo_materiel, stocker_photo_p
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
 from model.composer import modifier_composition
 from model.ficheintervention import assigner_fiche_dummy_eleve, \
-    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, get_nom_cours_by_id, \
+    get_proprietaire_fiche_par_id_fiche, copier_fiche, get_fiches_techniques_par_login, \
     get_fiche_par_id_fiche, get_id_fiche_apprenti
 from model.formation import get_all_formations, get_formation_par_apprenti
-from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
+from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours, \
+    get_nom_cours_by_id
 from model.materiel import add_materiel, get_all_categories_materiel, get_all_materiel, get_photo_materiel, update_materiel
 from model.personnel import get_id_personnel_by_login
 from model.pictogramme import add_picto, get_all_categories_pictos, get_all_pictogrammes, get_photo_picto_by_id, update_picto
@@ -186,8 +187,9 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_par_login(apprenti)
     fiches = changer_date(fiches)
+    cours = get_cours_par_apprenti(get_id_apprenti_by_login(apprenti))
     return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos,
-                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id, formation=formation)
+                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id, formation=formation, cours=cours)
 
 
 @educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET"])

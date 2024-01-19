@@ -4,8 +4,8 @@ from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
 from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
-from model.ficheintervention import get_fiches_techniques_finies_par_login, get_fiche_par_id_apprenti, \
-    get_nom_cours_by_id, get_id_fiche_apprenti, get_fiche_par_id_fiche
+from model.cours import get_nom_cours_by_id, get_cours_par_apprenti
+from model.ficheintervention import get_fiches_techniques_finies_par_login,  get_id_fiche_apprenti, get_fiche_par_id_fiche
 from model.trace import ajouter_commentaires_evaluation, modifier_commentaire_texte, modifier_evaluation_texte, \
     modifier_commentaire_audio, get_audio_commentaire, get_commentaires_type_par_fiche, get_commentaires_par_fiche, \
     modifier_eval_audio
@@ -33,8 +33,9 @@ def fiches_apprenti(apprenti):
     apprenti_infos = get_apprenti_by_login(apprenti)
     fiches = get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
+    cours = get_cours_par_apprenti(get_id_apprenti_by_login(apprenti))
     return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos,
-                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id)
+                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id, cours=cours)
 
 
 @educ_simple.route("/<apprenti>/<numero>/commentaires", methods=["GET"])

@@ -40,33 +40,6 @@ def get_proprietaire_fiche_par_id_fiche(id_fiche):
         logging.error(e)
 
 
-def get_nom_cours_by_id(id_fiche):
-    """
-    Récupère le nom d'un cours à partir de l'id d'une fiche
-
-    :return: Le nom du cours
-    """
-    try:
-        return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Cours).with_entities(
-            Cours.cours).first().cours
-    except Exception as e:
-        logging.error(f"Erreur lors de la récupération du nom du cours de la fiche {id_fiche}")
-        logging.error(e)
-
-
-def get_theme_cours_by_id(id_fiche):
-    """
-    Récupère le theme d'un cours à partir de l'id d'une fiche
-
-    :return: Le nom du cours
-    """
-    try:
-        return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Cours).with_entities(
-            Cours.theme).first().theme
-    except Exception as e:
-        logging.error(f"Erreur lors de la récupération du nom du cours de la fiche {id_fiche}")
-        logging.error(e)
-
 def get_fiche_par_id_apprenti(id_apprenti):
     """
     Récupère les identifiants des fiches techniques associées à un apprenti à partir de son id
