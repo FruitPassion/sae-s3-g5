@@ -75,6 +75,7 @@
                             </div>
                             <div>
                                 <select class="form-select fs-1 my-3" id="categorie-ajouter" name="categorie-ajouter">
+                                    <option selected disabled="disabled">--- Sélectionnez une catégorie ---</option>
                                     {% for categorie in categories %}
                                         <option value="{{ categorie }}">{{ categorie }}</option>
                                     {% endfor %}
