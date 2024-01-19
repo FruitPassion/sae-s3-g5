@@ -162,6 +162,5 @@ class ModifierPicto(FlaskForm):
     """
     form_identifiant = HiddenField()
     form_modifier_label = StringField(render_kw={"placeholder": "Calendrier"})
-    form_modifier_categorie = StringField(render_kw={"placeholder": "Matériaux utilisés"})
     form_modifier_souscategorie = StringField(render_kw={"placeholder": "ajouter"})
     form_modifier_submit = SubmitField("Valider")

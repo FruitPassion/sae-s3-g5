@@ -15,7 +15,7 @@ from model.formation import get_all_formations, get_formation_par_apprenti
 from model.cours import get_all_cours, get_cours_par_apprenti, get_apprentis_by_formation, update_cours, add_cours
 from model.materiel import add_materiel, get_all_materiel, get_photo_materiel, update_materiel
 from model.personnel import get_id_personnel_by_login
-from model.pictogramme import add_picto, get_all_pictogrammes, get_photo_picto_by_id, update_picto
+from model.pictogramme import add_picto, get_all_categories_pictos, get_all_pictogrammes, get_photo_picto_by_id, update_picto
 from model.trace import get_commentaires_par_fiche, get_commentaires_type_par_fiche
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
@@ -87,6 +87,10 @@ def gestion_pictos():
     Page du choix de gestion des images des matériaux
     """
     pictos = get_all_pictogrammes()
+    categories_pictos = get_all_categories_pictos()
+    categories = []
+    for categorie in categories_pictos:
+        categories.append(categorie[0])
 
     form_ajouter = AjouterPicto()
     form_modifier = ModifierPicto()
@@ -110,7 +114,7 @@ def gestion_pictos():
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
 
     return render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier,
-                           form_ajouter=form_ajouter), 200
+                           form_ajouter=form_ajouter, categories = categories), 200
 
 
 @educ_admin.route("/gestion-cours", methods=["GET", "POST", "DELETE"])

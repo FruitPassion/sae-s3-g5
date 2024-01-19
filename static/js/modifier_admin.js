@@ -69,8 +69,16 @@ function passer_parametre_form(element, nom_form){
         case "picto":
             id_element = element.parentElement.id.replace('arch-ele-','');
             document.getElementById("form_modifier_label").value            = document.getElementById("label-"+id_element).innerText;
-            document.getElementById("form_modifier_categorie").value        = document.getElementById("categorie-"+id_element).innerText;
             document.getElementById("form_modifier_souscategorie").value    = document.getElementById("souscategorie-"+id_element).innerText;
+            let categories       = document.getElementById("categorie-modifier");
+            let ancienneCategorie  = document.getElementById("categorie-" + id_element).innerText;
+
+            for (let i = 0; i < categories.length ; i++) {
+                if (categories.options[i].value === ancienneCategorie) {
+                    categories[i].setAttribute("selected", "selected");
+                    break; // Sortie de la boucle une fois l'option trouvée
+                }
+            }
             break;
     }
 }

@@ -99,3 +99,14 @@ def add_picto(label, categorie, souscategorie, url, commit=True):
 
     except Exception as e:
         suplement_erreur(e, message=f"Erreur lors de l'ajout du pictogramme {label} dans la catégorie {categorie}")
+
+
+def get_all_categories_pictos():
+    """
+    Récupère toutes les catégories de pictogrammes
+
+    """
+    try:
+        return Pictogramme.query.with_entities(Pictogramme.categorie).distinct().all()
+    except Exception as e:
+        suplement_erreur(e, message=f"Erreur lors de la récupération des catégories de pictogrammes")
