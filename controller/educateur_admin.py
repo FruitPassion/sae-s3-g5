@@ -60,14 +60,14 @@ def gestion_images():
     form_modifier = ModifierMateriel()
 
     if form_modifier.validate_on_submit() and request.method == "POST":
-        identifiant = request.form.get("id-element")
+        identifiant = request.form.get("id-element")[5:]
+        categorie = request.form.get("categorie-modifier")
         if len(request.files.get("materiel-modifier").filename) != 0:
             f = request.files.get("materiel-modifier")
-            chemin_materiel = stocker_photo_materiel(f, categorie=form_modifier.form_modifier_categorie.data)
+            chemin_materiel = stocker_photo_materiel(f, categorie=categorie)
         else:
             chemin_materiel = get_photo_materiel(identifiant)
-        update_materiel(identifiant, form_modifier.form_modifier_nom.data, form_modifier.form_modifier_categorie.data,
-                        chemin_materiel)
+        update_materiel(identifiant, form_modifier.form_modifier_nom.data, categorie, chemin_materiel)
         return redirect(url_for("educ_admin.gestion_images"), 302)
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":

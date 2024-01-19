@@ -143,9 +143,7 @@ class ModifierMateriel(FlaskForm):
     """
     form_identifiant = HiddenField()
     form_modifier_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Chalumeau"})
-    form_modifier_categorie = StringField(validators=[InputRequired()], render_kw={"placeholder": "Plomberie"})
     form_modifier_submit = SubmitField("Valider")
-
 
 
 class AjouterPicto(FlaskForm):

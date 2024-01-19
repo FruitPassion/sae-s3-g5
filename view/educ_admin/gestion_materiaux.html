@@ -139,7 +139,12 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Catégorie :</h3>
-                            {{ form_modifier.form_modifier_categorie(class="form-control fs-1 my-3") }}
+                            <select class="form-select fs-1 my-3" id="categorie-modifier" name="categorie-modifier">
+                                <option selected disabled="disabled">--- Sélectionnez une catégorie ---</option>  
+                                <option value="Electrique">Electrique</option>
+                                <option value="Plomberie">Plomberie</option>
+                                <option value="General">Général</option>
+                            </select>
                         </div>
 
                         <div class="w-75 test">
