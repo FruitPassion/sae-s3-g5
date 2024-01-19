@@ -62,8 +62,7 @@ function passer_parametre_form(element, nom_form){
         case "materiel":
             id_element = element.parentElement.id.replace('arch-ele-','');
             document.getElementById("form_modifier_nom").value         = document.getElementById("nom-"+id_element).innerText;
-            document.getElementById("form_modifier_categorie").value   = document.getElementById("categorie-"+id_element).innerText;
-            let categoriesMateriel       = document.getElementById("categorie-modifier-materiel");
+            let categoriesMateriel       = document.getElementById("categorie-modifier");
             let ancienneCategorieMateriel  = document.getElementById("categorie-" + id_element).innerText;
 
             for (let i = 0; i < categoriesMateriel.length ; i++) {
