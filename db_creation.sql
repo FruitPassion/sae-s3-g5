@@ -364,11 +364,11 @@ VALUES ('Ajouter', 'ajouter.png', 'Matériaux utilisés', 'ajouter'),
        ('Valider', 'valider.png', 'Autre', NULL),
        ('Materiel', 'materiel.png', 'Matériaux utilisés', 'choix materiel'),
        ('Nouvelle', 'nouvelle.png', 'Description du travail', 'nouvelle'),
-       ('Tres bien','tres_bien.png','Evaluation personnel','tres bien'),
-       ('Bien','bien.png','Evaluation personnel','bien'),
-       ('Assez bien','assez_bien.png','Evaluation personnel','assez bien'),
-       ('Moyen','moyen.png','Evaluation personnel','moyen'),
-       ('Pas bien','pas_bien.png','Evaluation personnel','pas bien');
+       ('Bien','bien.png','Ressenti','tres bien'),
+       ('Assez bien','assez_bien.png','Ressenti','bien'),
+       ('Moyen','moyen.png','Ressenti','assez bien'),
+       ('Mauvais','mauvais.png','Ressenti','moyen'),
+       ('Très mauvais','tres_mauvais.png','Ressenti','pas bien');
 
 
 INSERT INTO ComposerPresentation (id_element, id_fiche, taille_texte, audio, police, couleur, couleur_fond,
