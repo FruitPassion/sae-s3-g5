@@ -76,7 +76,7 @@ def stocker_picto(file):
         file.save(chemin_picto)
         chemin_picto = secure_filename(file.filename)
         img = Image.open(file.stream)
-        resize_image_picto(img, "./static/images/" + chemin_picto)
+        resize_image_picto(img, "./static/images/icone_fiches/" + chemin_picto)
         return chemin_picto
     except Exception as e:
         print(e)
