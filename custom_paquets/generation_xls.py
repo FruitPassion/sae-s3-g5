@@ -3,7 +3,7 @@ from custom_paquets.converter import changer_date
 
 from model.apprenti import Apprenti
 from model.ficheintervention import FicheIntervention
-from model.trace import Trace
+from model.laissertrace import LaisserTrace
 
 
 def generer_xls_apprentis(id_formation):
@@ -37,7 +37,7 @@ def generer_xls_apprentis(id_formation):
             elif fiches[j].etat_fiche == 1:
                 nb_fiches_finies += 1
 
-                commentaires = Trace.get_commentaires_par_fiche(fiches[j].id_fiche)
+                commentaires = LaisserTrace.get_commentaires_par_fiche(fiches[j].id_fiche)
 
                 for k in range(len(commentaires)):
                     worksheet.write(f'F{k * 2 + 4}',

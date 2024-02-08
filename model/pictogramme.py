@@ -1,6 +1,5 @@
 import logging
 from custom_paquets.gestions_erreur import suplement_erreur
-from model.composer import Compo
 
 from model.shared_model import db, DB_SCHEMA
 
@@ -23,7 +22,8 @@ class Pictogramme(db.Model):
         :return: les pictogrammes associés de la fiche id_fiche
         """
         try:
-            return Pictogramme.query.join(Compo).filter(Compo.id_fiche != id_fiche).distinct().all()
+            from model.composer import ComposerPresentation
+            return Pictogramme.query.join(ComposerPresentation).filter(ComposerPresentation.id_fiche != id_fiche).distinct().all()
         except Exception as e:
             logging.error("Erreur lors de la récupération des pictogrammes")
             logging.error(e)

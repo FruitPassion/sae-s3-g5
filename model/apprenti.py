@@ -5,10 +5,10 @@ from custom_paquets.gestions_erreur import suplement_erreur
 from custom_paquets.security import compare_passwords, encrypt_password
 
 from model.shared_model import db, DB_SCHEMA, Assister
+
 from model.cours import Cours
-from model.trace import Trace
-from model.ficheintervention import FicheIntervention
-from model.composer import Compo
+from model.laissertrace import LaisserTrace
+from model.composer import ComposerPresentation
 
 
 class Apprenti(db.Model):
@@ -308,14 +308,15 @@ class Apprenti(db.Model):
         :return: None
         """
         try:
+            from model.ficheintervention import FicheIntervention
             Assister.query.filter_by(id_apprenti=id_apprenti).delete()
             if commit:
                 db.session.commit()
             fiches = FicheIntervention.query.filter_by(id_apprenti=id_apprenti).all()
             if fiches:
                 for fiche in fiches:
-                    Compo.query.filter_by(id_fiche=fiche.id_fiche).delete()
-                    Trace.query.filter_by(id_fiche=fiche.id_fiche).delete()
+                    ComposerPresentation.query.filter_by(id_fiche=fiche.id_fiche).delete()
+                    LaisserTrace.query.filter_by(id_fiche=fiche.id_fiche).delete()
                 for fiche in fiches:
                     db.session.delete(fiche)
             if commit:

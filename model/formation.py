@@ -1,6 +1,5 @@
 import logging
 
-from custom_paquets.generation_xls import generer_xls_apprentis
 from model.apprenti import Apprenti
 from model.cours import Cours
 
@@ -174,6 +173,7 @@ def reinitisaliser_formation(id_formation, commit=True):
     :return: True si la réinitialisation s'est bien passée, False sinon
     """
     try:
+        from custom_paquets.generation_xls import generer_xls_apprentis
         # Suppression des cours
         generer_xls_apprentis(id_formation)
 

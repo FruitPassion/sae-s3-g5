@@ -4,7 +4,7 @@ from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
 from model.cours import Cours
 from model.formation import Formation
-from model.trace import Trace
+from model.laissertrace import LaisserTrace
 from model.apprenti import Apprenti
 from model.ficheintervention import FicheIntervention
 import json
@@ -60,7 +60,7 @@ def visualiser_commentaires(apprenti, fiche):
     
     :return: rendu de la page commentaires.html
     """
-    commentaires = Trace.get_commentaires_par_fiche(fiche)
+    commentaires = LaisserTrace.get_commentaires_par_fiche(fiche)
     return render_template("cip/commentaires.html", commentaires=commentaires, apprenti=apprenti), 200
 
 

@@ -7,14 +7,14 @@ from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
 from custom_paquets.gestion_image import stocker_photo_materiel, stocker_picto
 from model.apprenti import Apprenti
-from model.composer import Compo
+from model.composer import ComposerPresentation
 from model.cours import Cours
 from model.ficheintervention import FicheIntervention
 from model.formation import Formation
 from model.materiel import Materiel
 from model.personnel import Personnel
 from model.pictogramme import Pictogramme
-from model.trace import Trace
+from model.laissertrace import LaisserTrace
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
@@ -216,7 +216,7 @@ def ajouter_fiche(apprenti):
     :return: rendu de la page ajouter_fiche.html
     """
     form = AjouterFiche()
-    cours = Cours.get_cours_par_apprenti(Trace.get_id_apprenti_by_login(apprenti))
+    cours = Cours.get_cours_par_apprenti(LaisserTrace.get_id_apprenti_by_login(apprenti))
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
         id_cours = request.form.get('coursinput')
@@ -248,7 +248,7 @@ def personnalisation(id_fiche):
     composer_fiche = build_categories(id_fiche)
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
     if request.method == 'POST':
-        Compo.modifier_composition(request.form, id_fiche)
+        ComposerPresentation.modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.fiches_apprenti",
                                 apprenti=FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)),
@@ -265,9 +265,9 @@ def visualiser_commentaires(apprenti, numero):
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-    commentaires_educ = Trace.get_commentaires_type_par_fiche(
+    commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
-    commentaires_appr = Trace.get_commentaires_type_par_fiche(
+    commentaires_appr = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
     return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200

@@ -7,7 +7,7 @@ from model.apprenti import Apprenti
 from model.formation import Formation
 from model.personnel import Personnel
 from model.cours import Cours
-from model.trace import Trace
+from model.laissertrace import LaisserTrace
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -177,4 +177,4 @@ def save_audio(id_personnel, id_fiche, horodatage, commentaire_audio):
             commentaire_audio = os.path.join('static/audio', filename)
             audio_file.save(commentaire_audio)
 
-    return {"valide": Trace.modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio)}
+    return {"valide": LaisserTrace.modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio)}

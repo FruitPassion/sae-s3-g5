@@ -5,11 +5,11 @@ from time import strftime, localtime
 
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.gestions_erreur import suplement_erreur
+from model.shared_model import db, DB_SCHEMA
 
 from model.apprenti import Apprenti
 from model.personnel import Personnel
-from model.shared_model import db, DB_SCHEMA
-from model.composer import Compo
+from model.composer import ComposerPresentation
 
 
 class FicheIntervention(db.Model):
@@ -108,10 +108,10 @@ class FicheIntervention(db.Model):
         try:
             id_apprenti = Apprenti.get_id_apprenti_by_login(login)
             fiche_niveau = (
-                db.session.query(FicheIntervention.numero, func.sum(Compo.niveau).label('total_niveau'),
-                                 FicheIntervention.etat_fiche).join(Compo).join(Apprenti)
+                db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'),
+                                 FicheIntervention.etat_fiche).join(ComposerPresentation).join(Apprenti)
                 .filter(FicheIntervention.id_apprenti == id_apprenti)
-                .filter(~Compo.position_elem.like('%0%')).group_by(FicheIntervention.id_fiche).all()
+                .filter(~ComposerPresentation.position_elem.like('%0%')).group_by(FicheIntervention.id_fiche).all()
             )
             return convert_to_dict(fiche_niveau)
         except Exception as e:
@@ -128,11 +128,11 @@ class FicheIntervention(db.Model):
         try:
             id_apprenti = Apprenti.get_id_apprenti_by_login(login)
             niveau_champ = (
-                db.session.query(FicheIntervention.numero, func.avg(Compo.niveau).label('moyenne_niveau'))
-                .join(Compo)
+                db.session.query(FicheIntervention.numero, func.avg(ComposerPresentation.niveau).label('moyenne_niveau'))
+                .join(ComposerPresentation)
                 .join(Apprenti)
                 .filter(FicheIntervention.id_apprenti == id_apprenti)
-                .filter(~Compo.position_elem.like('%0%'))
+                .filter(~ComposerPresentation.position_elem.like('%0%'))
                 .group_by(FicheIntervention.id_fiche)
                 .all()
             )
@@ -299,7 +299,7 @@ class FicheIntervention(db.Model):
                                                id_cours=fiche_a_copier.id_cours)
             db.session.add(nouvelle_fiche)
             db.session.commit()
-            composer_fiche = Compo.get_composer_presentation(id_fiche)
+            composer_fiche = ComposerPresentation.get_composer_presentation(id_fiche)
             FicheIntervention.remplir_fiche(composer_fiche, nouvelle_fiche)
 
             return nouvelle_fiche.id_fiche
@@ -330,10 +330,10 @@ class FicheIntervention(db.Model):
         try:
             # Si l'apprenti a déjà une fiche, on copie les éléments de la dernière fiche
             if FicheIntervention.get_fiche_apprentis_existe(login_apprenti):
-                composer_fiche = Compo.get_composer_presentation(FicheIntervention.get_dernier_id_fiche_apprenti(login_apprenti))
+                composer_fiche = ComposerPresentation.get_composer_presentation(FicheIntervention.get_dernier_id_fiche_apprenti(login_apprenti))
             # Sinon on copie les éléments de la fiche par défaut
             else:
-                composer_fiche = Compo.get_composer_presentation()
+                composer_fiche = ComposerPresentation.get_composer_presentation()
 
             numero = FicheIntervention.get_dernier_numero_fiche_apprenti(login_apprenti) + 1
 
@@ -368,7 +368,7 @@ class FicheIntervention(db.Model):
         """
         try:
             for element in composer_fiche:
-                composer = Compo(id_element=element.id_element, id_fiche=fiche.id_fiche,
+                composer = ComposerPresentation(id_element=element.id_element, id_fiche=fiche.id_fiche,
                                                 id_pictogramme=element.id_pictogramme,
                                                 taille_pictogramme=element.taille_pictogramme,
                                                 couleur_pictogramme=element.couleur_pictogramme,

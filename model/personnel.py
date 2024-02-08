@@ -3,8 +3,7 @@ import logging
 from custom_paquets.security import compare_passwords
 
 from model.shared_model import db, DB_SCHEMA, EducAdmin
-from model.trace import Trace
-from model.ficheintervention import FicheIntervention
+from model.laissertrace import LaisserTrace
 
 
 class Personnel(db.Model):
@@ -191,13 +190,14 @@ class Personnel(db.Model):
             personnel.role = role
             if password is not None:
                 personnel.mdp = password
+
             if actif:
                 personnel.essais = 0
             elif actif == False:
                 personnel.essais = 3
+
             if commit:
                 db.session.commit()
-
         except Exception as e:
             logging.error(f"Erreur lors de la modification de {prenom} {nom}")
             logging.error(e)
@@ -234,8 +234,10 @@ class Personnel(db.Model):
         :return: Booléen en fonction de la réussite de l'opération
         """
         try:
+            from model.ficheintervention import FicheIntervention
+
             # Retirer le personnel des traces
-            traces = Trace.query.filter_by(id_personnel=id_personnel).all()
+            traces = LaisserTrace.query.filter_by(id_personnel=id_personnel).all()
             if traces:
                 for trace in traces:
                     trace.id_personnel = 1

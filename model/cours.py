@@ -1,8 +1,7 @@
 import logging
 
 from model.shared_model import db, DB_SCHEMA, Assister
-from model.apprenti import Apprenti
-from model.formation import Formation
+
 
 
 class Cours(db.Model):
@@ -54,6 +53,8 @@ class Cours(db.Model):
         :return: Une liste d'apprentis
         """
         try:
+            from model.formation import Formation
+            from model.apprenti import Apprenti
             return Cours.query.distinct().filter_by(
                 id_formation=Formation.get_formation_id_par_nom_formation(nom_formation)).join(
                 Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,

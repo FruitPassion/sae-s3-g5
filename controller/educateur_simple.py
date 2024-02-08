@@ -6,7 +6,7 @@ from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import Apprenti
 from model.cours import Cours
 from model.ficheintervention import FicheIntervention
-from model.trace import Trace
+from model.laissertrace import LaisserTrace
 from model.personnel import Personnel
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
@@ -44,9 +44,9 @@ def visualiser_commentaires(apprenti, numero):
     
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-    commentaires_educ = Trace.get_commentaires_type_par_fiche(
+    commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
-    commentaires_appr = Trace.get_commentaires_type_par_fiche(
+    commentaires_appr = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
     return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
@@ -68,20 +68,20 @@ def modifier_commentaires(apprenti, numero, type_commentaire):
     id_personnel = Personnel.get_id_personnel_by_login(session.get("name"))
 
     if type_commentaire == "educateur":
-        commentaires = Trace.get_commentaires_type_par_fiche(id_fiche)
+        commentaires = LaisserTrace.get_commentaires_type_par_fiche(id_fiche)
     else:
-        commentaires = Trace.get_commentaires_type_par_fiche(id_fiche, apprenti="1")
+        commentaires = LaisserTrace.get_commentaires_type_par_fiche(id_fiche, apprenti="1")
 
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
 
-        Trace.modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte,
-                                         type_commentaire=type_commentaire)
+        LaisserTrace.modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte,
+                                                type_commentaire=type_commentaire)
 
-        Trace.modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte,
-                                        type_commentaire=type_commentaire)
+        LaisserTrace.modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte,
+                                               type_commentaire=type_commentaire)
         if 'Administrateur' in Personnel.get_role_by_login(session.get("name")):
             return redirect(url_for('educ_admin.visualiser_commentaires', apprenti=apprenti, numero=numero))
         else:
@@ -108,8 +108,8 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
         commentaire_texte = request.form["commentaire"]
         eval_texte = request.form["evaluation"]
         intitule = request.form["intitule"]
-        Trace.ajouter_commentaires_evaluation(fiche.id_fiche, commentaire_texte, eval_texte, None, None,
-                                              session.get("name"), intitule, type_c)
+        LaisserTrace.ajouter_commentaires_evaluation(fiche.id_fiche, commentaire_texte, eval_texte, None, None,
+                                                     session.get("name"), intitule, type_c)
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero))
 
     return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche)

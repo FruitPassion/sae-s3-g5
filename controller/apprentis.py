@@ -5,10 +5,10 @@ from custom_paquets.builder import build_categories, build_materiel
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
-from model.composer import Compo
+from model.composer import ComposerPresentation
 from model.apprenti import Apprenti
 from model.cours import Cours
-from model.trace import Trace
+from model.laissertrace import LaisserTrace
 from model.ficheintervention import FicheIntervention
 
 apprenti = Blueprint('apprenti', __name__, url_prefix="/apprenti")
@@ -84,7 +84,7 @@ def completer_fiche(numero):
             FicheIntervention.definir_photo(fiche.id_fiche, avant_apres=True)  # True pour apres
 
         # Gestion des checkbox
-        checkboxes = Compo.get_checkbox_on(fiche.id_fiche)
+        checkboxes = ComposerPresentation.get_checkbox_on(fiche.id_fiche)
         for checkbox in checkboxes:
             if checkbox.position_elem not in request.form.keys():
                 completer_fiche[f"{checkbox.position_elem}"] = None
@@ -94,7 +94,7 @@ def completer_fiche(numero):
             if "radio-" in element:
                 element = request.form.get(f"{element}")
                 completer_fiche[f"{element}"] = "radioed"
-        radios = Compo.get_radio_radioed(fiche.id_fiche)
+        radios = ComposerPresentation.get_radio_radioed(fiche.id_fiche)
         for radio in radios:
             if radio.position_elem not in completer_fiche.keys():
                 completer_fiche[f"{radio.position_elem}"] = None
@@ -106,7 +106,7 @@ def completer_fiche(numero):
             elif "selecteur-" in element:
                 ajouter_materiel[f"{element.replace('selecteur-','')}"] = None
         if len(ajouter_materiel) != 0:
-            Compo.maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
+            ComposerPresentation.maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
 
         # Gestion des autres éléments
         for element in request.form:
@@ -119,7 +119,7 @@ def completer_fiche(numero):
                 element_data = None
                 
             completer_fiche[f"{element}"] = element_data
-        Compo.maj_contenu_fiche(completer_fiche, fiche.id_fiche)
+        ComposerPresentation.maj_contenu_fiche(completer_fiche, fiche.id_fiche)
         composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
     return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
@@ -139,7 +139,7 @@ def imprimer_pdf(numero):
     FicheIntervention.valider_fiche(fiche.id_fiche)
 
     materiaux = build_materiel()
-    composer_fiche = Compo.get_composer_presentation_par_apprenti(fiche.id_fiche)
+    composer_fiche = ComposerPresentation.get_composer_presentation_par_apprenti(fiche.id_fiche)
     return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche,
                            materiaux=materiaux)
 
@@ -166,7 +166,7 @@ def afficher_commentaires(numero):
     :return: rendu de la page commentaires.html
     """
     
-    commentaires = Trace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
+    commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     emoji = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires=commentaires, emoji=emoji), 200

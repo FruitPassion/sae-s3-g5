@@ -1,10 +1,9 @@
 from datetime import datetime
 import logging
-from model.personnel import Personnel
 from model.shared_model import db, DB_SCHEMA
 
 
-class Trace(db.Model):
+class LaisserTrace(db.Model):
     __tablename__ = 'LaisserTrace'
     __table_args__ = {'schema': DB_SCHEMA}
 
@@ -32,7 +31,7 @@ class Trace(db.Model):
         :return: Tous les commentaires
         """
         try:
-            return Trace.query.filter_by(id_fiche=id_fiche).all()
+            return LaisserTrace.query.filter_by(id_fiche=id_fiche).all()
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
             logging.error(e)
@@ -46,7 +45,7 @@ class Trace(db.Model):
         et l'identifiant de l'éducateur ayant créé la trace
         """
         try:
-            return Trace.query.filter_by(id_fiche=id_fiche, apprenti=apprenti).first()
+            return LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti=apprenti).first()
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
             logging.error(e)
@@ -61,11 +60,11 @@ class Trace(db.Model):
         """
         try:
             if type_commentaire == "educateur":
-                trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
+                trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
                 trace.commentaire_texte = commentaire_texte
                 db.session.commit()
             else:
-                trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
+                trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
                 trace.commentaire_texte = commentaire_texte
                 db.session.commit()
         except Exception as e:
@@ -81,8 +80,8 @@ class Trace(db.Model):
         :return: None
         """
         try:
-            trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
-                                          apprenti=f"{int(type_commentaire != 'educateur')}").first()
+            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                                 apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.commentaire_audio = commentaire_audio
         except Exception as e:
             logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
@@ -97,8 +96,8 @@ class Trace(db.Model):
         :return: None
         """
         try:
-            trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
-                                          apprenti=f"{int(type_commentaire != 'educateur')}").first()
+            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                                 apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.eval_texte = evaluation_texte
             db.session.commit()
         except Exception as e:
@@ -115,8 +114,8 @@ class Trace(db.Model):
         :return: None
         """
         try:
-            trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
-                                          apprenti=f"{int(type_commentaire != 'educateur')}").first()
+            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                                 apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.eval_audio = eval_audio
             db.session.commit()
         except Exception as e:
@@ -132,12 +131,13 @@ class Trace(db.Model):
         :return: None
         """
         try:
+            from model.personnel import Personnel
             id_personnel = Personnel.get_id_personnel_by_login(login)
             horodatage = datetime.now()
-            trace = Trace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
-                          commentaire_texte=commentaire_texte, eval_texte=eval_texte,
-                          commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti=type_c,
-                          intitule=intitule)
+            trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
+                                 commentaire_texte=commentaire_texte, eval_texte=eval_texte,
+                                 commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti=type_c,
+                                 intitule=intitule)
             db.session.add(trace)
             db.session.commit()
         except Exception as e:

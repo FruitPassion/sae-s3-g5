@@ -1,14 +1,14 @@
-from model.composer import Compo
+from model.composer import ComposerPresentation
 from model.materiel import Materiel
 from model.pictogramme import Pictogramme
 
 
 def build_categories(id_fiche):
-    composer_cat = Compo.get_composer_categorie(id_fiche)
-    composer_non_cat = Compo.get_composer_non_categorie(id_fiche)
+    composer_cat = ComposerPresentation.get_composer_categorie(id_fiche)
+    composer_non_cat = ComposerPresentation.get_composer_non_categorie(id_fiche)
 
     pictogrammes = Pictogramme.get_pictogrammes(id_fiche)
-    bases = Compo.get_elements_base()
+    bases = ComposerPresentation.get_elements_base()
     for i in range(len(composer_cat)):
         composer_cat[i] = composer_cat[i] | get_common_element(composer_cat[i], bases)
         composer_cat[i]["elements"] = []
