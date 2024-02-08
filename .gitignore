@@ -19,6 +19,7 @@ __pycache__
 
 static/files
 static/images/photo_fiche
+coverage.xml
 
 
 # Flask stuff:
