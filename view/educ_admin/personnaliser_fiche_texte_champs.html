@@ -1,8 +1,7 @@
 {% extends 'common/base.html' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/css/dd.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/dd.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/personnalisation_fiche.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/customiser_fiche_ms_dropdown.css') }}">
 {% endblock %}
@@ -10,7 +9,7 @@
 {% block javascripts %}
     <script src="{{ url_for('static',filename='js/color_generator.js') }}"></script>
     <script src="{{ url_for('static',filename='js/personnalisation_fiche.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ms-dropdown@4.0.3/dist/js/dd.min.js"></script>
+    <script src="{{ url_for('static',filename='js/dd.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}

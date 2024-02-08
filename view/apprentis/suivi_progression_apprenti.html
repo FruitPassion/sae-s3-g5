@@ -12,8 +12,8 @@
     <div id="suivi">
         <canvas id="camembert" width="200" height="200"></canvas>
         {% block javascripts %}
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+            <script src="{{ url_for('static',filename='js/chart.js') }}"></script>
+            <script src="{{ url_for('static',filename='js/chartjs-plugin-datalabels.js') }}"></script>
             <script src="{{ url_for('static',filename='js/suivi_progression_apprenti.js') }}"></script>
             <script>
                 window.onload = function () {

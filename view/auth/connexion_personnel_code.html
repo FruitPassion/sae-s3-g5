@@ -4,13 +4,11 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/connexion_personnel.css') }}">
-    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquerysctiptotop.css') }}">
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-            integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
-            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/cryxpad.js') }}"></script>
 {% endblock %}
 
