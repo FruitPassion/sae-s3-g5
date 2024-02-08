@@ -11,12 +11,10 @@ from flask import (
 
 from custom_paquets.custom_form import LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
-from model.apprenti import get_apprenti_by_login, check_password_apprenti, get_nbr_essais_connexion_apprenti, \
-    check_apprenti, check_password_is_set
-from model.cours import get_apprentis_by_formation
-from model.formation import get_all_formations, get_formation_id_par_nom_formation
-from model.personnel import check_personnel, check_password, get_role_by_login, get_nbr_essais_connexion_personnel, \
-    get_liste_personnel_non_super
+from model.apprenti import Apprenti
+from model.cours import Cours
+from model.formation import Formation
+from model.personnel import Personnel
 
 auth = Blueprint("auth", __name__)
 
@@ -63,25 +61,25 @@ def connexion_personnel_pin():
 
     :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """
-    personnels = get_liste_personnel_non_super()
+    personnels = Personnel.get_liste_personnel_non_super()
     code = 200
     if request.method == "POST":
         passwd = request.form["code"]
         login = request.form.get('login_select')
-        if not check_password(login, passwd):
-            if get_nbr_essais_connexion_personnel(login) == 3:
+        if not Personnel.check_password(login, passwd):
+            if Personnel.get_nbr_essais_connexion_personnel(login) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
-            if get_nbr_essais_connexion_personnel(login) == 3:
+            if Personnel.get_nbr_essais_connexion_personnel(login) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 session["name"] = login
-                session["role"] = get_role_by_login(login)
+                session["role"] = Personnel.get_role_by_login(login)
                 flash(CONNEXION_REUSSIE)
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"), 302)
@@ -104,23 +102,23 @@ def connexion_personnel_mdp():
     form = LoginPersonnelForm()
     code = 200
     if form.validate_on_submit():
-        if not check_personnel(form.login.data) or form.login.data == "dummy":
+        if not Personnel.check_personnel(form.login.data) or form.login.data == "dummy":
             flash(COMPTE_INCONNU, "error")
             code = 403
-        elif not check_password(form.login.data, form.password.data):
-            if get_nbr_essais_connexion_personnel(form.login.data) == 3:
+        elif not Personnel.check_password(form.login.data, form.password.data):
+            if Personnel.get_nbr_essais_connexion_personnel(form.login.data) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
-            if get_nbr_essais_connexion_personnel(form.login.data) == 3:
+            if Personnel.get_nbr_essais_connexion_personnel(form.login.data) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:
                 session["name"] = form.login.data
-                session["role"] = get_role_by_login(form.login.data)
+                session["role"] = Personnel.get_role_by_login(form.login.data)
                 flash(CONNEXION_REUSSIE)
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"), 302)
@@ -139,7 +137,7 @@ def choix_formation_apprentis():
 
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
-    formations = get_all_formations()
+    formations = Formation.get_all_formations()
     return render_template("auth/choix_formation_apprentis.html", formations=formations), 200
 
 
@@ -152,10 +150,10 @@ def choix_eleve_apprentis(nom_formation):
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
-    if not get_formation_id_par_nom_formation(nom_formation):
+    if not Formation.get_formation_id_par_nom_formation(nom_formation):
         abort(404)
     
-    apprentis = get_apprentis_by_formation(nom_formation)
+    apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200
 
 
@@ -168,19 +166,19 @@ def connexion_apprentis(nom_formation, login_apprenti):
 
     :return: connexion_apprentis.html
     """
-    apprenti = get_apprenti_by_login(login_apprenti)
+    apprenti = Apprenti.get_apprenti_by_login(login_apprenti)
     code = 200
-    code_set = check_password_is_set(login_apprenti)
+    code_set = Apprenti.check_password_is_set(login_apprenti)
     if request.method == "POST":
         login = request.form.get("login")
         password = request.form.get("pass")
-        if check_apprenti(login) and check_password_apprenti(login, password):
+        if Apprenti.check_apprenti(login) and Apprenti.check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
             flash(CONNEXION_REUSSIE)
             return redirect(url_for("apprenti.redirection_connexion"), 302)
         else:
-            if get_nbr_essais_connexion_apprenti(login) == 5:
+            if Apprenti.get_nbr_essais_connexion_apprenti(login) == 5:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
             else:

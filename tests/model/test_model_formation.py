@@ -1,9 +1,8 @@
 from custom_paquets.tester_usages import ApprentiTest, FormationTest
-from model.formation import archiver_formation
-from model.apprenti import remove_apprenti
-from model.formation import remove_formation
-from model.cours import add_apprenti_assister
-from model.shared_model import Apprenti, db, Formation, Cours
+from model.formation import Formation
+from model.apprenti import Apprenti
+from model.cours import Cours
+from model.shared_model import db
 
 
 def test_ajouter_formation(client):
@@ -18,7 +17,7 @@ def test_archiver_formation(client):
     # Création d'une formation à archiver
     formation_t = FormationTest()
 
-    archiver_formation(formation_t.id_formation, archiver=True, commit=False)
+    Formation.archiver_formation(formation_t.id_formation, archiver=True, commit=False)
     assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
                                               Formation.archive == 1).first() is not None
     db.session.rollback()
@@ -37,10 +36,10 @@ def test_supprimer_formation(client):
     apprenti = ApprentiTest(commit=True)
 
     # Ajout de l'apprenti dans un cours de la formation
-    add_apprenti_assister(apprenti.id_apprenti, formation.id_formation)
+    Cours.add_apprenti_assister(apprenti.id_apprenti, formation.id_formation)
 
     # Suppression de la formation
-    remove_formation(formation.id_formation)
+    Formation.remove_formation(formation.id_formation)
 
     # Vérification de la suppression de la formation dans la base de données
     assert db.session.query(Formation).filter(Formation.id_formation == formation.id_formation).first() is None
@@ -49,7 +48,7 @@ def test_supprimer_formation(client):
     assert db.session.query(Cours).filter(Cours.id_formation == formation.id_formation).first() is None
 
     # Suppression de l'apprenti
-    remove_apprenti(apprenti.id_apprenti)
+    Apprenti.remove_apprenti(apprenti.id_apprenti)
 
     # Vérification de la suppression de l'apprenti en BD
     assert db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti.id_apprenti).first() is None

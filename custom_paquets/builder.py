@@ -1,14 +1,14 @@
-from model.composer import get_composer_categorie, get_composer_non_categorie, get_elements_base
-from model.materiel import get_all_materiel
-from model.pictogramme import get_pictogrammes, get_all_pictogrammes
+from model.composer import Compo
+from model.materiel import Materiel
+from model.pictogramme import Pictogramme
 
 
 def build_categories(id_fiche):
-    composer_cat = get_composer_categorie(id_fiche)
-    composer_non_cat = get_composer_non_categorie(id_fiche)
+    composer_cat = Compo.get_composer_categorie(id_fiche)
+    composer_non_cat = Compo.get_composer_non_categorie(id_fiche)
 
-    pictogrammes = get_pictogrammes(id_fiche)
-    bases = get_elements_base()
+    pictogrammes = Pictogramme.get_pictogrammes(id_fiche)
+    bases = Compo.get_elements_base()
     for i in range(len(composer_cat)):
         composer_cat[i] = composer_cat[i] | get_common_element(composer_cat[i], bases)
         composer_cat[i]["elements"] = []
@@ -23,7 +23,7 @@ def build_categories(id_fiche):
 
 
 def build_materiel():
-    materiaux = get_all_materiel()
+    materiaux = Materiel.get_all_materiel()
     to_return = []
     for materiel in materiaux:
         # check if categorie already in one of to_return dictionnaries at key "nom"
@@ -39,7 +39,7 @@ def build_materiel():
 
 
 def build_pictogrammes():
-    pictogrammes = get_all_pictogrammes()
+    pictogrammes = Pictogramme.get_all_pictogrammes()
     to_return = {}
     for picto in pictogrammes:
         to_return[picto.categorie] = {}

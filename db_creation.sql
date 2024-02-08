@@ -1,4 +1,4 @@
--- Active: 1704885236680@@127.0.0.1@3306@db_fiches_dev
+-- Active: 1706110255136@@127.0.0.1@3306@db_fiches_dev
 CREATE OR REPLACE USER 'local_user'@'localhost' IDENTIFIED BY 'password';
 DROP DATABASE IF EXISTS db_fiches_dev;
 create database db_fiches_dev;

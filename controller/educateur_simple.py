@@ -3,13 +3,11 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
 from custom_paquets.gestion_audio import stocker_audio_commentaire
-from model.apprenti import get_apprenti_by_login, get_id_apprenti_by_login
-from model.cours import get_nom_cours_by_id, get_cours_par_apprenti
-from model.ficheintervention import get_fiches_techniques_finies_par_login,  get_id_fiche_apprenti, get_fiche_par_id_fiche
-from model.trace import ajouter_commentaires_evaluation, modifier_commentaire_texte, modifier_evaluation_texte, \
-    modifier_commentaire_audio, get_audio_commentaire, get_commentaires_type_par_fiche, get_commentaires_par_fiche, \
-    modifier_eval_audio
-from model.personnel import get_id_personnel_by_login, get_role_by_login
+from model.apprenti import Apprenti
+from model.cours import Cours
+from model.ficheintervention import FicheIntervention
+from model.trace import Trace
+from model.personnel import Personnel
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
 
@@ -30,12 +28,12 @@ def fiches_apprenti(apprenti):
     :return: Les fiches techniques de l'apprenti sélectionné.
     """
 
-    apprenti_infos = get_apprenti_by_login(apprenti)
-    fiches = get_fiches_techniques_finies_par_login(apprenti)
+    apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
+    fiches = FicheIntervention.get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
-    cours = get_cours_par_apprenti(get_id_apprenti_by_login(apprenti))
+    cours = Cours.get_cours_par_apprenti(Apprenti.get_id_apprenti_by_login(apprenti))
     return render_template("personnel/choix_fiches_apprenti.html", apprenti=apprenti_infos,
-                           fiches=fiches, get_nom_cours_by_id=get_nom_cours_by_id, cours=cours)
+                           fiches=fiches, get_nom_cours_by_id=Cours.get_nom_cours_by_id, cours=cours)
 
 
 @educ_simple.route("/<apprenti>/<numero>/commentaires", methods=["GET"])
@@ -46,8 +44,10 @@ def visualiser_commentaires(apprenti, numero):
     
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-    commentaires_educ = get_commentaires_type_par_fiche((get_id_fiche_apprenti(apprenti, numero)))
-    commentaires_appr = get_commentaires_type_par_fiche((get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
+    commentaires_educ = Trace.get_commentaires_type_par_fiche(
+        (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
+    commentaires_appr = Trace.get_commentaires_type_par_fiche(
+        (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
     return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
 
@@ -63,26 +63,26 @@ def modifier_commentaires(apprenti, numero, type_commentaire):
     """
     if type_commentaire not in ["educateur", "apprenti"]:
         abort(404)
-    id_fiche = get_id_fiche_apprenti(apprenti, numero)
+    id_fiche = FicheIntervention.get_id_fiche_apprenti(apprenti, numero)
 
-    id_personnel = get_id_personnel_by_login(session.get("name"))
+    id_personnel = Personnel.get_id_personnel_by_login(session.get("name"))
 
     if type_commentaire == "educateur":
-        commentaires = get_commentaires_type_par_fiche(id_fiche)
+        commentaires = Trace.get_commentaires_type_par_fiche(id_fiche)
     else:
-        commentaires = get_commentaires_type_par_fiche(id_fiche, apprenti="1")
+        commentaires = Trace.get_commentaires_type_par_fiche(id_fiche, apprenti="1")
 
-    fiche = get_fiche_par_id_fiche(id_fiche)
+    fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
     if request.method == 'POST':
         commentaire_texte = request.form["commentaire_texte"]
         eval_texte = request.form["eval_texte"]
 
-        modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte,
-                                   typeCommentaire=type_commentaire)
+        Trace.modifier_commentaire_texte(fiche.id_fiche, commentaires.horodatage, commentaire_texte,
+                                         type_commentaire=type_commentaire)
 
-        modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte,
-                                  typeCommentaire=type_commentaire)
-        if 'Administrateur' in get_role_by_login(session.get("name")):
+        Trace.modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte,
+                                        type_commentaire=type_commentaire)
+        if 'Administrateur' in Personnel.get_role_by_login(session.get("name")):
             return redirect(url_for('educ_admin.visualiser_commentaires', apprenti=apprenti, numero=numero))
         else:
             return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero))
@@ -99,7 +99,7 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
     
     :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
-    fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(apprenti, numero))
+    fiche = FicheIntervention.get_fiche_par_id_fiche(Personnel.get_id_fiche_apprenti(apprenti, numero))
     if request.method == 'POST':
         if type_commentaire == "apprenti":
             type_c = "1"
@@ -108,8 +108,8 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
         commentaire_texte = request.form["commentaire"]
         eval_texte = request.form["evaluation"]
         intitule = request.form["intitule"]
-        ajouter_commentaires_evaluation(fiche.id_fiche, commentaire_texte, eval_texte, None, None,
-                                        session.get("name"), intitule, type_c)
+        Trace.ajouter_commentaires_evaluation(fiche.id_fiche, commentaire_texte, eval_texte, None, None,
+                                              session.get("name"), intitule, type_c)
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero))
 
     return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche)

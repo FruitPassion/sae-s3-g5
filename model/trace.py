@@ -1,142 +1,145 @@
 from datetime import datetime
 import logging
-from model.personnel import get_id_personnel_by_login
-from model.shared_model import db, LaisserTrace
+from model.personnel import Personnel
+from model.shared_model import db, DB_SCHEMA
 
 
-def get_commentaires_par_fiche(id_fiche):
-    """
-    Récupère les commentaires de la fiche id_fiche d'un apprenti
+class Trace(db.Model):
+    __tablename__ = 'LaisserTrace'
+    __table_args__ = {'schema': DB_SCHEMA}
 
-    :return: Tous les commentaires
-    """
-    try:
-        return LaisserTrace.query.filter_by(id_fiche=id_fiche).all()
-    except Exception as e:
-        logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
-        logging.error(e)
+    id_personnel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Personnel.id_personnel'), primary_key=True)
+    horodatage = db.Column(db.DateTime, primary_key=True)
+    intitule = db.Column(db.String(50), nullable=False)
+    eval_texte = db.Column(db.Text, nullable=False)
+    commentaire_texte = db.Column(db.Text, nullable=False)
+    eval_audio = db.Column(db.String(255))
+    commentaire_audio = db.Column(db.String(50))
+    apprenti = db.Column(db.Integer, nullable=True)
+    id_fiche = db.Column(db.ForeignKey(f'{DB_SCHEMA}.FicheIntervention.id_fiche'), nullable=False, index=True)
 
+    FicheIntervention = db.relationship('FicheIntervention',
+                                        primaryjoin='LaisserTrace.id_fiche == FicheIntervention.id_fiche',
+                                        backref='traces')
+    Personnel = db.relationship('Personnel', primaryjoin='LaisserTrace.id_personnel == Personnel.id_personnel',
+                                backref='traces')
 
-def get_commentaires_type_par_fiche(id_fiche, apprenti="0"):
-    
-    """
-    Récupère les commentaires de la fiche id_fiche d'un apprenti
+    @staticmethod
+    def get_commentaires_par_fiche(id_fiche):
+        """
+        Récupère les commentaires de la fiche id_fiche d'un apprenti
 
-    :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
-    et l'identifiant de l'éducateur ayant créé la trace
-    """
-    try:
-        return LaisserTrace.query.filter_by(id_fiche=id_fiche, apprenti=apprenti).first()
-    except Exception as e:
-        logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
-        logging.error(e)
+        :return: Tous les commentaires
+        """
+        try:
+            return Trace.query.filter_by(id_fiche=id_fiche).all()
+        except Exception as e:
+            logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
+            logging.error(e)
 
+    @staticmethod
+    def get_commentaires_type_par_fiche(id_fiche, apprenti="0"):
+        """
+        Récupère les commentaires de la fiche id_fiche d'un apprenti
 
-def get_audio_commentaire(id_fiche):
-    try:
-        return LaisserTrace.query.filter_by(id_fiche=id_fiche).with_entities(LaisserTrace.audio).first().audio
-    except Exception as e:
-        logging.error(f"Erreur lors de la récupération de l'audio {id_fiche}")
-        logging.error(e)
+        :return: Tous les commentaires (évaluation texte et audio et commentaires audio et texte), leur horodatage
+        et l'identifiant de l'éducateur ayant créé la trace
+        """
+        try:
+            return Trace.query.filter_by(id_fiche=id_fiche, apprenti=apprenti).first()
+        except Exception as e:
+            logging.error(f"Erreur lors de la récupération des commentaires de la fiche {id_fiche}")
+            logging.error(e)
 
+    @staticmethod
+    def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte, type_commentaire):
+        """
+        Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
+        Modifie le commentaire textuel avec commentaire_texte
 
-def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte, typeCommentaire):
-    """
-    Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
-    Modifie le commentaire textuel avec commentaire_texte
+        :return: None
+        """
+        try:
+            if type_commentaire == "educateur":
+                trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
+                trace.commentaire_texte = commentaire_texte
+                db.session.commit()
+            else:
+                trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
+                trace.commentaire_texte = commentaire_texte
+                db.session.commit()
+        except Exception as e:
+            logging.error(
+                f"Erreur lors de la modification du commentaire textuel de la fiche {id_fiche} du {horodatage}")
+            logging.error(e)
 
-    :return: None
-    """
-    try:
-        if typeCommentaire == "educateur":
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
-            trace.commentaire_texte = commentaire_texte
-            db.session.commit()
-        else:
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
-            trace.commentaire_texte = commentaire_texte
-            db.session.commit()
-    except Exception as e:
-        logging.error(f"Erreur lors de la modification du commentaire textuel de la fiche {id_fiche} du {horodatage}")
-        logging.error(e)
-
-
-def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio, typeCommentaire):
-    """
-    Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
-    Modifie le (chemin ?) commentaire audio  avec commentaire_audio
-    :return: None
-    """
-    try:
-        if typeCommentaire == "educateur":
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
+    @staticmethod
+    def modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio, type_commentaire):
+        """
+        Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
+        Modifie le (chemin ?) commentaire audio  avec commentaire_audio
+        :return: None
+        """
+        try:
+            trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                          apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.commentaire_audio = commentaire_audio
-        else:
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
-            trace.commentaire_audio = commentaire_audio
-        db.session.commit()
-    except Exception as e:
-        logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
-        logging.error(e)
+        except Exception as e:
+            logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
+            logging.error(e)
 
+    @staticmethod
+    def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte, type_commentaire):
+        """
+        Récupère l'évaluation textuelle du horodatage (date/heure) de la fiche id_fiche
+        Modifie l'évaluation textuelle evaluation_texte avec evaluation_texte
 
-def modifier_evaluation_texte(id_fiche, horodatage, evaluation_texte, typeCommentaire):
-    """
-    Récupère l'évaluation textuelle du horodatage (date/heure) de la fiche id_fiche
-    Modifie l'évaluation textuelle evaluation_texte avec evaluation_texte
-
-    :return: None
-    """
-    try:
-        if typeCommentaire == "educateur":
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
+        :return: None
+        """
+        try:
+            trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                          apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.eval_texte = evaluation_texte
-        else:
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
-            trace.eval_texte = evaluation_texte
-        db.session.commit()
-    except Exception as e:
-        logging.error(
-            f"Erreur lors de la modification de l'évaluation textuelle de la fiche {id_fiche} du {horodatage}")
-        logging.error(e)
+            db.session.commit()
+        except Exception as e:
+            logging.error(
+                f"Erreur lors de la modification de l'évaluation textuelle de la fiche {id_fiche} du {horodatage}")
+            logging.error(e)
 
+    @staticmethod
+    def modifier_eval_audio(id_fiche, horodatage, eval_audio, type_commentaire):
+        """
+        Récupère l'évaluation audio du horodatage (date/heure) de la fiche id_fiche
+        Modifie (le chemin ?) l'évaluation audio eval_audio avec eval_audio
 
-def modifier_eval_audio(id_fiche, horodatage, eval_audio, typeCommentaire):
-    """
-    Récupère l'évaluation audio du horodatage (date/heure) de la fiche id_fiche
-    Modifie (le chemin ?) l'évaluation audio eval_audio avec eval_audio
-
-    :return: None
-    """
-    try:
-        if typeCommentaire == "educateur":
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
+        :return: None
+        """
+        try:
+            trace = Trace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                          apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.eval_audio = eval_audio
-        else:
-            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
-            trace.eval_audio = eval_audio
-        db.session.commit()
-    except Exception as e:
-        logging.error(f"Erreur lors de la modification de l'évaluation audio de la fiche {id_fiche} du {horodatage}")
-        logging.error(e)
+            db.session.commit()
+        except Exception as e:
+            logging.error(f"Erreur lors de la modification de l'évaluation audio de la fiche {id_fiche} du {horodatage}")
+            logging.error(e)
 
+    @staticmethod
+    def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login,
+                                        intitule, type_c):
+        """
+        Ajoute les commentaires et évaluations d'une fiche technique d'un apprenti
 
-def ajouter_commentaires_evaluation(id_fiche, commentaire_texte, eval_texte, commentaire_audio, eval_audio, login,
-                                    intitule, type_c):
-    """
-    Ajoute les commentaires et évaluations d'une fiche technique d'un apprenti
-
-    :return: None
-    """
-    try:
-        id_personnel = get_id_personnel_by_login(login)
-        horodatage = datetime.now()
-        trace = LaisserTrace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
-                             commentaire_texte=commentaire_texte, eval_texte=eval_texte,
-                             commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti=type_c,
-                             intitule=intitule)
-        db.session.add(trace)
-        db.session.commit()
-    except Exception as e:
-        logging.error(f"Erreur lors de l'ajout des commentaires et évaluations de la fiche {id_fiche}")
-        logging.error(e)
+        :return: None
+        """
+        try:
+            id_personnel = Personnel.get_id_personnel_by_login(login)
+            horodatage = datetime.now()
+            trace = Trace(id_fiche=id_fiche, id_personnel=id_personnel, horodatage=horodatage,
+                          commentaire_texte=commentaire_texte, eval_texte=eval_texte,
+                          commentaire_audio=commentaire_audio, eval_audio=eval_audio, apprenti=type_c,
+                          intitule=intitule)
+            db.session.add(trace)
+            db.session.commit()
+        except Exception as e:
+            logging.error(f"Erreur lors de l'ajout des commentaires et évaluations de la fiche {id_fiche}")
+            logging.error(e)

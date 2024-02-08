@@ -1,8 +1,8 @@
 from flask import url_for
 
 from custom_paquets.tester_usages import connexion_personnel_pin, connexion_personnel_mdp, deconnexion_personnel
-from model.cours import get_apprentis_by_formation
-from model.formation import get_all_formations
+from model.cours import Cours
+from model.formation import Formation
 
 '''
 Test des controller du fichier auth.py
@@ -108,7 +108,7 @@ def test_choix_formation_apprentis(client):
     assert response.request.path == "/choix-formation-apprentis"
 
     # Test de verification de l'utilisation de tout les intitules de formation
-    formations = get_all_formations()
+    formations = Formation.get_all_formations()
     html = response.get_data(as_text=True)
     for formation in formations:
         assert formation.intitule in html
@@ -126,7 +126,7 @@ def test_choix_eleve_apprentis(client):
     assert response.request.path == f"/choix-eleve-apprentis/{nom_formation}"
 
     # Test de verification de l'utilisation de toutes les informations de l'apprentis
-    apprentis = get_apprentis_by_formation(nom_formation)
+    apprentis = Cours.get_apprentis_by_formation(nom_formation)
     html = response.get_data(as_text=True)
     for apprenti in apprentis:
         assert 'class="libelle">' + apprenti.prenom + ' ' + apprenti.nom in html

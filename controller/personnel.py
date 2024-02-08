@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 
-from model.formation import get_all_formations
-from model.cours import get_apprentis_by_formation
+from model.formation import Formation
+from model.cours import Cours
 from custom_paquets.decorateur import personnel_login_required
-from model.personnel import get_role_by_login
+from model.personnel import Personnel
 
 personnel = Blueprint("personnel", __name__, url_prefix="/personnel")
 
@@ -23,7 +23,7 @@ def choix_formation():
     
     :return: rendu de la page choix_formation.html
     """
-    formations = get_all_formations()
+    formations = Formation.get_all_formations()
     return render_template("personnel/choix_formation.html", formations=formations), 200
 
 
@@ -36,7 +36,7 @@ def choix_eleve(nom_formation):
 
     :return: rendu de la page choix_apprentis.html
     """
-    apprentis = get_apprentis_by_formation(nom_formation)
+    apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
 
 
@@ -49,7 +49,7 @@ def redirection_fiches(apprenti):
     ou éducateur admin.
     """
 
-    role = get_role_by_login(session.get("name"))
+    role = Personnel.get_role_by_login(session.get("name"))
     if role == "Educateur Administrateur":
         return redirect(url_for('educ_admin.accueil_educadmin', apprenti=apprenti))
     elif role == "Educateur":

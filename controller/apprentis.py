@@ -5,13 +5,11 @@ from custom_paquets.builder import build_categories, build_materiel
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
-from model.composer import get_composer_presentation_par_apprenti, get_radio_radioed, maj_materiaux_fiche
-from model.apprenti import get_apprenti_by_login
-from model.composer import maj_contenu_fiche, get_checkbox_on
-from model.cours import get_liste_cours_assister, get_nom_cours_by_id
-from model.trace import get_commentaires_par_fiche
-from model.ficheintervention import get_etat_fiche_par_id_fiche, get_fiches_techniques_par_login, \
-    get_id_fiche_apprenti, get_fiche_par_id_fiche, definir_photo, valider_fiche
+from model.composer import Compo
+from model.apprenti import Apprenti
+from model.cours import Cours
+from model.trace import Trace
+from model.ficheintervention import FicheIntervention
 
 apprenti = Blueprint('apprenti', __name__, url_prefix="/apprenti")
 
@@ -32,12 +30,12 @@ def redirection_connexion():
 
     :return: Rendu de la page accueil_apprentis.html
     """
-    apprenti_infos = get_apprenti_by_login(session["name"])
-    fiches = get_fiches_techniques_par_login(session['name'])
+    apprenti_infos = Apprenti.get_apprenti_by_login(session["name"])
+    fiches = FicheIntervention.get_fiches_techniques_par_login(session['name'])
     fiches = changer_date(fiches)
-    cours = get_liste_cours_assister(apprenti_infos.id_apprenti)
+    cours = Cours.get_liste_cours_assister(apprenti_infos.id_apprenti)
     return render_template("apprentis/accueil_apprentis.html", fiches=fiches, apprenti=apprenti_infos,
-                           get_nom_cours_by_id=get_nom_cours_by_id, cours=cours)
+                           get_nom_cours_by_id=Cours.get_nom_cours_by_id, cours=cours)
 
 
 @apprenti.route("/redirection-connexion/suivi", methods=["GET"])
@@ -48,10 +46,10 @@ def suivi_progression():
     
     :return: rendu de la page suivi_progression_apprenti.html
     """
-    fiches_apprenti = get_fiches_techniques_par_login(session['name'])
+    fiches_apprenti = FicheIntervention.get_fiches_techniques_par_login(session['name'])
     etat_fiches = {}
     for fiche in fiches_apprenti:
-        etat_fiches[fiche.id_fiche] = get_etat_fiche_par_id_fiche(fiche.id_fiche)
+        etat_fiches[fiche.id_fiche] = FicheIntervention.get_etat_fiche_par_id_fiche(fiche.id_fiche)
     return render_template("apprentis/suivi_progression_apprenti.html", etat_fiches=etat_fiches)
 
 
@@ -65,9 +63,9 @@ def completer_fiche(numero):
     :return: rendu de la page completer_fiche.html
     """
     avancee = "0"
-    composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
+    composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     materiaux = build_materiel()
-    fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
+    fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
     if request.method == 'POST':
         avancee = request.form.get("avancee")
@@ -80,13 +78,13 @@ def completer_fiche(numero):
 
         if photo_avant.filename != "":
             process_photo(photo_avant, fiche.photo_avant, fiche.id_fiche, 'photo-avant')
-            definir_photo(fiche.id_fiche, avant_apres=False)  # False pour avant
+            FicheIntervention.definir_photo(fiche.id_fiche, avant_apres=False)  # False pour avant
         if photo_apres.filename != "":
             process_photo(photo_apres, fiche.photo_apres, fiche.id_fiche, 'photo-apres')
-            definir_photo(fiche.id_fiche, avant_apres=True)  # True pour apres
+            FicheIntervention.definir_photo(fiche.id_fiche, avant_apres=True)  # True pour apres
 
         # Gestion des checkbox
-        checkboxes = get_checkbox_on(fiche.id_fiche)
+        checkboxes = Compo.get_checkbox_on(fiche.id_fiche)
         for checkbox in checkboxes:
             if checkbox.position_elem not in request.form.keys():
                 completer_fiche[f"{checkbox.position_elem}"] = None
@@ -96,7 +94,7 @@ def completer_fiche(numero):
             if "radio-" in element:
                 element = request.form.get(f"{element}")
                 completer_fiche[f"{element}"] = "radioed"
-        radios = get_radio_radioed(fiche.id_fiche)
+        radios = Compo.get_radio_radioed(fiche.id_fiche)
         for radio in radios:
             if radio.position_elem not in completer_fiche.keys():
                 completer_fiche[f"{radio.position_elem}"] = None
@@ -108,7 +106,7 @@ def completer_fiche(numero):
             elif "selecteur-" in element:
                 ajouter_materiel[f"{element.replace('selecteur-','')}"] = None
         if len(ajouter_materiel) != 0:
-            maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
+            Compo.maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
 
         # Gestion des autres éléments
         for element in request.form:
@@ -121,8 +119,8 @@ def completer_fiche(numero):
                 element_data = None
                 
             completer_fiche[f"{element}"] = element_data
-        maj_contenu_fiche(completer_fiche, fiche.id_fiche)
-        composer_fiche = build_categories(get_id_fiche_apprenti(session['name'], numero))
+        Compo.maj_contenu_fiche(completer_fiche, fiche.id_fiche)
+        composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
     return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
                            avancee=avancee, materiaux=materiaux)
@@ -137,11 +135,11 @@ def imprimer_pdf(numero):
     :return: rendu de la page fiche_pdf.html
     """
     # verifier que fiche finie
-    fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
-    valider_fiche(fiche.id_fiche)
+    fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
+    FicheIntervention.valider_fiche(fiche.id_fiche)
 
     materiaux = build_materiel()
-    composer_fiche = get_composer_presentation_par_apprenti(fiche.id_fiche)
+    composer_fiche = Compo.get_composer_presentation_par_apprenti(fiche.id_fiche)
     return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche,
                            materiaux=materiaux)
 
@@ -154,8 +152,8 @@ def valider(numero):
 
     :return: rendu de la page valider.html
     """
-    fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
-    valider_fiche(fiche.id_fiche)
+    fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
+    FicheIntervention.valider_fiche(fiche.id_fiche)
     return redirect(url_for("apprenti.redirection_connexion"))
 
 
@@ -168,8 +166,8 @@ def afficher_commentaires(numero):
     :return: rendu de la page commentaires.html
     """
     
-    commentaires = get_commentaires_par_fiche(get_id_fiche_apprenti(session['name'], numero))
-    emoji = build_categories(get_id_fiche_apprenti(session['name'], numero))
+    commentaires = Trace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
+    emoji = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires=commentaires, emoji=emoji), 200
 
@@ -183,6 +181,6 @@ def afficher_images(numero):
     :return: rendu de la page commentaires.html
     """
 
-    fiche = get_fiche_par_id_fiche(get_id_fiche_apprenti(session['name'], numero))
+    fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/images.html", apprenti=apprenti, numero=numero,
                            fiche=fiche), 200

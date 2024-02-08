@@ -1,10 +1,9 @@
 from flask import url_for
 from custom_paquets.converter import generate_login
 from custom_paquets.tester_usages import connexion_personnel_mdp
-from model.formation import add_formation, get_formation_id_par_nom_formation
-from model.personnel import get_id_personnel_by_login
-from model.shared_model import Apprenti
-from model.apprenti import add_apprenti, get_id_apprenti_by_login, set_nbr_essais_connexion
+from model.formation import Formation
+from model.personnel import Personnel
+from model.apprenti import Apprenti
 
 '''
 Test des controller du fichier api.py
@@ -18,7 +17,7 @@ def test_api_check_password_apprenti(client):
     mdp = "12369"
 
     # Blocage d'un apprenti
-    set_nbr_essais_connexion(apprenti.login, 5)
+    Apprenti.set_nbr_essais_connexion(apprenti.login, 5)
     response = client.get(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp))
 
     # Test d'accès à la route
@@ -28,7 +27,7 @@ def test_api_check_password_apprenti(client):
     assert response.json["blocage"] == True
 
     # Test de déblocage d'un apprenti
-    set_nbr_essais_connexion(apprenti.login, 0)
+    Apprenti.set_nbr_essais_connexion(apprenti.login, 0)
     response = client.get(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp))
 
     # Test d'accès à la route
@@ -47,10 +46,10 @@ def test_api_archiver_formation(client):
     groupe = "1"
     image = "null"
 
-    add_formation(intitule, niveau_qualification, groupe, image, commit=False)
+    Formation.add_formation(intitule, niveau_qualification, groupe, image, commit=False)
 
     # Set up d'une formation
-    id_formation = get_formation_id_par_nom_formation(intitule)
+    id_formation = Formation.get_formation_id_par_nom_formation(intitule)
 
     # Connexion en tant que superadmin
     superadmin = "JED10"
@@ -105,8 +104,8 @@ def test_archivage_apprenti(client):
     photo = "/url/photo.jpg"
     login = generate_login(nom, prenom)
 
-    add_apprenti(nom, prenom, login, photo, commit=True)
-    id_apprenti = get_id_apprenti_by_login(login)
+    Apprenti.add_apprenti(nom, prenom, login, photo, commit=True)
+    id_apprenti = Apprenti.get_id_apprenti_by_login(login)
 
     # Connexion en tant que superadmin
     superadmin = "JED10"
@@ -155,7 +154,7 @@ def test_archivage_personnel(client):
     # Partie archivage
     # Récupération d'un personnel
     login = "ALL11"
-    id_personnel = get_id_personnel_by_login(login)
+    id_personnel = Personnel.get_id_personnel_by_login(login)
 
     # Connexion en tant que superadmin
     superadmin = "JED10"

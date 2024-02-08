@@ -3,14 +3,11 @@ import urllib.parse, uuid, os
 from flask import Blueprint, jsonify, request
 
 from custom_paquets.decorateur import admin_login_required, personnel_login_required
-from model.apprenti import check_password_apprenti, get_nbr_essais_connexion_apprenti, archiver_apprenti, \
-    remove_apprenti, set_password_apprenti
-from model.formation import archiver_formation, remove_formation, reinitisaliser_formation
-from model.materiel import remove_materiel
-from model.personnel import archiver_personnel, remove_personnel
-from model.cours import archiver_cours, remove_cours
-from model.pictogramme import remove_picto
-from model.trace import modifier_commentaire_audio
+from model.apprenti import Apprenti
+from model.formation import Formation
+from model.personnel import Personnel
+from model.cours import Cours
+from model.trace import Trace
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -26,8 +23,8 @@ def api_check_password_apprenti(user, password):
     """
     Vérifie que le login et le password correspondent bien à ceux de la base de données
     """
-    if get_nbr_essais_connexion_apprenti(user) != 5:
-        return {"valide": check_password_apprenti(user, password)}
+    if Apprenti.get_nbr_essais_connexion_apprenti(user) != 5:
+        return {"valide": Apprenti.check_password_apprenti(user, password)}
     else:
         return {"blocage": True}
 
@@ -40,10 +37,10 @@ def api_set_password_apprenti(user, password):
     :param user: Login de l'apprenti
     :param password: Nouveau mot de passe
     """
-    if check_password_apprenti(user, password):
+    if Apprenti.check_password_apprenti(user, password):
         return {"valide": False}
     else:
-        return {"valide": set_password_apprenti(user, password)}
+        return {"valide": Apprenti.set_password_apprenti(user, password)}
 
 
 @api.route("/archiver-formation/<id_formation>", methods=["GET"])
@@ -52,7 +49,7 @@ def api_archiver_formation(id_formation, commit=True):
     """
     Archive une formation à partir de son id
     """
-    return {"valide": archiver_formation(id_formation, commit=commit), "retirer": True}
+    return {"valide": Formation.archiver_formation(id_formation, commit=commit), "retirer": True}
 
 
 @api.route("/reinitialiser-formation/<id_formation>", methods=["GET"])
@@ -65,7 +62,7 @@ def api_reinitialiser_formation(id_formation, commit=True):
     :param commit:
     :return: JSON valide
     """
-    return {"valide": reinitisaliser_formation(id_formation, commit=commit)}
+    return {"valide": Formation.reinitisaliser_formation(id_formation, commit=commit)}
 
 
 @api.route("/desarchiver-formation/<id_formation>", methods=["GET"])
@@ -77,7 +74,7 @@ def api_desarchiver_formation(id_formation):
     :param id_formation:
     :return: JSON valide
     """
-    return {"valide": archiver_formation(id_formation, archiver=False)}
+    return {"valide": Formation.archiver_formation(id_formation, archiver=False)}
 
 
 @api.route("/supprimer-formation/<id_formation>", methods=["GET"])
@@ -86,7 +83,7 @@ def api_supprimer_formation(id_formation):
     """
     Supprime une formation à partir de son id
     """
-    return {"valide": remove_formation(id_formation)}
+    return {"valide": Formation.remove_formation(id_formation)}
 
 
 @api.route("/archiver-apprenti/<id_apprenti>", methods=["GET"])
@@ -95,7 +92,7 @@ def api_archiver_apprenti(id_apprenti):
     """
     Archive un apprenti à partir de son id
     """
-    return {"valide": archiver_apprenti(id_apprenti), "retirer": True}
+    return {"valide": Apprenti.archiver_apprenti(id_apprenti), "retirer": True}
 
 
 @api.route("/desarchiver-apprenti/<id_apprenti>", methods=["GET"])
@@ -104,7 +101,7 @@ def api_desarchiver_apprenti(id_apprenti):
     """
     Désarchive un apprenti à partir de son id
     """
-    return {"valide": archiver_apprenti(id_apprenti, archiver=False)}
+    return {"valide": Apprenti.archiver_apprenti(id_apprenti, archiver=False)}
 
 
 @api.route("/supprimer-apprenti/<id_apprenti>", methods=["GET"])
@@ -113,7 +110,7 @@ def api_supprimer_apprenti(id_apprenti):
     """
     Supprime un apprenti à partir de son id
     """
-    return {"valide": remove_apprenti(id_apprenti)}
+    return {"valide": Apprenti.remove_apprenti(id_apprenti)}
 
 
 @api.route("/archiver-cours/<id_cours>", methods=["GET"])
@@ -122,7 +119,7 @@ def api_archiver_cours(id_cours):
     """
     Archive un cours à partir de son id
     """
-    return {"valide": archiver_cours(id_cours), "retirer": True}
+    return {"valide":Cours.archiver_cours(id_cours), "retirer": True}
 
 
 @api.route("/desarchiver-cours/<id_cours>", methods=["GET"])
@@ -131,7 +128,7 @@ def api_desarchiver_cours(id_cours):
     """
     Désarchive un cours à partir de son id
     """
-    return {"valide": archiver_cours(id_cours, archiver=False)}
+    return {"valide": Cours.archiver_cours(id_cours, archiver=False)}
 
 
 @api.route("/supprimer-cours/<id_cours>", methods=["GET"])
@@ -140,7 +137,7 @@ def api_supprimer_cours(id_cours):
     """
     Supprime un cours à partir de son id
     """
-    return {"valide": remove_cours(id_cours)}
+    return {"valide": Cours.remove_cours(id_cours)}
 
 
 @api.route("/archiver-personnel/<id_personnel>", methods=["GET"])
@@ -149,7 +146,7 @@ def api_archiver_personnel(id_personnel):
     """
     Archive un personnel à partir de son id
     """
-    return {"valide": archiver_personnel(id_personnel), "retirer": True}
+    return {"valide": Personnel.archiver_personnel(id_personnel), "retirer": True}
 
 
 @api.route("/desarchiver-personnel/<id_personnel>", methods=["GET"])
@@ -158,7 +155,7 @@ def api_desarchiver_personnel(id_personnel):
     """
     Désarchive un personnel à partir de son id
     """
-    return {"valide": archiver_personnel(id_personnel, archiver=False)}
+    return {"valide": Personnel.archiver_personnel(id_personnel, archiver=False)}
 
 
 @api.route("/supprimer-personnel/<id_personnel>", methods=["GET"])
@@ -167,7 +164,7 @@ def api_supprimer_personnel(id_personnel):
     """
     Supprime un personnel à partir de son id
     """
-    return {"valide": remove_personnel(id_personnel)}
+    return {"valide": Personnel.remove_personnel(id_personnel)}
 
 
 @api.route("/save_audio/<id_personnel>", methods=['POST'])
@@ -180,4 +177,4 @@ def save_audio(id_personnel, id_fiche, horodatage, commentaire_audio):
             commentaire_audio = os.path.join('static/audio', filename)
             audio_file.save(commentaire_audio)
 
-    return {"valide": modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio)}
+    return {"valide": Trace.modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio)}

@@ -2,13 +2,11 @@ from flask import Blueprint, redirect, render_template, request, url_for
 
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
-from model.cours import get_nom_cours_by_id, get_liste_cours_assister
-from model.formation import get_formation_par_apprenti
-from model.trace import get_commentaires_par_fiche
-from model.apprenti import get_apprenti_by_login, get_adaptation_situation_examen_par_apprenti, \
-    update_adaptation_situation_examen_par_apprenti
-from model.ficheintervention import get_fiches_techniques_finies_par_login, get_niveau_etat_fiches_par_login, \
-    get_niveau_moyen_champs_par_login, get_nombre_fiches_finies_par_login
+from model.cours import Cours
+from model.formation import Formation
+from model.trace import Trace
+from model.apprenti import Apprenti
+from model.ficheintervention import FicheIntervention
 import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
@@ -29,7 +27,7 @@ def affiche_choix(apprenti):
 
     :return: rendu de la page choix_operations.html
     """
-    formation = get_formation_par_apprenti(apprenti)
+    formation = Formation.get_formation_par_apprenti(apprenti)
     return render_template("cip/choix_operations.html", apprenti=apprenti,
                            formation=formation), 200
 
@@ -44,12 +42,12 @@ def fiches_apprenti(apprenti):
 
     :return: rendu de la page fiches_techniques.html
     """
-    apprenti_infos = get_apprenti_by_login(apprenti)
-    fiches = get_fiches_techniques_finies_par_login(apprenti)
+    apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
+    fiches = FicheIntervention.get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
-    cours = get_liste_cours_assister(apprenti_infos.id_apprenti)
+    cours = Cours.get_liste_cours_assister(apprenti_infos.id_apprenti)
     return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos, fiches=fiches,
-                           get_nom_cours_by_id=get_nom_cours_by_id, cours=cours)
+                           get_nom_cours_by_id=Cours.get_nom_cours_by_id(), cours=cours)
 
 
 @cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
@@ -62,7 +60,7 @@ def visualiser_commentaires(apprenti, fiche):
     
     :return: rendu de la page commentaires.html
     """
-    commentaires = get_commentaires_par_fiche(fiche)
+    commentaires = Trace.get_commentaires_par_fiche(fiche)
     return render_template("cip/commentaires.html", commentaires=commentaires, apprenti=apprenti), 200
 
 
@@ -75,15 +73,15 @@ def suivi_progression_apprenti(apprenti):
 
     :return: rendu de la page suivi-progression.html
     """
-    apprenti_infos = get_apprenti_by_login(apprenti)
+    apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
 
     # Récupération des niveaux et états des fiches
-    niv_fiche = get_niveau_etat_fiches_par_login(apprenti)
+    niv_fiche = FicheIntervention.get_niveau_etat_fiches_par_login(apprenti)
     for niv in niv_fiche:
         niv["total_niveau"] = str(niv["total_niveau"])
 
-    niveau_moyen = get_niveau_moyen_champs_par_login(apprenti)
-    nb_fiches_finies = get_nombre_fiches_finies_par_login(apprenti)
+    niveau_moyen = FicheIntervention.get_niveau_moyen_champs_par_login(apprenti)
+    nb_fiches_finies = FicheIntervention.get_nombre_fiches_finies_par_login(apprenti)
 
     return render_template("cip/suivi_progression_cip.html", niv_fiche=json.dumps(niv_fiche),
                            niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
@@ -99,8 +97,8 @@ def affichage_adaptation_situation_examen(apprenti):
     :return: rendu de la page adaptation_situation_examen.html
     """
 
-    commentaire = get_adaptation_situation_examen_par_apprenti(apprenti)
-    apprenti = get_apprenti_by_login(apprenti)
+    commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
+    apprenti = Apprenti.get_apprenti_by_login(apprenti)
     return render_template("cip/adaptation_situation_examen.html", apprenti=apprenti,
                            commentaire=commentaire), 200
 
@@ -114,14 +112,14 @@ def modifier_commentaire(apprenti):
     :return: la page de modification du commentaire 
     """
 
-    commentaire = get_adaptation_situation_examen_par_apprenti(apprenti)
+    commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
 
     if request.method == 'POST':
         adaptation_situation_examen = request.form["commentaire"]
-        update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
+        Apprenti.update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
 
         return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti))
-    apprenti = get_apprenti_by_login(apprenti)
+    apprenti = Apprenti.get_apprenti_by_login(apprenti)
     return render_template("cip/modifier_adaptation_situation_examen.html", apprenti=apprenti,
                            commentaire=commentaire), 200
 
@@ -136,7 +134,7 @@ def ajouter_commentaire(apprenti):
     """
     if request.method == 'POST':
         adaptation_situation_examen = request.form["commentaire"]
-        update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
+        Apprenti.update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
         return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti))
-    apprenti = get_apprenti_by_login(apprenti)
+    apprenti = Apprenti.get_apprenti_by_login(apprenti)
     return render_template("cip/ajouter_adaptation_situation_examen.html", apprenti=apprenti), 200
