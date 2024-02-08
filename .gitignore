@@ -17,6 +17,9 @@ __pycache__
 .coverage
 
 
+static/files
+static/images/photo_fiche
+
 
 # Flask stuff:
 instance/
