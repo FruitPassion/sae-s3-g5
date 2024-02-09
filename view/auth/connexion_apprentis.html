@@ -3,15 +3,13 @@
 {% block title %}Connexion apprentis{% endblock %}
 
 {% block javascripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-            integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS"
-            crossorigin="anonymous"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/@garyliao/pattern-lock-js-advanced@1.0.1/patternlock.min.js "></script>
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/patternlock.min.js') }}"></script>
 {% endblock %}
 
 {% block stylesheets %}
-    <link href=" https://cdn.jsdelivr.net/npm/@garyliao/pattern-lock-js-advanced@1.0.1/patternlock.min.css "
-          rel="stylesheet">{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/patternlock.min.css') }}">
+{% endblock %}
 
 {% block body %}
     <div id="flashing" style="background-color: #e83c55; color: black; font-size : 35px" hidden="true">

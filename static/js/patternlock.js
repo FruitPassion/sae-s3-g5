@@ -31,7 +31,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         38: true, // up
         39: true, // right
         40: true, // down
-        32: true }, _defineProperty(_scrollKeys, '38', true), _defineProperty(_scrollKeys, 34, true), _defineProperty(_scrollKeys, 35, true), _defineProperty(_scrollKeys, 36, true), _scrollKeys);
+        32: true
+    }, _defineProperty(_scrollKeys, '38', true), _defineProperty(_scrollKeys, 34, true), _defineProperty(_scrollKeys, 35, true), _defineProperty(_scrollKeys, 36, true), _scrollKeys);
 
     function vibrate() {
         navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
@@ -54,6 +55,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         options = Object.assign(PatternLock.defaults, options || {});
 
+        options.hideLine ? hideLine() : showLine();
+
         svg.on('touchstart mousedown', function (e) {
             clear();
             e.preventDefault();
@@ -70,7 +73,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             clear: clear,
             success: success,
             error: error,
-            getPattern: getPattern
+            getPattern: getPattern,
+            switchHide: switchHide
         });
 
         function success() {
@@ -83,10 +87,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             svg.addClass('error');
         }
 
+        function switchHide() {
+            options.hideLine = !options.hideLine;
+            if (options.hideLine) {
+                hideLine();
+            } else {
+                showLine();
+            }
+        }
+
+        function hideLine() {
+            $('g.lock-lines').addClass('hide-lines');
+        }
+
+        function showLine() {
+            $('g.lock-lines').removeClass('hide-lines');
+        }
+
+        /**
+         * Return object with rspCode and pattern.
+         * Will receive not null pattern only when rspCode is success
+         */
         function getPattern() {
-            return parseInt(code.map(function (i) {
-                return dots.index(i) + 1;
-            }).join(''));
+            let patternResult = {
+                rspCode: '0000',
+                pattern: null
+            };
+
+            patternResult.rspCode = doConditionCheck();
+
+            if (patternResult.rspCode === '0000') {
+                patternResult.pattern = parseInt(code.map(function (i) {
+                    return dots.index(i) + 1;
+                }).join(''));
+            }
+
+            return patternResult;
+        }
+
+        /**
+         * 0000 -> success
+         * 1001 -> input is smaller than accepted.
+         * 1002 -> input is greater than accepted.
+         *
+         * @returns
+         */
+        function doConditionCheck() {
+            const resultLength = code.length;
+            if (options.checkMin) {
+                const acceptMin = options.min;
+                if (resultLength < acceptMin)
+                    return '1001';
+            }
+
+            if (options.checkMax) {
+                const acceptMax = options.max;
+                if (resultLength > acceptMax)
+                    return '1002';
+            }
+
+            return '0000';
         }
 
         function end() {
@@ -142,20 +202,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         function isUsed(target) {
-            for (var i = 0; i < code.length; i++) {
-                if (code[i] === target) {
+            if (options.allowRepeat)
+                return checkIsUsedUnderAllowedRepeat(target);
+
+            for (const codeNode of code) {
+                if (codeNode === target) {
                     return true;
                 }
             }
+
+            return false;
+        }
+
+        /** Accept repeat, except the same target as the last item in code[] */
+        function checkIsUsedUnderAllowedRepeat(target) {
+            if (code.length === 0)
+                return false;
+
+            if (target === code[code.length - 1])
+                return true;
+
             return false;
         }
 
         function isAvailable(target) {
-            for (var i = 0; i < dots.length; i++) {
-                if (dots[i] === target) {
+            for (const dot of dots) {
+                if (dot === target) {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -246,14 +322,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 x = _getMousePos2.x,
                 y = _getMousePos2.y;
 
-            pt.x = x;pt.y = y;
+            pt.x = x; pt.y = y;
             return pt.matrixTransform(element.getScreenCTM().inverse());
         }
     }
 
     PatternLock.defaults = {
-        onPattern: function onPattern() {},
-        vibrate: true
+        onPattern: function onPattern() { },
+        allowRepeat: false,
+        hideLine: false,
+        checkMin: true,
+        checkMax: true,
+        min: 4,
+        max: 9
     };
 
     return PatternLock;
