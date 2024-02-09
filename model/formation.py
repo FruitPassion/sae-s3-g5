@@ -163,29 +163,29 @@ class Formation(db.Model):
             logging.error(e)
             return False
 
+    @staticmethod
+    def reinitisaliser_formation(id_formation, commit=True):
+        """
+        Réinitialise une formation en retirant tous les apprentis et les cours d'une formation
 
-def reinitisaliser_formation(id_formation, commit=True):
-    """
-    Réinitialise une formation en retirant tous les apprentis et les cours d'une formation
+        :param id_formation: id de la formation à réinitialiser
+        :param commit: True pour commit, False pour ne pas commit
+        :return: True si la réinitialisation s'est bien passée, False sinon
+        """
+        try:
+            from custom_paquets.generation_xls import generer_xls_apprentis
+            # Suppression des cours
+            generer_xls_apprentis(id_formation)
 
-    :param id_formation: id de la formation à réinitialiser
-    :param commit: True pour commit, False pour ne pas commit
-    :return: True si la réinitialisation s'est bien passée, False sinon
-    """
-    try:
-        from custom_paquets.generation_xls import generer_xls_apprentis
-        # Suppression des cours
-        generer_xls_apprentis(id_formation)
+            # Suppression des apprentis
+            for apprenti in Apprenti.get_apprentis_by_formation(id_formation):
+                Apprenti.remove_apprenti(apprenti.id_apprenti)
 
-        # Suppression des apprentis
-        for apprenti in Apprenti.get_apprentis_by_formation(id_formation):
-            Apprenti.remove_apprenti(apprenti.id_apprenti)
+            if commit:
+                db.session.commit()
 
-        if commit:
-            db.session.commit()
-
-        return True
-    except Exception as e:
-        logging.error(f"Erreur lors de la réinitisalisation de la formation {id_formation}")
-        logging.error(e)
-        return False
+            return True
+        except Exception as e:
+            logging.error(f"Erreur lors de la réinitisalisation de la formation {id_formation}")
+            logging.error(e)
+            return False
