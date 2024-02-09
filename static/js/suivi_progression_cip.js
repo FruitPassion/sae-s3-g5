@@ -28,7 +28,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
     data: {
       labels: liste_num_fiche,
       datasets: [{
-        label: "Niveau total",
+        label: "Niveau d'accessibilité totale",
         data: liste_niv_fiche,
         backgroundColor: "#533C2B",
         borderColor: "#533C2B",
@@ -38,14 +38,6 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
     },
     options: {
       plugins: {
-        title: {
-          display: true,
-          text: 'Niveau total des fiches',
-          font: {
-            size: 50,
-            fontFamily: 'Montserrat',
-          },
-        },
         legend: {
           display: false,
         },
@@ -69,7 +61,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
         x: {
           title: {
             display: true,
-            text: 'Numéro de la fiche',
+            text: 'Numéro',
             font: {
               size: 30,
               family: 'Montserrat',
@@ -79,7 +71,7 @@ function creation_graphique_suivi_progression_cip(niv_fiche) {
         y: {
           title: {
             display: true,
-            text: 'Niveau total',
+            text: 'Niveau d\'accessibilité totale',
             font: {
               size: 30,
               family: 'Montserrat',

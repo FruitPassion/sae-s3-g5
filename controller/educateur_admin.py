@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, session, flash, redirect, url_for
+import json
 
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
@@ -271,3 +272,26 @@ def visualiser_commentaires(apprenti, numero):
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
     return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
+
+
+@educ_admin.route("/<apprenti>/suivi-progression", methods=["GET"])
+@educadmin_login_required
+def suivi_progression_apprenti(apprenti):
+    """
+    Page de suivi de progression de l'apprenti sélectionné.
+    Affiche le suivi de progression sous forme de graphique (niveau moyen, nombre de fiches finies, niveau des fiches)
+
+    :return: rendu de la page suivi-progression.html
+    """
+    apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
+
+    # Récupération des niveaux et états des fiches
+    niv_fiche = FicheIntervention.get_niveau_etat_fiches_par_login(apprenti)
+    for niv in niv_fiche:
+        niv["total_niveau"] = str(niv["total_niveau"])
+
+    niveau_moyen = FicheIntervention.get_niveau_moyen_champs_par_login(apprenti)
+    nb_fiches_finies = FicheIntervention.get_nombre_fiches_finies_par_login(apprenti)
+
+    return render_template("educ_admin/suivi_progression.html", niv_fiche=json.dumps(niv_fiche),
+                           niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
