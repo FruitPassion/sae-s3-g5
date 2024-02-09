@@ -101,7 +101,7 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
     
     :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
-    fiche = FicheIntervention.get_fiche_par_id_fiche(Personnel.get_id_fiche_apprenti(apprenti, numero))
+    fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(apprenti, numero))
     if request.method == 'POST':
         if type_commentaire == "apprenti":
             type_c = "1"
