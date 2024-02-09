@@ -223,7 +223,7 @@ def ajouter_fiche(apprenti):
     :return: rendu de la page ajouter_fiche.html
     """
     form = AjouterFiche()
-    cours = Cours.get_cours_par_apprenti(LaisserTrace.get_id_apprenti_by_login(apprenti))
+    cours = Cours.get_cours_par_apprenti(Apprenti.get_id_apprenti_by_login(apprenti))
     if form.validate_on_submit():
         degres = request.form.get('degres_urgence')
         id_cours = request.form.get('coursinput')

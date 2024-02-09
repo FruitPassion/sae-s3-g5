@@ -1,6 +1,7 @@
 from custom_paquets.tester_usages import ApprentiTest, ApprentiTestModif
 from model.apprenti import Apprenti
-from model.shared_model import db, FicheIntervention
+from model.shared_model import db
+from model.ficheintervention import FicheIntervention
 
 
 def test_ajouter_apprenti(client):
