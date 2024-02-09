@@ -53,20 +53,16 @@ class LaisserTrace(db.Model):
     @staticmethod
     def modifier_commentaire_texte(id_fiche, horodatage, commentaire_texte, type_commentaire):
         """
-        Récupère le commentaire audio du horodatage (date/heure) de la fiche id_fiche
+        Récupère le commentaire texte la la fiche id_fiche
         Modifie le commentaire textuel avec commentaire_texte
 
         :return: None
         """
         try:
-            if type_commentaire == "educateur":
-                trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="0").first()
-                trace.commentaire_texte = commentaire_texte
-                db.session.commit()
-            else:
-                trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage, apprenti="1").first()
-                trace.commentaire_texte = commentaire_texte
-                db.session.commit()
+            trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
+                                                 apprenti=f"{int(type_commentaire != 'educateur')}").first()
+            trace.commentaire_texte = commentaire_texte
+            db.session.commit()
         except Exception as e:
             logging.error(
                 f"Erreur lors de la modification du commentaire textuel de la fiche {id_fiche} du {horodatage}")
@@ -83,6 +79,7 @@ class LaisserTrace(db.Model):
             trace = LaisserTrace.query.filter_by(id_fiche=id_fiche, horodatage=horodatage,
                                                  apprenti=f"{int(type_commentaire != 'educateur')}").first()
             trace.commentaire_audio = commentaire_audio
+            db.session.commit()
         except Exception as e:
             logging.error(f"Erreur lors de la modification du commentaire audio de la fiche {id_fiche} du {horodatage}")
             logging.error(e)

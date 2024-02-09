@@ -1,0 +1,33 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/modifier_commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Arrêt de fiche{% endblock %}
+
+{% block body %}
+
+    <h1>Arret et copie de la fiche n°{{ id_fiche }} de {{ apprenti }} </h1>
+
+    <div class="w-75 m-auto mt-5">
+
+        <form name="raison" id="raison" method="POST">
+
+            <h2>Pourquoi arrêter cette fiche ?</h2>
+            <textarea class="modifiable form-control mb-3" id="raison_arret" name="raison_arret"
+                      maxlength="500"></textarea>
+
+            <br>
+
+            <input type="submit" value="Enregistrer" id="enregistrer" class="btn btn-primary form-control">
+
+        </form>
+        
+    </div>
+
+
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

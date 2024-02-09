@@ -118,8 +118,9 @@ def gestion_pictos():
             chemin_picto = stocker_picto(f)
         else:
             chemin_picto = Pictogramme.get_photo_picto_by_id(identifiant)
-        Pictogramme.update_picto(identifiant, form_modifier.form_modifier_label.data, form_modifier.form_modifier_categorie.data,
-                     form_modifier.form_modifier_souscategorie.data, chemin_picto)
+        Pictogramme.update_picto(identifiant, form_modifier.form_modifier_label.data,
+                                 form_modifier.form_modifier_categorie.data,
+                                 form_modifier.form_modifier_souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
 
     return render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier,
@@ -191,7 +192,7 @@ def fiches_apprenti(apprenti):
                            cours=cours)
 
 
-@educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET"])
+@educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET", "POST"])
 @educadmin_login_required
 def modifier_fiche(id_fiche):
     """
@@ -201,9 +202,14 @@ def modifier_fiche(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
-    id_fiche = FicheIntervention.copier_fiche(id_fiche, session["name"])
-    flash("Fiche copiée avec succès")
-    return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
+    if request.method == 'POST':
+        flash("Fiche copiée avec succès")
+        LaisserTrace.ajouter_commentaires_evaluation(id_fiche, request.form.get("raison_arret"), "", None, None,
+                                                     session["name"], "Copie de la fiche", "0")
+        id_fiche = FicheIntervention.copier_fiche(id_fiche, session["name"])
+        return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
+    apprenti = FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)
+    return render_template("educ_admin/raison_arret.html", id_fiche=id_fiche, apprenti=apprenti), 200
 
 
 @educ_admin.route("/<apprenti>/ajouter-fiche", methods=["GET", "POST"])
@@ -243,8 +249,7 @@ def personnalisation(id_fiche):
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
     liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto",
-                     "Open Sans",
-                     "Lato", "Oswald", "Poppins"]
+                     "Open Sans", "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(id_fiche)
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
@@ -272,6 +277,20 @@ def visualiser_commentaires(apprenti, numero):
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
     return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
+
+
+@educ_admin.route("/<apprenti>/<numero>/commentaires-arret", methods=["GET"])
+@educadmin_login_required
+def visualiser_commentaires_arret(apprenti, numero):
+    """
+    Page d'affichage des commentaires de la fiche d'identifiant fiche de l'apprenti au login apprenti
+
+    :return: les commentaires de la fiche de l'élève sélectionnée.
+    """
+    commentaire = LaisserTrace.get_commentaires_type_par_fiche(
+        (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
+    return render_template("personnel/commentaires_arret.html", apprenti=apprenti, numero=numero,
+                           commentaire=commentaire), 200
 
 
 @educ_admin.route("/<apprenti>/suivi-progression", methods=["GET"])

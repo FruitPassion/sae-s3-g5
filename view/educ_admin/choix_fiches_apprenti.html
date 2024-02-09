@@ -47,7 +47,11 @@
                     {% endif %}
                     <a {% if fiche.etat_fiche == 1 %}
                         href="{{ url_for('educ_admin.visualiser_commentaires', apprenti=apprenti.login,
-                        numero = fiche.numero) }}" {% endif %}
+                        numero = fiche.numero) }}"
+                    {% elif fiche.etat_fiche == 2 %}
+                        href="{{ url_for('educ_admin.visualiser_commentaires_arret', apprenti=apprenti.login,
+                        numero = fiche.numero) }}"
+                    {% endif %}
                         class="bg-modifier">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
                              alt="fiche finie">
@@ -85,7 +89,7 @@
         {% endif %}
     </div>
 
-    <div style="height: 200px"> </div>
+    <div style="height: 200px"></div>
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for("educ_admin.choix_eleve", nom_formation=formation) }}">
             {% include "_partial/_retour_bouton.html" %}</a>
