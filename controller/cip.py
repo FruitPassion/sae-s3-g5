@@ -47,7 +47,7 @@ def fiches_apprenti(apprenti):
     fiches = changer_date(fiches)
     cours = Cours.get_liste_cours_assister(apprenti_infos.id_apprenti)
     return render_template("cip/fiches_techniques.html", apprenti=apprenti_infos, fiches=fiches,
-                           get_nom_cours_by_id=Cours.get_nom_cours_by_id(), cours=cours)
+                           get_nom_cours_by_id=Cours.get_nom_cours_by_id, cours=cours)
 
 
 @cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])

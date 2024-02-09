@@ -295,3 +295,19 @@ def suivi_progression_apprenti(apprenti):
 
     return render_template("educ_admin/suivi_progression.html", niv_fiche=json.dumps(niv_fiche),
                            niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
+
+
+@educ_admin.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
+@educadmin_login_required
+def adaptation_situation_examen(apprenti):
+    """
+    Page de suivi d'adaptation en situation d'examen de l'apprenti sélectionné.
+    Affiche le commentaire de la CIP.
+
+    :return: rendu de la page adaptation_situation_examen.html
+    """
+
+    commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
+    apprenti = Apprenti.get_apprenti_by_login(apprenti)
+    return render_template("educ_admin/adaptation_situation_examen.html", apprenti=apprenti,
+                           commentaire=commentaire), 200

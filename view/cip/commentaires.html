@@ -9,11 +9,19 @@
 {% block body %}
     <h1>Commentaires</h1><br><br>
     <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
-    {% for commentaire in commentaires %}
-        <h2 class="commentaireTitre">{{ commentaire.intitule }}</h2>
-        <p class="commentaire">Commentaire : {{ commentaire.commentaire_texte }}</p>
-        <p class="commentaire">Evaluation : {{ commentaire.eval_texte }}</p>
-    {% endfor %}
+        {% if commentaires|length == 0 %}
+            <h2 class="commentaireTitre">Aucun commentaire</h2>
+        {% else %}
+            {% for commentaire in commentaires %}
+                <h2 class="commentaireTitre">{{ commentaire.intitule }}</h2>
+                <p class="commentaire">Commentaire : {% if commentaire.commentaire_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaire.commentaire_texte }}{% endif %}
+                </p>
+                <p class="commentaire">Evaluation :{% if commentaire.eval_texte == "" %}Aucune évaluation
+                    {% else %}{{ commentaire.eval_texte }}{% endif %}
+                </p>
+            {% endfor %}
+        {% endif %}
     </div>
     <div style="height: 200px"></div>
     <div class="fixed-bottom bg-light">

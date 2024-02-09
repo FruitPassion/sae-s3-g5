@@ -23,8 +23,10 @@
         </h2>
 
         {% if commentaires_educ != None %}
-            <p class="commentaire">Commentaire : {{ commentaires_educ.commentaire_texte }}</p>
-            <p class="commentaire">Evaluation : {{ commentaires_educ.eval_texte }}</p>
+            <p class="commentaire">Commentaire : {% if commentaires_educ.commentaire_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_educ.commentaire_texte }}{% endif %}</p>
+            <p class="commentaire">Evaluation : {% if commentaires_educ.eval_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_educ.eval_texte }}{% endif %}</p>
         {% else %}
             <p class="commentaire">Pas encore de commentaire de l'éducateur</p>
         {% endif %}
@@ -42,8 +44,10 @@
         </h2>
 
         {% if commentaires_appr != None %}
-            <p class="commentaire">Commentaire : {{ commentaires_appr.commentaire_texte }}</p>
-            <p class="commentaire">Evaluation : {{ commentaires_appr.eval_texte }}</p>
+            <p class="commentaire">Commentaire : {% if commentaires_appr.commentaire_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_appr.commentaire_texte }}{% endif %}</p>
+            <p class="commentaire">Evaluation : {% if commentaires_appr.eval_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_appr.eval_texte }}{% endif %}</p>
         {% else %}
             <p class="commentaire">Pas encore de commentaire de l'apprenti</p>
         {% endif %}
@@ -65,3 +69,4 @@
         </div>
     {% endif %}
 {% endblock %}
+
