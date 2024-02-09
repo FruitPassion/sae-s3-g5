@@ -20,16 +20,21 @@
 
         <h2 class="commentaireTitre">Ressenti apprenti {% include "_partial/_tts.html" %}</h2>
         <div class="d-flex mb-4" style="height: 70px">
-            {% for e in emoji[5]['elements'] %}
-                {% if e['text']!=None %}
-                    <img class="commentaire" src="{{ url_for('static',filename='images/icone_fiches/'+e['pictogramme']) }}">
-                    <p class="commentaire">{{ e['libelle_elem'] }}</p>
-                {% endif %}
-            {% endfor %}
+            {% if ressenti %}
+                {% for e in emoji[5]['elements'] %}
+                    {% if e['text']!=None %}
+                        <img class="commentaire"
+                             src="{{ url_for('static',filename='images/icone_fiches/'+e['pictogramme']) }}">
+                        <p class="commentaire">{{ e['libelle_elem'] }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="commentaire">Pas de ressenti mit. {% include "_partial/_tts.html" %}</p>
+            {% endif %}
         </div>
     </div>
 
-    <div style="height: 200px"> </div>
+    <div style="height: 200px"></div>
 
     <div class="fixed-bottom bg-light">
         <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>

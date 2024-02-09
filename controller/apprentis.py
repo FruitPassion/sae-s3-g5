@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, session, request, url_for
 from werkzeug.utils import secure_filename
 
-from custom_paquets.builder import build_categories, build_materiel
+from custom_paquets.builder import build_categories, build_materiel, check_ressenti
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
@@ -168,8 +168,9 @@ def afficher_commentaires(numero):
     
     commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     emoji = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
+    ressenti = check_ressenti(emoji)
     return render_template("apprentis/commentaires.html", apprenti=apprenti, numero=numero,
-                           commentaires=commentaires, emoji=emoji), 200
+                           commentaires=commentaires, emoji=emoji, ressenti=ressenti), 200
 
 
 @apprenti.route("/<numero>/images", methods=["GET"])

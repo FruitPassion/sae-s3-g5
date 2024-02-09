@@ -22,6 +22,14 @@ def build_categories(id_fiche):
     return composer_cat
 
 
+def check_ressenti(build):
+    nb = 0
+    for e in build[5]['elements']:
+        if e['text'] is None:
+            nb += 1
+    return nb != 5
+
+
 def build_materiel():
     materiaux = Materiel.get_all_materiel()
     to_return = []
