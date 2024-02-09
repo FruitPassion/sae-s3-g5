@@ -27,8 +27,15 @@
             <p class="text-center fs-1 my-5">Aucune fiche technique n'a été créée pour cet apprenti.</p>
         {% endif %}
         {% for fiche in fiches %}
+
             <div class="d-block block-fiche text-wrap" data-cour="{{ get_nom_cours_by_id(fiche.id_cours) }}">
                 <div class="parent">
+
+                    {% if fiche.etat_fiche == 1 %}
+                        <a class="modifier" target="_blank"
+                           href="{{ url_for('educ_simple.imprimer_pdf', id_fiche=fiche.id_fiche) }}">
+                            <i class="fa fa-print" aria-hidden="true"></i></a>
+                    {% endif %}
                     <a class="bg-modifier"
                        href="{{ url_for('educ_simple.visualiser_commentaires', apprenti=apprenti.login, numero = fiche.numero) }}">
                         <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"

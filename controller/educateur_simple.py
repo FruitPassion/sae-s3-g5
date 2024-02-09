@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, abort
 
+from custom_paquets.builder import build_materiel
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
 from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import Apprenti
+from model.composer import ComposerPresentation
 from model.cours import Cours
 from model.ficheintervention import FicheIntervention
 from model.laissertrace import LaisserTrace
@@ -113,3 +115,21 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero))
 
     return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche)
+
+
+@educ_simple.route("/imprimer-pdf/<id_fiche>", methods=["GET"])
+@educsimple_login_required
+def imprimer_pdf(id_fiche):
+    """
+    Page d'impression d'une fiche technique par un educ admin
+
+    :return: rendu de la page fiche_pdf.html
+    """
+    # verifier que fiche finie
+    fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
+    FicheIntervention.valider_fiche(fiche.id_fiche)
+
+    materiaux = build_materiel()
+    composer_fiche = ComposerPresentation.get_composer_presentation_par_apprenti(fiche.id_fiche)
+    return render_template("apprentis/fiche_pdf.html", composition=composer_fiche, fiche=fiche,
+                           materiaux=materiaux)
