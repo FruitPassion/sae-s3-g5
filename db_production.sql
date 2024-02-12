@@ -1,6 +1,6 @@
 -- Active: 1706110255136@@127.0.0.1@3306@db_fiches_dev
 
-USE db_fiches_dev;
+USE db_fiches_prod;
 
 
 CREATE TABLE Personnel

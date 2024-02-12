@@ -45,7 +45,7 @@ pwdusr=$(echo "${pwdusr// }") # check
 echo "user :" "'$pwdusr'" > db_usr_psswd.txt # check
 echo "Stockage du mot de passe user dans le fichier db_usr_psswd.txt" # check
 
-sed -i -e "s/\$\$AREMPLACER\$\$/$pwdusr/" oui.txt
+sed -i -e "s/--AREMPLACER--/$pwdusr/" oui.txt
 
 ## Create USER
 mysql -e "CREATE OR REPLACE USER 'user'@'localhost' IDENTIFIED BY '$pwdusr';" # check
