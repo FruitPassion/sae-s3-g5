@@ -6,11 +6,14 @@ from custom_paquets.tester_usages import connexion_apprentis
 Test des controller du fichier apprentis.py
 '''
 
+NOM_FORMATION = "Parcours plomberie"
+LOGIN = "DAJ12"
+
 # Test de la route de redirection de connexion
 def test_redirection_connexion(client):
     
-    nom_formation = "Parcours plomberie"
-    login = "DAJ12"
+    nom_formation = NOM_FORMATION
+    login = LOGIN
     
     # Test de connexion bon mot de passe et bon login
     response = connexion_apprentis(client, nom_formation, login, '12369')
@@ -22,8 +25,8 @@ def test_redirection_connexion(client):
 # Test de la route de suivi de progression
 def test_suivi_progression(client):
     
-    nom_formation = "Parcours plomberie"
-    login = "DAJ12"
+    nom_formation = NOM_FORMATION
+    login = LOGIN
     
     # Connexion apprenti
     connexion_apprentis(client, nom_formation, login, '12369')
@@ -37,8 +40,8 @@ def test_suivi_progression(client):
 # Test de la route de suivi de progression
 def test_commentaires(client):
     
-    nom_formation = "Parcours plomberie"
-    login = "DAJ12"
+    nom_formation = NOM_FORMATION
+    login = LOGIN
     
     # Connexion apprenti
     connexion_apprentis(client, nom_formation, login, '12369')
@@ -52,8 +55,8 @@ def test_commentaires(client):
 # Test de la route de suivi de progression
 def test_images(client):
     
-    nom_formation = "Parcours plomberie"
-    login = "DAJ12"
+    nom_formation = NOM_FORMATION
+    login = LOGIN
     
     # Connexion apprenti
     connexion_apprentis(client, nom_formation, login, '12369')
@@ -67,8 +70,8 @@ def test_images(client):
 # Test de la route de suivi de progression
 def test_pdf(client):
     
-    nom_formation = "Parcours plomberie"
-    login = "DAJ12"
+    nom_formation = NOM_FORMATION
+    login = LOGIN
     
     # Connexion apprenti
     connexion_apprentis(client, nom_formation, login, '12369')

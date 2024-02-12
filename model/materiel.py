@@ -85,4 +85,4 @@ class Materiel(db.Model):
         try:
             return Materiel.query.with_entities(Materiel.categorie).distinct().all()
         except Exception as e:
-            suplement_erreur(e, message=f"Erreur lors de la récupération des catégories du matériel")
+            suplement_erreur(e, message="Erreur lors de la récupération des catégories du matériel")

@@ -5,7 +5,7 @@ from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea, NumberInput
 
 VALIDATE = "validateForm()"
-
+COLMATER_FUITE = "colmater fuite"
 
 class LoginPersonnelForm(FlaskForm):
     """
@@ -111,7 +111,7 @@ class AjouterCours(FlaskForm):
     Formulaire d'ajout d'un cours
     """
     theme = StringField(validators=[InputRequired()], render_kw={"placeholder": "Problème tuyauterie"})
-    cours = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
+    cours = StringField(validators=[InputRequired()], render_kw={"placeholder": COLMATER_FUITE})
     duree = StringField(validators=[InputRequired()], render_kw={"placeholder": "3"})
     submit = SubmitField("Ajouter")
 
@@ -122,9 +122,9 @@ class ModifierCours(FlaskForm):
     """
     form_identifiant = HiddenField()
     form_theme = StringField(validators=[InputRequired()], render_kw={"placeholder": "Problème tuyauterie"})
-    form_cours = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
+    form_cours = StringField(validators=[InputRequired()], render_kw={"placeholder": COLMATER_FUITE})
     form_duree = IntegerField(widget=NumberInput(min = 1))
-    select_formation = StringField(validators=[InputRequired()], render_kw={"placeholder": "Colmater fuite"})
+    select_formation = StringField(validators=[InputRequired()], render_kw={"placeholder": COLMATER_FUITE})
     form_submit = SubmitField("Modifier")
 
 

@@ -23,7 +23,7 @@ def logging_erreur(e, message='Exception occurred : '):
 def suplement_erreur(e, message='Exception occurred : '):
     logging.error(message)
 
-    e_type, e_object, e_traceback = sys.exc_info()
+    e_type, _, e_traceback = sys.exc_info()
 
     e_message = str(e)
     e_line_number = e_traceback.tb_lineno

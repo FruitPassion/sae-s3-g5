@@ -4,6 +4,8 @@ from custom_paquets.gestions_erreur import suplement_erreur
 from model.shared_model import db, DB_SCHEMA, ElementBase as Elem
 
 
+ERREUR_RECUPERATION = "Erreur lors de la récupération des éléments de la fiche."
+
 class ComposerPresentation(db.Model):
     __tablename__ = 'ComposerPresentation'
     __table_args__ = {'schema': DB_SCHEMA}
@@ -44,7 +46,7 @@ class ComposerPresentation(db.Model):
         try:
             return ComposerPresentation.query.filter_by(id_fiche=id_fiche).all()
         except Exception as e:
-            suplement_erreur(e, message="Erreur lors de la récupération des éléments de la fiche.")
+            suplement_erreur(e, message=ERREUR_RECUPERATION)
 
     @staticmethod
     def get_composer_categorie(id_fiche=1):
@@ -56,7 +58,7 @@ class ComposerPresentation(db.Model):
         try:
             return convert_to_dict(ComposerPresentation.query.filter_by(id_fiche=id_fiche).join(Elem).filter_by(type="categorie").all())
         except Exception as e:
-            suplement_erreur(e, message="Erreur lors de la récupération des catégories de la fiche.")
+            suplement_erreur(e, message=ERREUR_RECUPERATION)
 
     @staticmethod
     def get_composer_non_categorie(id_fiche=1):
@@ -75,7 +77,7 @@ class ComposerPresentation(db.Model):
                                                          ComposerPresentation.couleur_pictogramme, ComposerPresentation.id_materiel).filter_by(
                     id_fiche=id_fiche).join(Elem).filter(Elem.type != "categorie").all())
         except Exception as e:
-            suplement_erreur(e, message="Erreur lors de la récupération des éléments de la fiche.")
+            suplement_erreur(e, message=ERREUR_RECUPERATION)
 
     @staticmethod
     def get_elements_base():
