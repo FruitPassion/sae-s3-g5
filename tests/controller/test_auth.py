@@ -8,6 +8,7 @@ from model.formation import Formation
 Test des controller du fichier auth.py
 '''
 
+COMPTE_INC_OU_INV = b'Compte inconnu ou mot de passe invalide'
 
 # Tests de la route d'accueil du site
 def test_choix_connexion(client):
@@ -94,7 +95,7 @@ def test_connexion_deconnexion_personnel(client):
 
     response = connexion_personnel_pin(client, "JED10", '123456')
 
-    assert b'Compte inconnu ou mot de passe invalide' in response.data
+    assert COMPTE_INC_OU_INV in response.data
 
 
 # Test de la route affichant la liste des formations
@@ -167,11 +168,11 @@ def test_connexion_deconnexion_apprenti(client):
     # Test de connexion mauvais login
     response = connexion_apprentis(client, nom_formation, 'BEN10', '12367')
     
-    assert b'Compte inconnu ou mot de passe invalide' in response.data
+    assert COMPTE_INC_OU_INV in response.data
     
     
     # Test de connexion mauvais mot de passe et bon login
     response = connexion_apprentis(client, nom_formation, login, '12367')
     
-    assert b'Compte inconnu ou mot de passe invalide' in response.data
+    assert COMPTE_INC_OU_INV in response.data
     
