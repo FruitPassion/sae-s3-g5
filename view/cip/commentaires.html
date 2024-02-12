@@ -17,7 +17,7 @@
                 <p class="commentaire">Commentaire : {% if commentaire.commentaire_texte == "" %}Aucun commentaire
                     {% else %}{{ commentaire.commentaire_texte }}{% endif %}
                 </p>
-                <p class="commentaire">Evaluation :{% if commentaire.eval_texte == "" %}Aucune évaluation
+                <p class="commentaire">Evaluation : {% if commentaire.eval_texte == "" %}Aucune évaluation
                     {% else %}{{ commentaire.eval_texte }}{% endif %}
                 </p>
             {% endfor %}
