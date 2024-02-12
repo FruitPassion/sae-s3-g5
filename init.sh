@@ -15,23 +15,27 @@ printf "${PURPLE}Mise à jour des paquets ...${NC}\n\n"
 apt update && apt upgrade # check
 
 # Install the dependencies
-printf "${PURPLE}Installation des dépendances ...${NC}\n\n"
+printf "\n\n${PURPLE}Installation des dépendances ...${NC}\n\n"
 apt install -y git apache2 libapache2-mod-wsgi-py3 mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
 
 # Install python
-printf "${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n\n"
+printf "\n\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n\n"
 
 wget -c https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tar.xz # check
 tar -Jxvf Python-3.10.13.tar.xz # check
 cd Python-3.10.13 #check
 ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" #check
 sudo make -j4 && sudo make altinstall # check 
-cd ..
-rm Python-3.10.13.tar.xz Python-3.10.13
+cd .. # check
+rm Python-3.10.13.tar.xz Python-3.10.13 # check
+
+printf "\n\n${GREEN}Installation des requirements python${NC}\n\n" # check
+
+pip3.10 install -r requirements.txt # check
 
 # Initialization
 #### MARIADB ####
-printf "${YELLOW}Paramétrage de la base de donnees MariaDB${NC}\n\n"
+printf "\n\n${YELLOW}Paramétrage de la base de donnees MariaDB${NC}\n\n"
 
 read -p "Entrez un nom d'administrateur : " 
 echo    # (optional) move to a new line
@@ -55,35 +59,32 @@ sed -i -e "s/--AREMPLACERLOG--/$replog/" db_production.py
 sed -i -e "s/--AREMPLACERMDP--/$repmail/" db_production.py
 sed -i -e "s/--AREMPLACERMAIL--/$repmdp/" db_production.py
 
-printf "${YELLOW}Démmarage de MariaDB${NC}\n\n"
+printf "\n\n${YELLOW}Démmarage de MariaDB${NC}\n\n"
 
 sudo systemctl enable mariadb.service # check
 sudo systemctl start mariadb.service # check
 
 
-# Generer mot de passe random et le stocker pour la base de donnée
-
-printf "${RED}Génération du mot de passe utilisateur${NC}\n\n" # check
+printf "\n\n${RED}Génération du mot de passe utilisateur${NC}\n\n" # check
 pwdadm=$(date | sha256sum) # check
 pwdadm=$(echo "${pwdadm// -}") # check
 pwdadm=$(echo "${pwdadm// }") # check
 
 echo "root :" "'$pwdadm'" > db_adm_psswd.txt
-printf "${RED}Stockage du mot de passe root dans le fichier db_adm_psswd.txt${NC}\n\n"
+printf "\n\n${RED}Stockage du mot de passe root dans le fichier db_adm_psswd.txt${NC}\n\n"
 
-# Generer mot de passe random et le stocker pour la base de donnée
 
-printf "${RED}Génération du mot de passe utilisateur${NC}\n\n" # check
+printf "\n\n${RED}Génération du mot de passe utilisateur${NC}\n\n" # check
 pwdusr=$(date | sha256sum) # check
 pwdusr=$(echo "${pwdusr// -}") # check
 pwdusr=$(echo "${pwdusr// }") # check
 
 echo "user :" "'$pwdusr'" > db_usr_psswd.txt # check
-printf "${RED}Stockage du mot de passe root dans le fichier db_usr_psswd.txt${NC}\n\n"
+printf "\n\n${RED}Stockage du mot de passe root dans le fichier db_usr_psswd.txt${NC}\n\n"
 
 sed -i -e "s/--AREMPLACER--/$pwdusr/" config.py
 
-printf "${YELLOW}Initialisation de la base de donnees MariaDB${NC}\n\n"
+printf "\n\n${YELLOW}Initialisation de la base de donnees MariaDB${NC}\n\n"
 
 ## Create USER
 mysql -e "CREATE OR REPLACE USER 'user'@'localhost' IDENTIFIED BY '$pwdusr';" # check
@@ -106,7 +107,7 @@ mysql -e "FLUSH PRIVILEGES" # check
 # Make sure that NOBODY can access the server without a password
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGES;" # check
 
-printf "${YELLOW}Initialisation et paramétrage de la base de donnees terminée${NC}\n\n"
+printf "\n\n${YELLOW}Initialisation et paramétrage de la base de donnees terminée${NC}\n\n"
 
 # #### APACHE #### 
 echo "Initialization of Apache..."
@@ -129,7 +130,7 @@ echo "Initialization of Apache done."
 echo "Creating the environmental variable..."
 echo "SEND HELP"
 
-s
+# Install the python packages
 echo "Testing the installation..."
 sudo a2dissite app
 sudo a2ensite 000-default
