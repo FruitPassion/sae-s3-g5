@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, flash, redirect, url_for
+from flask import Blueprint, Response, render_template, request, session, flash, redirect, url_for
 import json
 
 from custom_paquets.builder import build_categories, build_pictogrammes
@@ -82,9 +82,9 @@ def gestion_images():
         Materiel.add_materiel(form_ajouter.nom.data, categorie, chemin_materiel)
         return redirect(url_for("educ_admin.gestion_images"), 302)
 
-    return render_template("educ_admin/gestion_materiaux.html", materiaux=materiaux,
+    return Response(render_template("educ_admin/gestion_materiaux.html", materiaux=materiaux,
                            form_ajouter=form_ajouter, categories=categories,
-                           form_modifier=form_modifier), 200
+                           form_modifier=form_modifier), 200)
 
 
 @educ_admin.route("/gestion-pictos", methods=["GET", "POST"])
@@ -123,11 +123,11 @@ def gestion_pictos():
                                  form_modifier.form_modifier_souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
 
-    return render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier,
-                           form_ajouter=form_ajouter, categories=categories), 200
+    return Response(render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier,
+                           form_ajouter=form_ajouter, categories=categories), 200)
 
 
-@educ_admin.route("/gestion-cours", methods=["GET", "POST", "DELETE"])
+@educ_admin.route("/gestion-cours", methods=["GET", "POST"])
 @educadmin_login_required
 def gestion_cours():
     """
@@ -137,7 +137,7 @@ def gestion_cours():
     :return: rendu de la page gestion_cours.html
     """
     cours = Cours.get_all_cours()
-    coursArchives = Cours.get_all_cours(archive=True)
+    cours_archives = Cours.get_all_cours(archive=True)
     form_modifier = ModifierCours()
     formations = Formation.get_all_formations()
     form_ajouter = AjouterCours()
@@ -154,9 +154,9 @@ def gestion_cours():
                         selected_formation_id)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
 
-    return render_template("educ_admin/gestion_cours.html", cours=cours,
-                           form_modifier=form_modifier, form_ajouter=form_ajouter, coursArchives=coursArchives,
-                           formations=formations), 200
+    return Response(render_template("educ_admin/gestion_cours.html", cours=cours,
+                           form_modifier=form_modifier, form_ajouter=form_ajouter, cours_archives=cours_archives,
+                           formations=formations), 200)
 
 
 @educ_admin.route("/choix-eleve/<nom_formation>", methods=["GET"])
@@ -169,7 +169,7 @@ def choix_eleve(nom_formation):
     :return: rendu de la page choix_apprentis.html
     """
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
-    return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis), 200
+    return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis)
 
 
 @educ_admin.route("/<apprenti>/fiches", methods=["GET"])
@@ -209,7 +209,7 @@ def modifier_fiche(id_fiche):
         id_fiche = FicheIntervention.copier_fiche(id_fiche, session["name"])
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
     apprenti = FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)
-    return render_template("educ_admin/raison_arret.html", id_fiche=id_fiche, apprenti=apprenti), 200
+    return Response(render_template("educ_admin/raison_arret.html", id_fiche=id_fiche, apprenti=apprenti), 200)
 
 
 @educ_admin.route("/<apprenti>/ajouter-fiche", methods=["GET", "POST"])
@@ -236,8 +236,8 @@ def ajouter_fiche(apprenti):
                                                                 form.prenomintervenant.data, id_cours)
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche), 302)
-    return render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti,
-                           cours=cours), 200
+    return Response(render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti,
+                           cours=cours), 200)
 
 
 @educ_admin.route("/personnalisation/<id_fiche>", methods=["GET", "POST"])
@@ -259,8 +259,8 @@ def personnalisation(id_fiche):
         return redirect(url_for("educ_admin.fiches_apprenti",
                                 apprenti=FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)),
                         302)
-    return render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_polices,
-                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200
+    return Response(render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_polices,
+                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200)
 
 
 @educ_admin.route("/<apprenti>/<numero>/commentaires", methods=["GET"])

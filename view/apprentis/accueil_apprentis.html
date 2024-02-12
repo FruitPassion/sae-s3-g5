@@ -28,7 +28,7 @@
             <div class="d-block block-fiche text-wrap" data-cour="{{ get_nom_cours_by_id(fiche.id_cours) }}">
                 <div class="parent">
                     {% if fiche.etat_fiche == 1 %}
-                        <a class="modifier" target="_blank"
+                        <a class="modifier" target="_blank" rel="noopener"
                            href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero) }}">
                             <i class="fa fa-print" aria-hidden="true"></i></a>
                         <a class="modifier2" href="{{ url_for('apprenti.afficher_images', numero=fiche.numero) }}">

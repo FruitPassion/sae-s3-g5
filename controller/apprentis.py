@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, session, request, url_for
+from flask import Blueprint, Response, redirect, render_template, session, request, url_for
 from werkzeug.utils import secure_filename
 
 from custom_paquets.builder import build_categories, build_materiel, check_ressenti
@@ -122,8 +122,8 @@ def completer_fiche(numero):
         ComposerPresentation.maj_contenu_fiche(completer_fiche, fiche.id_fiche)
         composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
-    return render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
-                           avancee=avancee, materiaux=materiaux)
+    return Response(render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
+                           avancee=avancee, materiaux=materiaux), 200)
 
 
 @apprenti.route("/imprimer-pdf/<numero>", methods=["GET"]) # Pour tester

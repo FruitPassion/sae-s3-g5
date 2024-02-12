@@ -39,7 +39,7 @@
                            href="{{ url_for('educ_admin.modifier_fiche', id_fiche=fiche.id_fiche) }}">
                             <i class="fa fa-pencil-square" aria-hidden="true"></i></a>
                     {% elif fiche.etat_fiche == 1 %}
-                        <a class="modifier" target="_blank"
+                        <a class="modifier" target="_blank"  rel="noopener"
                            href="{{ url_for('educ_simple.imprimer_pdf', id_fiche=fiche.id_fiche) }}">
                             <i class="fa fa-print" aria-hidden="true"></i></a>
                     {% else %}

@@ -118,6 +118,7 @@ class Cours(db.Model):
             logging.error("Erreur lors de la récupération de l'id du cours")
             logging.error(e)
 
+    @staticmethod
     def get_cours_id(nom_cours: str):
         """
         Retourne l'id d'un cours à partir de son nom

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for, abort
+from flask import Blueprint, Response, render_template, request, session, redirect, url_for, abort
 
 from custom_paquets.builder import build_materiel
 from custom_paquets.converter import changer_date
@@ -85,12 +85,12 @@ def modifier_commentaires(apprenti, numero, type_commentaire):
         LaisserTrace.modifier_evaluation_texte(fiche.id_fiche, commentaires.horodatage, eval_texte,
                                                type_commentaire=type_commentaire)
         if 'Administrateur' in Personnel.get_role_by_login(session.get("name")):
-            return redirect(url_for('educ_admin.visualiser_commentaires', apprenti=apprenti, numero=numero))
+            return redirect(url_for('educ_admin.visualiser_commentaires', apprenti=apprenti, numero=numero), 302)
         else:
-            return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero))
+            return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero), 302)
 
-    return render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
-                           commentaires=commentaires, typeCommentaire=type_commentaire, id_personnel=id_personnel)
+    return Response(render_template("personnel/modifier_commentaires.html", apprenti=apprenti, fiche=fiche,
+                           commentaires=commentaires, typeCommentaire=type_commentaire, id_personnel=id_personnel), 200)
 
 
 @educ_simple.route("/<apprenti>/<numero>/ajouter-commentaires/<type_commentaire>", methods=["POST", "GET"])
@@ -112,9 +112,9 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
         intitule = request.form["intitule"]
         LaisserTrace.ajouter_commentaires_evaluation(fiche.id_fiche, commentaire_texte, eval_texte, None, None,
                                                      session.get("name"), intitule, type_c)
-        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero))
+        return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero), 302)
 
-    return render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche)
+    return Response(render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200)
 
 
 @educ_simple.route("/imprimer-pdf/<id_fiche>", methods=["GET"])

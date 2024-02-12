@@ -15,8 +15,7 @@
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
             {% else %}
-                <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'educateur') }}"
-                   name="commentaire_educateur">
+                <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'educateur') }}">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </a>
             {% endif %}

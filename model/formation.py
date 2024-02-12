@@ -60,7 +60,7 @@ class Formation(db.Model):
             logging.error(e)
             return False
 
-
+    @staticmethod
     def get_nom_formation(id_formation):
         """
         Retourne l'intitulé d'une formation à partir de son id

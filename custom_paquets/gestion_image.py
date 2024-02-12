@@ -1,6 +1,7 @@
 from PIL import Image, ImageFilter, ImageOps, ImageColor
 from werkzeug.utils import secure_filename
 from random import randint
+import secrets
 
 
 def random_color():
@@ -8,7 +9,7 @@ def random_color():
     for name, code in ImageColor.colormap.items():
         if name not in ["black", "white", "lightgrey", "darkgrey", "grey", "dimgrey", "dimgray", "silver", "gainsboro"]:
             color.append(name)
-    return color[randint(0, len(color) - 1)]
+    return secrets.choice(color)
 
 
 def resize_image_profile(img: Image, path: str):

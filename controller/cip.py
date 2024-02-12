@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, Response, redirect, render_template, request, url_for
 
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
@@ -120,8 +120,8 @@ def modifier_commentaire(apprenti):
 
         return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti))
     apprenti = Apprenti.get_apprenti_by_login(apprenti)
-    return render_template("cip/modifier_adaptation_situation_examen.html", apprenti=apprenti,
-                           commentaire=commentaire), 200
+    return Response(render_template("cip/modifier_adaptation_situation_examen.html", apprenti=apprenti,
+                           commentaire=commentaire), 200)
 
 
 @cip.route("/<apprenti>/ajouter-commentaire", methods=["GET", "POST"])
@@ -137,4 +137,4 @@ def ajouter_commentaire(apprenti):
         Apprenti.update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)
         return redirect(url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti))
     apprenti = Apprenti.get_apprenti_by_login(apprenti)
-    return render_template("cip/ajouter_adaptation_situation_examen.html", apprenti=apprenti), 200
+    return Response(render_template("cip/ajouter_adaptation_situation_examen.html", apprenti=apprenti), 200)

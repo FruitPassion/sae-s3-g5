@@ -187,7 +187,7 @@
 
                 <fieldset id="field-70" class="scheduler-border p-2 mr-auto ml-2" hidden=""
                           style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                    <p>Image après l'intervention : {% include "_partial/_tts.html" %}</p>
+                    <legend>Image après l'intervention : {% include "_partial/_tts.html" %}</legend>
                     <div>
                         <div class="mb-4 d-flex justify-content-center">
                             {% if fiche.photo_apres != None %}
@@ -215,7 +215,8 @@
                 </fieldset>
                 <fieldset id="field-80" class="scheduler-border p-2 mr-auto ml-2" hidden=""
                           style="background-color: {{ composition[0]['couleur_fond'] }}; font-size: {{ composition[0]['taille_texte']|int-10 }}px">
-                    <div class="d-flex justify-content-center  bg-primary rounded-4 mb-4"
+                    <legend>Derniere partie {% include "_partial/_tts.html" %}</legend>
+                          <div class="d-flex justify-content-center  bg-primary rounded-4 mb-4"
                          style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
                         <a href="{{ url_for('apprenti.valider', numero=fiche.numero ) }}"
                            style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;"
@@ -225,7 +226,7 @@
                     </div>
                     <div class="d-flex justify-content-center  bg-primary rounded-4"
                          style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
-                        <a href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero ) }}"
+                        <a href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero ) }}"  rel="noopener"
                            style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;" target="_blank"
                            class="btn btn-primary"><i class="fa fa-print" aria-hidden="true"></i>
                             Imprimer la fiche</a>

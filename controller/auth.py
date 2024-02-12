@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    Response,
     abort,
     render_template,
     flash,
@@ -86,8 +87,8 @@ def connexion_personnel_pin():
                 elif session["role"] == "Educateur Administrateur":
                     return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
-                    return redirect(url_for("personnel.choix_formation"))
-    return render_template("auth/connexion_personnel_pin.html", personnels=personnels), code
+                    return redirect(url_for("personnel.choix_formation"), 302)
+    return Response(render_template("auth/connexion_personnel_pin.html", personnels=personnels), code)
 
 
 @auth.route("/connexion-personnel-mdp", methods=["GET", "POST"])
@@ -126,7 +127,7 @@ def connexion_personnel_mdp():
                     return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)
-    return render_template("auth/connexion_personnel_code.html", form=form), code
+    return Response(render_template("auth/connexion_personnel_code.html", form=form), code)
 
 
 @auth.route("/choix-formation-apprentis", methods=["GET", "POST"])
@@ -138,7 +139,7 @@ def choix_formation_apprentis():
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
     formations = Formation.get_all_formations()
-    return render_template("auth/choix_formation_apprentis.html", formations=formations), 200
+    return Response(render_template("auth/choix_formation_apprentis.html", formations=formations), 200 )
 
 
 @auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET", "POST"])
@@ -154,7 +155,7 @@ def choix_eleve_apprentis(nom_formation):
         abort(404)
     
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
-    return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200
+    return Response(render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200)
 
 
 @auth.route("/connexion-apprentis/<nom_formation>/<login_apprenti>", methods=["GET", "POST"])
@@ -184,11 +185,11 @@ def connexion_apprentis(nom_formation, login_apprenti):
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
-    return render_template("auth/connexion_apprentis.html", apprenti=apprenti,
-                           nom_formation=nom_formation, code_set=code_set), code
+    return Response(render_template("auth/connexion_apprentis.html", apprenti=apprenti,
+                           nom_formation=nom_formation, code_set=code_set), code)
 
 
-@auth.route("/logout", methods=["GET", "POST"])
+@auth.route("/logout", methods=["GET"])
 def logout():
     """
     Permet de se déconnecter de la session en cours.

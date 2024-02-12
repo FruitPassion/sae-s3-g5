@@ -1,7 +1,7 @@
 from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, Response, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
 from custom_paquets.gestion_image import stocker_photo_profile
@@ -84,10 +84,10 @@ def gestion_personnel():
         Personnel.add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
         return redirect(url_for(REDIRECTION), 302)
 
-    return render_template("admin/gestion_personnel.html", liste_personnel=personnel,
+    return Response(render_template("admin/gestion_personnel.html", liste_personnel=personnel,
                            form_ajouter=form_ajouter, form_modifier=form_modifier,
                            form_modifier_admin=form_modifier_admin, couleurs=couleurs,
-                           liste_personnel_archive=liste_personnel_archive)
+                           liste_personnel_archive=liste_personnel_archive), 200)
 
 
 @admin.route("/gestion-apprentis", methods=["GET", "POST"])
@@ -125,9 +125,9 @@ def gestion_apprentis():
         Cours.add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1].id_formation)
         return redirect(url_for("admin.gestion_apprentis"), 302)
 
-    return render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis,
+    return Response(render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis,
                            form_ajouter=form_ajouter, form_modifier=form_modifier, formations=formations,
-                           liste_apprentis_archives=liste_apprentis_archives)
+                           liste_apprentis_archives=liste_apprentis_archives), 200)
 
 
 @admin.route("/gestion-formations", methods=["GET", "POST", "DELETE"])
@@ -161,5 +161,5 @@ def gestion_formations():
                          form_modifier.form_groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formations"), 302)
 
-    return render_template("admin/gestion_formations.html", liste_formations=formations, form=form,
-                           form_modifier=form_modifier, liste_formations_archivees=liste_formations_archivees)
+    return Response(render_template("admin/gestion_formations.html", liste_formations=formations, form=form,
+                           form_modifier=form_modifier, liste_formations_archivees=liste_formations_archivees), 200)

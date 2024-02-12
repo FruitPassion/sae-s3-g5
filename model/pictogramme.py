@@ -121,4 +121,4 @@ class Pictogramme(db.Model):
         try:
             return Pictogramme.query.with_entities(Pictogramme.categorie).distinct().all()
         except Exception as e:
-            suplement_erreur(e, message=f"Erreur lors de la récupération des catégories de pictogrammes")
+            suplement_erreur(e, message="Erreur lors de la récupération des catégories de pictogrammes")
