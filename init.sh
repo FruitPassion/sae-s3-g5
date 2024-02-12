@@ -39,7 +39,7 @@ repnom=$REPLY
 read -p "Entrez un prenom d'administrateur : " 
 echo    # (optional) move to a new line
 repprenom=$REPLY
-replog=$(python -c "from custom_paquets.converter import generate_login; print(generate_login('$repnom','$repprenom'))")
+replog=$(python3.10 -c "from custom_paquets.converter import generate_login; print(generate_login('$repnom','$repprenom'))")
 read -p "Entrez un mail d'administrateur : " 
 echo    # (optional) move to a new line
 repmail=$REPLY
@@ -47,7 +47,7 @@ read -p "Entrez un mot de passe administrateur : "
 echo    # (optional) move to a new line
 repmdp=$REPLY
 
-repmdp=$(python -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repmdp').decode('utf-8'))")
+repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repmdp').decode('utf-8'))")
 
 sed -i -e "s/--AREMPLACERNOM--/$repnom/" db_production.py
 sed -i -e "s/--AREMPLACERPRENOM--/$repprenom/" db_production.py
