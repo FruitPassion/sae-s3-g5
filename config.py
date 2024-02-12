@@ -63,7 +63,7 @@ class MainConfig:
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"
     DB_SCHEMA = "db_fiches_prod"
-    SQLALCHEMY_DATABASE_URI = f'mariadb://local_user:password@localhost:3306/{DB_SCHEMA}'
+    SQLALCHEMY_DATABASE_URI = f'mariadb://user:--AREMPLACER--@localhost:3306/{DB_SCHEMA}'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {
