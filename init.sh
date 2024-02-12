@@ -14,8 +14,8 @@ tar -Jxvf Python-3.10.13.tar.xz # check
 cd Python-3.10.13 #check
 ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" #check
 sudo make -j4 && sudo make altinstall # check 
-
-cd 
+cd ..
+rm Python-3.10.13.tar.xz Python-3.10.13
 
 sudo apt install -y mariadb-server # check
 
@@ -29,17 +29,23 @@ sudo systemctl start mariadb.service # check
 
 # Generer mot de passe random et le stocker pour la base de donnée
 echo "Generation du mot de passe admin.." # check
-pwdadm=$(date | md5sum) # check
+pwdadm=$(date | sha256sum) # check
+pwdadm=$(echo "${pwdadm// -}") # check
+pwdadm=$(echo "${pwdadm// }") # check
 
 echo "root :" "'$pwdadm'" > db_adm_psswd.txt
 echo "Stockage du mot de passe root dans le fichier db_adm_psswd.txt" # check
 
 # Generer mot de passe random et le stocker pour la base de donnée
 echo "Generation du mot de passe utilisateur.." # check
-pwdusr=$(date | md5sum) # check
+pwdusr=$(date | sha256sum) # check
+pwdusr=$(echo "${pwdusr// -}") # check
+pwdusr=$(echo "${pwdusr// }") # check
 
 echo "user :" "'$pwdusr'" > db_usr_psswd.txt # check
 echo "Stockage du mot de passe user dans le fichier db_usr_psswd.txt" # check
+
+sed -i -e "s/\$\$AREMPLACER\$\$/$pwdusr/" oui.txt
 
 ## Create USER
 mysql -e "CREATE OR REPLACE USER 'user'@'localhost' IDENTIFIED BY '$pwdusr';" # check
@@ -61,11 +67,6 @@ mysql -e "FLUSH PRIVILEGES" # check
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGES;" # check
 
 echo "Initialization of MariaDB done." # check
-
-#### CLONE THE REPOSITORY ####
-echo "Cloning the repository..."
-git clone https://github.com/{username}/{repository}.git
-echo "Cloning done."
 
 # #### APACHE #### 
 echo "Initialization of Apache..."
