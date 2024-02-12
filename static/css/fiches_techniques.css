@@ -1,0 +1,88 @@
+#blocFiches {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 95%;
+    margin: 30px auto auto;
+    background-color: #e5e3e3;
+    border-radius: 20px;
+}
+
+#selectCours{
+    width: 95%;
+margin: 30px auto auto;
+}
+
+.block-fiche {
+    margin: 0 20px 20px;
+    width: 360px;
+}
+
+.parent {
+    position: relative;
+    align-items: center;
+}
+
+.parent #pause {
+    position: absolute;
+    top: 37%;
+    left: 37%;
+    height: 100px
+}
+
+.parent .check {
+    position: absolute;
+    top: 37%;
+    left: 34%;
+    height: 100px;
+}
+
+.parent .plus {
+    position: absolute;
+    top: 36%;
+    left: 31%;
+    height: 100px;
+}
+
+.fiche {
+    z-index: 11;
+}
+
+#suivi_progression {
+    border-radius: 10px;
+    width: 75%;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+#suivi_progression a {
+    height: 8%;
+    font-size: 35px;
+    top: 100%;
+    filter: invert(100%);
+}
+
+#suivi_progression img[alt*="progression"] {
+    width: 50px;
+}
+
+.modifier {
+    right: 15%;
+}
+
+.modifier2 {
+    right: 40%;
+}
+
+.modifier, .modifier2 {
+    position: absolute;
+    z-index: 1;
+    top: 5%;
+    font-size: 70px;
+}
+
+.bg-modifier {
+    z-index: -1;
+}

@@ -1,0 +1,21 @@
+.commentaireTitre {
+    font-size: 4em;
+    margin-left:1%;
+    margin-bottom:1%;
+    margin-top: 10px;
+}
+
+.commentaire {
+    margin-left:2%;
+    white-space: pre-wrap;
+}
+
+.modifier {
+    height:1em;
+}
+
+.commentaireTitre a img {
+    position: absolute;
+    margin-left: 1%;
+    height: 85px;
+}

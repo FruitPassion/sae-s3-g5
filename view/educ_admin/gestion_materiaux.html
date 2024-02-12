@@ -1,0 +1,152 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des materiaux{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des matériaux</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <table class="table table-bordered" aria-describedby="table des materiaux" id="table-non-archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Nom</th>
+                        <th scope="col">Catégorie</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Modifier</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for materiel in materiaux %}
+                        <tr class="text-center" id="arch-ele-{{ materiel['id_materiel'] }}">
+                            <td id="nom-{{ materiel['id_materiel'] }}" class="align-middle">{{ materiel["nom"] }}</td>
+                            <td id="categorie-{{ materiel['id_materiel'] }}"
+                                class="align-middle">{{ materiel["categorie"] }}</td>
+                            
+                            <td id="lien-{{ materiel['id_materiel'] }}" value="{{ materiel['lien'] }}">
+                                <img src="{{ url_for('static', filename='images/materiel/'+materiel['lien']) }}" alt="photo matériel" style="width:120px;">
+                            </td>
+                            <th scope="row" onclick="passer_parametre_form(this, 'materiel')"
+                                class="align-middle ele-btn-modif" data-bs-toggle="modal"
+                                data-bs-target="#modal-modifier">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div style="height: 200px; position: relative"></div>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Nom :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.nom(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Catégorie :</h3>
+                            </div>
+                            <div>
+                                <select class="form-select fs-1 my-3" id="categorie-ajouter" name="categorie-ajouter">
+                                    <option value="" selected disabled="disabled">--- Sélectionnez une catégorie ---</option>
+                                    {% for categorie in categories %}
+                                        <option value="{{ categorie }}">{{ categorie }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="m-4 w-50">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="materiel" name="materiel"
+                                        accept="image/png, image/jpeg, image/jpg"/>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="w-50 mx-auto my-5">
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier le matériel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
+                        {{ form_modifier.hidden_tag() }}
+                        <input type="hidden" value="" id="id-element-materiel" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Nom :</h3>
+                            {{ form_modifier.form_modifier_nom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Catégorie :</h3>
+                            <select class="form-select fs-1 my-3" id="categorie-modifier" name="categorie-modifier">
+                                {% for categorie in categories %}
+                                    <option value="{{ categorie }}">{{ categorie }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="w-75 test">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="materiel-modifier"
+                                       name="materiel-modifier"
+                                       accept="image/png, image/jpeg, image/jpg" value="oui.jpg"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer d-flex">
+                    {{ form_modifier.form_modifier_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control text-center"
+                            data-bs-dismiss="modal">Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('educ_admin.accueil_educadmin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+{% endblock %}

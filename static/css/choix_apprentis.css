@@ -1,0 +1,23 @@
+#liste_appprentis {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.apprenti {
+    margin: 3em;
+    width: 10em;
+    display: inline-block;
+}
+
+.libelle {
+    text-align: center;
+    margin-left: 1%;
+    font-size: 2em;
+}
+
+.photo_profil {
+    height: 10em;
+    width: 100%;
+}

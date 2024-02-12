@@ -1,0 +1,94 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Connexion apprentis{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/patternlock.min.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/patternlock.min.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div id="flashing" style="background-color: #e83c55; color: black; font-size : 35px" hidden="true">
+        <ul class="flashes" style="margin-top: revert">
+            <li>Compte bloqué, contactez un admin {% include "_partial/_tts.html" %}</li>
+        </ul>
+    </div>
+    {% if code_set %}
+        <h1>Saisissez votre code {% include "_partial/_tts.html" %}</h1>
+    {% else %}
+        <h1>Votre code n'a pas encore été paramétré, saisissez en un nouveau {% include "_partial/_tts.html" %}</h1>
+    {% endif %}
+    <svg class="patternlock w-100" id="lock" viewBox="0 0 100 100"  height="800px">
+        <g class="lock-actives"></g>
+        <g class="lock-lines"></g>
+        <g class="lock-dots">
+            <circle cx="20" cy="20" r="2"/>
+            <circle cx="50" cy="20" r="2"/>
+            <circle cx="80" cy="20" r="2"/>
+
+            <circle cx="20" cy="50" r="2"/>
+            <circle cx="50" cy="50" r="2"/>
+            <circle cx="80" cy="50" r="2"/>
+
+            <circle cx="20" cy="80" r="2"/>
+            <circle cx="50" cy="80" r="2"/>
+            <circle cx="80" cy="80" r="2"/>
+        </g>
+    </svg>
+    <form id="form_hidden" method="POST">
+        <input type="hidden" name="login" id="login" value="{{ apprenti.login }}">
+        <input type="hidden" name="password" id="password" value="">
+    </form>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=nom_formation) }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}
+
+{% block javascripts2 %}
+    <script defer>
+
+        let login = document.getElementById('login').value;
+        let lock = new PatternLock("#lock", {
+            onPattern: function (result) {
+                validate(lock, login, lock.getPattern());
+            }
+        });
+    </script>
+    {% if code_set %}
+        <script defer>
+            function validate(lock, login, essai) {
+                $.getJSON("/api/check-password-apprenti/" + encodeURIComponent(login) + "/" + encodeURIComponent(essai.pattern), function (data) {
+                    if (data["valide"]) {
+                        lock.success();
+                        document.getElementById('password').value = essai.pattern;
+                        document.forms["form_hidden"].submit();
+                        document.getElementById("form_hidden").submit();
+                    } else {
+                        if (data["blocage"]) {
+                            document.getElementById("flashing").removeAttribute("hidden");
+                        }
+                        lock.error();
+                    }
+                })
+            }
+        </script>
+    {% else %}
+        <script defer>
+            function validate(lock, login, essai) {
+                $.getJSON("/api/set-password-apprenti/" + encodeURIComponent(login) + "/" + encodeURIComponent(essai.pattern), function (data) {
+                    if (data["valide"]) {
+                        location.reload();
+                    } else {
+                        lock.error();
+                        location.reload();
+                    }
+                })
+            }
+        </script>
+    {% endif %}
+{% endblock %}

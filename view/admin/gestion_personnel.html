@@ -1,0 +1,356 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des comptes{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste du personnel</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+            <button class="nav-link" id="nav-archiver-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+                    type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <table class="table table-bordered" aria-describedby="tableau personnel" id="table-non-archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Mail</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Actif</th>
+                        <th scope="col">Modifier</th>
+                        <th scope="col">Archiver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for personnel in liste_personnel %}
+                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                            id="ele-{{ personnel.id_personnel }}">
+                            <td id="login-{{ personnel.id_personnel }}">{{ personnel.login }}</td>
+                            <td id="nom-{{ personnel.id_personnel }}">{{ personnel.nom }}</td>
+                            <td id="prenom-{{ personnel.id_personnel }}">{{ personnel.prenom }}</td>
+                            <td id="email-{{ personnel.id_personnel }}">{{ personnel.email }}</td>
+                            <td id="role-{{ personnel.id_personnel }}"
+                                class="{{ couleurs[personnel.role] }}">{{ personnel.role }}</td>
+                            <td>
+                                {% if personnel.essais == 3 %}
+                                    <i id="actif-{{ personnel.id_personnel }}" class="fa fa-times" aria-hidden="true"></i>
+                                {% else %}
+                                    <i id="actif-{{ personnel.id_personnel }}" class="fa fa-check" aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                            {% if personnel.role != "SuperAdministrateur" %}
+                                <th scope="row" onclick="passer_parametre_form(this, 'personnel')"
+                                    class="align-middle ele-btn-modif" data-bs-toggle="modal"
+                                    data-bs-target="#modal-modifier">
+                                    <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                </th>
+                            {% else %}
+                                <th scope="row" onclick="passer_parametre_form(this, 'admin')"
+                                    class="align-middle" data-bs-toggle="modal"
+                                    data-bs-target="#modal-modifier-super-admin">
+                                    <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                </th>
+                            {% endif %}
+                            
+                            <th scope="row" class="align-middl ele-btn-archiver"
+                                onclick="validation_archivage(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-archiver">
+                                {% if personnel.role != "SuperAdministrateur" %}
+                                    <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                                {% endif %}
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <form method="post" id="container-ajout" name="ajout_personnel">
+                    <div class="w-75 test">
+                        <div class="d-flex">
+                            <div class="m-4 w-50">
+                                <div>
+                                    <h3 class="fs-1 my-3">Nom :</h3>
+                                </div>
+                                <div>
+                                    {{ form_ajouter.nom(class="form-control fs-1 my-3") }}
+                                </div>
+                                <div>
+                                    <h3 class="fs-1 my-3">Prénom :</h3>
+                                </div>
+                                <div>
+                                    {{ form_ajouter.prenom(class="form-control fs-1 my-3") }}
+                                </div>
+                            </div>
+                            <div class="m-4 w-50">
+                                <div>
+                                    <h3 class="fs-1 my-3">Email :</h3>
+                                </div>
+                                <div>
+                                    {{ form_ajouter.email(class="form-control fs-1 my-3") }}
+                                </div>
+                                <div>
+                                    <h3 class="fs-1 my-3">Mot de passe :</h3>
+                                </div>
+                                <div id="bloc_password">
+                                    <input name="password" class='form-control fs-1 my-3' type="password" id="password"
+                                           minlength="6" maxlength="6" required/>
+                                    <img alt="eye" id="icone_visibilite"
+                                         src="{{ url_for('static', filename='images/hide.png') }}"
+                                         onclick="visibilite()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-4">
+                            <h3 class="fs-1 my-3">Choisissez un rôle :</h3>
+                            <select id ="select_role" name="select_role" class="fs-1 my-3 form-select role_selector" required>
+                                <option value="" selected disabled="disabled">--- Sélectionnez un rôle ---</option>
+                                <option value="CIP">CIP</option>
+                                <option value="Educateur">Educateur</option>
+                                <option value="Educateur_Administrateur">Educateur Administrateur</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w-50 mx-auto my-5">
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
+                <table class="table table-bordered" aria-describedby="tableau personnel archivé" id="table-archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Mail</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Actif</th>
+                        <th scope="col">Désarchiver</th>
+                        <th scope="col">Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for personnel in liste_personnel_archive %}
+                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                            id="arch-ele-{{ personnel.id_personnel }}">
+                            <td id="login">{{ personnel.login }}</td>
+                            <td id="nom">{{ personnel.nom }}</td>
+                            <td id="prenom">{{ personnel.prenom }}</td>
+                            <td id="email">{{ personnel.email }}</td>
+                            <td id="role" class="{{ couleurs[personnel.role] }}">{{ personnel.role }}</td>
+                            <td>
+                                {% if personnel.essais == 3 %}
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                            <th scope="row" class="align-middle ele-btn-desarchiver"
+                                onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-desarchiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-supprimer"
+                                onclick="validation_suppression(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-supprimer">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="height: 200px; position: relative"></div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-archiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver le membre du personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver ce membre du personnel ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="archiver_personnel()">Archiver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-desarchiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Désarchiver le membre du personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="desarchiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver ce membre du personnel ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="desarchiver_personnel()">Désarchiver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier le membre du personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier" autocomplete="off">
+                        <input type="hidden" value="" id="id-element-personnel" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Nom :</h3>
+                            {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Prénom :</h3>
+                            {{ form_modifier.form_prenom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Email :</h3>
+                            {{ form_modifier.form_email(class="form-control fs-1 my-3", id="email_personnel") }}
+                        </div>
+
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Choisissez un rôle :</h3>
+                            <select id="nouveau_role" name="nouveau_role" class="fs-1 my-3 form-select" required>
+                                <option value="CIP">CIP</option>
+                                <option value="Educateur">Educateur</option>
+                                <option value="Educateur_Administrateur">Educateur Administrateur</option>
+                            </select>
+                        </div>
+
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Mot de passe :</h3>
+                            {{ form_modifier.form_password(pattern = "[0-9]{6}", class = "form-control fs-1 my-3", autocomplete="new-password") }}
+                        </div>
+                        <div class="w-75 test d-flex">
+                            <h3 class="fs-1 my-3">Utilisateur actif :</h3>
+                            <div class="form-check form-switch replace-check">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    id="form_actif" name="form_actif">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer d-flex">
+                    {{ form_modifier.submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal-modifier-super-admin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier le super administrateur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier-admin" autocomplete="off">
+                        <input type="hidden" value="" id="id-element-admin" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Nom :</h3>
+                            {{ form_modifier_admin.form_nom(class="form-control fs-1 my-3", id= "nom_admin") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Prénom :</h3>
+                            {{ form_modifier_admin.form_prenom(class="form-control fs-1 my-3", id= "prenom_admin") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Email :</h3>
+                            {{ form_modifier_admin.form_email(class="form-control fs-1 my-3", id= "mail_admin") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Mot de passe :</h3>
+                            {{ form_modifier_admin.form_password(class="form-control fs-1 my-3", autocomplete="new-password") }}
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer d-flex">
+                    {{ form_modifier_admin.submit(form="container-modifier-admin", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Supprimer le personnel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="supprimer-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer ce membre du personnel ? Cette action
+                        est irréversible et entraînera l'anonymisation de ce personnel en base de données'.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
+                            onclick="supprimer_personnel()">Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+{% endblock %}

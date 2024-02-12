@@ -1,0 +1,302 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des formations{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/reinitialiser_admin.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des formations</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+            <button class="nav-link" id="nav-archiver-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+                    type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <table class="table table-bordered" aria-describedby="tableau formations" id="table-non-archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Intitulé</th>
+                        <th scope="col">Niveau qualification</th>
+                        <th scope="col">Groupe</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Modifier</th>
+                        <th scope="col">Archiver</th>
+                        <th scope="col">Réinitialiser</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for formation in liste_formations %}
+                        <tr class="text-center" id="ele-{{ formation.id_formation }}">
+                            <td id="intitule-{{ formation.id_formation }}" class="align-middle">{{formation.intitule }}</td>
+                            <td id="niveau_qualif-{{ formation.id_formation }}" class="align-middle">{{formation.niveau_qualif }}</td>
+                            <td id="groupe-{{ formation.id_formation }}" class="align-middle">{{formation.groupe }}</td>
+                            <td id="image-{{ formation.id_formation }}" value="{{ formation.image }}"><img style="width:180px; height:100px;"
+                                        src="{{ url_for('static', filename='images/'+formation.image) }}" alt="image formation"></td>
+                            <th scope="row" onclick="passer_parametre_form(this, 'formation')"
+                                class="align-middle  ele-btn-modif" data-bs-toggle="modal"  data-bs-target="#modal-modifier">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-archiver"
+                                onclick="validation_archivage(this)" data-bs-toggle="modal" data-bs-target="#modal-archiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-archiver-arpprenti"
+                                onclick="validation_reinitialisation_formation(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-reinitialiser">
+                                <button><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                            </th>                            
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <br>
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Intitulé :</h3>
+                            </div>
+                            <div>
+                                {{ form.intitule(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Niveau qualification :</h3>
+                            </div>
+                            <div>
+                                {{ form.niveau_qualif(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                        <div class="m-4 w-50">
+                            <div class="parent-div">
+                                <div class="mb-3">
+                                    <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                    <input class="form-control fs-1 my-3" type="file" id="image" name="image"
+                                           accept="image/png, image/jpeg, image/jpg"/>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Groupe :</h3>
+                            </div>
+                            <div>
+                                {{ form.groupe(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-50 mx-auto my-5">
+                        {{ form.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
+                <table class="table table-bordered" aria-describedby="tableau formations archivées" id="table-archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Intitulé</th>
+                        <th scope="col">Niveau qualification</th>
+                        <th scope="col">Groupe</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Désarchiver</th>
+                        <th scope="col">Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for formation in liste_formations_archivees %}
+                        <tr class="text-center" id="arch-ele-{{ formation.id_formation }}">
+                            <td class="align-middle">{{ formation.intitule }}</td>
+                            <td class="align-middle">{{ formation.niveau_qualif }}</td>
+                            <td class="align-middle">{{ formation.groupe }}</td>
+                            <td><img alt="img formation" style="width:180px; height:100px;"
+                                     src="{{ url_for('static', filename='images/'+formation.image) }}"></td>
+                            <th scope="row" class="align-middle ele-btn-desarchiver"
+                                onclick="validation_desarchivage(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-desarchiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-supprimer"
+                                onclick="validation_suppression(this)" data-bs-toggle="modal"
+                                data-bs-target="#modal-supprimer">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="height: 200px; position: relative"></div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-archiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver la formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="archiver_formation()">Archiver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
+                        <input type="hidden" id="id-element-formation" name="id-element" value="">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Intitulé :</h3>
+                            {{ form_modifier.form_intitule(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Niveau qualification :</h3>
+                            {{ form_modifier.form_niveau_qualif(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Groupe :</h3>
+                            {{ form_modifier.form_groupe(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="image-formation" name="image-formation"
+                                       accept="image/png, image/jpeg, image/jpg"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex">
+                    {{ form_modifier.form_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control text-center" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-desarchiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Désarchiver la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="desarchiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver la formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="desarchiver_formation()">Désarchiver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-reinitialiser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <h5 class="modal-title fs-1" id="modal-title">Réinitialiser la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="reinitialiser-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir réinitialiser la formation ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="reinitialiser()">Réinitialiser</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-lien" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <h5 class="modal-title fs-1" id="modal-title">Télécharger l'archive</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body justify-content-end">
+                    <input type="hidden" value="" id="reinitialiser-value">
+                    
+                    <p id="modal-text" class="text-center fs-3">Cliquez pour télécharger l'archive</p>
+                    <div class="d-flex justify-content-center">
+                    <a href="/static/files/apprentis.xlsx">
+                        <button class="btn btn-primary fs-4 text-center"><i class="fa fa-download" aria-hidden="true"></i>  Télécharger</button>
+                    </a></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Supprimer la formation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="supprimer-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer la formation ? Cette action
+                        est irréversible et entraînera la suppression des élèments associés à l'id de cette formation.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
+                            onclick="supprimer_formation()">Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

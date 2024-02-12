@@ -2,13 +2,25 @@
 
 
 {% block body %}
-    <p>Liste des membres du personnel</p>
-    <div>
-        <p>Id - Nom - Prenom - Role</p>
-    </div>
-    {% for p in personnel %}
-        <div>
-            <p>{{ p["Id_Personnel"] }} - {{ p["Nom"] }} - {{ p["Prenom"] }} - {{ p["Role"] }}</p>
+
+    <h1 class="mb-5">Choisissez votre connexion {% include "_partial/_tts.html" %}</h1>
+
+    <div class="d-flex justify-content-center text-center pt-5">
+        <div class="px-5">
+            <a href="{{ url_for('auth.choix_type_connexion') }}" class="p-5">
+                <img src="{{ url_for('static', filename='images/prof.png') }}" class="rounded" alt="icone prof"
+                     height="200px">
+            </a>
+            <p class="text-link">Personnel {% include "_partial/_tts.html" %}</p>
         </div>
-    {% endfor %}
+        <div class="px-5">
+            <a href="{{ url_for('auth.choix_formation_apprentis') }}" class="p-5">
+                <img src="{{ url_for('static', filename='images/eleve.png') }}" class="rounded" alt="icone eleve"
+                     height="200px">
+            </a>
+            <p class="text-link">Apprenti {% include "_partial/_tts.html" %}</p>
+        </div>
+    </div>
+
+
 {% endblock %}

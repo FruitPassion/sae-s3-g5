@@ -1,0 +1,71 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Commentaires de la fiche technique numero {{ numero }} de {{ apprenti }} </h1>
+    <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
+        <h2 class="commentaireTitre">Commentaires intervenant
+            {% if commentaires_educ  == None %}
+                <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'educateur') }}">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'educateur') }}">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+        </h2>
+
+        {% if commentaires_educ != None %}
+            <p class="commentaire">Commentaire : {% if commentaires_educ.commentaire_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_educ.commentaire_texte }}{% endif %}</p>
+            <p class="commentaire">Evaluation : {% if commentaires_educ.eval_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_educ.eval_texte }}{% endif %}</p>
+        {% else %}
+            <p class="commentaire">Pas encore de commentaire de l'éducateur</p>
+        {% endif %}
+
+        <h2 class="commentaireTitre">Commentaires apprenti
+            {% if commentaires_appr  == None %}
+                <a href="{{ url_for('educ_simple.ajouter_commentaires', apprenti = apprenti, numero = numero, type_commentaire ='apprenti') }}">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <a href="{{ url_for('educ_simple.modifier_commentaires', apprenti = apprenti, numero = numero, type_commentaire = 'apprenti') }}">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+        </h2>
+
+        {% if commentaires_appr != None %}
+            <p class="commentaire">Commentaire : {% if commentaires_appr.commentaire_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_appr.commentaire_texte }}{% endif %}</p>
+            <p class="commentaire">Evaluation : {% if commentaires_appr.eval_texte == "" %}Aucun commentaire
+                    {% else %}{{ commentaires_appr.eval_texte }}{% endif %}</p>
+        {% else %}
+            <p class="commentaire">Pas encore de commentaire de l'apprenti</p>
+        {% endif %}
+    </div>
+
+
+
+    <div style="height: 200px"></div>
+
+    {% if session["role"] == "Educateur Administrateur" %}
+        <div class="fixed-bottom bg-light">
+            <a href="{{ url_for("educ_admin.fiches_apprenti", apprenti=apprenti) }}">
+                {% include "_partial/_retour_bouton.html" %}</a>
+        </div>
+    {% else %}
+        <div class="fixed-bottom bg-light">
+            <a href="{{ url_for("educ_simple.fiches_apprenti", apprenti=apprenti) }}">
+                {% include "_partial/_retour_bouton.html" %}</a>
+        </div>
+    {% endif %}
+{% endblock %}
+

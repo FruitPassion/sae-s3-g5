@@ -1,0 +1,82 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Ajouter fiche technique{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/ajouter_fiche.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Préciser les détails</h1>
+
+    <div class="container">
+        <form class="fs-2" method="post" name="ajouter">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label for="coursinput" class="form-label">Thème - Cours de la fiche :</label>
+                <select class="form-select form-select-lg fs-3 form-control mb-3" aria-label=".form-select-lg"
+                        name="coursinput">
+                    {% for cour in cours %}
+                        <option class="fs-3" value="{{ cour.id_cours }}">{{ cour.theme }} - {{ cour.cours }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="nominput" class="form-label">Nom du client :</label>
+                {{ form.nominput(class="form-control fs-3") }}
+            </div>
+            <div class="mb-3">
+                <label for="nomintervenant" class="form-label">Nom de l'intervenant :</label>
+                {{ form.nomintervenant(class="form-control fs-3") }}
+            </div>
+            <div class="mb-3">
+                <label for="prenomintervenant" class="form-label">Prénom de l'intervenant :</label>
+                {{ form.prenomintervenant(class="form-control fs-3") }}
+            </div>
+            <div class="mb-3">
+                <label for="dateinput" class="form-label">Date de la demande</label>
+                {{ form.dateinput(class="form-control fs-3") }}
+            </div>
+            <div class="mb-3">
+                <label for="lieuinput" class="form-label">Lieu d'intervention :</label>
+                {{ form.lieuinput(class="form-control fs-3") }}
+            </div>
+
+            <div class="mb-3">
+                <label for="decriptioninput" class="form-label">Description de l'intervention :</label>
+                {{ form.decriptioninput(class="form-control fs-3") }}
+            </div>
+
+            <label class="form-label">Niveau d'urgence (Urgent ... Non-Urgent) :</label>
+            <div class="mb-3 text-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio1"
+                           value="rouge" checked>
+                    <label class="form-check-label" for="inlineRadio1">1</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio2"
+                           value="orange">
+                    <label class="form-check-label" for="inlineRadio2">2</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio3"
+                           value="jaune">
+                    <label class="form-check-label" for="inlineRadio3">3</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="degres_urgence" id="inlineRadio4"
+                           value="vert">
+                    <label class="form-check-label" for="inlineRadio4">4</label>
+                </div>
+            </div>
+            {{ form.submit(class="btn btn-primary form-control fs-3") }}
+        </form>
+    </div>
+    <div style="height: 200px"> </div>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('educ_admin.fiches_apprenti', apprenti=apprenti) }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

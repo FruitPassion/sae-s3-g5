@@ -1,0 +1,308 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des apprentis{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des apprentis</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+            <button class="nav-link" id="nav-archiver-tab" data-bs-toggle="tab" data-bs-target="#nav-archiver"
+                    type="button" role="tab" aria-controls="nav-archiver" aria-selected="false">Archives
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <table class="table table-bordered" aria-describedby="table des apprentis" id="table-non-archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Actif</th>
+                        <th scope="col">Modifier</th>
+                        <th scope="col">Archiver</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for apprenti in liste_apprentis %}
+                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
+                            id="ele-{{ apprenti['id_apprenti'] }}">
+                            <td id="login-{{ apprenti['id_apprenti'] }}"
+                                class="align-middle">{{ apprenti["login"] }}</td>
+                            <td id="nom-{{ apprenti['id_apprenti'] }}" class="align-middle">{{ apprenti["nom"] }}</td>
+                            <td id="prenom-{{ apprenti['id_apprenti'] }}"
+                                class="align-middle">{{ apprenti["prenom"] }}</td>
+                            <td id="photo-{{ apprenti['id_apprenti'] }}" value="{{ apprenti['photo'] }}"><img
+                                    style="width:80px; border-radius: 60px;"
+                                    src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
+                                    alt="photo profile apprenti"></td>
+                            <td class="align-middle">
+                                {% if apprenti["essais"] == 5 %}
+                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-times"
+                                       aria-hidden="true"></i>
+                                {% else %}
+                                    <i id="actif-{{ apprenti['id_apprenti'] }}" class="fa fa-check"
+                                       aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                            <th scope="row" onclick="passer_parametre_form(this, 'apprenti')"
+                                class="align-middle ele-btn-modif" data-bs-toggle="modal"
+                                data-bs-target="#modal-modifier">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-archiver" onclick="validation_archivage(this)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-archiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    {{ form_ajouter.hidden_tag() }}
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Nom :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.nom(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Prénom :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.prenom(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                        <div class="m-4 w-50">
+                            <div class="parent-div">
+                                <div class="mb-3">
+                                    <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                    <input class="form-control fs-1 my-3" type="file" id="avatar" name="avatar"
+                                           accept="image/png, image/jpeg, image/jpg"/>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Choisissez une formation :</h3>
+                                <select name="select_formation" class="fs-1 my-3 form-select" required>
+                                    <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
+                                    </option>
+                                    {% for formation in formations %}
+                                        <option value="{{ formation.id_formation }}">{{ formation.intitule }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-50 mx-auto my-5">
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
+                <table class="table table-bordered" id="table-archive" aria-describedby="table apprentis archivés">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Login</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Actif</th>
+                        <th scope="col">Désarchiver</th>
+                        <th scope="col">Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for apprenti in liste_apprentis_archives %}
+                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
+                            id="arch-ele-{{ apprenti['id_apprenti'] }}">
+                            <td class="align-middle">{{ apprenti["login"] }}</td>
+                            <td class="align-middle">{{ apprenti["nom"] }}</td>
+                            <td class="align-middle">{{ apprenti["prenom"] }}</td>
+                            <td><img style="width:80px; border-radius: 60px;"
+                                     src="{{ url_for('static', filename='images/'+apprenti['photo']) }}"
+                                     alt="photo profile apprenti"></td>
+                            <td class="align-middle">
+                                {% if apprenti["essais"] == 5 %}
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                {% endif %}
+                            </td>
+                            <th scope="row" class="align-middle ele-btn-desarchiver"
+                                onclick="validation_desarchivage(this)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-desarchiver">
+                                <button><i class="fa fa-archive" aria-hidden="true"></i></button>
+                            </th>
+                            <th scope="row" class="align-middle ele-btn-supprimer"
+                                onclick="validation_suppression(this)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal-supprimer">
+                                <button><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="height: 200px; position: relative"></div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-archiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Archiver l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="archiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir archiver l'apprenti ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="archiver_apprenti()">Archiver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-desarchiver" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Désarchiver l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="desarchiver-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir désarchiver l'apprenti ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary fs-3" data-bs-dismiss="modal"
+                            onclick="desarchiver_apprenti()">Désarchiver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-supprimer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Supprimer l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="supprimer-value">
+                    <p id="modal-text" class=" fs-3">Êtes-vous sûr de vouloir supprimer l'apprenti ? Cette action
+                        est irréversible et entraînera la suppression des élèments associés à l'id de cet apprenti.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary fs-3" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger fs-3" data-bs-dismiss="modal"
+                            onclick="supprimer_apprenti()">Supprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier l'apprenti</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
+                        {{ form_modifier.hidden_tag() }}
+                        <input type="hidden" value="" id="id-element-apprenti" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Nom :</h3>
+                            {{ form_modifier.form_nom(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Prénom :</h3>
+                            {{ form_modifier.form_prenom(class="form-control fs-1 my-3") }}
+                        </div>
+
+                        <div class="w-75 test d-flex">
+                            <div class="w-50 d-flex">
+                                <h3 class="fs-1 my-3">Utilisateur actif :</h3>
+                                <div class="form-check form-switch replace-check">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                           id="form_actif" name="form_actif">
+                                </div>
+                            </div>
+                            <div class="w-50 d-flex">
+                                <h3 class="fs-1 my-3">Réinitialiser le mot de passe :</h3>
+                                <div class="form-check form-switch replace-check">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                           id="form_reinitialiser" name="form_reinitialiser">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-75 test">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="avatar-modifier"
+                                       name="avatar-modifier"
+                                       accept="image/png, image/jpeg, image/jpg" value="oui.jpg"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer d-flex">
+                    {{ form_modifier.form_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                    <button type="button" class="btn btn-secondary fs-3 form-control text-center"
+                            data-bs-dismiss="modal">Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('admin.accueil_admin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+{% endblock %}

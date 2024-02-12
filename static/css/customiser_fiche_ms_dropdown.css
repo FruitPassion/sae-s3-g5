@@ -1,0 +1,38 @@
+
+.ms-dd {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+.ms-dd .ms-dd-header{
+    border: none;
+}
+
+.ms-dd-header {
+    border-radius: 5px;
+}
+
+.ms-dd .ms-list-option.option-selected, .ms-dd .ms-optgroup ul .ms-list-option.option-selected{
+    background: #e9e9ed;
+}
+
+.ms-dd .ms-dd-option-image, .ms-dd .ms-dd-selected-img {
+    max-width: 31px;
+    max-height: 31px;
+}
+
+.ms-dd .ms-options {
+    height: 300px;
+}
+
+.ms-dd .ms-value-input{
+    display: none;
+}
+
+.ms-dd-option-content {
+    padding-top: 3px;
+    padding-left: 10px;
+}
+
+.ms-dd .ms-dd-header .option-selected{
+    font-weight: initial;
+}

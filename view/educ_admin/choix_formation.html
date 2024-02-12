@@ -1,0 +1,34 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/choix_formation_personnel.css') }}">
+{% endblock %}
+
+{% block title %}Choix formation{% endblock %}
+
+{% block body %}
+
+    <h1>Choisissez une formation</h1>
+
+    <div>
+        {% for formation in formations %}
+            <div class="container d-flex form-card mt-5">
+                <div class="lien-formation">
+                    <a  href="{{ url_for('educ_admin.choix_eleve', nom_formation=formation.intitule) }}">
+                        <div class="container">
+                            <img class="img-formation" alt="image fond"
+                                 src="{{ url_for('static', filename='images/'+formation.image) }}">
+                            <p class="formation-txt">{{ formation.intitule }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('educ_admin.accueil_educadmin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+
+{% endblock %}

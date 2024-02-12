@@ -1,0 +1,50 @@
+#suivi{
+    width: 60%;
+    align-content: center;
+    margin: auto;
+    margin-top: 80px;
+}
+
+canvas#camembert{
+    width: 60%;
+    height: 60%;
+    margin: auto;
+}
+
+.legend{
+  display: flex;
+  justify-content: space-around;
+  text-align: justify;
+  margin: 30px;
+  margin-top: 90px;
+}
+
+.texte{
+  width: 50%;
+  padding: 20px;
+}
+
+.box {
+    height: 40px;
+    width: 100px;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    clear: both;
+    margin-left: 38%;
+  }
+  
+  .red {
+    background-color: #C30010;
+  }
+  
+  .green {
+    background-color: #98FB98;
+  }
+  
+  .orange {
+    background-color: #FF8B28;
+  }
+
+  p{
+    text-align: center;
+  }

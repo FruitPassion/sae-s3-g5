@@ -1,0 +1,62 @@
+.modal{
+    --bs-modal-width: 75%;
+}
+
+#container-ajout {
+    background-color: #ececec;
+    padding: 10px;
+    margin: auto;
+}
+
+#ajouter {
+    margin-left:50%;
+    margin-right:-50%;
+}
+
+.test{
+    margin: auto;
+}
+
+.form-check-input {
+    transform: scale(2.5);
+}
+
+.grid-container > div {
+    background-color: #666;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+}
+
+.label-file {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#enregistrer {
+    margin-left: 50%;
+    margin-right: -50%;
+    display: none;
+}
+
+#bloc_password {
+    display: flex;
+    align-items: center;
+}
+
+#bloc_password img {
+    display:flex;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+}
+
+.align-middle{
+    vertical-align: middle;
+}
+
+.replace-check {
+    position: relative;
+    left: 50px;
+    top: 30px;
+}

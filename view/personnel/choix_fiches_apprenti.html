@@ -1,0 +1,57 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ url_for('static', filename='js/filtre_fiche.js') }}"></script>
+{% endblock %}
+
+{% block title %}Fiches techniques{% endblock %}
+
+{% block body %}
+    <h1>Fiches techniques de {{ apprenti.prenom }} {{ apprenti.nom }}</h1>
+
+    <select id="selectCours" class="form-select fs-2" aria-label="Default select example"
+            onchange="filtrer_fiches(this)">
+        <option value="0">Tous les cours</option>
+        {% for cour in cours %}
+            <option value="{{ cour.cours }}">{{ cour.cours }}</option>
+        {% endfor %}
+    </select>
+    <div id="blocFiches" class="py-4 px-2">
+        {% if fiches|length == 0 %}
+            <p class="text-center fs-1 my-5">Aucune fiche technique n'a été créée pour cet apprenti.</p>
+        {% endif %}
+        {% for fiche in fiches %}
+
+            <div class="d-block block-fiche text-wrap" data-cour="{{ get_nom_cours_by_id(fiche.id_cours) }}">
+                <div class="parent">
+
+                    {% if fiche.etat_fiche == 1 %}
+                        <a class="modifier" target="_blank" rel="noopener"
+                           href="{{ url_for('educ_simple.imprimer_pdf', id_fiche=fiche.id_fiche) }}">
+                            <i class="fa fa-print" aria-hidden="true"></i></a>
+                    {% endif %}
+                    <a class="bg-modifier"
+                       href="{{ url_for('educ_simple.visualiser_commentaires', apprenti=apprenti.login, numero = fiche.numero) }}">
+                        <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                             alt="fiche">
+                        <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                    </a>
+                </div>
+                <p class="text-center fs-1">Fiche n°{{ fiche.numero }}</p>
+                <p class="text-center fs-2">{{ get_nom_cours_by_id(fiche.id_cours) }}</p>
+                <p class="text-center fs-3">{{ fiche.date_convertis }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div style="height: 200px"> </div>
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

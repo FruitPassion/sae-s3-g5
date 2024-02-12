@@ -1,0 +1,12 @@
+{% extends 'common/base.html' %}
+
+{% block title %}{{ titre }}{% endblock %}
+
+
+{% block body %}
+    <h1 class="py-5">{{ erreur }}</h1>
+    <div class="w-75 px-5 border border-primary" style="margin: auto">
+        <h3 class="text-center pt-4">{{ description }}</h3>
+        <p class="pt-4" style="font-size: 15px">{{ description_plus|safe }}</p>
+    </div>
+{% endblock %}

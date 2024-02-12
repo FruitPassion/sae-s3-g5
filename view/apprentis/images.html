@@ -1,0 +1,37 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Image de l'intervention numero {{ numero }} {% include "_partial/_tts.html" %}</h1>
+
+    <div class="m-auto mt-5 rounded-4" style="width: 85%; border: black solid 5px">
+        <div class="d-flex">
+            <div class="w-50 p-3 d-inline">
+                {% if fiche.photo_avant != None %}
+                    <img src="{{ url_for('static',filename='images/photo_fiche/'+fiche.photo_avant) }}" class="img-fluid" alt="Photo avant">
+                    <p>Image avant l'opération {% include "_partial/_tts.html" %}</p>
+                {% else %}
+                    <p>Image non disponible  {% include "_partial/_tts.html" %}</p>
+                {% endif %}
+            </div>
+            <div style="border: solid black 3px"></div>
+            <div class="w-50 p-3">
+                {% if fiche.photo_apres != None %}
+                    <img src="{{ url_for('static',filename='images/photo_fiche/'+fiche.photo_apres) }}" class="img-fluid" alt="Photo apres">
+                    <p>Image après l'opération {% include "_partial/_tts.html" %}</p>
+                {% else %}
+                    <p>Image non disponible {% include "_partial/_tts.html" %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div style="height: 200px"> </div>
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('apprenti.redirection_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

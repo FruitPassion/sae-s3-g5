@@ -1,0 +1,47 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Ajouter des commentaires{% endblock %}
+
+{% block body %}
+    {% if typeCommentaire =="educateur" %}
+        <h1>Ajout commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% else %}
+        <h1>Ajout commentaire apprenti de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% endif %}
+    <div class="w-75 m-auto mt-5">
+        <form name="ajouter_commentaire" method="post">
+
+            <p>Intitulé : </p>
+            <input type="text" name="intitule" id="intitule" class="ajout fs-3 form-control mb-3">
+
+            {% if typeCommentaire =="educateur" %}
+                <p>Commentaire de l'éducateur : </p>
+            {% else %}
+                <p>Commentaire de l'apprenti : </p>
+            {% endif %}
+            <textarea name="commentaire" maxlength="500" rows="4" cols="30"
+                      class="ajout form-control mb-3 fs-3"></textarea>
+
+
+
+            {% if typeCommentaire =="educateur" %}
+                <p>Evaluation de l'éducateur : </p>
+            {% else %}
+                <p>Evaluation de l'apprenti : </p>
+            {% endif %}
+            <textarea id="evaluation" name="evaluation" maxlength="500" rows="4" cols="30"
+                      class="ajout form-control mb-3 fs-3"></textarea>
+
+            <input type="submit" value="Valider" class="btn btn-primary form-control">
+        </form>
+
+        <div class="fixed-bottom bg-light">
+            <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+        </div>
+    </div>
+
+{% endblock %}
