@@ -1,14 +1,26 @@
 #!/bin/bash
+
+BLACK='\033[0;30m'        
+RED='\033[0;31m'         
+GREEN='\033[0;32m'       
+YELLOW='\033[0;33m'       
+BLUE='\033[0;34m'         
+PURPLE='\033[0;35m'      
+CYAN='\033[0;36m'         
+WHITE='\033[0;37m'
+NC='\033[0m'
+
 # Update of the packages
-echo "Update of the packages..."
+printf "${PURPLE}Mise à jour des paquets ...${NC}\n\n"
 apt update && apt upgrade # check
 
 # Install the dependencies
-echo "Installation of the dependencies..."
-apt install -y git
-apt install -y apache2 # check
-apt install -y libapache2-mod-wsgi-py3 # check
-apt install wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
+printf "${PURPLE}Installation des dépendances ...${NC}\n\n"
+apt install -y git apache2 libapache2-mod-wsgi-py3 mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
+
+# Install python
+printf "${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n\n"
+
 wget -c https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tar.xz # check
 tar -Jxvf Python-3.10.13.tar.xz # check
 cd Python-3.10.13 #check
@@ -17,35 +29,61 @@ sudo make -j4 && sudo make altinstall # check
 cd ..
 rm Python-3.10.13.tar.xz Python-3.10.13
 
-sudo apt install -y mariadb-server # check
-
 # Initialization
 #### MARIADB ####
-echo "Initialization of MariaDB users..." # check
+printf "${YELLOW}Paramétrage de la base de donnees MariaDB${NC}\n\n"
+
+read -p "Entrez un nom d'administrateur : " 
+echo    # (optional) move to a new line
+repnom=$REPLY
+read -p "Entrez un prenom d'administrateur : " 
+echo    # (optional) move to a new line
+repprenom=$REPLY
+replog=$(python -c "from custom_paquets.converter import generate_login; print(generate_login('$repnom','$repprenom'))")
+read -p "Entrez un mail d'administrateur : " 
+echo    # (optional) move to a new line
+repmail=$REPLY
+read -p "Entrez un mot de passe administrateur : " 
+echo    # (optional) move to a new line
+repmdp=$REPLY
+
+repmdp=$(python -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repmdp').decode('utf-8'))")
+
+sed -i -e "s/--AREMPLACERNOM--/$repnom/" db_production.py
+sed -i -e "s/--AREMPLACERPRENOM--/$repprenom/" db_production.py
+sed -i -e "s/--AREMPLACERLOG--/$replog/" db_production.py
+sed -i -e "s/--AREMPLACERMDP--/$repmail/" db_production.py
+sed -i -e "s/--AREMPLACERMAIL--/$repmdp/" db_production.py
+
+printf "${YELLOW}Démmarage de MariaDB${NC}\n\n"
+
 sudo systemctl enable mariadb.service # check
 sudo systemctl start mariadb.service # check
 
 
-
 # Generer mot de passe random et le stocker pour la base de donnée
-echo "Generation du mot de passe admin.." # check
+
+printf "${RED}Génération du mot de passe utilisateur${NC}\n\n" # check
 pwdadm=$(date | sha256sum) # check
 pwdadm=$(echo "${pwdadm// -}") # check
 pwdadm=$(echo "${pwdadm// }") # check
 
 echo "root :" "'$pwdadm'" > db_adm_psswd.txt
-echo "Stockage du mot de passe root dans le fichier db_adm_psswd.txt" # check
+printf "${RED}Stockage du mot de passe root dans le fichier db_adm_psswd.txt${NC}\n\n"
 
 # Generer mot de passe random et le stocker pour la base de donnée
-echo "Generation du mot de passe utilisateur.." # check
+
+printf "${RED}Génération du mot de passe utilisateur${NC}\n\n" # check
 pwdusr=$(date | sha256sum) # check
 pwdusr=$(echo "${pwdusr// -}") # check
 pwdusr=$(echo "${pwdusr// }") # check
 
 echo "user :" "'$pwdusr'" > db_usr_psswd.txt # check
-echo "Stockage du mot de passe user dans le fichier db_usr_psswd.txt" # check
+printf "${RED}Stockage du mot de passe root dans le fichier db_usr_psswd.txt${NC}\n\n"
 
-sed -i -e "s/--AREMPLACER--/$pwdusr/" oui.txt
+sed -i -e "s/--AREMPLACER--/$pwdusr/" config.py
+
+printf "${YELLOW}Initialisation de la base de donnees MariaDB${NC}\n\n"
 
 ## Create USER
 mysql -e "CREATE OR REPLACE USER 'user'@'localhost' IDENTIFIED BY '$pwdusr';" # check
@@ -53,6 +91,8 @@ mysql -e "DROP DATABASE IF EXISTS db_fiches_prod;" # check
 mysql -e "create database db_fiches_prod;" # check
 mysql -e "grant all privileges on db_fiches_prod.* TO 'user'@'localhost' identified by '$pwdusr';"
 mysql -e "flush privileges;" # check
+
+mysql -h "localhost" -u "user" "-p$pwdusr" "db_fiches_prod" < "db_production.sql"
 
 # Secure mariadb installation
 # Kill the anonymous users
@@ -66,7 +106,7 @@ mysql -e "FLUSH PRIVILEGES" # check
 # Make sure that NOBODY can access the server without a password
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGES;" # check
 
-echo "Initialization of MariaDB done." # check
+printf "${YELLOW}Initialisation et paramétrage de la base de donnees terminée${NC}\n\n"
 
 # #### APACHE #### 
 echo "Initialization of Apache..."
