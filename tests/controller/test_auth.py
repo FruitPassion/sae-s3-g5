@@ -1,6 +1,6 @@
 from flask import url_for
 
-from custom_paquets.tester_usages import connexion_personnel_pin, connexion_personnel_mdp, deconnexion_personnel
+from custom_paquets.tester_usages import connexion_apprentis, connexion_personnel_pin, connexion_personnel_mdp, deconnexion
 from model.cours import Cours
 from model.formation import Formation
 
@@ -37,7 +37,7 @@ def test_connexion_personnel_chargement(client):
     assert response.request.path == "/connexion-personnel-mdp"
 
 
-def test_connexion_deconnexion(client):
+def test_connexion_deconnexion_personnel(client):
 
     # Test connexion superadministrateur
     username = "JED10"
@@ -51,7 +51,7 @@ def test_connexion_deconnexion(client):
     assert response.request.path == "/admin/accueil-admin"
 
     # Test deconnexion
-    response = deconnexion_personnel(client)
+    response = deconnexion(client)
     with client.session_transaction() as sess:
         assert sess.get('name') is None
     assert response.status_code == 200
@@ -67,7 +67,7 @@ def test_connexion_deconnexion(client):
 
     assert response.status_code == 200
     assert response.request.path == "/educ-admin/accueil-educadmin"
-    deconnexion_personnel(client)
+    deconnexion(client)
 
     # Test connexion educateur
     username = "MAC10"
@@ -78,22 +78,22 @@ def test_connexion_deconnexion(client):
         assert sess['role'] == 'Educateur'
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"
-    deconnexion_personnel(client)
+    deconnexion(client)
 
     # Test connexion cip
     username = "FAR16"
     passw = "161616"
     response = connexion_personnel_pin(client, username, passw)
-    print(response.data)
+    
     with client.session_transaction() as sess:
         assert sess['name'] == 'FAR16'
         assert sess['role'] == 'CIP'
     assert response.status_code == 200
     assert response.request.path == "/personnel/choix-formation-personnel"
-    deconnexion_personnel(client)
+    deconnexion(client)
 
     response = connexion_personnel_pin(client, "JED10", '123456')
-    print(response.data)
+
     assert b'Compte inconnu ou mot de passe invalide' in response.data
 
 
@@ -136,3 +136,42 @@ def test_choix_eleve_apprentis(client):
 
     # Test d'accès à la route
     assert response.status_code == 404
+
+
+def test_connexion_deconnexion_apprenti(client):
+    # Test accès apprenti sans login
+    response = client.get(url_for("apprenti.redirection_connexion"))
+
+    # Test d'accès à la route et echec car non connecté
+    assert response.status_code == 302
+    
+    nom_formation = "Parcours plomberie"
+    login = "DAJ12"
+    
+    # Test de connexion bon mot de passe et bon login
+    response = connexion_apprentis(client, nom_formation, login, '12369')
+    assert response.status_code == 200
+    assert response.request.path == "/apprenti/redirection-connexion"
+    
+    with client.session_transaction() as sess:
+        assert sess['name'] == 'DAJ12'
+        assert sess['role'] == 'apprentis'
+        
+    # Test deconnexion
+    response = deconnexion(client)
+    with client.session_transaction() as sess:
+        assert sess.get('name') is None
+    assert response.status_code == 200
+    assert response.request.path == "/"
+        
+    # Test de connexion mauvais login
+    response = connexion_apprentis(client, nom_formation, 'BEN10', '12367')
+    
+    assert b'Compte inconnu ou mot de passe invalide' in response.data
+    
+    
+    # Test de connexion mauvais mot de passe et bon login
+    response = connexion_apprentis(client, nom_formation, login, '12367')
+    
+    assert b'Compte inconnu ou mot de passe invalide' in response.data
+    

@@ -27,8 +27,18 @@ def connexion_personnel_mdp(client, username, password):
     ), follow_redirects=True)
 
 
+
+# Fonction de connexion avec un mot de passe
+def connexion_apprentis(client, nom_formation, login, password):
+    Apprenti.reset_nbr_essais_connexion(login)
+    return client.post(f"/connexion-apprentis/{nom_formation}/{login}", data=dict(
+        login=login,
+        password=password
+    ), follow_redirects=True)
+    
+
 # Fonction de deconnexion
-def deconnexion_personnel(client):
+def deconnexion(client):
     return client.get('/logout', follow_redirects=True)
 
 

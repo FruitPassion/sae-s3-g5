@@ -172,7 +172,7 @@ def connexion_apprentis(nom_formation, login_apprenti):
     code_set = Apprenti.check_password_is_set(login_apprenti)
     if request.method == "POST":
         login = request.form.get("login")
-        password = request.form.get("pass")
+        password = request.form.get("password")
         if Apprenti.check_apprenti(login) and Apprenti.check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"

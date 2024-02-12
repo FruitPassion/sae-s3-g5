@@ -41,7 +41,7 @@
     </svg>
     <form id="form_hidden" method="POST">
         <input type="hidden" name="login" id="login" value="{{ apprenti.login }}">
-        <input type="hidden" name="pass" id="pass" value="">
+        <input type="hidden" name="password" id="password" value="">
     </form>
 
     <div class="fixed-bottom bg-light">
@@ -65,7 +65,7 @@
                 $.getJSON("/api/check-password-apprenti/" + encodeURIComponent(login) + "/" + encodeURIComponent(essai.pattern), function (data) {
                     if (data["valide"]) {
                         lock.success();
-                        document.getElementById('pass').value = essai.pattern;
+                        document.getElementById('password').value = essai.pattern;
                         document.forms["form_hidden"].submit();
                         document.getElementById("form_hidden").submit();
                     } else {

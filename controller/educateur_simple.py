@@ -3,7 +3,6 @@ from flask import Blueprint, Response, render_template, request, session, redire
 from custom_paquets.builder import build_materiel
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
-from custom_paquets.gestion_audio import stocker_audio_commentaire
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
 from model.cours import Cours
