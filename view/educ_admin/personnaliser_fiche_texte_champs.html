@@ -29,7 +29,7 @@
                     <legend>{{ categorie["libelle_elem"] }}</legend>
                     {% if categorie["libelle_elem"] == "Matériaux utilisés" %}
                         <a href="{{ url_for('educ_admin.gestion_images') }}" >
-                            <button class="btn btn-primary form-control" type="button">Gestion du materiel
+                            <button class="btn btn-primary form-control" type="button">Gestion du matériel
                             <i class="fa fa-plus" aria-hidden="true"></i></button>
                         </a>
                     {% endif %}
@@ -90,7 +90,7 @@
                 {% for categorie in composition %}
                     <div class="set-hidde" id="set-{{ categorie["position_elem"] }}"
                          {% if loop.index0 != 0 %}hidden="" {% endif %}>
-                        <h3>Choix de l'élement ou de la catégorie</h3>
+                        <h3>Choix de l'élément ou de la catégorie</h3>
                         <select id="selecteur-element-{{ categorie['position_elem'] }}"
                                 name="selecteur-element-{{ categorie['position_elem'] }}"
                                 onchange="changer_element(this)">
@@ -99,7 +99,7 @@
                             {% for element in categorie["elements"] %}
                                 <option value="{{ element['position_elem'] }}"
                                         {% if categorie["niveau"] != None %}disabled{% endif %}
-                                >Element - {{ element["libelle_elem"] }}</option>
+                                >Élément - {{ element["libelle_elem"] }}</option>
                             {% endfor %}
                         </select>
 
