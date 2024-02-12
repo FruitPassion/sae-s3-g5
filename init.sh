@@ -59,10 +59,10 @@ repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; pr
 sed -i -e "s/--AREMPLACERNOM--/$repnom/" db_production.sql
 sed -i -e "s/--AREMPLACERPRENOM--/$repprenom/" db_production.sql
 sed -i -e "s/--AREMPLACERLOG--/$replog/" db_production.sql
-sed -i -e "s/--AREMPLACERMDP--/$repmail/" db_production.sql
-sed -i -e "s/--AREMPLACERMAIL--/$repmdp/" db_production.sql
+sed -i -e "s@--AREMPLACERMDP--@$repmdp@" db_production.sql
+sed -i -e "s/--AREMPLACERMAIL--/$repmail/" db_production.sql
 
-printf "\n\n$BALISE\n${YELLOW}Démmarage de MariaDB${NC}\n$BALISE\n\n"
+printf "\n\n$BALISE\n${YELLOW}Démarrage de MariaDB${NC}\n$BALISE\n\n"
 
 sudo systemctl enable mariadb.service # check
 sudo systemctl start mariadb.service # check
