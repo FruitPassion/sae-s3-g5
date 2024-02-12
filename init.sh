@@ -17,7 +17,7 @@ apt update && apt upgrade # check
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git apache2 libapache2-mod-wsgi-py3 mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
+apt install -y git apache2 mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
 
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
@@ -32,9 +32,15 @@ rm -r Python-3.10.13.tar.xz Python-3.10.13 # check
 
 printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" # check
 
-pip3.10 install -r requirements.txt # check
+python3.10 -m venv .env # check
 
+source .env/bin/activate # check
 pip3.10 install --upgrade pip # check
+
+pip3.10 install -r requirements.txt # check
+pip3.10 install mod-wsgi # check
+
+deactivate # check
 
 # Initialization
 #### MARIADB ####
@@ -109,30 +115,19 @@ mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGE
 printf "\n\n$BALISE\n${YELLOW}Initialisation et paramétrage de la base de donnees terminée${NC}\n$BALISE\n\n"
 
 # #### APACHE #### 
-echo "Initialization of Apache..."
-sudo systemctl enable apache2 # check
-sudo systemctl start apache2 # check
+printf "\n\n$BALISE\n${BLUE}Parametrage de Apache2${NC}\n$BALISE\n\n"
+
+systemctl enable apache2 # check
+systemctl start apache2 # check
 
 # Create the virtual host
-echo "Creating the virtual host..."
-sudo cp app.conf /etc/apache2/sites-available/000-default.conf
-sudo a2ensite app
-sudo a2dissite 000-default
-sudo systemctl reload apache2
+printf "\n\n$BALISE\n${BLUE}Creation de l'host virtuel${NC}\n$BALISE\n\n"
+cp app.conf /etc/apache2/sites-available/000-default.conf
+a2dissite 000-default
+systemctl reload apache2
 
 # Restart the server
-sudo systemctl restart apache2
-echo "Initialization of Apache done."
+systemctl restart apache2
+printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 80.${NC}\n$BALISE\n\n"
 
 
-#### CREATE ENVIRONMENTAL VARIABLE ####
-echo "Creating the environmental variable..."
-echo "SEND HELP"
-
-# Install the python packages
-echo "Testing the installation..."
-sudo a2dissite app
-sudo a2ensite 000-default
-sudo systemctl reload apache2
-
-echo "Testing done."
