@@ -1,5 +1,4 @@
 import logging
-import os
 import sys
 
 
@@ -35,11 +34,6 @@ def suplement_erreur(e, message='Exception occurred : '):
 
 class ProjectError(Exception):
     pass
-
-
-class GitBranchError(ProjectError):
-    pass
-
 
 class ConfigurationError(ProjectError):
     pass

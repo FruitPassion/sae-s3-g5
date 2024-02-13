@@ -51,7 +51,7 @@ class DevConfig:
     }
 
 
-class MainConfig:
+class ProdConfig:
     """
     Configuration de l'application en mode production
     """

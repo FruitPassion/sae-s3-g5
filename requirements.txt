@@ -4,7 +4,6 @@ Flask-WTF
 bcrypt
 pytest
 pytest-flask
-pygit2
 pillow
 pymysql
 pytest-cov
@@ -17,6 +16,7 @@ gunicorn
 itsdangerous
 MarkupSafe
 xmlrunner
+Unidecode
 flask-unittest
 flask-security-too[fsqla,common]
 Unidecode
