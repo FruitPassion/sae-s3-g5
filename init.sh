@@ -34,6 +34,12 @@ printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\
 
 apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev
 
+cd ..
+chown www-data:www-data FichesProd/
+chown www-data:www-data FichesProd/*
+
+cd FichesProd/
+
 pip3.10 install virtualenv
 virtualenv .env 
 
@@ -90,7 +96,7 @@ sudo systemctl start mariadb.service
 printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" 
 pwdadm=$(date | sha256sum) 
 pwdadm=$(echo "${pwdadm// -}") 
-pwdadm=$(echo "${pwdadm// }") 
+pwdadm=$(echo "${pwdadm// }")
 
 sleep 1
 
@@ -143,7 +149,3 @@ printf "$BALISE\n${GREEN}Identfiants administrateur de la base de donnée :\n - 
 printf "Identfiants utilisateur de la base de donnée :\n - user : 'user'\n - password : '$pwdusr'  ${NC}\n$BALISE\n\n"
 
 printf "$BALISE\n${RED}Notez les quelques part, ils ne seront plus affichés et ne seront enregistrés nulle part.${NC}\n$BALISE\n\n"
-
-cd ..
-chown www-data:www-data FichesProd/
-chown www-data:www-data FichesProd/*
