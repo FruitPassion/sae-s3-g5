@@ -89,14 +89,15 @@ def create_app(config=None):
         if isinstance(e, HTTPException):
             code = e.code
             try:
-                with open('static/error.json') as json_file:
+                with open('static/error.json', encoding="utf-8") as json_file:
                     errors = json.load(json_file)
                     description = errors[f"{code}"]["description"]
             except SystemExit as e:
-                logging.exception('error while accessing the dict')
+                logging.exception('Erreur lors de la lecture du fichier error.json')
                 raise e
         return render_template("common/erreur.html", titre='erreur', erreur=f"Erreur {code}",
-                               description=description, description_plus=description_plus), code
+                               description=description, description_plus=description_plus,
+                               config=config), code
 
     # Permet d'horodater les fichiers utilisés dans le navigateur et d'éviter les problèmes de cache
     @app.context_processor
