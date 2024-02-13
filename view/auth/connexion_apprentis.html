@@ -40,8 +40,9 @@
         </g>
     </svg>
     <form id="form_hidden" method="POST">
-        <input type="hidden" name="login" id="login" value="{{ apprenti.login }}">
-        <input type="hidden" name="password" id="password" value="">
+        {{ form.csrf_token }}
+        {{ form.login(value=apprenti.login) }}
+        {{ form.password() }}
     </form>
 
     <div class="fixed-bottom bg-light">
