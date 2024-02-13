@@ -105,7 +105,11 @@ pwdusr=$(date | sha256sum)
 pwdusr=$(echo "${pwdusr// -}") 
 pwdusr=$(echo "${pwdusr// }") 
 
-sed -i -e "s/--AREMPLACER--/$pwdusr/" config.py
+source .env/bin/activate 
+
+python3.10 -c "from custom_paquets.security import generate_key, encrypt_file; generate_key(); encrypt_file('$pwdusr');"
+
+deactivate
 
 printf "\n\n$BALISE\n${YELLOW}Initialisation de la base de donnees MariaDB${NC}\n$BALISE\n\n"
 
@@ -142,6 +146,11 @@ systemctl reload apache2
 
 # Restart the server
 systemctl restart apache2
+
+printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
+
+rm db_production.sql app.conf
+
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 80.${NC}\n$BALISE\n\n"
 
 printf "$BALISE\n${GREEN}Identfiants administrateur de la base de donnée :\n - user : 'root'\n - password : '$pwdadm'\n\n"
