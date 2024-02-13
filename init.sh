@@ -38,9 +38,10 @@ source .env/bin/activate # check
 pip3.10 install --upgrade pip # check
 
 pip3.10 install -r requirements.txt # check
-pip3.10 install mod-wsgi # check
 
 deactivate # check
+
+apt install libapache2-mod-wsgi-py3 # check
 
 # Initialization
 #### MARIADB ####
@@ -123,7 +124,7 @@ systemctl start apache2 # check
 # Create the virtual host
 printf "\n\n$BALISE\n${BLUE}Creation de l'host virtuel${NC}\n$BALISE\n\n"
 cp app.conf /etc/apache2/sites-available/000-default.conf
-a2dissite 000-default
+a2ensite 000-default
 systemctl reload apache2
 
 # Restart the server
