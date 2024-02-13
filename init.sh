@@ -35,9 +35,10 @@ printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\
 python3.10 -m venv .env # check
 
 source .env/bin/activate # check
-pip3.10 install --upgrade pip # check
 
 pip3.10 install -r requirements.txt # check
+
+pip3.10 install --upgrade pip # check
 
 deactivate # check
 

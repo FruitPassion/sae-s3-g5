@@ -17,6 +17,7 @@ gunicorn
 itsdangerous
 MarkupSafe
 xmlrunner
+Unidecode
 flask-unittest
 flask-security-too[fsqla,common]
 Unidecode
