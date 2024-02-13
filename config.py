@@ -1,9 +1,9 @@
 import os
-import logging
 import sys
 from configparser_crypt import ConfigParserCrypt
 
 from custom_paquets.app_checker import lire_config
+from custom_paquets.getion_logs import gestion_logs
 
 import pymysql
 
@@ -27,36 +27,14 @@ else:
 
 
 
-LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-LOG_NAME = ''
-LOG_FILE_INFO = 'logs/access.log'
-LOG_FILE_ERROR = 'logs/error.log'
-log = logging.getLogger(LOG_NAME)
-log_formatter = logging.Formatter(LOG_FORMAT)
-
-# comment this to suppress console output
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(log_formatter)
-log.addHandler(stream_handler)
-
-file_handler_info = logging.FileHandler(LOG_FILE_INFO, mode='a')
-file_handler_info.setFormatter(log_formatter)
-file_handler_info.setLevel(logging.INFO)
-log.addHandler(file_handler_info)
-
-file_handler_error = logging.FileHandler(LOG_FILE_ERROR, mode='a')
-file_handler_error.setFormatter(log_formatter)
-file_handler_error.setLevel(logging.ERROR)
-log.addHandler(file_handler_error)
-
-log.setLevel(logging.INFO)
+gestion_logs()
 
 
 class DevConfig:
     """
     Configuration de l'application en mode développement
     """
-    SECRET_KEY = "3@$=)+Nj{HlH8E&u-43}K.~)C3JTSCL5L9a63_iH#UN6V4nd9d"
+    SECRET_KEY = "password"
     ENVIRONMENT = "development"
     FLASK_APP = "FichesDev"
     DEBUG = True
@@ -79,7 +57,7 @@ class ProdConfig:
     SECRET_KEY = os.urandom(32)
     ENVIRONMENT = "production"
     FLASK_APP = "FichesProd"
-    WTF_CSRF_ENABLED = True
+    # WTF_CSRF_ENABLED = True
     DEBUG = False
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"

@@ -10,7 +10,7 @@ from flask import (
     session,
 )
 
-from custom_paquets.custom_form import LoginPersonnelForm
+from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
 from model.apprenti import Apprenti
 from model.cours import Cours
@@ -121,16 +121,18 @@ def connexion_personnel_mdp():
                 session["name"] = form.login.data
                 session["role"] = Personnel.get_role_by_login(form.login.data)
                 flash(CONNEXION_REUSSIE)
+                
                 if session["role"] == 'SuperAdministrateur':
                     return redirect(url_for("admin.accueil_admin"), 302)
                 elif session["role"] == "Educateur Administrateur":
                     return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)
+                
     return Response(render_template("auth/connexion_personnel_code.html", form=form), code)
 
 
-@auth.route("/choix-formation-apprentis", methods=["GET", "POST"])
+@auth.route("/choix-formation-apprentis", methods=["GET"])
 @logout_required
 def choix_formation_apprentis():
     """
@@ -139,10 +141,10 @@ def choix_formation_apprentis():
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
     formations = Formation.get_all_formations()
-    return Response(render_template("auth/choix_formation_apprentis.html", formations=formations), 200 )
+    return render_template("auth/choix_formation_apprentis.html", formations=formations)
 
 
-@auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET", "POST"])
+@auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET"])
 @logout_required
 def choix_eleve_apprentis(nom_formation):
     """
@@ -155,7 +157,7 @@ def choix_eleve_apprentis(nom_formation):
         abort(404)
     
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
-    return Response(render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation), 200)
+    return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation)
 
 
 @auth.route("/connexion-apprentis/<nom_formation>/<login_apprenti>", methods=["GET", "POST"])
@@ -167,12 +169,13 @@ def connexion_apprentis(nom_formation, login_apprenti):
 
     :return: connexion_apprentis.html
     """
+    form = LoginApprentiForm()
     apprenti = Apprenti.get_apprenti_by_login(login_apprenti)
     code = 200
     code_set = Apprenti.check_password_is_set(login_apprenti)
-    if request.method == "POST":
-        login = request.form.get("login")
-        password = request.form.get("password")
+    if form.validate_on_submit():
+        login = form.login.data
+        password = form.password.data
         if Apprenti.check_apprenti(login) and Apprenti.check_password_apprenti(login, password):
             session["name"] = login
             session["role"] = "apprentis"
@@ -186,7 +189,7 @@ def connexion_apprentis(nom_formation, login_apprenti):
                 flash(COMPTE_INCONNU, "error")
                 code = 403
     return Response(render_template("auth/connexion_apprentis.html", apprenti=apprenti,
-                           nom_formation=nom_formation, code_set=code_set), code)
+                           nom_formation=nom_formation, code_set=code_set, form=form), code)
 
 
 @auth.route("/logout", methods=["GET"])

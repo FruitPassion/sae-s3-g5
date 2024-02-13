@@ -7,13 +7,24 @@ from wtforms.widgets import TextArea, NumberInput
 VALIDATE = "validateForm()"
 COLMATER_FUITE = "colmater fuite"
 
+class LoginApprentiForm(FlaskForm):
+    """
+    Formulaire de connexion pour les apprentis
+    """
+    login = HiddenField(validators=[InputRequired(), Length(min=5, max=5)])
+
+    password = HiddenField(validators=[InputRequired(), Length(min=1, max=9)])
+
+
 class LoginPersonnelForm(FlaskForm):
     """
     Formulaire de connexion pour le personnel
     """
-    login = StringField(validators=[InputRequired(), Length(min=5, max=5)], render_kw={"placeholder": "ABC12"})
+    login = StringField(validators=[InputRequired(message='Le champ login est obligatoire'),
+                                    Length(min=5, max=5, message='Le login doit etre de 5 caractères')], render_kw={"placeholder": "ABC12"})
 
-    password = PasswordField(validators=[InputRequired(), Length(min=2)], render_kw={"placeholder": "*********"})
+    password = PasswordField(validators=[InputRequired(message='Le champ mot de passe est obligatoire'),
+                                         Length(min=5, message='La longueur du mot de passe est trop courte')], render_kw={"placeholder": "*********"})
 
     submit = SubmitField("Se connecter")
 
