@@ -92,6 +92,8 @@ pwdadm=$(date | sha256sum)
 pwdadm=$(echo "${pwdadm// -}") 
 pwdadm=$(echo "${pwdadm// }") 
 
+sleep 1
+
 printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" 
 pwdusr=$(date | sha256sum) 
 pwdusr=$(echo "${pwdusr// -}") 
@@ -136,8 +138,12 @@ systemctl reload apache2
 systemctl restart apache2
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 80.${NC}\n$BALISE\n\n"
 
-printf "$BALISE\n${GREEN}Identfiants administrateur de la base de donnée :\n - user : 'root'\n - password : '$pwdadm'  {NC}\n"
+printf "$BALISE\n${GREEN}Identfiants administrateur de la base de donnée :\n - user : 'root'\n - password : '$pwdadm'\n\n"
 
-printf "${GREEN}Identfiants utilisateur de la base de donnée :\n - user : 'user'\n - password : '$pwdusr'  {NC}\n$BALISE\n\n"
+printf "Identfiants utilisateur de la base de donnée :\n - user : 'user'\n - password : '$pwdusr'  ${NC}\n$BALISE\n\n"
 
-printf "$BALISE\n${RED}Notez les quelques part, ils ne seront plus affiché et ne seront enregistrés nul part.{NC}\n$BALISE\n\n"
+printf "$BALISE\n${RED}Notez les quelques part, ils ne seront plus affichés et ne seront enregistrés nulle part.${NC}\n$BALISE\n\n"
+
+cd ..
+chown www-data:www-data FichesProd/
+chown www-data:www-data FichesProd/*
