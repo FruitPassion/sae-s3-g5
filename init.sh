@@ -32,7 +32,8 @@ rm -r Python-3.10.13.tar.xz Python-3.10.13 # check
 
 printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" # check
 
-python3.10 -m venv .env # check
+pip3.10 install virtualenv
+virtualenv .env # check
 
 source .env/bin/activate # check
 
@@ -54,6 +55,9 @@ repnom=$REPLY
 read -p "Entrez un prenom d'administrateur : " 
 echo    # (optional) move to a new line
 repprenom=$REPLY
+
+source .env/bin/activate
+
 replog=$(python3.10 -c "from custom_paquets.converter import generate_login; print(generate_login('$repnom','$repprenom'))")
 read -p "Entrez un mail d'administrateur : " 
 echo    # (optional) move to a new line
@@ -63,6 +67,8 @@ echo    # (optional) move to a new line
 repmdp=$REPLY
 
 repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repmdp').decode('utf-8'))")
+
+deactivate
 
 sed -i -e "s/--AREMPLACERNOM--/$repnom/" db_production.sql
 sed -i -e "s/--AREMPLACERPRENOM--/$repprenom/" db_production.sql
