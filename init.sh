@@ -17,7 +17,7 @@ apt update && apt upgrade
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git apache2 mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
+apt install -y git mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
 
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
@@ -75,9 +75,9 @@ echo    # (optional) move to a new line
 repmail=$REPLY
 read -p "Entrez un mot de passe administrateur : " 
 echo    # (optional) move to a new line
-repmdp=$REPLY
+repavmdp=$REPLY
 
-repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repmdp').decode('utf-8'))")
+repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repavmdp').decode('utf-8'))")
 
 deactivate
 
@@ -153,8 +153,10 @@ rm db_production.sql app.conf
 
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 80.${NC}\n$BALISE\n\n"
 
-printf "$BALISE\n${GREEN}Identfiants administrateur de la base de donnée :\n - user : 'root'\n - password : '$pwdadm'\n\n"
+printf "$BALISE\n${GREEN}Identfiants administrateur de l'application :\n - login : '$replog'\n - mot de passe : '$repavmdp'\n\n"
 
-printf "Identfiants utilisateur de la base de donnée :\n - user : 'user'\n - password : '$pwdusr'  ${NC}\n$BALISE\n\n"
+printf "Identfiants administrateur de la base de donnée :\n - login : 'root'\n - mot de passe : '$pwdadm'\n\n"
+
+printf "Identfiants utilisateur de la base de donnée :\n - login : 'user'\n - mot de passe : '$pwdusr'  ${NC}\n$BALISE\n\n"
 
 printf "$BALISE\n${RED}Notez les quelques part, ils ne seront plus affichés et ne seront enregistrés nulle part.${NC}\n$BALISE\n\n"
