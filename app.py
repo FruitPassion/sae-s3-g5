@@ -1,41 +1,39 @@
-import logging
-
-from custom_paquets import check_requirements
-from custom_paquets.app_checker import check_git_branch
-
-# Vérification de la présence des dépendances dans l'environnement virtuel
-check_requirements.checking()
-
 # Importation des librairies nécessaires
 import json
 import os
+import logging
+import sys
+
+# Vérification de la présence des dépendances dans l'environnement virtuel
+from custom_paquets import check_requirements
+check_requirements.checking()
 
 # Paquets flask
 from flask import Flask, url_for, render_template
 from flask_wtf import CSRFProtect
 from werkzeug.exceptions import HTTPException
 
-# Paquets git
-
 # Paquet gestion d'erreur
 from custom_paquets.gestions_erreur import logging_erreur, LogOpeningError
 
-# model de la base de données
-from model.shared_model import db
-
-# Controller
-from controller.cip import cip
-from controller.educateur_admin import educ_admin
-from controller.educateur_simple import educ_simple
-from controller.admin import admin
-from controller.api import api
-from controller.apprentis import apprenti
-from controller.personnel import personnel
-from controller.auth import auth
-
 
 # Fonction pour créer une application et la paramétrer
-def create_app():
+def create_app(config=None):
+    from custom_paquets.app_checker import check_config, lire_config
+    
+    # Vérification de la configuration demandée.
+    # Si aucune configuration n'est demandée, le programme s'arrête
+    check_config(config)
+    if not os.path.exists('config.txt'):
+        os.mknod('config.txt')
+    with open("config.txt", "w") as file:
+        file.write(config)
+        
+    config = lire_config("config.txt")
+    
+    # model de la base de données
+    from model.shared_model import db
+    
     # Déclaration de l'application
     # Changement du chemin d'accès des templates
     app = Flask(__name__, template_folder="view")
@@ -46,9 +44,19 @@ def create_app():
     if open('logs/access.log', 'w').close():
         raise LogOpeningError("Impossible d'ouvrir le fichier de log")
 
-    # Vérification de la branche du Git pour charger la bonne configuration
-    # Utilisable uniquement dans la branche main ou dev
-    check_git_branch(app)
+    # Chargement de la configuration dev ou prod
+    app.config.from_object(f"config.{config.capitalize()}Config")
+    
+    
+    # Importation des controller
+    from controller.cip import cip
+    from controller.educateur_admin import educ_admin
+    from controller.educateur_simple import educ_simple
+    from controller.admin import admin
+    from controller.api import api
+    from controller.apprentis import apprenti
+    from controller.personnel import personnel
+    from controller.auth import auth
 
     # Enregistrement des controller
     app.register_blueprint(auth)
@@ -110,4 +118,7 @@ def create_app():
 
 # Appel principal pour lancer l'application
 if __name__ == "__main__":
-    create_app().run()
+    try:
+        create_app(sys.argv[1]).run()
+    except IndexError:
+        raise ValueError("Argument de lancement manquant (dev ou prod)")

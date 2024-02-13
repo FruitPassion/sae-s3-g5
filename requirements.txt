@@ -4,7 +4,6 @@ Flask-WTF
 bcrypt
 pytest
 pytest-flask
-pygit2
 pillow
 pymysql
 pytest-cov

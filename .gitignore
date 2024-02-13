@@ -11,6 +11,8 @@ __pycache__
 
 *.log
 
+config.txt
+
 .trunk
 .pytest_cache
 .scannerwork

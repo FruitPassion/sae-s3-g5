@@ -13,7 +13,7 @@ BALISE='##############################'
 
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
-apt update && apt upgrade # check
+apt update && apt upgrade 
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
@@ -22,24 +22,26 @@ apt install -y git apache2 mariadb-server wget build-essential libreadline-dev l
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
 
-wget -c https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tar.xz # check
-tar -Jxvf Python-3.10.13.tar.xz # check
+wget -c https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tar.xz 
+tar -Jxvf Python-3.10.13.tar.xz 
 cd Python-3.10.13 #check
 ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" #check
-sudo make -j4 && sudo make altinstall # check 
-cd .. # check
-rm -r Python-3.10.13.tar.xz Python-3.10.13 # check
+sudo make -j4 && sudo make altinstall  
+cd .. 
+rm -r Python-3.10.13.tar.xz Python-3.10.13 
+
+printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" 
 
 apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev
 
 pip3.10 install virtualenv
-virtualenv .env # check
+virtualenv .env 
 
-source .env/bin/activate # check
+source .env/bin/activate 
 
-pip3.10 install -r requirements.txt # check
+pip3.10 install -r requirements.txt 
 
-pip3.10 install --upgrade pip # check
+pip3.10 install --upgrade pip 
 
 pip3.10 install mod-wsgi
 
@@ -47,9 +49,6 @@ deactivate
 
 cp .env/lib/python3.10/site-packages/mod_wsgi/server/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so /usr/lib/apache2/modules/
 echo 'LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so' > /etc/apache2/mods-enabled/wsgi.load
-
-
-printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" # check
 
 # Initialization
 #### MARIADB ####
@@ -84,55 +83,48 @@ sed -i -e "s/--AREMPLACERMAIL--/$repmail/" db_production.sql
 
 printf "\n\n$BALISE\n${YELLOW}Démarrage de MariaDB${NC}\n$BALISE\n\n"
 
-sudo systemctl enable mariadb.service # check
-sudo systemctl start mariadb.service # check
+sudo systemctl enable mariadb.service 
+sudo systemctl start mariadb.service 
 
 
-printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" # check
-pwdadm=$(date | sha256sum) # check
-pwdadm=$(echo "${pwdadm// -}") # check
-pwdadm=$(echo "${pwdadm// }") # check
+printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" 
+pwdadm=$(date | sha256sum) 
+pwdadm=$(echo "${pwdadm// -}") 
+pwdadm=$(echo "${pwdadm// }") 
 
-echo "root :" "'$pwdadm'" > db_adm_psswd.txt
-printf "$BALISE\n${RED}>>> Stockage du mot de passe root dans le fichier db_adm_psswd.txt${NC}\n$BALISE\n\n"
-
-
-printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" # check
-pwdusr=$(date | sha256sum) # check
-pwdusr=$(echo "${pwdusr// -}") # check
-pwdusr=$(echo "${pwdusr// }") # check
-
-echo "user :" "'$pwdusr'" > db_usr_psswd.txt # check
-printf "$BALISE\n${RED}>>> Stockage du mot de passe root dans le fichier db_usr_psswd.txt${NC}\n$BALISE\n\n"
+printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" 
+pwdusr=$(date | sha256sum) 
+pwdusr=$(echo "${pwdusr// -}") 
+pwdusr=$(echo "${pwdusr// }") 
 
 sed -i -e "s/--AREMPLACER--/$pwdusr/" config.py
 
 printf "\n\n$BALISE\n${YELLOW}Initialisation de la base de donnees MariaDB${NC}\n$BALISE\n\n"
 
 ## Create USER
-mysql -e "CREATE OR REPLACE USER 'user'@'localhost' IDENTIFIED BY '$pwdusr';" # check
-mysql -e "DROP DATABASE IF EXISTS db_fiches_prod;" # check
-mysql -e "create database db_fiches_prod;" # check
+mysql -e "CREATE OR REPLACE USER 'user'@'localhost' IDENTIFIED BY '$pwdusr';" 
+mysql -e "DROP DATABASE IF EXISTS db_fiches_prod;" 
+mysql -e "create database db_fiches_prod;" 
 mysql -e "grant all privileges on db_fiches_prod.* TO 'user'@'localhost' identified by '$pwdusr';"
-mysql -e "flush privileges;" # check
+mysql -e "flush privileges;" 
 
 mysql -h "localhost" -u "user" "-p$pwdusr" "db_fiches_prod" < "db_production.sql"
 
 # Secure mariadb installation
 # Kill off the demo database
-mysql -e "DROP DATABASE IF EXISTS test" # check
+mysql -e "DROP DATABASE IF EXISTS test" 
 # Make our changes take effect
-mysql -e "FLUSH PRIVILEGES" # check
+mysql -e "FLUSH PRIVILEGES" 
 # Make sure that NOBODY can access the server without a password
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGES;" # check
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGES;" 
 
 printf "\n\n$BALISE\n${YELLOW}Initialisation et paramétrage de la base de donnees terminée${NC}\n$BALISE\n\n"
 
 # #### APACHE #### 
 printf "\n\n$BALISE\n${BLUE}Parametrage de Apache2${NC}\n$BALISE\n\n"
 
-systemctl enable apache2 # check
-systemctl start apache2 # check
+systemctl enable apache2 
+systemctl start apache2 
 
 # Create the virtual host
 printf "\n\n$BALISE\n${BLUE}Creation de l'host virtuel${NC}\n$BALISE\n\n"
@@ -144,4 +136,8 @@ systemctl reload apache2
 systemctl restart apache2
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 80.${NC}\n$BALISE\n\n"
 
+printf "$BALISE\n${GREEN}Identfiants administrateur de la base de donnée :\n - user : 'root'\n - password : '$pwdadm'  {NC}\n"
 
+printf "${GREEN}Identfiants utilisateur de la base de donnée :\n - user : 'user'\n - password : '$pwdusr'  {NC}\n$BALISE\n\n"
+
+printf "$BALISE\n${RED}Notez les quelques part, ils ne seront plus affiché et ne seront enregistrés nul part.{NC}\n$BALISE\n\n"

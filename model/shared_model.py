@@ -1,9 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-from custom_paquets.app_checker import get_current_config
+
+from custom_paquets.app_checker import lire_config
 
 db = SQLAlchemy()
 
-DB_SCHEMA = f"db_fiches_{get_current_config().lower()}"
+config = lire_config("config.txt")
+
+DB_SCHEMA = f"db_fiches_{config.lower()}"
 
 
 class Assister(db.Model):
