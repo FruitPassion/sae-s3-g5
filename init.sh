@@ -30,7 +30,7 @@ sudo make -j4 && sudo make altinstall # check
 cd .. # check
 rm -r Python-3.10.13.tar.xz Python-3.10.13 # check
 
-printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" # check
+apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev
 
 pip3.10 install virtualenv
 virtualenv .env # check
@@ -41,9 +41,15 @@ pip3.10 install -r requirements.txt # check
 
 pip3.10 install --upgrade pip # check
 
-deactivate # check
+pip3.10 install mod-wsgi
 
-apt install libapache2-mod-wsgi-py3 # check
+deactivate
+
+cp .env/lib/python3.10/site-packages/mod_wsgi/server/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so /usr/lib/apache2/modules/
+echo 'LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so' > /etc/apache2/mods-enabled/wsgi.load
+
+
+printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" # check
 
 # Initialization
 #### MARIADB ####
