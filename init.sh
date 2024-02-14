@@ -11,9 +11,19 @@ WHITE='\033[0;37m'
 NC='\033[0m'
 BALISE='##############################'
 
+current_directory=$(basename $(pwd))
+parent_directory=$(dirname "$(pwd)")
+
+if [ "$parent_directory/" != "/var/www/" ]; then
+    echo "Le dossier $current_directory n'est pas dans /var/www/"
+    exit 1
+fi
+
+
+
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
-apt update && apt upgrade 
+apt update -y && apt upgrade -y
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
@@ -35,10 +45,10 @@ printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\
 apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev
 
 cd ..
-chown www-data:www-data FichesProd/
-chown www-data:www-data FichesProd/*
+chown www-data:www-data "$current_directory/"
+chown www-data:www-data "$current_directory/*"
 
-cd FichesProd/
+cd $current_directory
 
 pip3.10 install virtualenv
 virtualenv .env 
@@ -140,9 +150,29 @@ systemctl start apache2
 
 # Create the virtual host
 printf "\n\n$BALISE\n${BLUE}Creation de l'host virtuel${NC}\n$BALISE\n\n"
+
+read -p "Entrez un nom de domaine pour acceder localement à l'application (ex: site.local ) : " 
+echo    # (optional) move to a new line
+nomdom=$REPLY
+
+sed -i -e "s/__AREMPLACERSN__/$current_directory/g" app.conf
+sed -i -e "s/__AREMPLACERDN__/$nomdom/g" app.conf
+
 cp app.conf /etc/apache2/sites-available/000-default.conf
 a2ensite 000-default
-systemctl reload apache2
+
+# Create the virtual host
+printf "\n\n$BALISE\n${BLUE}Creation d'un certificat SSL${NC}\n$BALISE\n\n"
+
+
+a2enmod ssl
+a2enmod rewrite
+
+mkdir /etc/apache2/certificate
+cd /etc/apache2/certificate
+openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Toulouse/O=APEAJ/OU=Aide/CN=$nomdom" -out apache-certificate.crt -keyout apache.key 
+selfip=$(ip -4 addr show enp0s3 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+echo "$selfip   $nomdom" >> /etc/hosts
 
 # Restart the server
 systemctl restart apache2
@@ -151,7 +181,7 @@ printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n
 
 rm db_production.sql app.conf
 
-printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 80.${NC}\n$BALISE\n\n"
+printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 443 à l'adresse : https://$nomdom ${NC}\n$BALISE\n\n"
 
 printf "$BALISE\n${GREEN}Identfiants administrateur de l'application :\n - login : '$replog'\n - mot de passe : '$repavmdp'\n\n"
 

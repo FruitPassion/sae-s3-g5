@@ -120,6 +120,6 @@ def create_app(config=None):
 # Appel principal pour lancer l'application
 if __name__ == "__main__":
     try:
-        create_app(sys.argv[1]).run()
+        create_app(sys.argv[1]).run(host="0.0.0.0")
     except IndexError:
         raise ValueError("Argument de lancement manquant (dev ou prod)")
