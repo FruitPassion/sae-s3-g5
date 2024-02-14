@@ -16,56 +16,62 @@
 {% block body %}
     <h1>Entrez vos identifiants</h1>
 
+    {% if personnels|length == 0 %}
+    <div class="container w-50 mt-5 text-center" style="height: 90%">
+        <p>Aucun personnel n'est enregistré dans la base de données</p>
+        </div>
+    {% else %}
     <div class="container" style="height: 90%">
-        <form method="post" name="code-form">
-            <input type="hidden" name="code" id="hidden-code" maxlength="6" minlength="6" required value="">
-            <input type="submit" id="fantom-click" hidden="">
-            <div id="cryxpad-clavier" style="position: absolute;left: 50%;">
-                <div class="row" style="left: -50%;position: relative;">
-                    <div class="col w-100">
-                        <select class="form-control form-select fs-2 my-3 text-center" aria-label="Selectionnez"
-                        name="login_select">
-                            {% for personnel in personnels %}
-                                <option class="fs-5"
-                                        value="{{ personnel.login }}">{{ personnel.login }}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="form-group mb-5 mt-1">
-                            <input type="password" class="form-control text-center fs-2" id="cryxpad-input-field"
-                                   maxlength="6"
-                                   aria-describedby="cryxpad-input-field-help" placeholder="Tapez votre code" disabled>
+            <form method="post" name="code-form">
+                <input type="hidden" name="code" id="hidden-code" maxlength="6" minlength="6" required value="">
+                <input type="submit" id="fantom-click" hidden="">
+                <div id="cryxpad-clavier" style="position: absolute;left: 50%;">
+                    <div class="row" style="left: -50%;position: relative;">
+                        <div class="col w-100">
+                            <select class="form-control form-select fs-2 my-3 text-center" aria-label="Selectionnez"
+                            name="login_select">
+                                {% for personnel in personnels %}
+                                    <option class="fs-5"
+                                            value="{{ personnel.login }}">{{ personnel.login }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-group mb-5 mt-1">
+                                <input type="password" class="form-control text-center fs-2" id="cryxpad-input-field"
+                                    maxlength="6"
+                                    aria-describedby="cryxpad-input-field-help" placeholder="Tapez votre code" disabled>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="cryxpad-container"></div>
-                <div class="w-100 d-block" style="left: -50%;position: relative;margin-top: 20px;">
-                    <button id="cryxpad-validate-btn" class="btn btn-primary w-100 my-1 fs-1" type="submit"
-                            disabled>Valider
-                    </button>
-                    <button id="cryxpad-remove-btn" type="button" class="btn btn-danger w-100 my-1 fs-1">Effacer
-                    </button>
+                    <div class="cryxpad-container"></div>
+                    <div class="w-100 d-block" style="left: -50%;position: relative;margin-top: 20px;">
+                        <button id="cryxpad-validate-btn" class="btn btn-primary w-100 my-1 fs-1" type="submit"
+                                disabled>Valider
+                        </button>
+                        <button id="cryxpad-remove-btn" type="button" class="btn btn-danger w-100 my-1 fs-1">Effacer
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                //Appel par défaut du plug-in
+                $('.cryxpad-container').cryxpad({
+                    'inputFormId': 'cryxpad-input-field',
+                    'removeButtonId': 'cryxpad-remove-btn',
+                    'validateButtonId': 'cryxpad-validate-btn',
+                    'carreaux': 4, // nombre de carreaux sur une ligne du clavier
+                    'width': 125, // longeur d'un bouton
+                    'height': 125, // hauteur d'un bouton
+                    /*'buttonClass':"btn btn-primary",*/
+                });
+            });
+        </script>
+    {% endif %}
 
     <div class="fixed-bottom bg-light">
         <a href="{{ url_for('auth.choix_type_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
     </div>
-
-    <script type="text/javascript">
-        $(function () {
-            //Appel par défaut du plug-in
-            $('.cryxpad-container').cryxpad({
-                'inputFormId': 'cryxpad-input-field',
-                'removeButtonId': 'cryxpad-remove-btn',
-                'validateButtonId': 'cryxpad-validate-btn',
-                'carreaux': 4, // nombre de carreaux sur une ligne du clavier
-                'width': 125, // longeur d'un bouton
-                'height': 125, // hauteur d'un bouton
-                /*'buttonClass':"btn btn-primary",*/
-            });
-        });
-    </script>
 {% endblock %}

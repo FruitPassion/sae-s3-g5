@@ -57,7 +57,7 @@ class ProdConfig:
     SECRET_KEY = os.urandom(32)
     ENVIRONMENT = "production"
     FLASK_APP = "FichesProd"
-    # WTF_CSRF_ENABLED = True
+    WTF_CSRF_ENABLED = False
     DEBUG = False
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"
@@ -70,5 +70,5 @@ class ProdConfig:
         "pool_pre_ping": True,
     }
     SESSION_COOKIE_SECURE = True
-    # SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'

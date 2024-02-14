@@ -156,6 +156,7 @@ echo    # (optional) move to a new line
 nomdom=$REPLY
 
 sed -i -e "s/__AREMPLACERSN__/$current_directory/g" app.conf
+sed -i -e "s/__AREMPLACERSN__/$current_directory/g" app.wsgi
 sed -i -e "s/__AREMPLACERDN__/$nomdom/g" app.conf
 
 cp app.conf /etc/apache2/sites-available/000-default.conf
