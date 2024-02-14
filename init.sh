@@ -45,8 +45,7 @@ printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\
 apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev
 
 cd ..
-chown www-data:www-data "$current_directory/"
-chown www-data:www-data "$current_directory/*"
+chown -R www-data:www-data "$current_directory/"
 
 cd $current_directory
 
@@ -174,6 +173,8 @@ cd /etc/apache2/certificate
 openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Toulouse/O=APEAJ/OU=Aide/CN=$nomdom" -out apache-certificate.crt -keyout apache.key 
 selfip=$(ip -4 addr show enp0s3 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 echo "$selfip   $nomdom" >> /etc/hosts
+
+cd -
 
 # Restart the server
 systemctl restart apache2
