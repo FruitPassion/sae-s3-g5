@@ -25,7 +25,8 @@ def create_app(config=None):
     # Si aucune configuration n'est demandée, le programme s'arrête
     check_config(config)
     if not os.path.exists('config.txt'):
-        os.mknod('config.txt')
+        file = open('config.txt', 'w')
+        file.close()
     with open("config.txt", "w") as file:
         file.write(config)
         
