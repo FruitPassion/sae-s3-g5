@@ -11,10 +11,10 @@
                 {% elif session['role'] == 'CIP' %} {{ url_for('static', filename='documentations/doc_cip.pdf') }}; 
                 {% elif session['role'] == 'SuperAdministrateur' %} {{ url_for('static', filename='documentations/doc_superadmin.pdf') }};
                 {% endif %}" target="_blank" rel="noopener">
-                <i class="fa fa-question-circle fa-4x m-4" aria-hidden="true"></i>
+                <i class="fa fa-question-circle fa-4x m-2" aria-hidden="true"></i>
             </a>
             <a role="search" href="{{ url_for('auth.logout') }}">
-                <img src="{{ url_for('static', filename='images/deconnexion.png') }}" alt="deco" height="80">
+                <i class="fa fa-sign-out fa-5x" aria-hidden="true"></i>
             </a>
         </div>
     </div>
