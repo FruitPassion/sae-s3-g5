@@ -29,6 +29,35 @@ COMPTE_BLOQUE = "Compte bloqué, contacter un admin"
 COMPTE_INCONNU = "Compte inconnu ou mot de passe invalide."
 CONNEXION_REUSSIE = "Connexion réussie."
 
+@auth.route("/interdit", methods=["GET"])
+@logout_required
+def forbidden():
+    """
+    Page d'erreur 403. Lorsque l'utilisateur n'a pas les droits pour accéder à une page, il est redirigé vers cette page.
+
+    :return: Rendu de la page d'erreur 403.
+    """
+    abort(403)
+
+@auth.route("/introuvable", methods=["GET"])
+@logout_required
+def not_found():
+    """
+    Page d'erreur 404. Lorsque qu'une page n'est pas trouvée, l'utilisateur est redirigé vers cette page.
+
+    :return: Rendu de la page d'erreur 404
+    """
+    abort(404)
+
+@auth.route("/erreur-serveur", methods=["GET"])
+@logout_required
+def serveur_error():
+    """
+    Page d'erreur 500. Lorsqu'une erreur serveur est détectée, l'utilisateur est redirigé vers cette page.
+
+    :return: Rendu de la page d'erreur  500
+    """
+    abort(500)
 
 @auth.route("/")
 @logout_required
