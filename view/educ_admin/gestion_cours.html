@@ -50,7 +50,7 @@
                             <td id="duree-{{ cour.id_cours }}" class="align-middle">{{ cour.duree }}</td>
                             {% for formation in formations %}
                                 {% if formation.id_formation == cour.id_formation %}
-                                    <td id="duree-{{ formation.intitule }}"
+                                    <td id="formation-{{ cour.id_cours }}"
                                         class="align-middle">{{ formation.intitule }}</td>
                                 {% endif %}
                             {% endfor %}
@@ -96,11 +96,11 @@
                             </div>
                             <div>
                                 <h3 class="fs-1 my-3">Choisissez une formation :</h3>
-                                <select name="select_formation" class="fs-1 my-3 form-select" required>
+                                <select id="select_formation" name="select_formation" class="fs-1 my-3 form-select" required>
                                     <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                     </option>
                                     {% for formation in formations %}
-                                        <option value="{{ formation.id_formation }}">{{ formation.intitule }}</option>
+                                        <option value="{{ formation.intitule }}">{{ formation.intitule }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -242,12 +242,12 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Formation associée :</h3>
-                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select"
+                            <select name="select_formation_modifier" id="select_formation_modifier" class="fs-1 my-3 form-select"
                                     required>
                                 <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                 </option>
                                 {% for formation in formations %}
-                                    <option value="{{ formation.id_formation }}">{{ formation.intitule }}</option>
+                                    <option value="{{ formation.intitule }}">{{ formation.intitule }}</option>
                                 {% endfor %}
                             </select>
                         </div>
