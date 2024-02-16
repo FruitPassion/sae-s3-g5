@@ -15,6 +15,7 @@ BALISE='##############################'
 # Get the current directory
 current_directory=$(basename $(pwd))
 parent_directory=$(dirname "$(pwd)")
+nbr_processors=$(nproc --all)
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
@@ -56,7 +57,7 @@ wget -c https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tar.xz
 tar -Jxvf Python-3.10.13.tar.xz 
 cd Python-3.10.13 #check
 ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" #check
-sudo make -j4 && sudo make altinstall  
+sudo make -j "$nbr_processors" && sudo make altinstall  
 cd .. 
 rm -r Python-3.10.13.tar.xz Python-3.10.13 
 
@@ -211,7 +212,7 @@ cd modsecurity
 git submodule init
 git submodule update
 ./configure
-make
+make -j "$nbr_processors"
 make install
 cd ..
 mkdir conf
