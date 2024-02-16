@@ -2,10 +2,20 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('auth.choix_connexion') }}">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="80"
-                 class="d-inline-block align-text-top">
+                class="d-inline-block align-text-top">
         </a>
-        <a class="d-flex" role="search" href="{{ url_for('auth.logout') }}">
-            <img src="{{ url_for('static', filename='images/deconnexion.png') }}" alt="deco" height="80">
-        </a>
+        <div class="d-flex">
+            <a href="{% if session['role'] == 'apprentis' %} {{ url_for('static', filename='documentations/doc_apprenti.pdf') }}; 
+                {% elif session['role'] == 'Educateur Administrateur' %} {{ url_for('static', filename='documentations/doc_educadmin.pdf') }}; 
+                {% elif session['role'] == 'Educateur' %} {{ url_for('static', filename='documentations/doc_educateursimple.pdf') }}; 
+                {% elif session['role'] == 'CIP' %} {{ url_for('static', filename='documentations/doc_cip.pdf') }}; 
+                {% elif session['role'] == 'SuperAdministrateur' %} {{ url_for('static', filename='documentations/doc_superadmin.pdf') }};
+                {% endif %}" target="_blank" rel="noopener">
+                <i class="fa fa-question-circle fa-4x m-4" aria-hidden="true"></i>
+            </a>
+            <a role="search" href="{{ url_for('auth.logout') }}">
+                <img src="{{ url_for('static', filename='images/deconnexion.png') }}" alt="deco" height="80">
+            </a>
+        </div>
     </div>
 </nav>
