@@ -9,7 +9,10 @@
 {% block body %}
 
     <h1>Choix de la formation en cours {% include "_partial/_tts.html" %}</h1>
-
+    
+    {% if formations|length == 0 %}
+        <p>Aucune formation n'est disponible pour le moment</p>
+    {% endif %}
     <div>
         {% for formation in formations %}
             <div class="container d-flex form-card mt-5">

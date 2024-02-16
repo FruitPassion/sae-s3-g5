@@ -10,6 +10,9 @@
     <h1>Choisissez le profil d'un apprenti</h1>
 
     <div id="liste_appprentis">
+        {% if apprentis|length == 0 %}
+            <p>Aucun apprenti n'est inscrit à cette formation {% include "_partial/_tts.html" %}</p>
+        {% endif %}
         {% for apprenti in apprentis %}
             <div class="apprenti">
                 <a href="{{ url_for('personnel.redirection_fiches', apprenti=apprenti.login) }}">

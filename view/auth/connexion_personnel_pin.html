@@ -14,13 +14,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Entrez vos identifiants</h1>
 
     {% if personnels|length == 0 %}
+    <h1>Aucun personnel</h1>
     <div class="container w-50 mt-5 text-center" style="height: 90%">
         <p>Aucun personnel n'est enregistré dans la base de données</p>
         </div>
     {% else %}
+    <h1>Entrez vos identifiants</h1>
     <div class="container" style="height: 90%">
             <form method="post" name="code-form">
                 <input type="hidden" name="code" id="hidden-code" maxlength="6" minlength="6" required value="">

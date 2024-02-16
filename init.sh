@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Colors
 BLACK='\033[0;30m'        
 RED='\033[0;31m'         
 GREEN='\033[0;32m'       
@@ -11,15 +12,34 @@ WHITE='\033[0;37m'
 NC='\033[0m'
 BALISE='##############################'
 
+# Get the current directory
 current_directory=$(basename $(pwd))
 parent_directory=$(dirname "$(pwd)")
 
-if [ "$parent_directory/" != "/var/www/" ]; then
-    echo "Le dossier $current_directory n'est pas dans /var/www/"
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]; then
+    printf "\n\n${RED}Ce script doit être exécuté en tant que root${NC}\n\n"
     exit 1
 fi
 
+# Check if the script is run in the right directory
+if [ "$parent_directory/" != "/var/www/" ]; then
+    echo "Le dossier $current_directory n'est pas dans /var/www/"
+    printf "\n\n${RED}Le dossier $current_directory doit être dans le répertoire /var/www/${NC}\n\n"
+    exit 1
+fi
 
+# Check the architecture of the system and if it is supported
+architecture=$(dpkg --print-architecture)
+if [ "$architecture" = "amd64" ]; then
+    proc="x86_64"
+elif [ "$architecture" = "arm64" ]; then
+    proc="aarch64"
+else
+    printf "\n\n${RED}L'architecture de votre système n'est pas supportée${NC}\n\n"
+    exit 1
+fi
+printf "\n\n$BALISE\n${GREEN}Architecture detectée : $proc${NC}\n$BALISE\n\n"
 
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
@@ -27,7 +47,7 @@ apt update -y && apt upgrade -y
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev #check
+apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
 
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
@@ -40,9 +60,12 @@ sudo make -j4 && sudo make altinstall
 cd .. 
 rm -r Python-3.10.13.tar.xz Python-3.10.13 
 
-printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" 
+printf "\n\n$BALISE\n${GREEN}Installation des requirements Apache${NC}\n$BALISE\n\n" 
 
-apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev
+apt install -y libapache2-mod-wsgi-py3 apache2 apache2-utils apache2-dev libapache2-mod-security2 
+apt install -y libcurl4-openssl-dev libpcre3 libghc-regex-pcre-dev 
+
+printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" 
 
 cd ..
 chown -R www-data:www-data "$current_directory/"
@@ -62,8 +85,9 @@ pip3.10 install mod-wsgi
 
 deactivate
 
-cp .env/lib/python3.10/site-packages/mod_wsgi/server/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so /usr/lib/apache2/modules/
-echo 'LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so' > /etc/apache2/mods-enabled/wsgi.load
+
+cp ".env/lib/python3.10/site-packages/mod_wsgi/server/mod_wsgi-py310.cpython-310-$proc-linux-gnu.so" /usr/lib/apache2/modules/
+echo "LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi-py310.cpython-310-$proc-linux-gnu.so" > /etc/apache2/mods-enabled/wsgi.load
 
 # Initialization
 #### MARIADB ####
@@ -102,7 +126,7 @@ sudo systemctl enable mariadb.service
 sudo systemctl start mariadb.service 
 
 
-printf "\n\n$BALISE\n${RED}Génération du mot de passe utilisateur${NC}\n$BALISE\n" 
+printf "\n\n$BALISE\n${RED}Génération du mot de passe administrateur${NC}\n$BALISE\n" 
 pwdadm=$(date | sha256sum) 
 pwdadm=$(echo "${pwdadm// -}") 
 pwdadm=$(echo "${pwdadm// }")
@@ -142,16 +166,21 @@ mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$pwdadm'; FLUSH PRIVILEGE
 printf "\n\n$BALISE\n${YELLOW}Initialisation et paramétrage de la base de donnees terminée${NC}\n$BALISE\n\n"
 
 # #### APACHE #### 
-printf "\n\n$BALISE\n${BLUE}Parametrage de Apache2${NC}\n$BALISE\n\n"
+printf "\n\n$BALISE\n${BLUE}Activation des mods de Apache2${NC}\n$BALISE\n\n"
 
-systemctl enable apache2 
-systemctl start apache2 
+a2enmod ssl
+a2enmod rewrite
+a2enmod headers
+a2enmod unique_id
+a2enmod security2
+
+echo "Activation des modules terminée"
 
 # Create the virtual host
 printf "\n\n$BALISE\n${BLUE}Creation de l'host virtuel${NC}\n$BALISE\n\n"
 
 read -p "Entrez un nom de domaine pour acceder localement à l'application (ex: site.local ) : " 
-echo    # (optional) move to a new line
+echo    
 nomdom=$REPLY
 
 sed -i -e "s/__AREMPLACERSN__/$current_directory/g" app.conf
@@ -164,20 +193,41 @@ a2ensite 000-default
 # Create the virtual host
 printf "\n\n$BALISE\n${BLUE}Creation d'un certificat SSL${NC}\n$BALISE\n\n"
 
-
-a2enmod ssl
-a2enmod rewrite
-
 mkdir /etc/apache2/certificate
 cd /etc/apache2/certificate
-openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Toulouse/O=APEAJ/OU=Aide/CN=$nomdom" -out apache-certificate.crt -keyout apache.key 
-selfip=$(ip -4 addr show enp0s3 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+openssl req -new -newkey rsa:4096 -x509 -sha256 -nodes -subj "/C=FR/ST=France/L=Toulouse/O=APEAJ/OU=Aide/CN=$nomdom" -out apache-certificate.crt -keyout apache.key 
+selfip=$(ip -4 addr show wlan0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 echo "$selfip   $nomdom" >> /etc/hosts
 
 cd -
 
-# Restart the server
-systemctl restart apache2
+# Create the virtual host
+printf "\n\n$BALISE\n${BLUE}Configuration de ModSecurity${NC}\n$BALISE\n\n"
+
+cd /etc/apache2/
+git clone https://github.com/owasp-modsecurity/ModSecurity.git modsecurity
+cd modsecurity
+./build.sh
+git submodule init
+git submodule update
+./configure
+make
+make install
+cd ..
+mkdir conf
+cd conf
+wget https://github.com/coreruleset/coreruleset/archive/v3.3.5.tar.gz
+tar -xvzf v3.3.5.tar.gz
+ln -s coreruleset-3.3.5 /etc/apache2/conf/crs
+cp crs/crs-setup.conf.example crs/crs-setup.conf
+rm v3.3.5.tar.gz
+cd ..
+
+# Start and enable apache
+printf "\n\n$BALISE\n${BLUE}Demarrage d'Apache${NC}\n$BALISE\n\n"
+
+systemctl enable apache2 
+systemctl start apache2 
 
 printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
 

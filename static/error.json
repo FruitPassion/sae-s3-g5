@@ -5,8 +5,13 @@
   "403" : {
     "description": "Action non autorisée"
   },
-
   "404" : {
     "description": "Page introuvable."
+  },
+  "500" : {
+    "description": "Erreur interne du serveur."
+  },
+  "503" : {
+    "description": "Service indisponible."
   }
 }
