@@ -10,10 +10,10 @@
                 {% elif session['role'] == 'Educateur' %} {{ url_for('static', filename='documentations/doc_educateursimple.pdf') }}; 
                 {% elif session['role'] == 'CIP' %} {{ url_for('static', filename='documentations/doc_cip.pdf') }}; 
                 {% elif session['role'] == 'SuperAdministrateur' %} {{ url_for('static', filename='documentations/doc_superadmin.pdf') }};
-                {% endif %}" target="_blank" rel="noopener">
+                {% endif %}" target="_blank" rel="noopener" class="mx-5">
                 <i class="fa fa-question-circle fa-4x m-2" aria-hidden="true"></i>
             </a>
-            <a role="search" href="{{ url_for('auth.logout') }}">
+            <a role="search" href="{{ url_for('auth.logout') }}" class="mx-2">
                 <i class="fa fa-sign-out fa-5x" aria-hidden="true"></i>
             </a>
         </div>
