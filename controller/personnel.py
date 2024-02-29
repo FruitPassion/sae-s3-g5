@@ -1,5 +1,5 @@
-from flask import Blueprint, abort, render_template, session, redirect, url_for
-from model.apprenti import Apprenti
+from flask import Blueprint, render_template, session, redirect, url_for
+from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
 
 from model.formation import Formation
 from model.cours import Cours
@@ -45,8 +45,7 @@ def choix_eleve(nom_formation):
     :return: rendu de la page choix_apprentis.html
     """
 
-    if not Formation.get_formation_id_par_nom_formation(nom_formation):
-        abort(404)
+    formation_existe(nom_formation)
         
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
@@ -61,8 +60,7 @@ def redirection_fiches(apprenti):
     ou éducateur admin.
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
+    apprenti_existe(apprenti)
 
     role = Personnel.get_role_by_login(session.get("name"))
     if role == "Educateur Administrateur":

@@ -12,6 +12,7 @@ from flask import (
 
 from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
+from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
 from model.apprenti import Apprenti
 from model.cours import Cours
 from model.formation import Formation
@@ -182,8 +183,8 @@ def choix_eleve_apprentis(nom_formation):
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
-    if not Formation.get_formation_id_par_nom_formation(nom_formation):
-        abort(404)
+
+    formation_existe(nom_formation)
     
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation)
@@ -198,10 +199,8 @@ def connexion_apprentis(nom_formation, login_apprenti):
 
     :return: connexion_apprentis.html
     """
-    if not Formation.get_formation_id_par_nom_formation(nom_formation):
-        abort(404)
-    if not Apprenti.get_id_apprenti_by_login(login_apprenti):
-        abort(404)
+    formation_existe(nom_formation)
+    apprenti_existe(login_apprenti)
     
     form = LoginApprentiForm()
     apprenti = Apprenti.get_apprenti_by_login(login_apprenti)

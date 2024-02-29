@@ -1,9 +1,10 @@
-from flask import Blueprint, Response, abort, redirect, render_template, session, request, url_for
+from flask import Blueprint, Response, redirect, render_template, session, request, url_for
 
 from custom_paquets.builder import build_categories, build_materiel, check_ressenti
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
+from custom_paquets.gestion_filtres_routes import fiche_by_numero_existe
 from model.composer import ComposerPresentation
 from model.apprenti import Apprenti
 from model.cours import Cours
@@ -70,8 +71,7 @@ def completer_fiche(numero):
     :return: rendu de la page completer_fiche.html
     """
 
-    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
-        abort(404)
+    fiche_by_numero_existe(session['name'], numero)
 
     avancee = "0"
     composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
@@ -146,8 +146,7 @@ def imprimer_pdf(numero):
     :return: rendu de la page fiche_pdf.html
     """
 
-    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
-        abort(404)
+    fiche_by_numero_existe(session['name'], numero)
 
     # vérifier que fiche finie
     fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
@@ -180,8 +179,8 @@ def afficher_commentaires(numero):
 
     :return: rendu de la page commentaires.html
     """
-    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
-        abort(404)
+    
+    fiche_by_numero_existe(session['name'], numero)
 
     commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     emoji = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
@@ -198,8 +197,8 @@ def afficher_images(numero):
 
     :return: rendu de la page commentaires.html
     """
-    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
-        abort(404)
+
+    fiche_by_numero_existe(session['name'], numero)
         
     fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/images.html", apprenti=apprenti, numero=numero,

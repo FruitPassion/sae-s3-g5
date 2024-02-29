@@ -3,6 +3,7 @@ from flask import Blueprint, Response, render_template, request, session, redire
 from custom_paquets.builder import build_materiel
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import educsimple_login_required
+from custom_paquets.gestion_filtres_routes import apprenti_existe, fiche_by_id_existe, fiche_by_numero_existe
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
 from model.cours import Cours
@@ -81,11 +82,8 @@ def modifier_commentaires(apprenti, numero, type_commentaire):
     :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
-
-    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
-        abort(404)
+    apprenti_existe(apprenti)
+    fiche_by_numero_existe(apprenti, numero)
 
     if type_commentaire not in ["educateur", "apprenti"]:
         abort(404)
@@ -126,11 +124,8 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
     :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
-
-    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
-        abort(404)
+    apprenti_existe(apprenti)
+    fiche_by_numero_existe(apprenti, numero)
     
     if type_commentaire not in ["educateur", "apprenti"]:
         abort(404)
@@ -160,8 +155,7 @@ def imprimer_pdf(id_fiche):
     :return: rendu de la page fiche_pdf.html
     """
 
-    if not FicheIntervention.get_fiche_par_id_fiche(id_fiche):
-        abort(404)
+    fiche_by_id_existe(id_fiche)
 
     # verifier que fiche finie
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)

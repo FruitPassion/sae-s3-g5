@@ -6,6 +6,7 @@ from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import AjouterFiche, AjouterPicto, ModifierCours, ModifierMateriel, ModifierPicto
 from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
+from custom_paquets.gestion_filtres_routes import apprenti_existe, fiche_by_id_existe, fiche_by_numero_existe, formation_existe
 from custom_paquets.gestion_image import stocker_photo_materiel, stocker_picto
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
@@ -177,8 +178,7 @@ def choix_eleve(nom_formation):
     :return: rendu de la page choix_apprentis.html
     """
 
-    if not Formation.get_formation_id_par_nom_formation(nom_formation):
-        abort(404)
+    formation_existe(nom_formation)
 
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis)
@@ -195,8 +195,7 @@ def fiches_apprenti(apprenti):
     :return: rendu de la page choix_fiches_apprenti.html
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
+    apprenti_existe(apprenti)
 
     formation = Formation.get_formation_par_apprenti(apprenti)
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
@@ -219,8 +218,7 @@ def modifier_fiche(id_fiche):
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
 
-    if not FicheIntervention.get_fiche_par_id_fiche(id_fiche):
-        abort(404)
+    fiche_by_id_existe(id_fiche)
 
     if request.method == 'POST':
         flash("Fiche copiée avec succès")
@@ -243,8 +241,7 @@ def ajouter_fiche(apprenti):
     :return: rendu de la page ajouter_fiche.html
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
+    apprenti_existe(apprenti)
 
     form = AjouterFiche()
     cours = Cours.get_cours_par_apprenti(Apprenti.get_id_apprenti_by_login(apprenti))
@@ -273,8 +270,7 @@ def personnalisation(id_fiche):
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
 
-    if not FicheIntervention.get_fiche_par_id_fiche(id_fiche):
-        abort(404)
+    fiche_by_id_existe(id_fiche)
     
     liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto",
                      "Open Sans", "Lato", "Oswald", "Poppins"]
@@ -300,11 +296,8 @@ def visualiser_commentaires(apprenti, numero):
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
-
-    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
-        abort(404)
+    apprenti_existe(apprenti)
+    fiche_by_numero_existe(apprenti, numero)
 
     commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
@@ -322,11 +315,8 @@ def visualiser_commentaires_arret(apprenti, numero):
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
-
-    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
-        abort(404)
+    apprenti_existe(apprenti)
+    fiche_by_numero_existe(apprenti, numero)
 
     commentaire = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
@@ -344,8 +334,7 @@ def suivi_progression_apprenti(apprenti):
     :return: rendu de la page suivi-progression.html
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
+    apprenti_existe(apprenti)
     
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
 
@@ -371,8 +360,7 @@ def adaptation_situation_examen(apprenti):
     :return: rendu de la page adaptation_situation_examen.html
     """
 
-    if not Apprenti.get_id_apprenti_by_login(apprenti):
-        abort(404)
+    apprenti_existe(apprenti)
         
     commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
     apprenti = Apprenti.get_apprenti_by_login(apprenti)
