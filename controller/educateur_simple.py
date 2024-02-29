@@ -28,7 +28,7 @@ def redirect_educ_simple():
     """
     return redirect(url_for("personnel.redirect_personnel"), 302)
 
-@educ_simple.route("/<apprenti>/fiches", methods=["GET"])
+@educ_simple.route("/<string:apprenti>/fiches", methods=["GET"])
 @educsimple_login_required
 def fiches_apprenti(apprenti):
     """
@@ -49,7 +49,7 @@ def fiches_apprenti(apprenti):
                            fiches=fiches, get_nom_cours_by_id=Cours.get_nom_cours_by_id, cours=cours)
 
 
-@educ_simple.route("/<apprenti>/<numero>/commentaires", methods=["GET"])
+@educ_simple.route("/<string:apprenti>/<int:numero>/commentaires", methods=["GET"])
 @educsimple_login_required
 def visualiser_commentaires(apprenti, numero):
     """
@@ -72,7 +72,7 @@ def visualiser_commentaires(apprenti, numero):
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
 
 
-@educ_simple.route("/<apprenti>/<numero>/modifier-commentaires/<type_commentaire>", methods=["GET", "POST"])
+@educ_simple.route("/<string:apprenti>/<int:numero>/modifier-commentaires/<string:type_commentaire>", methods=["GET", "POST"])
 @educsimple_login_required
 def modifier_commentaires(apprenti, numero, type_commentaire):
     """
@@ -115,7 +115,7 @@ def modifier_commentaires(apprenti, numero, type_commentaire):
                            commentaires=commentaires, typeCommentaire=type_commentaire, id_personnel=id_personnel), 200)
 
 
-@educ_simple.route("/<apprenti>/<numero>/ajouter-commentaires/<type_commentaire>", methods=["POST", "GET"])
+@educ_simple.route("/<string:apprenti>/<int:numero>/ajouter-commentaires/<string:type_commentaire>", methods=["POST", "GET"])
 @educsimple_login_required
 def ajouter_commentaires(apprenti, numero, type_commentaire):
     """
@@ -146,7 +146,7 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
     return Response(render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200)
 
 
-@educ_simple.route("/imprimer-pdf/<id_fiche>", methods=["GET"])
+@educ_simple.route("/imprimer-pdf/<int:id_fiche>", methods=["GET"])
 @educsimple_login_required
 def imprimer_pdf(id_fiche):
     """

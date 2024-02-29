@@ -28,7 +28,7 @@ def redirect_cip():
     return redirect(url_for("personnel.redirect_personnel"), 302)
 
 
-@cip.route("/<apprenti>/choix-operations", methods=["GET"])
+@cip.route("/<string:apprenti>/choix-operations", methods=["GET"])
 @cip_login_required
 def affiche_choix(apprenti):
     """
@@ -45,7 +45,7 @@ def affiche_choix(apprenti):
                            formation=formation), 200
 
 
-@cip.route("/<apprenti>/fiches", methods=["GET"])
+@cip.route("/<string:apprenti>/fiches", methods=["GET"])
 @cip_login_required
 def fiches_apprenti(apprenti):
     """
@@ -66,7 +66,7 @@ def fiches_apprenti(apprenti):
                            get_nom_cours_by_id=Cours.get_nom_cours_by_id, cours=cours)
 
 
-@cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
+@cip.route("/<string:apprenti>/<int:fiche>/commentaires", methods=["GET"])
 @cip_login_required
 def visualiser_commentaires(apprenti, fiche):
     """
@@ -84,7 +84,7 @@ def visualiser_commentaires(apprenti, fiche):
     return render_template("cip/commentaires.html", commentaires=commentaires, apprenti=apprenti), 200
 
 
-@cip.route("/<apprenti>/suivi-progression", methods=["GET"])
+@cip.route("/<string:apprenti>/suivi-progression", methods=["GET"])
 @cip_login_required
 def suivi_progression_apprenti(apprenti):
     """
@@ -110,7 +110,7 @@ def suivi_progression_apprenti(apprenti):
                            niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
 
 
-@cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
+@cip.route("/<string:apprenti>/adaptation-situation-examen", methods=["GET"])
 @cip_login_required
 def affichage_adaptation_situation_examen(apprenti):
     """
@@ -128,7 +128,7 @@ def affichage_adaptation_situation_examen(apprenti):
                            commentaire=commentaire), 200
 
 
-@cip.route("/<apprenti>/modifier-commentaire", methods=["GET", "POST"])
+@cip.route("/<string:apprenti>/modifier-commentaire", methods=["GET", "POST"])
 @cip_login_required
 def modifier_commentaire(apprenti):
     """
@@ -151,7 +151,7 @@ def modifier_commentaire(apprenti):
                            commentaire=commentaire), 200)
 
 
-@cip.route("/<apprenti>/ajouter-commentaire", methods=["GET", "POST"])
+@cip.route("/<string:apprenti>/ajouter-commentaire", methods=["GET", "POST"])
 @cip_login_required
 def ajouter_commentaire(apprenti):
     """

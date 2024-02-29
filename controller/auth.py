@@ -174,7 +174,7 @@ def choix_formation_apprentis():
     return render_template("auth/choix_formation_apprentis.html", formations=formations)
 
 
-@auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET"])
+@auth.route("/choix-eleve-apprentis/<string:nom_formation>", methods=["GET"])
 @logout_required
 def choix_eleve_apprentis(nom_formation):
     """
@@ -190,7 +190,7 @@ def choix_eleve_apprentis(nom_formation):
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation)
 
 
-@auth.route("/connexion-apprentis/<nom_formation>/<login_apprenti>", methods=["GET", "POST"])
+@auth.route("/connexion-apprentis/<string:nom_formation>/<string:login_apprenti>", methods=["GET", "POST"])
 @logout_required
 def connexion_apprentis(nom_formation, login_apprenti):
     """

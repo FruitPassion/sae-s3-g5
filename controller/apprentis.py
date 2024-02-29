@@ -61,7 +61,7 @@ def suivi_progression():
     return render_template("apprentis/suivi_progression_apprenti.html", etat_fiches=etat_fiches)
 
 
-@apprenti.route("/completer-fiche/<numero>", methods=["GET", "POST"])
+@apprenti.route("/completer-fiche/<int:numero>", methods=["GET", "POST"])
 @apprenti_login_required
 def completer_fiche(numero):
     """
@@ -137,7 +137,7 @@ def completer_fiche(numero):
                            avancee=avancee, materiaux=materiaux), 200)
 
 
-@apprenti.route("/imprimer-pdf/<numero>", methods=["GET"]) # Pour tester
+@apprenti.route("/imprimer-pdf/<int:numero>", methods=["GET"]) # Pour tester
 @apprenti_login_required
 def imprimer_pdf(numero):
     """
@@ -158,7 +158,7 @@ def imprimer_pdf(numero):
                            materiaux=materiaux)
 
 
-@apprenti.route("/valider/<numero>", methods=["GET"])
+@apprenti.route("/valider/<int:numero>", methods=["GET"])
 @apprenti_login_required
 def valider(numero):
     """
@@ -171,7 +171,7 @@ def valider(numero):
     return redirect(url_for("apprenti.redirection_connexion"))
 
 
-@apprenti.route("/<numero>/commentaires", methods=["GET"])
+@apprenti.route("/<int:numero>/commentaires", methods=["GET"])
 @apprenti_login_required
 def afficher_commentaires(numero):
     """
@@ -189,7 +189,7 @@ def afficher_commentaires(numero):
                            commentaires=commentaires, emoji=emoji, ressenti=ressenti), 200
 
 
-@apprenti.route("/<numero>/images", methods=["GET"])
+@apprenti.route("/<int:numero>/images", methods=["GET"])
 @apprenti_login_required
 def afficher_images(numero):
     """

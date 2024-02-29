@@ -35,7 +35,7 @@ def choix_formation():
     return render_template("personnel/choix_formation.html", formations=formations), 200
 
 
-@personnel.route("/choix-eleves/<nom_formation>", methods=["GET"])
+@personnel.route("/choix-eleves/<string:nom_formation>", methods=["GET"])
 @personnel_login_required
 def choix_eleve(nom_formation):
     """
@@ -51,7 +51,7 @@ def choix_eleve(nom_formation):
     return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
 
 
-@personnel.route("/redirection-fiches/<apprenti>", methods=["GET"])
+@personnel.route("/redirection-fiches/<string:apprenti>", methods=["GET"])
 @personnel_login_required
 def redirection_fiches(apprenti):
     """

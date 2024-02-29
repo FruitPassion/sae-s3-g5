@@ -168,7 +168,7 @@ def gestion_cours():
                            formations=formations), 200)
 
 
-@educ_admin.route("/choix-eleve/<nom_formation>", methods=["GET"])
+@educ_admin.route("/choix-eleve/<string:nom_formation>", methods=["GET"])
 @educadmin_login_required
 def choix_eleve(nom_formation):
     """
@@ -184,7 +184,7 @@ def choix_eleve(nom_formation):
     return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis)
 
 
-@educ_admin.route("/<apprenti>/fiches", methods=["GET"])
+@educ_admin.route("/<string:apprenti>/fiches", methods=["GET"])
 @educadmin_login_required
 def fiches_apprenti(apprenti):
     """
@@ -207,7 +207,7 @@ def fiches_apprenti(apprenti):
                            cours=cours)
 
 
-@educ_admin.route("/modifier-fiche/<id_fiche>", methods=["GET", "POST"])
+@educ_admin.route("/modifier-fiche/<int:id_fiche>", methods=["GET", "POST"])
 @educadmin_login_required
 def modifier_fiche(id_fiche):
     """
@@ -230,7 +230,7 @@ def modifier_fiche(id_fiche):
     return Response(render_template("educ_admin/raison_arret.html", id_fiche=id_fiche, apprenti=apprenti), 200)
 
 
-@educ_admin.route("/<apprenti>/ajouter-fiche", methods=["GET", "POST"])
+@educ_admin.route("/<string:apprenti>/ajouter-fiche", methods=["GET", "POST"])
 @educadmin_login_required
 def ajouter_fiche(apprenti):
     """
@@ -261,7 +261,7 @@ def ajouter_fiche(apprenti):
                            cours=cours), 200)
 
 
-@educ_admin.route("/personnalisation/<id_fiche>", methods=["GET", "POST"])
+@educ_admin.route("/personnalisation/<int:id_fiche>", methods=["GET", "POST"])
 @educadmin_login_required
 def personnalisation(id_fiche):
     """
@@ -287,7 +287,7 @@ def personnalisation(id_fiche):
                            composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200)
 
 
-@educ_admin.route("/<apprenti>/<numero>/commentaires", methods=["GET"])
+@educ_admin.route("/<string:apprenti>/<int:numero>/commentaires", methods=["GET"])
 @educadmin_login_required
 def visualiser_commentaires(apprenti, numero):
     """
@@ -307,7 +307,7 @@ def visualiser_commentaires(apprenti, numero):
                            commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
 
 
-@educ_admin.route("/<apprenti>/<numero>/commentaires-arret", methods=["GET"])
+@educ_admin.route("/<string:apprenti>/<int:numero>/commentaires-arret", methods=["GET"])
 @educadmin_login_required
 def visualiser_commentaires_arret(apprenti, numero):
     """
@@ -324,7 +324,7 @@ def visualiser_commentaires_arret(apprenti, numero):
                            commentaire=commentaire), 200
 
 
-@educ_admin.route("/<apprenti>/suivi-progression", methods=["GET"])
+@educ_admin.route("/<string:apprenti>/suivi-progression", methods=["GET"])
 @educadmin_login_required
 def suivi_progression_apprenti(apprenti):
     """
@@ -350,7 +350,7 @@ def suivi_progression_apprenti(apprenti):
                            niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
 
 
-@educ_admin.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
+@educ_admin.route("/<string:apprenti>/adaptation-situation-examen", methods=["GET"])
 @educadmin_login_required
 def adaptation_situation_examen(apprenti):
     """
