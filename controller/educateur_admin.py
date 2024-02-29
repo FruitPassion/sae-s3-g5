@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, abort, render_template, request, session, flash, redirect, url_for
+from flask import Blueprint, Response, render_template, request, session, flash, redirect, url_for
 import json
 
 from custom_paquets.builder import build_categories, build_pictogrammes
