@@ -37,6 +37,9 @@ def fiches_apprenti(apprenti):
     :return: Les fiches techniques de l'apprenti sélectionné.
     """
 
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
     fiches = FicheIntervention.get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
@@ -53,6 +56,13 @@ def visualiser_commentaires(apprenti, numero):
     
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
+    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
+        abort(404)
+
     commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
     commentaires_appr = LaisserTrace.get_commentaires_type_par_fiche(
@@ -70,6 +80,13 @@ def modifier_commentaires(apprenti, numero, type_commentaire):
     
     :return: la page de modification des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
+    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
+        abort(404)
+
     if type_commentaire not in ["educateur", "apprenti"]:
         abort(404)
     id_fiche = FicheIntervention.get_id_fiche_apprenti(apprenti, numero)
@@ -108,6 +125,16 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
     
     :return: la page d'ajout des commentaires des éducateurs de la fiche de l'élève sélectionnée.
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
+    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
+        abort(404)
+    
+    if type_commentaire not in ["educateur", "apprenti"]:
+        abort(404)
+
     fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(apprenti, numero))
     if request.method == 'POST':
         if type_commentaire == "apprenti":
@@ -132,6 +159,10 @@ def imprimer_pdf(id_fiche):
 
     :return: rendu de la page fiche_pdf.html
     """
+
+    if not FicheIntervention.get_fiche_par_id_fiche(id_fiche):
+        abort(404)
+
     # verifier que fiche finie
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
     FicheIntervention.valider_fiche(fiche.id_fiche)

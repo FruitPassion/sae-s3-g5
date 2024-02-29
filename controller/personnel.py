@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, abort, render_template, session, redirect, url_for
+from model.apprenti import Apprenti
 
 from model.formation import Formation
 from model.cours import Cours
@@ -43,6 +44,10 @@ def choix_eleve(nom_formation):
 
     :return: rendu de la page choix_apprentis.html
     """
+
+    if not Formation.get_formation_id_par_nom_formation(nom_formation):
+        abort(404)
+        
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
 
@@ -55,6 +60,9 @@ def redirection_fiches(apprenti):
     Affiche les actions possibles de la CIP ou les fiches des apprentis si le rôle est éducateur simple
     ou éducateur admin.
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
 
     role = Personnel.get_role_by_login(session.get("name"))
     if role == "Educateur Administrateur":

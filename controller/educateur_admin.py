@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, render_template, request, session, flash, redirect, url_for
+from flask import Blueprint, Response, abort, render_template, request, session, flash, redirect, url_for
 import json
 
 from custom_paquets.builder import build_categories, build_pictogrammes
@@ -176,6 +176,10 @@ def choix_eleve(nom_formation):
 
     :return: rendu de la page choix_apprentis.html
     """
+
+    if not Formation.get_formation_id_par_nom_formation(nom_formation):
+        abort(404)
+
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis)
 
@@ -190,6 +194,10 @@ def fiches_apprenti(apprenti):
 
     :return: rendu de la page choix_fiches_apprenti.html
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
     formation = Formation.get_formation_par_apprenti(apprenti)
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
     fiches = FicheIntervention.get_fiches_techniques_par_login(apprenti)
@@ -210,6 +218,10 @@ def modifier_fiche(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
+
+    if not FicheIntervention.get_fiche_par_id_fiche(id_fiche):
+        abort(404)
+
     if request.method == 'POST':
         flash("Fiche copiée avec succès")
         LaisserTrace.ajouter_commentaires_evaluation(id_fiche, request.form.get("raison_arret"), "", None, None,
@@ -230,6 +242,10 @@ def ajouter_fiche(apprenti):
 
     :return: rendu de la page ajouter_fiche.html
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
     form = AjouterFiche()
     cours = Cours.get_cours_par_apprenti(Apprenti.get_id_apprenti_by_login(apprenti))
     if form.validate_on_submit():
@@ -256,6 +272,10 @@ def personnalisation(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
+
+    if not FicheIntervention.get_fiche_par_id_fiche(id_fiche):
+        abort(404)
+    
     liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto",
                      "Open Sans", "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
@@ -279,6 +299,13 @@ def visualiser_commentaires(apprenti, numero):
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
+    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
+        abort(404)
+
     commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
     commentaires_appr = LaisserTrace.get_commentaires_type_par_fiche(
@@ -295,6 +322,12 @@ def visualiser_commentaires_arret(apprenti, numero):
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+
+    if not FicheIntervention.get_id_fiche_apprenti(apprenti, numero):
+        abort(404)
+
     commentaire = LaisserTrace.get_commentaires_type_par_fiche(
         (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
     return render_template("personnel/commentaires_arret.html", apprenti=apprenti, numero=numero,
@@ -310,6 +343,10 @@ def suivi_progression_apprenti(apprenti):
 
     :return: rendu de la page suivi-progression.html
     """
+
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+    
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
 
     # Récupération des niveaux et états des fiches
@@ -334,6 +371,9 @@ def adaptation_situation_examen(apprenti):
     :return: rendu de la page adaptation_situation_examen.html
     """
 
+    if not Apprenti.get_id_apprenti_by_login(apprenti):
+        abort(404)
+        
     commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
     apprenti = Apprenti.get_apprenti_by_login(apprenti)
     return render_template("educ_admin/adaptation_situation_examen.html", apprenti=apprenti,
