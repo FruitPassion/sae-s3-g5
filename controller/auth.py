@@ -198,6 +198,11 @@ def connexion_apprentis(nom_formation, login_apprenti):
 
     :return: connexion_apprentis.html
     """
+    if not Formation.get_formation_id_par_nom_formation(nom_formation):
+        abort(404)
+    if not Apprenti.get_id_apprenti_by_login(login_apprenti):
+        abort(404)
+    
     form = LoginApprentiForm()
     apprenti = Apprenti.get_apprenti_by_login(login_apprenti)
     code = 200

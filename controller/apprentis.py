@@ -1,5 +1,4 @@
-from flask import Blueprint, Response, redirect, render_template, session, request, url_for
-from werkzeug.utils import secure_filename
+from flask import Blueprint, Response, abort, redirect, render_template, session, request, url_for
 
 from custom_paquets.builder import build_categories, build_materiel, check_ressenti
 from custom_paquets.converter import changer_date
@@ -27,6 +26,7 @@ def redirect_apprenti():
     Redirige vers la page d'accueil de l'apprenti
     """
     return redirect(url_for("apprenti.redirection_connexion"), 302)
+
 
 @apprenti.route("/redirection-connexion", methods=["GET"])
 @apprenti_login_required
@@ -69,6 +69,10 @@ def completer_fiche(numero):
     :param numero: id de la fiche technique
     :return: rendu de la page completer_fiche.html
     """
+
+    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
+        abort(404)
+
     avancee = "0"
     composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     materiaux = build_materiel()
@@ -141,7 +145,11 @@ def imprimer_pdf(numero):
 
     :return: rendu de la page fiche_pdf.html
     """
-    # verifier que fiche finie
+
+    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
+        abort(404)
+
+    # vérifier que fiche finie
     fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     FicheIntervention.valider_fiche(fiche.id_fiche)
 
@@ -172,7 +180,9 @@ def afficher_commentaires(numero):
 
     :return: rendu de la page commentaires.html
     """
-    
+    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
+        abort(404)
+
     commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     emoji = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     ressenti = check_ressenti(emoji)
@@ -188,7 +198,9 @@ def afficher_images(numero):
 
     :return: rendu de la page commentaires.html
     """
-
+    if not FicheIntervention.get_id_fiche_apprenti(session['name'], numero):
+        abort(404)
+        
     fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     return render_template("apprentis/images.html", apprenti=apprenti, numero=numero,
                            fiche=fiche), 200
