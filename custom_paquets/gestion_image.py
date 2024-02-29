@@ -1,3 +1,4 @@
+import os
 from PIL import Image, ImageFilter, ImageOps, ImageColor
 from werkzeug.utils import secure_filename
 from random import randint
@@ -127,3 +128,10 @@ def save_photo(photo, id_fiche, filename):
     filename = secure_filename(f"{id_fiche}_{filename}.jpg")
     photo.save(f"./static/images/photo_fiche/{filename}")
 
+
+def supprimer_photo_profil(file):
+    try:
+        chemin_avatar = "./static/images/" + file
+        os.remove(chemin_avatar)
+    except:
+        return "erreur suppression photo de profil"
