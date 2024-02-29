@@ -4,7 +4,7 @@ from custom_paquets.security import encrypt_password
 from flask import Blueprint, Response, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
-from custom_paquets.gestion_image import stocker_photo_profile
+from custom_paquets.gestion_image import stocker_photo_profile, supprimer_photo_profil
 from custom_paquets.gestion_image import stocker_image_formation
 from model.apprenti import Apprenti
 from model.personnel import Personnel
@@ -114,8 +114,11 @@ def gestion_apprentis():
     form_modifier = ModifierApprenti()
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
+        chemin_ancien_avatar = Apprenti.get_photos_profil_apprenti(identifiant)
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
         if len(request.files.get("avatar-modifier").filename) != 0:
+            if chemin_ancien_avatar != "photo_profile/defaut_profile.png":
+                supprimer_photo_profil(chemin_ancien_avatar)
             f = request.files.get("avatar-modifier")
             chemin_avatar = stocker_photo_profile(f)
         else:
