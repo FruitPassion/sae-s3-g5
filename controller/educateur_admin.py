@@ -25,6 +25,14 @@ Blueprint pour toutes les routes relatives aux URL des pages des educs admin
 Préfixe d'URL : /educ-admin/ .
 '''
 
+@educ_admin.route("/", methods=["GET"])
+@educadmin_login_required
+def redirect_educ_admin():
+    """
+    Redirige vers la page d'accueil de l'educ admin
+    """
+    return redirect(url_for("educ_admin.accueil_educadmin"), 302)
+
 
 @educ_admin.route("/accueil-educadmin", methods=["GET"])
 @educadmin_login_required

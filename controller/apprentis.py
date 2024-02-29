@@ -20,6 +20,13 @@ Blueprint pour toutes les routes relatives aux URL des pages d'apprentis
 Préfixe d'URL : /apprenti/ .
 '''
 
+@apprenti.route("/", methods=["GET"])
+@apprenti_login_required
+def redirect_apprenti():
+    """
+    Redirige vers la page d'accueil de l'apprenti
+    """
+    return redirect(url_for("apprenti.redirection_connexion"), 302)
 
 @apprenti.route("/redirection-connexion", methods=["GET"])
 @apprenti_login_required

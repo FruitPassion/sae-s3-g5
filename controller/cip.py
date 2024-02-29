@@ -10,6 +10,7 @@ from model.ficheintervention import FicheIntervention
 import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
+personnel = Blueprint("personnel", __name__, url_prefix="/cip")
 
 '''
 Blueprint pour toutes les routes relatives aux URL des pages du CIP
@@ -17,6 +18,13 @@ Blueprint pour toutes les routes relatives aux URL des pages du CIP
 Préfixe d'URL : /cip/ .
 '''
 
+@cip.route("/", methods=["GET"])
+@cip_login_required
+def redirect_cip():
+    """
+    Redirige vers la page d'accueil de la cip
+    """
+    return redirect(url_for("personnel.redirect_personnel"), 302)
 
 @cip.route("/<apprenti>/choix-operations", methods=["GET"])
 @cip_login_required

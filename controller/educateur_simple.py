@@ -11,6 +11,7 @@ from model.laissertrace import LaisserTrace
 from model.personnel import Personnel
 
 educ_simple = Blueprint("educ_simple", __name__, url_prefix="/educ-simple")
+personnel = Blueprint("personnel", __name__, url_prefix="/educ-simple")
 
 '''
 Blueprint pour toutes les routes relatives aux URL des pages des éducateurs simples
@@ -18,6 +19,13 @@ Blueprint pour toutes les routes relatives aux URL des pages des éducateurs sim
 Préfixe d'URL : /educ-simple/ .
 '''
 
+@educ_simple.route("/", methods=["GET"])
+@educsimple_login_required
+def redirect_educ_simple():
+    """
+    Redirige vers la page d'accueil de l'educ simple
+    """
+    return redirect(url_for("personnel.redirect_personnel"), 302)
 
 @educ_simple.route("/<apprenti>/fiches", methods=["GET"])
 @educsimple_login_required
