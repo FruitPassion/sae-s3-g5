@@ -2,8 +2,8 @@ import os
 from PIL import Image, ImageFilter, ImageOps, ImageColor
 from werkzeug.utils import secure_filename
 from random import randint
+from model.shared_model import db
 import secrets
-
 
 def random_color():
     color = []
@@ -140,6 +140,7 @@ def default_image_profil(file):
     try:
         if not os.path.exists('./static/images/' + file):
             chemin_avatar = "./photo_profile/defaut_profile.png"
+            db.session.commit()
         else:
             chemin_avatar = file
         return chemin_avatar
@@ -150,6 +151,7 @@ def default_image_formation(file):
     try:
         if not os.path.exists('./static/images/' + file):
             chemin_image = "./formation_image/default_formation.png"
+            db.session.commit()
         else:
             chemin_image = file
         return chemin_image
