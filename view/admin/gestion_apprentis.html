@@ -18,9 +18,6 @@
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des apprentis</h1>
     <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchApprentis" placeholder="Rechercher un apprentis ..." 
-        aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchApprentis')">
-        </div>
       
       
     <div class="px-3 fs-2 h-50">
@@ -37,6 +34,10 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                
+        <input type="text" class="form-control" id="searchApprentis" placeholder="Rechercher un apprentis ..." 
+        aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchApprentis')">
+        </div>
                 <table class="table table-bordered" aria-describedby="table des apprentis" id="tab_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
@@ -51,7 +52,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprentis %}
-                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
                             id="ele-{{ apprenti['id_apprenti'] }}">
                             <td id="login-{{ apprenti['id_apprenti'] }}"
                                 class="align-middle">{{ apprenti["login"] }}</td>

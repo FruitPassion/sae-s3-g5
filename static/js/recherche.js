@@ -22,7 +22,6 @@ function searchTable(tabname, searchApprentis)
         tr[i].style.display = display;
     }
 
-    console.log(noresultname);
     if (nbr == 0) {
         document.getElementById(noresultname).style.display = "";
         table.style.display = "none";
