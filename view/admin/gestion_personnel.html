@@ -16,10 +16,10 @@
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste du personnel</h1>
-    <form autocomplete="off" id="search-bar">
-        <input type="text" class="form-control fs-1" id="search" placeholder="Rechercher un membre du personnel...">
-        <button class="btn btn-primary fs-1" type="button" id="search-btn">Rechercher</button>
-    </form>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="searchPersonnel" placeholder="Rechercher un membre du personne ..." 
+        aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchPersonnel')">
+    </div>
     <div class="px-3 fs-2 h-50">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
@@ -89,6 +89,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="tab_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" name="ajout_personnel">
