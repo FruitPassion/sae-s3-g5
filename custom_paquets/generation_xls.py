@@ -1,4 +1,4 @@
-import xlsxwriter
+import xlsxwriter, os
 from custom_paquets.converter import changer_date
 
 from model.apprenti import Apprenti
@@ -7,6 +7,10 @@ from model.laissertrace import LaisserTrace
 
 
 def generer_xls_apprentis(id_formation):
+    
+    if not os.path.exists("./static/files"):
+        os.makedirs("./static/files")
+    
     workbook = xlsxwriter.Workbook("./static/files/apprentis.xlsx")
     cell_header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 
                                               'border': 1, 'text_wrap': True})
