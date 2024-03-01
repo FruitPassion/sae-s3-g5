@@ -13,6 +13,7 @@ from flask import (
 from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm
 from custom_paquets.decorateur import logout_required
 from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
+from custom_paquets.gestion_image import default_image_formation, default_image_profil
 from model.apprenti import Apprenti
 from model.cours import Cours
 from model.formation import Formation
@@ -171,6 +172,9 @@ def choix_formation_apprentis():
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
     formations = Formation.get_all_formations()
+    ## Gestion des images par défaut
+    for formation in formations:
+        formation.image = default_image_formation(formation.image)
     return render_template("auth/choix_formation_apprentis.html", formations=formations)
 
 
@@ -187,6 +191,10 @@ def choix_eleve_apprentis(nom_formation):
     formation_existe(nom_formation)
     
     apprentis = Cours.get_apprentis_by_formation(nom_formation)
+    ## Gestion des images par défaut
+    for apprenti in apprentis:
+        apprenti.photo = default_image_profil(apprenti.photo)
+    
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation)
 
 

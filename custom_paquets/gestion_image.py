@@ -135,3 +135,23 @@ def supprimer_photo_profil(file):
         os.remove(chemin_avatar)
     except:
         return "erreur suppression photo de profil"
+    
+def default_image_profil(file):
+    try:
+        if not os.path.exists('./static/images/' + file):
+            chemin_avatar = "./photo_profile/defaut_profile.png"
+        else:
+            chemin_avatar = file
+        return chemin_avatar
+    except:
+        return "Erreur : pas de photo de profil par défaut"
+    
+def default_image_formation(file):
+    try:
+        if not os.path.exists('./static/images/' + file):
+            chemin_image = "./formation_image/default_formation.png"
+        else:
+            chemin_image = file
+        return chemin_image
+    except:
+        return "Erreur : pas d'image de formation par défaut"

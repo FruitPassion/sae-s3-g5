@@ -4,7 +4,7 @@ from custom_paquets.security import encrypt_password
 from flask import Blueprint, Response, redirect, render_template, request, url_for
 
 from custom_paquets.decorateur import admin_login_required
-from custom_paquets.gestion_image import stocker_photo_profile, supprimer_photo_profil
+from custom_paquets.gestion_image import default_image_formation, default_image_profil, stocker_photo_profile, supprimer_photo_profil
 from custom_paquets.gestion_image import stocker_image_formation
 from model.apprenti import Apprenti
 from model.personnel import Personnel
@@ -109,6 +109,10 @@ def gestion_apprentis():
 
     formations = Formation.get_all_formations()
     apprentis = Apprenti.get_all_apprentis()
+    ## Gestion des images par défaut
+    for apprenti in apprentis:
+        apprenti['photo'] = default_image_profil(apprenti['photo'])
+    
     liste_apprentis_archives = Apprenti().get_all_apprentis(archive=True)
     form_ajouter = AjouterApprenti()
     form_modifier = ModifierApprenti()
@@ -149,6 +153,10 @@ def gestion_formations():
     On peut aussi y rajouter une formation
     """
     formations = Formation.get_all_formations()
+    ## Gestion des images par défaut
+    for formation in formations:
+        formation.image = default_image_formation(formation.image)
+    
     liste_formations_archivees = Formation.get_all_formations(archive=True)
     form = AjouterFormation()
     form_modifier = ModifierFormation()
