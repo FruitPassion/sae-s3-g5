@@ -2,6 +2,7 @@ from flask import Blueprint, Response, redirect, render_template, session, reque
 
 from custom_paquets.builder import build_categories, build_materiel, check_ressenti
 from custom_paquets.converter import changer_date
+from custom_paquets.custom_form import CompleterFiche
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
 from custom_paquets.gestion_filtres_routes import fiche_by_numero_existe
@@ -73,12 +74,13 @@ def completer_fiche(numero):
 
     fiche_by_numero_existe(session['name'], numero)
 
+    form = CompleterFiche()
     avancee = "0"
     composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
     materiaux = build_materiel()
     fiche = FicheIntervention.get_fiche_par_id_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
-    if request.method == 'POST':
+    if request.method == 'POST' and form.validate_on_submit():
         avancee = request.form.get("avancee")
         completer_fiche = {}
         ajouter_materiel = {}
@@ -134,7 +136,7 @@ def completer_fiche(numero):
         composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
     return Response(render_template("apprentis/completer_fiche.html",  composition=composer_fiche, fiche=fiche,
-                           avancee=avancee, materiaux=materiaux), 200)
+                           avancee=avancee, materiaux=materiaux, form=form), 200)
 
 
 @apprenti.route("/imprimer-pdf/<int:numero>", methods=["GET"]) # Pour tester

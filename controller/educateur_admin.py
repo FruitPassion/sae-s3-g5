@@ -3,7 +3,7 @@ import json
 
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
-from custom_paquets.custom_form import AjouterFiche, AjouterPicto, ModifierCours, ModifierMateriel, ModifierPicto
+from custom_paquets.custom_form import AjouterFiche, AjouterPicto, ModifierCours, ModifierFiche, ModifierMateriel, ModifierPicto, RaisonArretForm
 from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
 from custom_paquets.gestion_filtres_routes import apprenti_existe, fiche_by_id_existe, fiche_by_numero_existe, formation_existe
@@ -224,17 +224,19 @@ def modifier_fiche(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
-
+    form = RaisonArretForm()
     fiche_by_id_existe(id_fiche)
 
     if request.method == 'POST':
         flash("Fiche copiée avec succès")
+        id_nouvelle_fiche = FicheIntervention.copier_fiche(id_fiche, session["name"])
         LaisserTrace.ajouter_commentaires_evaluation(id_fiche, request.form.get("raison_arret"), "", None, None,
                                                      session["name"], "Copie de la fiche", "0")
-        id_fiche = FicheIntervention.copier_fiche(id_fiche, session["name"])
-        return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche))
+        
+        return redirect(url_for("educ_admin.personnalisation", id_fiche=id_nouvelle_fiche))
     apprenti = FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)
-    return Response(render_template("educ_admin/raison_arret.html", id_fiche=id_fiche, apprenti=apprenti), 200)
+    fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
+    return Response(render_template("educ_admin/raison_arret.html", fiche=fiche, apprenti=apprenti, form=form), 200)
 
 
 @educ_admin.route("/<string:apprenti>/ajouter-fiche", methods=["GET", "POST"])
@@ -276,7 +278,7 @@ def personnalisation(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
-
+    form = ModifierFiche()
     fiche_by_id_existe(id_fiche)
     
     liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto",
@@ -291,7 +293,7 @@ def personnalisation(id_fiche):
                                 apprenti=FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)),
                         302)
     return Response(render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_polices,
-                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche), 200)
+                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche, form=form), 200)
 
 
 @educ_admin.route("/<string:apprenti>/<int:numero>/commentaires", methods=["GET"])

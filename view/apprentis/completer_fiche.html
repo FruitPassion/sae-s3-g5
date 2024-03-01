@@ -235,8 +235,10 @@
                 </fieldset>
                 <div class="mt-5 bg-primary d-flex justify-content-center rounded-4"
                      style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
-                    <button class="btn btn-primary" style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;" type="submit">
-                        <i class="fa fa-floppy-o" aria-hidden="true"></i> Sauvegarder
+                     {{ form.csrf_token }}
+                    <button class="btn btn-primary" style="font-size: {{ composition[0]['taille_texte']|int + 15 }}px;">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i> 
+                        {{ form.submit(class="text-white bg-primary border-0") }}
                     </button>
                     <a hidden="" class="text-light">
                         Sauvegarder la progression</a>{% include "_partial/_tts_hidden_invert.html" %}

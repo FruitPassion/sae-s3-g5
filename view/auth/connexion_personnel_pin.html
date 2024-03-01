@@ -24,16 +24,16 @@
     <h1>Entrez vos identifiants</h1>
     <div class="container" style="height: 90%">
             <form method="post" name="code-form">
-                <input type="hidden" name="code" id="hidden-code" maxlength="6" minlength="6" required value="">
-                <input type="submit" id="fantom-click" hidden="">
+                {{ form.csrf_token }}
+                {{ form.hiddencode }}
+                {{ form.fantomclick }}
                 <div id="cryxpad-clavier" style="position: absolute;left: 50%;">
                     <div class="row" style="left: -50%;position: relative;">
                         <div class="col w-100">
                             <select class="form-control form-select fs-2 my-3 text-center" aria-label="Selectionnez"
                             name="login_select">
                                 {% for personnel in personnels %}
-                                    <option class="fs-5"
-                                            value="{{ personnel.login }}">{{ personnel.login }}</option>
+                                    <option class="fs-5" value="{{ personnel.login }}">{{ personnel.login }}</option>
                                 {% endfor %}
                             </select>
                             <div class="form-group mb-5 mt-1">

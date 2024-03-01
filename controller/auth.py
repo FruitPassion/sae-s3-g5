@@ -10,7 +10,7 @@ from flask import (
     session,
 )
 
-from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm
+from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm, LoginPersonnelPin
 from custom_paquets.decorateur import logout_required
 from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
 from custom_paquets.gestion_image import default_image_formation, default_image_profil
@@ -94,9 +94,10 @@ def connexion_personnel_pin():
     :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """
     personnels = Personnel.get_liste_personnel_non_super()
+    form = LoginPersonnelPin()
     code = 200
-    if request.method == "POST":
-        passwd = request.form["code"]
+    if request.method == "POST" and form.validate_on_submit():
+        passwd = request.form["hiddencode"]
         login = request.form.get('login_select')
         if not Personnel.check_password(login, passwd):
             if Personnel.get_nbr_essais_connexion_personnel(login) == 3:
@@ -119,7 +120,7 @@ def connexion_personnel_pin():
                     return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)
-    return Response(render_template("auth/connexion_personnel_pin.html", personnels=personnels), code)
+    return Response(render_template("auth/connexion_personnel_pin.html", personnels=personnels, form=form), code)
 
 
 @auth.route("/connexion-personnel-mdp", methods=["GET", "POST"])

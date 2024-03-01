@@ -14,6 +14,8 @@
     <script src="{{ url_for('static',filename='js/dd.min.js') }}"></script>
 {% endblock %}
 
+{% block title %}Personnalisation fiche numéro {{ fiche.numero }}{% endblock %}
+
 {% block body %}
     <h1>Personnalisation fiche numéro {{ fiche.numero }}</h1>
 
@@ -89,6 +91,7 @@
         <div id="zone_personnalisation">
             <h2>Personnalisation</h2>
             <form id="personnalisation" name="personnalisation" method="post" >
+                {{ form.csrf_token }}
                 {% for categorie in composition %}
                     <div class="set-hidde" id="set-{{ categorie["position_elem"] }}"
                          {% if loop.index0 != 0 %}hidden="" {% endif %}>
@@ -347,6 +350,6 @@
         </div>
     </div>
     <div class="d-flex my-3 px-5" id="actions_finales">
-        <button class="btn btn-primary form-control" type="submit" value="Submit" form="personnalisation">Envoyer</button>
+        {{ form.submit }}
     </div>
 {% endblock %}

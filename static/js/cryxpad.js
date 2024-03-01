@@ -145,7 +145,7 @@
                 let data = $el.data("number");
                 selectednumber = $inputcodeElement.val().toString()+data.toString();
                 $inputcodeElement.val(selectednumber);
-                $('#hidden-code').val(selectednumber);
+                $('#hiddencode').val(selectednumber);
                 if (selectednumber.length === 6){
                     $('#cryxpad-validate-btn').attr("disabled", false);
                 } else {
@@ -156,12 +156,12 @@
 
         function removeButtonClick($el){
             let inputCode = $inputcodeElement.val("");
-            $('#hidden-code').val("")
+            $('#hiddencode').val("")
             $('#cryxpad-validate-btn').attr("disabled", true);
         }
 
         function validaterButtonClick($el){
-            $("#fantom-click").click();
+            $("#fantomclick").click();
         }
 
     };

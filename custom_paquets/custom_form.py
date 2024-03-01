@@ -14,6 +14,7 @@ class LoginApprentiForm(FlaskForm):
     login = HiddenField(validators=[InputRequired(), Length(min=5, max=5)])
 
     password = HiddenField(validators=[InputRequired(), Length(min=1, max=9)])
+    
 
 
 class LoginPersonnelForm(FlaskForm):
@@ -27,7 +28,43 @@ class LoginPersonnelForm(FlaskForm):
                                          Length(min=5, message='La longueur du mot de passe est trop courte')], render_kw={"placeholder": "*********"})
 
     submit = SubmitField("Se connecter")
+    
+    
+class LoginPersonnelPin(FlaskForm):
+    """
+    Formulaire de connexion pour le personnel
+    """
+    """
+    translate this :
+    <input type="hidden" name="hiddencode" id="hiddencode" maxlength="6" minlength="6" required value="">
+    """
+    hiddencode = HiddenField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput(), render_kw={"hidden": "true"})
 
+    fantomclick = SubmitField(render_kw={"hidden": "true"})
+
+
+class RaisonArretForm(FlaskForm):
+    """
+    Formulaire de raison d'arrêt
+    """
+    # text area pour la raison d'arrêt
+    raison_arret = StringField(u'Text', widget=TextArea(), render_kw={"maxlength": "500", "class": "modifiable form-control mb-3"})
+    enregistrer = SubmitField("Enregistrer", render_kw={"class": "btn btn-primary form-control"})
+
+class CompleterFiche(FlaskForm):
+    """
+    Validation CSRF pour la fiche
+    """
+    
+    submit = SubmitField("Sauvegarder")
+    
+
+class ModifierFiche(FlaskForm):
+    """
+    Validation CSRF pour la fiche
+    """
+    # <button class="btn btn-primary form-control" type="submit" value="Submit" form="personnalisation">Envoyer</button>
+    submit = SubmitField("Envoyer", render_kw={"class": "btn btn-primary form-control", "form": "personnalisation"})
 
 class AjouterFiche(FlaskForm):
     """
