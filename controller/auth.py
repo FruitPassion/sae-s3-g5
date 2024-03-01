@@ -188,9 +188,8 @@ def choix_eleve_apprentis(nom_formation):
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
 
-    formation_existe(nom_formation)
-    
-    apprentis = Cours.get_apprentis_by_formation(nom_formation)
+    id_formation = Formation.get_formation_id_par_nom_formation(nom_formation)
+    apprentis = Apprenti.get_apprentis_by_formation(id_formation)
     ## Gestion des images par défaut
     for apprenti in apprentis:
         apprenti.photo = default_image_profil(apprenti.photo)

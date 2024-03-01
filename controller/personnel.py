@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for
 from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
 from custom_paquets.gestion_image import default_image_formation, default_image_profil
+from model.apprenti import Apprenti
 
 from model.formation import Formation
 from model.cours import Cours
@@ -50,8 +51,8 @@ def choix_eleve(nom_formation):
     """
 
     formation_existe(nom_formation)
-        
-    apprentis = Cours.get_apprentis_by_formation(nom_formation)
+    id_formation = Formation.get_formation_id_par_nom_formation(nom_formation)
+    apprentis = Apprenti.get_apprentis_by_formation(id_formation)
     ## Gestion des images par défaut
     for apprenti in apprentis:
         apprenti.photo = default_image_profil(apprenti.photo)
