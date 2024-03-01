@@ -12,10 +12,17 @@
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche.js') }}"></script>
 {% endblock %}
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des apprentis</h1>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="searchApprentis" placeholder="Rechercher un apprentis ..." 
+        aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchApprentis')">
+        </div>
+      
+      
     <div class="px-3 fs-2 h-50">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
@@ -30,7 +37,7 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="table des apprentis" id="table-non-archive">
+                <table class="table table-bordered" aria-describedby="table des apprentis" id="tab_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -78,6 +85,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="tab_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                  </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">

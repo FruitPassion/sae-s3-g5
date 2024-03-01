@@ -18,6 +18,10 @@
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des formations</h1>
+    <form autocomplete="off" id="search-bar">
+        <input type="text" class="form-control fs-1" id="search" placeholder="Rechercher une formation...">
+        <button class="btn btn-primary fs-1" type="button" id="search-btn">Rechercher</button>
+    </form>
     <div class="px-3 fs-2 h-50">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
