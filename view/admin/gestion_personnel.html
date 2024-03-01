@@ -12,14 +12,11 @@
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche_personnel.js') }}"></script>
 {% endblock %}
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste du personnel</h1>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchPersonnel" placeholder="Rechercher un membre du personne ..." 
-        aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchPersonnel')">
-    </div>
     <div class="px-3 fs-2 h-50">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
@@ -34,7 +31,11 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="tableau personnel" id="table-non-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchPersonnel" placeholder="Rechercher un membre du personne ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchPersonnel')">
+                </div>
+                <table class="table table-bordered" aria-describedby="tableau personnel" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -49,7 +50,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel %}
-                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if personnel.essais == 3 %}table-danger{% endif %}"
                             id="ele-{{ personnel.id_personnel }}">
                             <td id="login-{{ personnel.id_personnel }}">{{ personnel.login }}</td>
                             <td id="nom-{{ personnel.id_personnel }}">{{ personnel.nom }}</td>

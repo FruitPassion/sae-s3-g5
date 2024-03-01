@@ -14,14 +14,11 @@
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/reinitialiser_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche_formation.js') }}"></script>
 {% endblock %}
 
 {% block body %}
     <h1 class="mt-5 mb-5 pt-5 text-black">Liste des formations</h1>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="searchFormation" placeholder="Rechercher une formation ..." 
-        aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchFormation')">
-        </div>
     <div class="px-3 fs-2 h-50">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
@@ -36,7 +33,11 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="tableau formations" id="table-non-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchFormation" placeholder="Rechercher une formation ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchFormation')">
+                </div>
+                <table class="table table-bordered" aria-describedby="tableau formations" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Intitulé</th>
@@ -50,7 +51,7 @@
                     </thead>
                     <tbody>
                     {% for formation in liste_formations %}
-                        <tr class="text-center" id="ele-{{ formation.id_formation }}">
+                        <tr class="text-center row-to-search" id="ele-{{ formation.id_formation }}">
                             <td id="intitule-{{ formation.id_formation }}" class="align-middle">{{formation.intitule }}</td>
                             <td id="niveau_qualif-{{ formation.id_formation }}" class="align-middle">{{formation.niveau_qualif }}</td>
                             <td id="groupe-{{ formation.id_formation }}" class="align-middle">{{formation.groupe }}</td>
