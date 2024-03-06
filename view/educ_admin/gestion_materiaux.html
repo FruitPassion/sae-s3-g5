@@ -10,6 +10,7 @@
 {% block javascripts %}
     <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/recherche_materiaux.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -25,7 +26,11 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="table des materiaux" id="table-non-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchMat" placeholder="Rechercher un matériaux ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchMat')">
+                </div>
+                <table class="table table-bordered" aria-describedby="table des materiaux" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Nom</th>
@@ -36,7 +41,7 @@
                     </thead>
                     <tbody>
                     {% for materiel in materiaux %}
-                        <tr class="text-center" id="arch-ele-{{ materiel['id_materiel'] }}">
+                        <tr class="text-center row-to-search" id="arch-ele-{{ materiel['id_materiel'] }}">
                             <td id="nom-{{ materiel['id_materiel'] }}" class="align-middle">{{ materiel["nom"] }}</td>
                             <td id="categorie-{{ materiel['id_materiel'] }}"
                                 class="align-middle">{{ materiel["categorie"] }}</td>
@@ -53,6 +58,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="tab_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
                 <div style="height: 200px; position: relative"></div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
