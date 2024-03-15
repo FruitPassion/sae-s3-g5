@@ -117,7 +117,7 @@ class ModifierPersonnel(FlaskForm):
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
     form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
-    form_password = PasswordField()
+    form_password = PasswordField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput())
     submit = SubmitField("Modifier")
 
 
