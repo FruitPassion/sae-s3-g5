@@ -11,6 +11,7 @@
 
     <div class="w-75 m-auto mt-5">
         <form name="modifier" id="modifier" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <p>Commentaire (CIP) :</p>
             <textarea class="modifiable form-control" id="commentaire" name="commentaire"
                       maxlength="500">{{ commentaire }}</textarea>

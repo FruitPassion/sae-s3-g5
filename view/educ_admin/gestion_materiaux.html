@@ -65,6 +65,7 @@
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="d-flex w-75 test">
                         <div class="m-4 w-50">
                             <div>

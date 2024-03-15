@@ -17,6 +17,7 @@
     <div class="w-75 m-auto mt-5">
 
         <form name="modifier" id="modifier" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             {% if typeCommentaire =="educateur"%}
                 <p>Commentaire de l'éducateur :</p>
             {% else %}

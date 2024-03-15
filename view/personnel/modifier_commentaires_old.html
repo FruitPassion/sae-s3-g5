@@ -17,6 +17,7 @@
     <div id="bloc">
 
         <form name="modifier" id="modifier" enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             {% if typeCommentaire =="educateur"%}
                 <p>Commentaire de l'éducateur :</p>
             {% else %}
