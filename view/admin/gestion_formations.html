@@ -189,6 +189,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <input type="hidden" id="id-element-formation" name="id-element" value="">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Intitulé :</h3>

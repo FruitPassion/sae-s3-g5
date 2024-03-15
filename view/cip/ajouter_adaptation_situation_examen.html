@@ -11,6 +11,7 @@
     <div id="bloc">
        
         <form name="ajouter_commentaire" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <p>Commentaire (CIP) : </p>
             <textarea class="commentaire" name="commentaire" maxlength="500" rows="10" cols="100" class="ajout"></textarea>
 

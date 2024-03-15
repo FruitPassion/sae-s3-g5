@@ -23,6 +23,7 @@
 
     <div id="container-principal" class="px-4">
         <form method="POST" name="completer-fiche" enctype="multipart/form-data" class="mb-5">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div id="caroussel">
                 <input type="hidden" id="avancee" name="avancee" value="">
                 <fieldset hidden="" id="field-0" class="scheduler-border p-2 mr-auto ml-2"
