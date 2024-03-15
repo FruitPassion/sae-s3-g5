@@ -20,14 +20,6 @@ Préfixe d'URL : /cip/ .
 '''
 
 @cip.route("/", methods=["GET"])
-@cip_login_required
-def redirect_cip():
-    """
-    Redirige vers la page d'accueil de la cip
-    """
-    return redirect(url_for("personnel.redirect_personnel"), 302)
-
-
 @cip.route("/<string:apprenti>/choix-operations", methods=["GET"])
 @cip_login_required
 def affiche_choix(apprenti):
