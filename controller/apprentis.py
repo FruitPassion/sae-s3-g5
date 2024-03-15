@@ -63,8 +63,8 @@ def completer_fiche(numero):
     :param numero: id de la fiche technique
     :return: rendu de la page completer_fiche.html
     """
-
-    check_accessibilite_fiche(numero, 0)
+    
+    check_accessibilite_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero), 0)
     fiche_by_numero_existe(session['name'], numero)
 
     form = CompleterFiche()
@@ -175,6 +175,7 @@ def afficher_commentaires(numero):
     :return: rendu de la page commentaires.html
     """
     
+    check_accessibilite_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero), 1)
     fiche_by_numero_existe(session['name'], numero)
 
     commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
