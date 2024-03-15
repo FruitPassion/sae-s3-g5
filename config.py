@@ -57,7 +57,7 @@ class ProdConfig:
     SECRET_KEY = os.urandom(32)
     ENVIRONMENT = "production"
     FLASK_APP = "FichesProd"
-    WTF_CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = True
     DEBUG = False
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"

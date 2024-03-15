@@ -33,9 +33,9 @@
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
                 <div id="searchbar">
                     <input type="text" class="form-control" id="searchApprentis" placeholder="Rechercher un apprentis ..." 
-                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('tab_non_archive', 'searchApprentis')">
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchApprentis')">
                 </div>
-                <table class="table table-bordered" aria-describedby="table des apprentis" id="tab_non_archive">
+                <table class="table table-bordered" aria-describedby="table des apprentis" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -83,7 +83,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="tab_non_archiveRes" style="display: none;">
+                <div id="table_non_archiveRes" style="display: none;">
                     <p>Aucun résultat</p>
                 </div>
             </div>
