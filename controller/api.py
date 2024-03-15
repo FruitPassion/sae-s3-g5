@@ -29,18 +29,19 @@ def api_check_password_apprenti(user, password):
         return {"blocage": True}
 
 
-@api.route("/set-password-apprenti/<user>/<password>", methods=["GET"])
-def api_set_password_apprenti(user, password):
+@api.route("/set-password-apprenti/", methods=["POST"])
+def api_set_password_apprenti():
     """
     Modifie le mot de passe d'un apprenti
 
     :param user: Login de l'apprenti
     :param password: Nouveau mot de passe
     """
-    if Apprenti.check_password_apprenti(user, password):
+    infos = request.get_json()
+    if Apprenti.check_password_apprenti(infos["login"], str(infos["password"])):
         return {"valide": False}
     else:
-        return {"valide": Apprenti.set_password_apprenti(user, password)}
+        return {"valide": Apprenti.set_password_apprenti(infos["login"], str(infos["password"]))}
 
 
 @api.route("/archiver-formation/<int:id_formation>", methods=["GET"])
@@ -165,16 +166,3 @@ def api_supprimer_personnel(id_personnel):
     Supprime un personnel à partir de son id
     """
     return {"valide": Personnel.remove_personnel(id_personnel)}
-
-
-@api.route("/save_audio/<int:id_personnel>", methods=['POST'])
-@personnel_login_required
-def save_audio(id_personnel, id_fiche, horodatage, commentaire_audio):
-    if 'commentaire_audio' in request.files:
-        audio_file = request.files['commentaire_audio']
-        if audio_file.filename != '':
-            filename = f"{id_fiche}.{id_personnel}.mp3"
-            commentaire_audio = os.path.join('static/audio', filename)
-            audio_file.save(commentaire_audio)
-
-    return {"valide": LaisserTrace.modifier_commentaire_audio(id_fiche, horodatage, commentaire_audio)}

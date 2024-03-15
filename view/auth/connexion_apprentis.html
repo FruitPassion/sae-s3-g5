@@ -81,14 +81,28 @@
     {% else %}
         <script defer>
             function validate(lock, login, essai) {
-                $.getJSON("/api/set-password-apprenti/" + encodeURIComponent(login) + "/" + encodeURIComponent(essai.pattern), function (data) {
-                    if (data["valide"]) {
-                        location.reload();
-                    } else {
-                        lock.error();
-                        location.reload();
-                    }
-                })
+                const contentData = {
+                    login: login,
+                    password: essai.pattern
+                };
+            
+                const requestOptions = {
+                    method: 'POST', // Méthode HTTP
+                    headers: { 'Content-Type': 'application/json' }, // Type de contenu
+                    body: JSON.stringify(contentData) // Corps de la requête
+                };
+            
+                fetch(`/api/set-password-apprenti/`, requestOptions)
+                    .then(response => response.json()) // Convertir la réponse en JSON
+                    .then(data => {
+                        if (data["valide"]) {
+                            location.reload();
+                        } else {
+                            lock.error();
+                            location.reload();
+                        }
+                    })
+                    .catch(error =>  lock.error());
             }
         </script>
     {% endif %}
