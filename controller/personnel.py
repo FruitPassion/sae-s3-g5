@@ -17,13 +17,6 @@ Préfixe d'URL : /personnel/ .
 '''
 
 @personnel.route("/", methods=["GET"])
-@personnel_login_required
-def redirect_personnel():
-    """
-    Redirige vers la page d'accueil des personnels
-    """
-    return redirect(url_for("personnel.choix_formation"), 302)
-
 @personnel.route("/choix-formation-personnel", methods=["GET"])
 @personnel_login_required
 def choix_formation():

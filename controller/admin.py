@@ -23,14 +23,6 @@ Préfixe d'URL : /admin/ .
 '''
 
 @admin.route("/", methods=["GET"])
-@admin_login_required
-def redirect_admin():
-    """
-    Redirige vers la page d'accueil de l'admin
-    """
-    return redirect(url_for("admin.accueil_admin"), 302)
-
-
 @admin.route("/accueil-admin", methods=["GET"])
 @admin_login_required
 def accueil_admin():
