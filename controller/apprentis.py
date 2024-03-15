@@ -4,6 +4,7 @@ from custom_paquets.builder import build_categories, build_materiel, check_resse
 from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import CompleterFiche
 from custom_paquets.decorateur import apprenti_login_required
+from custom_paquets.function_completer_fiches import *
 from custom_paquets.gestion_image import process_photo
 from custom_paquets.gestion_filtres_routes import check_accessibilite_fiche, fiche_by_numero_existe
 from model.composer import ComposerPresentation
@@ -90,41 +91,17 @@ def completer_fiche(numero):
             FicheIntervention.definir_photo(fiche.id_fiche, avant_apres=True)  # True pour apres
 
         # Gestion des checkbox
-        checkboxes = ComposerPresentation.get_checkbox_on(fiche.id_fiche)
-        for checkbox in checkboxes:
-            if checkbox.position_elem not in request.form.keys():
-                completer_fiche[f"{checkbox.position_elem}"] = None
+        process_checkboxes(fiche, completer_fiche)
 
         # Gestion des radios
-        for element in request.form:
-            if "radio-" in element:
-                element = request.form.get(f"{element}")
-                completer_fiche[f"{element}"] = "radioed"
-        radios = ComposerPresentation.get_radio_radioed(fiche.id_fiche)
-        for radio in radios:
-            if radio.position_elem not in completer_fiche.keys():
-                completer_fiche[f"{radio.position_elem}"] = None
+        process_radio_input(fiche, completer_fiche)
 
         # Gestion des matériaux
-        for element in request.form:
-            if "selecteur-" in element and len(request.form.get(f"{element}")) != 0:
-                ajouter_materiel[f"{element.replace('selecteur-','')}"] = request.form.get(f"{element}")
-            elif "selecteur-" in element:
-                ajouter_materiel[f"{element.replace('selecteur-','')}"] = None
-        if len(ajouter_materiel) != 0:
-            ComposerPresentation.maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
+        process_material(fiche, ajouter_materiel)
 
         # Gestion des autres éléments
-        for element in request.form:
-            if element == "avancee" or "radio-" in element:
-                continue
-
-            if len(request.form.get(f"{element}")) != 0:
-                element_data = request.form.get(f"{element}")
-            else:
-                element_data = None
-                
-            completer_fiche[f"{element}"] = element_data
+        complete_form_data(completer_fiche)
+        
         ComposerPresentation.maj_contenu_fiche(completer_fiche, fiche.id_fiche)
         composer_fiche = build_categories(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
 
