@@ -6,7 +6,7 @@ from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import AjouterFiche, AjouterPicto, ModifierCours, ModifierFiche, ModifierMateriel, ModifierPicto, RaisonArretForm
 from custom_paquets.custom_form import AjouterCours, AjouterMateriel
 from custom_paquets.decorateur import educadmin_login_required
-from custom_paquets.gestion_filtres_routes import apprenti_existe, fiche_by_id_existe, fiche_by_numero_existe, formation_existe
+from custom_paquets.gestion_filtres_routes import apprenti_existe, check_accessibilite_fiche, fiche_by_id_existe, fiche_by_numero_existe, formation_existe
 from custom_paquets.gestion_image import default_image_formation, default_image_profil, stocker_photo_materiel, stocker_picto
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
@@ -224,6 +224,8 @@ def modifier_fiche(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
+    
+    check_accessibilite_fiche(id_fiche, 0) # la fiche doit être accessible pour être modifiable
     form = RaisonArretForm()
     fiche_by_id_existe(id_fiche)
 
@@ -278,6 +280,7 @@ def personnalisation(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
+    check_accessibilite_fiche(id_fiche, 0)
     form = ModifierFiche()
     fiche_by_id_existe(id_fiche)
     
@@ -305,6 +308,7 @@ def visualiser_commentaires(apprenti, numero):
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
 
+    check_accessibilite_fiche(numero, 0)
     apprenti_existe(apprenti)
     fiche_by_numero_existe(apprenti, numero)
 
@@ -324,6 +328,7 @@ def visualiser_commentaires_arret(apprenti, numero):
 
     :return: les commentaires de la fiche de l'élève sélectionnée.
     """
+    check_accessibilite_fiche(numero, 1)
     apprenti_existe(apprenti)
     fiche_by_numero_existe(apprenti, numero)
 

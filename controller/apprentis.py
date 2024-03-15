@@ -5,7 +5,7 @@ from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import CompleterFiche
 from custom_paquets.decorateur import apprenti_login_required
 from custom_paquets.gestion_image import process_photo
-from custom_paquets.gestion_filtres_routes import fiche_by_numero_existe
+from custom_paquets.gestion_filtres_routes import check_accessibilite_fiche, fiche_by_numero_existe
 from model.composer import ComposerPresentation
 from model.apprenti import Apprenti
 from model.cours import Cours
@@ -72,6 +72,7 @@ def completer_fiche(numero):
     :return: rendu de la page completer_fiche.html
     """
 
+    check_accessibilite_fiche(numero, 0)
     fiche_by_numero_existe(session['name'], numero)
 
     form = CompleterFiche()
@@ -182,6 +183,7 @@ def afficher_commentaires(numero):
     :return: rendu de la page commentaires.html
     """
     
+    check_accessibilite_fiche(numero, 1)
     fiche_by_numero_existe(session['name'], numero)
 
     commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
