@@ -183,7 +183,6 @@ def afficher_commentaires(numero):
     :return: rendu de la page commentaires.html
     """
     
-    check_accessibilite_fiche(numero, 1)
     fiche_by_numero_existe(session['name'], numero)
 
     commentaires = LaisserTrace.get_commentaires_par_fiche(FicheIntervention.get_id_fiche_apprenti(session['name'], numero))
