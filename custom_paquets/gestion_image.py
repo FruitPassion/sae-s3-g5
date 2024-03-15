@@ -4,13 +4,26 @@ from werkzeug.utils import secure_filename
 from random import randint
 from model.shared_model import db
 import secrets
+import numpy as np
 
-def random_color():
-    color = []
-    for name, code in ImageColor.colormap.items():
-        if name not in ["black", "white", "lightgrey", "darkgrey", "grey", "dimgrey", "dimgray", "silver", "gainsboro"]:
-            color.append(name)
-    return secrets.choice(color)
+def img_estim(img, thrshld):
+    is_light = np.mean(img) > thrshld
+    return 'light' if is_light else 'dark'
+
+def random_color(pixel):
+    color_for_dark = ["lightcoral", "mistyrose", "peachpuff", "bisque", "papayawhip", "oldlace", "cornsilk"
+                      "palegreen", "lightgreen", "palegoldenrod", "azure", "lightcyan", "paleturquoise", "lavender", "powderblue", "lightblue", "skyblue", "lightskyblue", "aliceblue",
+                      "lightsteelblue", "thistle", "lavenderblush", "plum", "lightpink", "pink", "lightcoral", "salmon", "lightsalmon", "sandybrown"]
+    
+    color_for_light = ["brown", "firebrick", "sienna", "chocolate", "peru", "burlywood", "tan", "goldenrod",
+                       "gold", "darkkhaki", "olive", "olivedrab", "yellowgreen", "forestgreen", "green",
+                       "seagreen", "mediumseagreen", "mediumaquamarine", "lightseagreen", "teal",
+                       "cadetblue", "deepskyblue", "steelblue", "cornflowerblue", "royalblue", "slateblue",
+                       "mediumpurple", "darkorchid", "mediumorchid", "hotpink", "mediumvioletred", "palevioletred"]
+    if pixel == 'light':
+        return secrets.choice(color_for_light)
+    else:
+        return secrets.choice(color_for_dark)
 
 
 def resize_image_profile(img: Image, path: str):
@@ -38,7 +51,7 @@ def resize_image_formation(im: Image, path: str):
     im = im.crop((0, 0, 1200, 393))
     im = im.convert("L")
     im = im.filter(ImageFilter.GaussianBlur(radius=3))
-    im = ImageOps.colorize(im, black=random_color(), white="white")
+    im = ImageOps.colorize(im, black=random_color(img_estim(im, 127)), white="white")
     im.save(path)
 
 
