@@ -19,3 +19,15 @@ def formation_existe(nom):
 def apprenti_existe(login):
     if not Apprenti.get_id_apprenti_by_login(login):
         abort(404)
+
+def check_accessibilite_fiche(id_fiche, accessible):
+    # Vérifie l'accessibilité de la fiche id_fiche en fonction de son état
+    # 0 : en cours, 1 : terminée, 2 : arrêtée
+    if accessible == 0:
+        # Si la fiche est en cours, alors elle doit être accessible (modifiable par educ admin ou remplissable par apprenti)
+        if not FicheIntervention.get_etat_fiche_par_id_fiche(id_fiche) == 0:
+            abort(404)
+    else:
+        # Sinon, elle ne doit pas être accessible
+        if FicheIntervention.get_etat_fiche_par_id_fiche(id_fiche) == 0:
+            abort(404)
