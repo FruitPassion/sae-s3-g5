@@ -1,13 +1,10 @@
-import urllib.parse, uuid, os
+from flask import Blueprint, request
 
-from flask import Blueprint, jsonify, request
-
-from custom_paquets.decorateur import admin_login_required, personnel_login_required
+from custom_paquets.decorateur import admin_login_required
 from model.apprenti import Apprenti
 from model.formation import Formation
 from model.personnel import Personnel
 from model.cours import Cours
-from model.laissertrace import LaisserTrace
 
 api = Blueprint('api', __name__, url_prefix="/api")
 
@@ -18,13 +15,15 @@ Préfixe d'URL : /api/ .
 '''
 
 
-@api.route("/check-password-apprenti/<user>/<password>", methods=["GET"])
-def api_check_password_apprenti(user, password):
+@api.route("/check-password-apprenti/", methods=["GET"])
+def api_check_password_apprenti():
     """
     Vérifie que le login et le password correspondent bien à ceux de la base de données
     """
-    if Apprenti.get_nbr_essais_connexion_apprenti(user) != 5:
-        return {"valide": Apprenti.check_password_apprenti(user, password)}
+    infos = request.get_json()
+    
+    if Apprenti.get_nbr_essais_connexion_apprenti(infos["login"]) != 5:
+        return {"valide": Apprenti.check_password_apprenti(infos["login"], infos["password"])}
     else:
         return {"blocage": True}
 
