@@ -68,10 +68,22 @@ function archiver(route, elementid = "archiver-value") {
     clone.id = "arch-" + clone.id
 
     afficher_snack("Archivage en cours...", "info");
-    $.getJSON("/api/archiver-" + route + "/" + encodeURIComponent(id_element), function (data) {
-        if (data["valide"]) {
+
+    const contentData = {
+        archive: true
+    };
+
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' }, // Type de contenu
+        body: JSON.stringify(contentData) // Corps de la requête
+    };
+
+    fetch("/api/" + route + "/"+ encodeURIComponent(id_element), requestOptions)
+        .then(response => response.json()) // Convertir la réponse en JSON
+        .then(data => {
             afficher_snack("Archivage réussi !", "success");
-            if (data["retirer"]) {
+            if (data["valide"]) {
                 switch (route) {
                     case "personnel":
                     case "apprenti":
@@ -94,10 +106,9 @@ function archiver(route, elementid = "archiver-value") {
                 }
                 table.appendChild(clone);
                 row.parentElement.removeChild(row);
+            } else {
+                afficher_snack("Archivage échoué.", "error");
             }
-        } else {
-            afficher_snack("Archivage échoué.", "error");
-        }
     });
 }
 
@@ -128,34 +139,47 @@ function desarchiver_cours() {
 function desarchiver(route) {
     let id_element = document.getElementById("desarchiver-value").value;
     let row = document.getElementById("arch-ele-" + id_element);
-    let table = document.getElementById("table-non-archive").getElementsByTagName("tbody")[0];
+    let table = document.getElementById("table_non_archive").getElementsByTagName("tbody")[0];
     let clone = row.cloneNode(true);
     clone.id = clone.id.replace("arch-", "")
 
     afficher_snack("Désarchivage en cours...", "info");
 
-    $.getJSON("/api/desarchiver-" + route + "/" + encodeURIComponent(id_element), function (data) {
-        if (data["valide"]) {
-            afficher_snack("Desarchivage réussi !", "success");
-            switch (route) {
-                case "formation":
-                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
-                    clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver + btn_archiver_apprenti;
-                    break;
-                case "apprenti":
-                case "personnel":
-                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
-                    clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
-                    break;
-                case "cours":
-                    clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
-                    clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
-                    break;
+    
+    const contentData = {
+        archive: false
+    };
+
+    const requestOptions = {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' }, // Type de contenu
+        body: JSON.stringify(contentData) // Corps de la requête
+    };
+
+    fetch("/api/" + route + "/" + encodeURIComponent(id_element), requestOptions)
+        .then(response => response.json()) // Convertir la réponse en JSON
+        .then(data => {
+            if (data["valide"]) {
+                afficher_snack("Desarchivage réussi !", "success");
+                switch (route) {
+                    case "formation":
+                        clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
+                        clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver + btn_archiver_apprenti;
+                        break;
+                    case "apprenti":
+                    case "personnel":
+                        clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
+                        clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
+                        break;
+                    case "cours":
+                        clone.getElementsByClassName("ele-btn-desarchiver")[0].outerHTML = btn_modifier(route);
+                        clone.getElementsByClassName("ele-btn-supprimer")[0].outerHTML = btn_archiver;
+                        break;
+                }
+                table.appendChild(clone);
+                row.parentElement.removeChild(row);
+            } else {
+                afficher_snack("Désarchivage échoué.", "error");
             }
-            table.appendChild(clone);
-            row.parentElement.removeChild(row);
-        } else {
-            afficher_snack("Désarchivage échoué.", "error");
-        }
     });
 }

@@ -41,20 +41,13 @@ def api_set_password_apprenti():
         return {"valide": False}
     else:
         return {"valide": Apprenti.set_password_apprenti(infos["login"], str(infos["password"]))}
+    
 
 
-@api.route("/archiver-formation/<int:id_formation>", methods=["GET"])
+
+@api.route("/reinitialiser-formation/<int:id_formation>", methods=["PATCH"])
 @admin_login_required
-def api_archiver_formation(id_formation, commit=True):
-    """
-    Archive une formation à partir de son id
-    """
-    return {"valide": Formation.archiver_formation(id_formation, commit=commit), "retirer": True}
-
-
-@api.route("/reinitialiser-formation/<int:id_formation>", methods=["GET"])
-@admin_login_required
-def api_reinitialiser_formation(id_formation, commit=True):
+def api_reinitialiser_formation(id_formation):
     """
     Réinitialise une formation à partir de son id
 
@@ -62,19 +55,20 @@ def api_reinitialiser_formation(id_formation, commit=True):
     :param commit:
     :return: JSON valide
     """
-    return {"valide": Formation.reinitisaliser_formation(id_formation, commit=commit)}
+    return {"valide": Formation.reinitisaliser_formation(id_formation)}
 
 
-@api.route("/desarchiver-formation/<int:id_formation>", methods=["GET"])
+@api.route("/formation/<int:id_formation>", methods=["PATCH"])
 @admin_login_required
-def api_desarchiver_formation(id_formation):
+def api_archive_formation(id_formation):
     """
     Désarchive une formation à partir de son id
 
     :param id_formation:
     :return: JSON valide
     """
-    return {"valide": Formation.archiver_formation(id_formation, archiver=False)}
+    infos = request.get_json()
+    return {"valide": Formation.archiver_formation(id_formation, archiver=infos["archive"])}
 
 
 @api.route("/formation/<int:id_formation>", methods=["DELETE"])
@@ -86,22 +80,14 @@ def api_supprimer_formation(id_formation):
     return {"valide": Formation.remove_formation(id_formation)}
 
 
-@api.route("/archiver-apprenti/<int:id_apprenti>", methods=["GET"])
+@api.route("/apprenti/<int:id_apprenti>", methods=["PATCH"])
 @admin_login_required
-def api_archiver_apprenti(id_apprenti):
+def api_archive_apprenti(id_apprenti):
     """
-    Archive un apprenti à partir de son id
+    Archive/Désarchive un apprenti à partir de son id
     """
-    return {"valide": Apprenti.archiver_apprenti(id_apprenti), "retirer": True}
-
-
-@api.route("/desarchiver-apprenti/<int:id_apprenti>", methods=["GET"])
-@admin_login_required
-def api_desarchiver_apprenti(id_apprenti):
-    """
-    Désarchive un apprenti à partir de son id
-    """
-    return {"valide": Apprenti.archiver_apprenti(id_apprenti, archiver=False)}
+    infos = request.get_json()
+    return {"valide": Apprenti.archiver_apprenti(id_apprenti, archiver=infos["archive"], commit=True)}
 
 
 @api.route("/apprenti/<int:id_apprenti>", methods=["DELETE"])
@@ -113,22 +99,14 @@ def api_supprimer_apprenti(id_apprenti):
     return {"valide": Apprenti.remove_apprenti(id_apprenti)}
 
 
-@api.route("/archiver-cours/<int:id_cours>", methods=["GET"])
+@api.route("/cours/<int:id_cours>", methods=["PATCH"])
 @admin_login_required
-def api_archiver_cours(id_cours):
+def api_archive_cours(id_cours):
     """
-    Archive un cours à partir de son id
+    Archive/Désarchive un cours à partir de son id
     """
-    return {"valide":Cours.archiver_cours(id_cours), "retirer": True}
-
-
-@api.route("/desarchiver-cours/<int:id_cours>", methods=["GET"])
-@admin_login_required
-def api_desarchiver_cours(id_cours):
-    """
-    Désarchive un cours à partir de son id
-    """
-    return {"valide": Cours.archiver_cours(id_cours, archiver=False)}
+    infos = request.get_json()
+    return {"valide": Cours.archiver_cours(id_cours, archiver=infos["archive"])}
 
 
 @api.route("/cours/<int:id_cours>", methods=["DELETE"])
@@ -140,22 +118,15 @@ def api_supprimer_cours(id_cours):
     return {"valide": Cours.remove_cours(id_cours)}
 
 
-@api.route("/archiver-personnel/<int:id_personnel>", methods=["GET"])
+@api.route("/personnel/<int:id_personnel>", methods=["PATCH"])
 @admin_login_required
-def api_archiver_personnel(id_personnel):
+def api_archive_personnel(id_personnel):
     """
-    Archive un personnel à partir de son id
+    Archive/Désarchive un personnel à partir de son id
     """
-    return {"valide": Personnel.archiver_personnel(id_personnel), "retirer": True}
-
-
-@api.route("/desarchiver-personnel/<int:id_personnel>", methods=["GET"])
-@admin_login_required
-def api_desarchiver_personnel(id_personnel):
-    """
-    Désarchive un personnel à partir de son id
-    """
-    return {"valide": Personnel.archiver_personnel(id_personnel, archiver=False)}
+    infos = request.get_json()
+    
+    return {"valide": Personnel.archiver_personnel(id_personnel, archiver=infos["archive"])}
 
 
 @api.route("/personnel/<int:id_personnel>", methods=["DELETE"])
