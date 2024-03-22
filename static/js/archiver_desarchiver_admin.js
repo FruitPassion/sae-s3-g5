@@ -63,7 +63,7 @@ function archiver_cours() {
 function archiver(route, elementid = "archiver-value") {
     let id_element = document.getElementById(elementid).value;
     let row = document.getElementById("ele-" + id_element);
-    let table = document.getElementById("table-archive").getElementsByTagName("tbody")[0];
+    let table = document.getElementById("table_archive").getElementsByTagName("tbody")[0];
     let clone = row.cloneNode(true);
     clone.id = "arch-" + clone.id
 

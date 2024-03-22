@@ -13,6 +13,7 @@
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/recherche_apprentis.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche_apprentis_archive.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -131,7 +132,11 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" id="table-archive" aria-describedby="table apprentis archivés">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchApprentisArchive" placeholder="Rechercher un apprenti archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchApprentisArchive')">
+                </div>
+                <table class="table table-bordered" id="table_archive" aria-describedby="table apprentis archivés">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -145,7 +150,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprentis_archives %}
-                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
                             id="arch-ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
@@ -176,6 +181,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
         </div>
         <div style="height: 200px; position: relative"></div>
