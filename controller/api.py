@@ -77,7 +77,7 @@ def api_desarchiver_formation(id_formation):
     return {"valide": Formation.archiver_formation(id_formation, archiver=False)}
 
 
-@api.route("/supprimer-formation/<int:id_formation>", methods=["GET"])
+@api.route("/formation/<int:id_formation>", methods=["DELETE"])
 @admin_login_required
 def api_supprimer_formation(id_formation):
     """
@@ -104,7 +104,7 @@ def api_desarchiver_apprenti(id_apprenti):
     return {"valide": Apprenti.archiver_apprenti(id_apprenti, archiver=False)}
 
 
-@api.route("/supprimer-apprenti/<int:id_apprenti>", methods=["GET"])
+@api.route("/apprenti/<int:id_apprenti>", methods=["DELETE"])
 @admin_login_required
 def api_supprimer_apprenti(id_apprenti):
     """
@@ -131,7 +131,7 @@ def api_desarchiver_cours(id_cours):
     return {"valide": Cours.archiver_cours(id_cours, archiver=False)}
 
 
-@api.route("/supprimer-cours/<int:id_cours>", methods=["GET"])
+@api.route("/cours/<int:id_cours>", methods=["DELETE"])
 @admin_login_required
 def api_supprimer_cours(id_cours):
     """
@@ -158,7 +158,7 @@ def api_desarchiver_personnel(id_personnel):
     return {"valide": Personnel.archiver_personnel(id_personnel, archiver=False)}
 
 
-@api.route("/supprimer-personnel/<int:id_personnel>", methods=["GET"])
+@api.route("/personnel/<int:id_personnel>", methods=["DELETE"])
 @admin_login_required
 def api_supprimer_personnel(id_personnel):
     """

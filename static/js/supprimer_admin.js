@@ -28,12 +28,19 @@ function supprimer(route){
 
     afficher_snack("Suppression en cours...", "info");
 
-    $.getJSON("/api/supprimer-"+route+"/" + encodeURIComponent(id_element), function (data) {
-        if (data["valide"]) {
-            afficher_snack("Suppression réussie !", "success");
-            row.parentElement.removeChild(row);
-        } else {
-            afficher_snack("Suppression échouée.", "error");
-        }
-    });
+    const requestOptions = {
+        method: 'DELETE', // Méthode HTTP
+        headers: { 'Content-Type': 'application/json' }, // Type de contenu
+    };
+
+    fetch("/api/"+route+"/" + encodeURIComponent(id_element), requestOptions)
+        .then(response => response.json()) // Convertir la réponse en JSON
+        .then(data => {
+            if (data["valide"]) {
+                afficher_snack("Suppression réussie !", "success");
+                row.parentElement.removeChild(row);
+            } else {
+                afficher_snack("Suppression échouée.", "error");
+            }
+        });
 }
