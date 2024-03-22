@@ -119,7 +119,11 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" aria-describedby="tableau formations archivées" id="table-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchFormationArchive" placeholder="Rechercher une formation archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchFormationArchive')">
+                </div>
+                <table class="table table-bordered" aria-describedby="tableau formations archivées" id="table_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Intitulé</th>
@@ -132,7 +136,7 @@
                     </thead>
                     <tbody>
                     {% for formation in liste_formations_archivees %}
-                        <tr class="text-center" id="arch-ele-{{ formation.id_formation }}">
+                        <tr class="text-center row-to-search" id="arch-ele-{{ formation.id_formation }}">
                             <td class="align-middle">{{ formation.intitule }}</td>
                             <td class="align-middle">{{ formation.niveau_qualif }}</td>
                             <td class="align-middle">{{ formation.groupe }}</td>
@@ -152,6 +156,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
         </div>
         <div style="height: 200px; position: relative"></div>

@@ -120,7 +120,11 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" id="table-archive" aria-describedby="table cours archivés">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchCoursArchive" placeholder="Rechercher un cours archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchCoursArchive')">
+                </div>
+                <table class="table table-bordered" id="table_archive" aria-describedby="table cours archivés">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Thème</th>
@@ -133,7 +137,7 @@
                     </thead>
                     <tbody>
                     {% for cour in cours_archives %}
-                        <tr class="text-center" id="arch-ele-{{ cour.id_cours }}">
+                        <tr class="text-center row-to-search" id="arch-ele-{{ cour.id_cours }}">
                             <td class="align-middle">{{ cour.theme }}</td>
                             <td class="align-middle">{{ cour.cours }}</td>
                             <td class="align-middle">{{ cour.duree }}</td>
@@ -154,7 +158,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <div id="tab_non_archiveRes" style="display: none;">
+                <div id="table_archiveRes" style="display: none;">
                     <p>Aucun résultat</p>
                 </div>
             </div>

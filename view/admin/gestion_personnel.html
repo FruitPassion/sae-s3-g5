@@ -148,7 +148,11 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" aria-describedby="tableau personnel archivé" id="table-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchPersonnelArchive" placeholder="Rechercher un membre du personnel archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchPersonnelArchive')">
+                </div>
+                <table class="table table-bordered" aria-describedby="tableau personnel archivé" id="table_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -163,7 +167,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel_archive %}
-                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if personnel.essais == 3 %}table-danger{% endif %}"
                             id="arch-ele-{{ personnel.id_personnel }}">
                             <td id="login">{{ personnel.login }}</td>
                             <td id="nom">{{ personnel.nom }}</td>
@@ -191,6 +195,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
         </div>
         <div style="height: 200px; position: relative"></div>
