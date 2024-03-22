@@ -10,7 +10,7 @@ def encrypt_password(password):
 
 def compare_passwords(new_passw, old_passwd):
     old_passwd = bytes(old_passwd, 'utf-8')
-    return bcrypt.checkpw(get_b64(new_passw), old_passwd)
+    return bcrypt.checkpw(get_b64(str(new_passw)), old_passwd)
 
 
 def get_b64(password):

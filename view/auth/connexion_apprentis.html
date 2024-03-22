@@ -69,22 +69,25 @@
                 };
             
                 const requestOptions = {
-                    method: 'GET', // Méthode HTTP
+                    method: 'POST', // Méthode HTTP
                     headers: { 'Content-Type': 'application/json' }, // Type de contenu
                     body: JSON.stringify(contentData) // Corps de la requête
                 };
             
-                fetch(`/api/check-password-apprenti/`, requestOptions)
-                    .then(response => response.json()) // Convertir la réponse en JSON
+                fetch("/api/check-password-apprenti/", requestOptions)
+                    .then(response => response.json()) 
                     .then(data => {
                         if (data["valide"]) {
-                            location.reload();
+                            lock.success(); 
+                            document.getElementById('password').value = essai.pattern; 
+                            document.forms["form_hidden"].submit(); 
+                            document.getElementById("form_hidden").submit(); 
                         } else {
                             lock.error();
                             location.reload();
                         }
                     })
-                    .catch(error =>  lock.error());
+                    .catch(error => location.reload());
             }
         </script>
     {% else %}

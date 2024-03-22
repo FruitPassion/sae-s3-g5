@@ -15,7 +15,7 @@ Préfixe d'URL : /api/ .
 '''
 
 
-@api.route("/check-password-apprenti/", methods=["GET"])
+@api.route("/check-password-apprenti/", methods=["POST"])
 def api_check_password_apprenti():
     """
     Vérifie que le login et le password correspondent bien à ceux de la base de données
