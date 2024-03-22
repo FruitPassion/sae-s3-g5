@@ -5,14 +5,16 @@ from random import randint
 from model.shared_model import db
 import secrets
 import numpy as np
+import cv2
+from matplotlib import colors
 
 def img_estim(img, thrshld):
     is_light = np.mean(img) > thrshld
     return 'light' if is_light else 'dark'
 
 def random_color(pixel):
-    color_for_dark = ["lightcoral", "mistyrose", "peachpuff", "bisque", "papayawhip", "oldlace", "cornsilk"
-                      "palegreen", "lightgreen", "palegoldenrod", "azure", "lightcyan", "paleturquoise", "lavender", "powderblue", "lightblue", "skyblue", "lightskyblue", "aliceblue",
+    color_for_dark = ["lightcoral", "mistyrose", "peachpuff", "bisque", "papayawhip", "oldlace",
+                      "cornsilk", "palegreen", "lightgreen", "palegoldenrod", "azure", "lightcyan", "paleturquoise", "lavender", "powderblue", "lightblue", "skyblue", "lightskyblue", "aliceblue",
                       "lightsteelblue", "thistle", "lavenderblush", "plum", "lightpink", "pink", "lightcoral", "salmon", "lightsalmon", "sandybrown"]
     
     color_for_light = ["brown", "firebrick", "sienna", "chocolate", "peru", "burlywood", "tan", "goldenrod",
@@ -24,7 +26,10 @@ def random_color(pixel):
         return secrets.choice(color_for_light)
     else:
         return secrets.choice(color_for_dark)
-
+    
+def to_rgb255(tuple_color):
+    rgb_color = tuple(int(x * 255) for x in tuple_color)
+    return rgb_color
 
 def resize_image_profile(img: Image, path: str):
     img_width, img_height = img.size
@@ -51,9 +56,11 @@ def resize_image_formation(im: Image, path: str):
     im = im.crop((0, 0, 1200, 393))
     im = im.convert("L")
     im = im.filter(ImageFilter.GaussianBlur(radius=3))
-    im = ImageOps.colorize(im, black=random_color(img_estim(im, 127)), white="white")
-    im.save(path)
-
+    target = cv2.imread(path)
+    color = np.full(shape=target.shape, fill_value=to_rgb255(colors.to_rgb(random_color(img_estim(im, 127)))), dtype=np.uint8)
+    fused_img  = cv2.addWeighted(target, 0.5, color, 0.5, 0)
+    cv2.waitKey(0)
+    cv2.imwrite(path, fused_img)
 
 def resize_image_picto(im: Image, path: str):
     """Resize l'image pour qu'elle soit carrée et de taille 400x400"""
