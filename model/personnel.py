@@ -1,5 +1,7 @@
 import logging
 
+from flask import session
+
 from custom_paquets.security import compare_passwords
 
 from model.shared_model import db, DB_SCHEMA, EducAdmin
@@ -102,10 +104,11 @@ class Personnel(db.Model):
         try:
             old_password = Personnel.query.with_entities(Personnel.mdp).filter_by(login=login).first().mdp
             digest = compare_passwords(new_password, old_password)
-            if digest and Personnel.get_nbr_essais_connexion_personnel(login) < 3:
-                Personnel.reset_nbr_essais_connexion(login)
-            elif not digest and Personnel.get_nbr_essais_connexion_personnel(login) < 3:
-                Personnel.update_nbr_essais_connexion(login)
+            if not Personnel.check_super_admin(login):
+                if digest and Personnel.get_nbr_essais_connexion_personnel(login) < 3:
+                    Personnel.reset_nbr_essais_connexion(login)
+                elif not digest and Personnel.get_nbr_essais_connexion_personnel(login) < 3:
+                    Personnel.update_nbr_essais_connexion(login)
             return digest
         except Exception as e:
             logging.error(f"Erreur lors de la vérification du mot de passe de {login}")
