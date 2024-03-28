@@ -70,13 +70,13 @@ class PersonnelTestModif:
 
 
 class ApprentiTest:
-    def __init__(self, commit=False):
+    def __init__(self):
         self.nom = "SousFifre"
         self.prenom = "Malheureux"
         self.photo = "/url/photo.jpg"
         self.login = generate_login(self.nom, self.prenom)
 
-        self.id_apprenti = Apprenti.add_apprenti(self.nom, self.prenom, self.login, self.photo, commit=commit)
+        self.id_apprenti = Apprenti.add_apprenti(self.nom, self.prenom, self.login, self.photo)
 
 
 class ApprentiTestModif:
@@ -95,14 +95,13 @@ class ApprentiTestModif:
 
 
 class FormationTest:
-    def __init__(self, commit=False):
+    def __init__(self):
         self.intitule = "Parcours électricité"
         self.niveau_qualification = 3
         self.groupe = "1"
         self.image = "formation_image/elec.jpg"
 
-        self.id_formation = Formation.add_formation(self.intitule, self.niveau_qualification, self.groupe, self.image,
-                                                    commit=commit)
+        self.id_formation = Formation.add_formation(self.intitule, self.niveau_qualification, self.groupe, self.image)
 
 
 class CoursTest:

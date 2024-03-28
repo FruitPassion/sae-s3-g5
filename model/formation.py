@@ -91,7 +91,7 @@ class Formation(db.Model):
         try:
             formation = Formation(intitule=intitule, niveau_qualif=niveau_qualif, groupe=groupe, image=image)
             db.session.add(formation)
-            if commit:
+            if commit == True:
                 db.session.commit()
             return Formation.get_formation_id_par_nom_formation(intitule)
         except Exception as e:
