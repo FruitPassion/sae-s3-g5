@@ -1,7 +1,5 @@
 # Importation des librairies nécessaires
-import json
 import os
-import logging
 import sys
 
 # Vérification de la présence des dépendances dans l'environnement virtuel
@@ -15,7 +13,7 @@ from werkzeug.exceptions import HTTPException
 from custom_paquets import app_utils
 
 # Paquet gestion d'erreur
-from custom_paquets.gestions_erreur import logging_erreur, LogOpeningError
+from custom_paquets.gestions_erreur import LogOpeningError
 
 
 # Fonction pour créer une application et la paramétrer
