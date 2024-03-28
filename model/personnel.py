@@ -1,7 +1,5 @@
 import logging
 
-from flask import session
-
 from custom_paquets.security import compare_passwords
 
 from model.shared_model import db, DB_SCHEMA, EducAdmin

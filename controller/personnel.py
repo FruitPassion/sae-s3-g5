@@ -4,7 +4,6 @@ from custom_paquets.gestion_image import default_image_formation, default_image_
 from model.apprenti import Apprenti
 
 from model.formation import Formation
-from model.cours import Cours
 from custom_paquets.decorateur import personnel_login_required
 from model.personnel import Personnel
 
