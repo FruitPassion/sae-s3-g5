@@ -20,9 +20,11 @@ def test_archiver_formation(client):
     formation_t = FormationTest()
 
     Formation.archiver_formation(formation_t.id_formation, archiver=True, commit=False)
-    assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
-                                              Formation.archive == 1).first() is not None
-    db.session.rollback()
+    formation_d = db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
+                                              Formation.archive == 1).first()
+    assert formation_d is not None
+    db.session.delete(formation_d)
+    db.session.commit()
     assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
                                               Formation.archive == 1).first() is None
 
