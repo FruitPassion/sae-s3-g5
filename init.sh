@@ -145,7 +145,7 @@ source .env/bin/activate
 replog=$(python3.10 -c "from custom_paquets.converter import generate_login; print(generate_login('$repnom','$repprenom'))")
 
 
-repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repavmdp').decode('utf-8'))")
+repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repavmdp', salt=15).decode('utf-8'))")
 
 deactivate
 
