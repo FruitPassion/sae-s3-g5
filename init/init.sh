@@ -23,6 +23,8 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+cd ..
+
 # Check if the script is run in the right directory
 if [ "$parent_directory/" != "/var/www/" ]; then
     echo "Le dossier $current_directory n'est pas dans /var/www/"
@@ -86,6 +88,11 @@ read -p "Entrez le mot de passe du SSID de votre réseau wifi : "
 echo   
 mdpssid=$REPLY
 
+cp init/db_production.sql .
+cp init/app.conf .
+cp init/app.wsgi .
+cp init/redis.conf .
+
 
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
@@ -96,20 +103,20 @@ printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\
 apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables nmcli mydumper iptables-persistent
 
 
-printf "\n\n$BALISE\n${PURPLE}Installation de ${BLUE}Docker${PURPLE}$ et ${RED}redis${NC}\n$BALISE\n\n"
+printf "\n\n$BALISE\n${PURPLE}Installation de ${RED}redis${NC}\n$BALISE\n\n"
 
-apt-get install -y  ca-certificates curl
-install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-chmod a+r /etc/apt/keyrings/docker.asc
+curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
 
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
+
 apt-get update
-apt-get -y  install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-docker run --name some-redis -d -p 6379:6379 redis
+apt-get install redis-server
+
+redis-server redis.conf
+cp redis.conf /etc/redis/redis.conf
+
+systemctl enable redis-server
+systemctl restart redis-server
 
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
@@ -301,7 +308,7 @@ ip6tables-save > /etc/iptables/rules.v6
 
 printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
 
-rm db_production.sql app.conf
+rm db_production.sql app.conf app.wsgi
 
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 443 à l'adresse : https://$nomdom ${NC}\n$BALISE\n\n"
 
