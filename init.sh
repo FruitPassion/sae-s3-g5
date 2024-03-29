@@ -23,8 +23,6 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-cd ..
-
 # Check if the script is run in the right directory
 if [ "$parent_directory/" != "/var/www/" ]; then
     echo "Le dossier $current_directory n'est pas dans /var/www/"
@@ -94,7 +92,7 @@ apt update -y && apt upgrade -y
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables mydumper iptables-persistent
+apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables mydumper 
 
 
 printf "\n\n$BALISE\n${PURPLE}Installation de ${RED}redis${NC}\n$BALISE\n\n"
@@ -299,6 +297,8 @@ iptables -P FORWARD -j DROP
 
 iptables-save > /etc/iptables/rules.v4
 ip6tables-save > /etc/iptables/rules.v6
+
+apt install iptables-persistent -y
 
 printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
 
