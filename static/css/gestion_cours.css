@@ -60,3 +60,20 @@
     left: 50px;
     top: 30px;
 }
+
+#searchbar{
+    margin: 10px;
+}
+
+#searchbar input{
+    height: 60px;
+    font-size: 30px;
+}
+
+#table_non_archiveRes p {
+    font-size: 30px;
+}
+
+#table_archiveRes p {
+    font-size: 30px;
+}

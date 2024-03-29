@@ -12,10 +12,12 @@
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche_apprentis.js') }}"></script>
+    
 {% endblock %}
 
 {% block body %}
-    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des apprentis</h1>
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des apprentis</h1>   
     <div class="px-3 fs-2 h-50">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
@@ -30,7 +32,11 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="table des apprentis" id="table-non-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchApprentis" placeholder="Rechercher un apprenti ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchApprentis')">
+                </div>
+                <table class="table table-bordered" aria-describedby="table des apprentis" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -44,7 +50,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprentis %}
-                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
                             id="ele-{{ apprenti['id_apprenti'] }}">
                             <td id="login-{{ apprenti['id_apprenti'] }}"
                                 class="align-middle">{{ apprenti["login"] }}</td>
@@ -78,6 +84,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">
@@ -123,7 +132,11 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" id="table-archive" aria-describedby="table apprentis archivés">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchApprentisArchive" placeholder="Rechercher un apprenti archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchApprentisArchive')">
+                </div>
+                <table class="table table-bordered" id="table_archive" aria-describedby="table apprentis archivés">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
@@ -137,7 +150,7 @@
                     </thead>
                     <tbody>
                     {% for apprenti in liste_apprentis_archives %}
-                        <tr class="text-center {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if apprenti['essais'] == 5 %}table-danger{% endif %}"
                             id="arch-ele-{{ apprenti['id_apprenti'] }}">
                             <td class="align-middle">{{ apprenti["login"] }}</td>
                             <td class="align-middle">{{ apprenti["nom"] }}</td>
@@ -168,6 +181,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
         </div>
         <div style="height: 200px; position: relative"></div>

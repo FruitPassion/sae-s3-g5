@@ -1,6 +1,7 @@
+import json
 from flask import url_for
 from custom_paquets.converter import generate_login
-from custom_paquets.tester_usages import connexion_personnel_mdp
+from custom_paquets.tester_usages import FormationTest, connexion_personnel_mdp
 from model.formation import Formation
 from model.personnel import Personnel
 from model.apprenti import Apprenti
@@ -41,55 +42,53 @@ def test_api_check_password_apprenti(client):
 def test_api_archiver_formation(client):
     # Partie archivage
     # Création d'une formation à archiver
-    intitule = "Parcours électricité"
-    niveau_qualification = 3
-    groupe = "1"
-    image = "null"
-
-    Formation.add_formation(intitule, niveau_qualification, groupe, image, commit=False)
-
-    # Set up d'une formation
-    id_formation = Formation.get_formation_id_par_nom_formation(intitule)
+    formation_t = FormationTest()
 
     # Connexion en tant que superadmin
     superadmin = "JED10"
     mdp = "superadmin"
     connexion_personnel_mdp(client, superadmin, mdp)
+    
+    data = {"archive": True}
 
     # Test d'archivage d'une formation
-    response = client.get(url_for("api.api_archiver_formation", id_formation=id_formation))
+    response = client.post(url_for("api.api_archive_formation", id_formation=formation_t.id_formation),
+                           data=json.dumps(data),
+                headers={"Content-Type": "application/json"})
 
     # Test d'accès à la route
     assert response.status_code == 200
-    print(response.data)
-    print(type(response))
 
     # Test de vérification de la route
-    assert response.request.path == "/api/archiver-formation/" + str(id_formation)
+    assert response.request.path == "/api/formation/" + str(formation_t.id_formation)
 
     # Test de vérification de l'archivage
     assert response.json["valide"] == True
+    
+    data = {"archive": False}
 
     # Test de désarchivage
-    response = client.get(url_for("api.api_desarchiver_formation", id_formation=id_formation))
+    response = client.post(url_for("api.api_archive_formation", id_formation=formation_t.id_formation),
+                data=json.dumps(data),
+                headers={"Content-Type": "application/json"})
 
     # Test d'accès à la route
     assert response.status_code == 200
 
     # Test de vérification de la route
-    assert response.request.path == "/api/desarchiver-formation/" + str(id_formation)
+    assert response.request.path == "/api/formation/" + str(formation_t.id_formation)
 
     # Test de vérification du désarchivage
     assert response.json["valide"] == True
 
     # Test de suppression
-    response = client.get(url_for("api.api_supprimer_formation", id_formation=id_formation))
+    response = client.delete(url_for("api.api_supprimer_formation", id_formation=formation_t.id_formation))
 
     # Test d'accès à la route
     assert response.status_code == 200
 
     # Test de vérification de la route
-    assert response.request.path == "/api/supprimer-formation/" + str(id_formation)
+    assert response.request.path == "/api/formation/" + str(formation_t.id_formation)
 
     # Test de vérification de la suppression
     assert response.json["valide"] == True

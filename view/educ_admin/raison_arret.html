@@ -8,19 +8,19 @@
 
 {% block body %}
 
-    <h1>Arrêt et copie de la fiche n°{{ id_fiche }} de {{ apprenti }} </h1>
+    <h1>Arrêt et copie de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
 
     <div class="w-75 m-auto mt-5">
 
         <form name="raison" id="raison" method="POST">
 
             <h2>Pourquoi arrêter cette fiche ?</h2>
-            <textarea class="modifiable form-control mb-3" id="raison_arret" name="raison_arret"
-                      maxlength="500"></textarea>
+            {{ form.csrf_token }}
+            {{ form.raison_arret }}
 
             <br>
 
-            <input type="submit" value="Enregistrer" id="enregistrer" class="btn btn-primary form-control">
+            {{ form.enregistrer }}
 
         </form>
         

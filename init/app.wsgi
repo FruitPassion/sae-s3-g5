@@ -1,4 +1,4 @@
-#!/var/www/FichesProd/.env/bin/python3.10
+#!/var/www/__AREMPLACERSN__/.env/bin/python3.10
 
 import sys
 

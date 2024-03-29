@@ -56,7 +56,15 @@ function passer_parametre_form(element, nom_form){
             document.getElementById("form_theme").value       = document.getElementById("theme-"+id_element).innerText;
             document.getElementById("form_cours").value       = document.getElementById("cours-"+id_element).innerText;
             document.getElementById("form_duree").value       = document.getElementById("duree-"+id_element).innerText;
-            document.getElementById("select_formation").value = document.getElementById("formation-"+id_element).innerText;
+            let formationAssociee       = document.getElementById("select_formation_modifier");
+            let ancienneFormationAssociee  = document.getElementById("formation-" + id_element).innerText;
+
+            for (let i = 0; i < formationAssociee.length ; i++) {
+                if (formationAssociee.options[i].value === ancienneFormationAssociee) {
+                    formationAssociee[i].setAttribute("selected", "selected");
+                    break; // Sortie de la boucle une fois l'option trouvée
+                }
+            }
             break;
 
         case "materiel":

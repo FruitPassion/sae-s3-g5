@@ -10,10 +10,11 @@ from flask import (
     session,
 )
 
-from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm
+from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm, LoginPersonnelPin
 from custom_paquets.decorateur import logout_required
+from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
+from custom_paquets.gestion_image import default_image_formation, default_image_profil
 from model.apprenti import Apprenti
-from model.cours import Cours
 from model.formation import Formation
 from model.personnel import Personnel
 
@@ -92,9 +93,10 @@ def connexion_personnel_pin():
     :return: En fonction du rôle de la personne, on est redirigé vers la page correspondante.
     """
     personnels = Personnel.get_liste_personnel_non_super()
+    form = LoginPersonnelPin()
     code = 200
-    if request.method == "POST":
-        passwd = request.form["code"]
+    if request.method == "POST" and form.validate_on_submit():
+        passwd = request.form["hiddencode"]
         login = request.form.get('login_select')
         if not Personnel.check_password(login, passwd):
             if Personnel.get_nbr_essais_connexion_personnel(login) == 3:
@@ -117,7 +119,7 @@ def connexion_personnel_pin():
                     return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)
-    return Response(render_template("auth/connexion_personnel_pin.html", personnels=personnels), code)
+    return Response(render_template("auth/connexion_personnel_pin.html", personnels=personnels, form=form), code)
 
 
 @auth.route("/connexion-personnel-mdp", methods=["GET", "POST"])
@@ -170,10 +172,13 @@ def choix_formation_apprentis():
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
     formations = Formation.get_all_formations()
+    ## Gestion des images par défaut
+    for formation in formations:
+        formation.image = default_image_formation(formation.image)
     return render_template("auth/choix_formation_apprentis.html", formations=formations)
 
 
-@auth.route("/choix-eleve-apprentis/<nom_formation>", methods=["GET"])
+@auth.route("/choix-eleve-apprentis/<string:nom_formation>", methods=["GET"])
 @logout_required
 def choix_eleve_apprentis(nom_formation):
     """
@@ -182,14 +187,17 @@ def choix_eleve_apprentis(nom_formation):
     :param nom_formation: Permet de chercher la liste des apprentis en fonction de la formation suivie.
     :return: Rendue de la page choix_apprentis.html avec la liste des eleves associés à la formation.
     """
-    if not Formation.get_formation_id_par_nom_formation(nom_formation):
-        abort(404)
+
+    id_formation = Formation.get_formation_id_par_nom_formation(nom_formation)
+    apprentis = Apprenti.get_apprentis_by_formation(id_formation)
+    ## Gestion des images par défaut
+    for apprenti in apprentis:
+        apprenti.photo = default_image_profil(apprenti.photo)
     
-    apprentis = Cours.get_apprentis_by_formation(nom_formation)
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation)
 
 
-@auth.route("/connexion-apprentis/<nom_formation>/<login_apprenti>", methods=["GET", "POST"])
+@auth.route("/connexion-apprentis/<string:nom_formation>/<string:login_apprenti>", methods=["GET", "POST"])
 @logout_required
 def connexion_apprentis(nom_formation, login_apprenti):
     """
@@ -198,6 +206,9 @@ def connexion_apprentis(nom_formation, login_apprenti):
 
     :return: connexion_apprentis.html
     """
+    formation_existe(nom_formation)
+    apprenti_existe(login_apprenti)
+    
     form = LoginApprentiForm()
     apprenti = Apprenti.get_apprenti_by_login(login_apprenti)
     code = 200

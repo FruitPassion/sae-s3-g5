@@ -1,16 +1,35 @@
+import os
 from PIL import Image, ImageFilter, ImageOps, ImageColor
 from werkzeug.utils import secure_filename
 from random import randint
+from model.shared_model import db
 import secrets
+import numpy as np
+import cv2
+from matplotlib import colors
 
+def img_estim(img, thrshld):
+    is_light = np.mean(img) > thrshld
+    return 'light' if is_light else 'dark'
 
-def random_color():
-    color = []
-    for name, code in ImageColor.colormap.items():
-        if name not in ["black", "white", "lightgrey", "darkgrey", "grey", "dimgrey", "dimgray", "silver", "gainsboro"]:
-            color.append(name)
-    return secrets.choice(color)
-
+def random_color(pixel):
+    color_for_dark = ["lightcoral", "mistyrose", "peachpuff", "bisque", "papayawhip", "oldlace",
+                      "cornsilk", "palegreen", "lightgreen", "palegoldenrod", "azure", "lightcyan", "paleturquoise", "lavender", "powderblue", "lightblue", "skyblue", "lightskyblue", "aliceblue",
+                      "lightsteelblue", "thistle", "lavenderblush", "plum", "lightpink", "pink", "lightcoral", "salmon", "lightsalmon", "sandybrown"]
+    
+    color_for_light = ["brown", "firebrick", "sienna", "chocolate", "peru", "burlywood", "tan", "goldenrod",
+                       "gold", "darkkhaki", "olive", "olivedrab", "yellowgreen", "forestgreen", "green",
+                       "seagreen", "mediumseagreen", "mediumaquamarine", "lightseagreen", "teal",
+                       "cadetblue", "deepskyblue", "steelblue", "cornflowerblue", "royalblue", "slateblue",
+                       "mediumpurple", "darkorchid", "mediumorchid", "hotpink", "mediumvioletred", "palevioletred"]
+    if pixel == 'light':
+        return secrets.choice(color_for_light)
+    else:
+        return secrets.choice(color_for_dark)
+    
+def to_rgb255(tuple_color):
+    rgb_color = tuple(int(x * 255) for x in tuple_color)
+    return rgb_color
 
 def resize_image_profile(img: Image, path: str):
     img_width, img_height = img.size
@@ -37,9 +56,11 @@ def resize_image_formation(im: Image, path: str):
     im = im.crop((0, 0, 1200, 393))
     im = im.convert("L")
     im = im.filter(ImageFilter.GaussianBlur(radius=3))
-    im = ImageOps.colorize(im, black=random_color(), white="white")
-    im.save(path)
-
+    target = cv2.imread(path)
+    color = np.full(shape=target.shape, fill_value=to_rgb255(colors.to_rgb(random_color(img_estim(im, 127)))), dtype=np.uint8)
+    fused_img  = cv2.addWeighted(target, 0.5, color, 0.5, 0)
+    cv2.waitKey(0)
+    cv2.imwrite(path, fused_img)
 
 def resize_image_picto(im: Image, path: str):
     """Resize l'image pour qu'elle soit carrée et de taille 400x400"""
@@ -127,3 +148,32 @@ def save_photo(photo, id_fiche, filename):
     filename = secure_filename(f"{id_fiche}_{filename}.jpg")
     photo.save(f"./static/images/photo_fiche/{filename}")
 
+
+def supprimer_photo_profil(file):
+    try:
+        chemin_avatar = "./static/images/" + file
+        os.remove(chemin_avatar)
+    except:
+        return "erreur suppression photo de profil"
+    
+def default_image_profil(file):
+    try:
+        if not os.path.exists('./static/images/' + file):
+            chemin_avatar = "./photo_profile/defaut_profile.png"
+            db.session.commit()
+        else:
+            chemin_avatar = file
+        return chemin_avatar
+    except:
+        return "Erreur : pas de photo de profil par défaut"
+    
+def default_image_formation(file):
+    try:
+        if not os.path.exists('./static/images/' + file):
+            chemin_image = "./formation_image/default_formation.png"
+            db.session.commit()
+        else:
+            chemin_image = file
+        return chemin_image
+    except:
+        return "Erreur : pas d'image de formation par défaut"

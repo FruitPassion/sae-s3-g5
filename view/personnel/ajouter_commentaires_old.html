@@ -15,6 +15,7 @@
     <div>
        
         <form name="ajouter_commentaire" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
             <p>Intitulé : </p>
             <input type="text" name="intitule" id="intitule" class="ajout">

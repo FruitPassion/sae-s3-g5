@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, session, redirect, url_for
+from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
+from custom_paquets.gestion_image import default_image_formation, default_image_profil
+from model.apprenti import Apprenti
 
 from model.formation import Formation
-from model.cours import Cours
 from custom_paquets.decorateur import personnel_login_required
 from model.personnel import Personnel
 
@@ -13,7 +15,7 @@ Blueprint pour toutes les routes relatives aux URL des pages du personnel (non s
 Préfixe d'URL : /personnel/ .
 '''
 
-
+@personnel.route("/", methods=["GET"])
 @personnel.route("/choix-formation-personnel", methods=["GET"])
 @personnel_login_required
 def choix_formation():
@@ -24,10 +26,13 @@ def choix_formation():
     :return: rendu de la page choix_formation.html
     """
     formations = Formation.get_all_formations()
+    ## Gestion des images par défaut
+    for formation in formations:
+        formation.image = default_image_formation(formation.image)
     return render_template("personnel/choix_formation.html", formations=formations), 200
 
 
-@personnel.route("/choix-eleves/<nom_formation>", methods=["GET"])
+@personnel.route("/choix-eleves/<string:nom_formation>", methods=["GET"])
 @personnel_login_required
 def choix_eleve(nom_formation):
     """
@@ -36,11 +41,17 @@ def choix_eleve(nom_formation):
 
     :return: rendu de la page choix_apprentis.html
     """
-    apprentis = Cours.get_apprentis_by_formation(nom_formation)
+
+    formation_existe(nom_formation)
+    id_formation = Formation.get_formation_id_par_nom_formation(nom_formation)
+    apprentis = Apprenti.get_apprentis_by_formation(id_formation)
+    ## Gestion des images par défaut
+    for apprenti in apprentis:
+        apprenti.photo = default_image_profil(apprenti.photo)
     return render_template("personnel/choix_apprentis.html", apprentis=apprentis), 200
 
 
-@personnel.route("/redirection-fiches/<apprenti>", methods=["GET"])
+@personnel.route("/redirection-fiches/<string:apprenti>", methods=["GET"])
 @personnel_login_required
 def redirection_fiches(apprenti):
     """
@@ -48,6 +59,8 @@ def redirection_fiches(apprenti):
     Affiche les actions possibles de la CIP ou les fiches des apprentis si le rôle est éducateur simple
     ou éducateur admin.
     """
+
+    apprenti_existe(apprenti)
 
     role = Personnel.get_role_by_login(session.get("name"))
     if role == "Educateur Administrateur":

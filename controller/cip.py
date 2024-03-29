@@ -2,6 +2,7 @@ from flask import Blueprint, Response, redirect, render_template, request, url_f
 
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
+from custom_paquets.gestion_filtres_routes import apprenti_existe, fiche_by_id_existe
 from model.cours import Cours
 from model.formation import Formation
 from model.laissertrace import LaisserTrace
@@ -10,6 +11,7 @@ from model.ficheintervention import FicheIntervention
 import json
 
 cip = Blueprint("cip", __name__, url_prefix="/cip")
+personnel = Blueprint("personnel", __name__, url_prefix="/cip")
 
 '''
 Blueprint pour toutes les routes relatives aux URL des pages du CIP
@@ -17,8 +19,8 @@ Blueprint pour toutes les routes relatives aux URL des pages du CIP
 Préfixe d'URL : /cip/ .
 '''
 
-
-@cip.route("/<apprenti>/choix-operations", methods=["GET"])
+@cip.route("/", methods=["GET"])
+@cip.route("/<string:apprenti>/choix-operations", methods=["GET"])
 @cip_login_required
 def affiche_choix(apprenti):
     """
@@ -27,12 +29,15 @@ def affiche_choix(apprenti):
 
     :return: rendu de la page choix_operations.html
     """
+
+    apprenti_existe(apprenti)
+
     formation = Formation.get_formation_par_apprenti(apprenti)
     return render_template("cip/choix_operations.html", apprenti=apprenti,
                            formation=formation), 200
 
 
-@cip.route("/<apprenti>/fiches", methods=["GET"])
+@cip.route("/<string:apprenti>/fiches", methods=["GET"])
 @cip_login_required
 def fiches_apprenti(apprenti):
     """
@@ -42,6 +47,9 @@ def fiches_apprenti(apprenti):
 
     :return: rendu de la page fiches_techniques.html
     """
+
+    apprenti_existe(apprenti)
+    
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
     fiches = FicheIntervention.get_fiches_techniques_finies_par_login(apprenti)
     fiches = changer_date(fiches)
@@ -50,7 +58,7 @@ def fiches_apprenti(apprenti):
                            get_nom_cours_by_id=Cours.get_nom_cours_by_id, cours=cours)
 
 
-@cip.route("/<apprenti>/<fiche>/commentaires", methods=["GET"])
+@cip.route("/<string:apprenti>/<int:fiche>/commentaires", methods=["GET"])
 @cip_login_required
 def visualiser_commentaires(apprenti, fiche):
     """
@@ -60,11 +68,15 @@ def visualiser_commentaires(apprenti, fiche):
     
     :return: rendu de la page commentaires.html
     """
+
+    apprenti_existe(apprenti)
+    fiche_by_id_existe(fiche)
+
     commentaires = LaisserTrace.get_commentaires_par_fiche(fiche)
     return render_template("cip/commentaires.html", commentaires=commentaires, apprenti=apprenti), 200
 
 
-@cip.route("/<apprenti>/suivi-progression", methods=["GET"])
+@cip.route("/<string:apprenti>/suivi-progression", methods=["GET"])
 @cip_login_required
 def suivi_progression_apprenti(apprenti):
     """
@@ -73,6 +85,9 @@ def suivi_progression_apprenti(apprenti):
 
     :return: rendu de la page suivi-progression.html
     """
+
+    apprenti_existe(apprenti)
+
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
 
     # Récupération des niveaux et états des fiches
@@ -87,7 +102,7 @@ def suivi_progression_apprenti(apprenti):
                            niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
 
 
-@cip.route("/<apprenti>/adaptation-situation-examen", methods=["GET"])
+@cip.route("/<string:apprenti>/adaptation-situation-examen", methods=["GET"])
 @cip_login_required
 def affichage_adaptation_situation_examen(apprenti):
     """
@@ -97,13 +112,15 @@ def affichage_adaptation_situation_examen(apprenti):
     :return: rendu de la page adaptation_situation_examen.html
     """
 
+    apprenti_existe(apprenti)
+
     commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
     apprenti = Apprenti.get_apprenti_by_login(apprenti)
     return render_template("cip/adaptation_situation_examen.html", apprenti=apprenti,
                            commentaire=commentaire), 200
 
 
-@cip.route("/<apprenti>/modifier-commentaire", methods=["GET", "POST"])
+@cip.route("/<string:apprenti>/modifier-commentaire", methods=["GET", "POST"])
 @cip_login_required
 def modifier_commentaire(apprenti):
     """
@@ -111,6 +128,8 @@ def modifier_commentaire(apprenti):
     
     :return: la page de modification du commentaire 
     """
+
+    apprenti_existe(apprenti)
 
     commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
 
@@ -124,7 +143,7 @@ def modifier_commentaire(apprenti):
                            commentaire=commentaire), 200)
 
 
-@cip.route("/<apprenti>/ajouter-commentaire", methods=["GET", "POST"])
+@cip.route("/<string:apprenti>/ajouter-commentaire", methods=["GET", "POST"])
 @cip_login_required
 def ajouter_commentaire(apprenti):
     """
@@ -132,6 +151,9 @@ def ajouter_commentaire(apprenti):
     
     :return: la page d'ajout d'un commentaire 
     """
+    
+    apprenti_existe(apprenti)
+    
     if request.method == 'POST':
         adaptation_situation_examen = request.form["commentaire"]
         Apprenti.update_adaptation_situation_examen_par_apprenti(apprenti, adaptation_situation_examen)

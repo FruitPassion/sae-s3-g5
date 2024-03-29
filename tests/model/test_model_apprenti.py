@@ -6,9 +6,11 @@ from model.ficheintervention import FicheIntervention
 
 def test_ajouter_apprenti(client):
     apprenti = ApprentiTest()
-
-    assert db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti.id_apprenti).first() is not None
-    db.session.rollback()
+    
+    apprenti_d = db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti.id_apprenti).first()
+    assert apprenti_d is not None
+    db.session.delete(apprenti_d)
+    db.session.commit()
     assert db.session.query(Apprenti).filter(Apprenti.id_apprenti == apprenti.id_apprenti).first() is None
 
 

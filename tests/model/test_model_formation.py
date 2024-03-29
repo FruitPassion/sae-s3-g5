@@ -7,9 +7,11 @@ from model.shared_model import db
 
 def test_ajouter_formation(client):
     formation_t = FormationTest()
-
-    assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation).first() is not None
-    db.session.rollback()
+    
+    formation_d = db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation).first()
+    assert formation_d is not None
+    db.session.delete(formation_d)
+    db.session.commit()
     assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation).first() is None
 
 
@@ -18,22 +20,24 @@ def test_archiver_formation(client):
     formation_t = FormationTest()
 
     Formation.archiver_formation(formation_t.id_formation, archiver=True, commit=False)
-    assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
-                                              Formation.archive == 1).first() is not None
-    db.session.rollback()
+    formation_d = db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
+                                              Formation.archive == 1).first()
+    assert formation_d is not None
+    db.session.delete(formation_d)
+    db.session.commit()
     assert db.session.query(Formation).filter(Formation.id_formation == formation_t.id_formation,
                                               Formation.archive == 1).first() is None
 
 
 def test_supprimer_formation(client):
     # Création d'une formation à supprimer
-    formation = FormationTest(commit=True)
+    formation = FormationTest()
 
     # Vérification de l'ajout de la formation
     assert db.session.query(Formation).filter(Formation.id_formation == formation.id_formation).first() is not None
 
     # Ajout d'un apprenti à la formation
-    apprenti = ApprentiTest(commit=True)
+    apprenti = ApprentiTest()
 
     # Ajout de l'apprenti dans un cours de la formation
     Cours.add_apprenti_assister(apprenti.id_apprenti, formation.id_formation)

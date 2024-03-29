@@ -1,6 +1,6 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Gestion des comptes{% endblock %}
+{% block title %}Gestion du personnel{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
@@ -12,6 +12,7 @@
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche_personnel.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -30,14 +31,18 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="tableau personnel" id="table-non-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchPersonnel" placeholder="Rechercher un membre du personnel ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchPersonnel')">
+                </div>
+                <table class="table table-bordered" aria-describedby="tableau personnel" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
                         <th scope="col">Nom</th>
                         <th scope="col">Prénom</th>
                         <th scope="col">Mail</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Rôle</th>
                         <th scope="col">Actif</th>
                         <th scope="col">Modifier</th>
                         <th scope="col">Archiver</th>
@@ -45,7 +50,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel %}
-                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if personnel.essais == 3 %}table-danger{% endif %}"
                             id="ele-{{ personnel.id_personnel }}">
                             <td id="login-{{ personnel.id_personnel }}">{{ personnel.login }}</td>
                             <td id="nom-{{ personnel.id_personnel }}">{{ personnel.nom }}</td>
@@ -85,6 +90,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" name="ajout_personnel">
@@ -140,14 +148,18 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" aria-describedby="tableau personnel archivé" id="table-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchPersonnelArchive" placeholder="Rechercher un membre du personnel archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchPersonnelArchive')">
+                </div>
+                <table class="table table-bordered" aria-describedby="tableau personnel archivé" id="table_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Login</th>
                         <th scope="col">Nom</th>
                         <th scope="col">Prénom</th>
                         <th scope="col">Mail</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Rôle</th>
                         <th scope="col">Actif</th>
                         <th scope="col">Désarchiver</th>
                         <th scope="col">Supprimer</th>
@@ -155,7 +167,7 @@
                     </thead>
                     <tbody>
                     {% for personnel in liste_personnel_archive %}
-                        <tr class="text-center {% if personnel.essais == 3 %}table-danger{% endif %}"
+                        <tr class="text-center row-to-search {% if personnel.essais == 3 %}table-danger{% endif %}"
                             id="arch-ele-{{ personnel.id_personnel }}">
                             <td id="login">{{ personnel.login }}</td>
                             <td id="nom">{{ personnel.nom }}</td>
@@ -183,6 +195,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
         </div>
         <div style="height: 200px; position: relative"></div>
@@ -240,7 +255,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier" autocomplete="off">
+                    <form method="post" id="container-modifier" autocomplete="off">*
+                        {{ form_modifier.csrf_token }}
                         <input type="hidden" value="" id="id-element-personnel" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
@@ -296,6 +312,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier-admin" autocomplete="off">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <input type="hidden" value="" id="id-element-admin" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>

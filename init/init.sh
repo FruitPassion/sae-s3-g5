@@ -15,6 +15,7 @@ BALISE='##############################'
 # Get the current directory
 current_directory=$(basename $(pwd))
 parent_directory=$(dirname "$(pwd)")
+nbr_processors=$(nproc --all)
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
@@ -22,10 +23,18 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+cd ..
+
 # Check if the script is run in the right directory
 if [ "$parent_directory/" != "/var/www/" ]; then
     echo "Le dossier $current_directory n'est pas dans /var/www/"
     printf "\n\n${RED}Le dossier $current_directory doit être dans le répertoire /var/www/${NC}\n\n"
+    exit 1
+fi
+
+interf=(nmcli --get-values GENERAL.DEVICE,GENERAL.TYPE device show | grep -B 1 'wifi' | head -n 1)
+if [ -z "$interf" ]; then
+    printf "\n\n${RED}Aucune interface wifi n'a été détectée${NC}\n\n"
     exit 1
 fi
 
@@ -39,7 +48,51 @@ else
     printf "\n\n${RED}L'architecture de votre système n'est pas supportée${NC}\n\n"
     exit 1
 fi
+
 printf "\n\n$BALISE\n${GREEN}Architecture detectée : $proc${NC}\n$BALISE\n\n"
+
+
+read -p "Entrez un nom d'administrateur pour l'application : " 
+echo   
+repnom=$REPLY
+read -p "Entrez un prenom d'administrateur pour l'application : " 
+echo   
+repprenom=$REPLY
+read -p "Entrez un mail d'administrateur pour l'application : " 
+echo   
+repmail=$REPLY
+while true; do
+    read -p "Entrez un mot de passe administrateur pour l'application (sans @ dedans) : " 
+    echo   
+    repavmdp=$REPLY
+    if [[ $repavmdp == *"@"* ]]; then
+        echo "Le mot de passe ne doit pas contenir de @"
+    else
+        break
+    fi
+done
+read -p "Entrez un nom de domaine pour acceder localement à l'application (ex: site.local ) : " 
+echo    
+nomdom=$REPLY
+while true; do
+    read -p "Entrez le nom du SSID de votre réseau wifi (ex: Wifi-1234) (sans espace dedans) : "
+    echo   
+    nomssid=$REPLY
+    if [[ $nomssid == *" "* ]]; then
+        echo "Le nom du SSID ne doit pas contenir d'espace"
+    else
+        break
+    fi
+done
+read -p "Entrez le mot de passe du SSID de votre réseau wifi : " 
+echo   
+mdpssid=$REPLY
+
+cp init/db_production.sql .
+cp init/app.conf .
+cp init/app.wsgi .
+cp init/redis.conf .
+
 
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
@@ -47,7 +100,23 @@ apt update -y && apt upgrade -y
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables nmcli mydumper iptables-persistent
+
+
+printf "\n\n$BALISE\n${PURPLE}Installation de ${RED}redis${NC}\n$BALISE\n\n"
+
+curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
+
+apt-get update
+apt-get install redis-server
+
+redis-server redis.conf
+cp redis.conf /etc/redis/redis.conf
+
+systemctl enable redis-server
+systemctl restart redis-server
 
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
@@ -56,7 +125,7 @@ wget -c https://www.python.org/ftp/python/3.10.13/Python-3.10.13.tar.xz
 tar -Jxvf Python-3.10.13.tar.xz 
 cd Python-3.10.13 #check
 ./configure --enable-optimizations --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" #check
-sudo make -j4 && sudo make altinstall  
+sudo make -j "$nbr_processors" && sudo make altinstall  
 cd .. 
 rm -r Python-3.10.13.tar.xz Python-3.10.13 
 
@@ -93,24 +162,13 @@ echo "LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi-py310.cpython-310
 #### MARIADB ####
 printf "\n\n$BALISE\n${YELLOW}Paramétrage de la base de donnees MariaDB${NC}\n$BALISE\n\n"
 
-read -p "Entrez un nom d'administrateur : " 
-echo    # (optional) move to a new line
-repnom=$REPLY
-read -p "Entrez un prenom d'administrateur : " 
-echo    # (optional) move to a new line
-repprenom=$REPLY
 
 source .env/bin/activate
 
 replog=$(python3.10 -c "from custom_paquets.converter import generate_login; print(generate_login('$repnom','$repprenom'))")
-read -p "Entrez un mail d'administrateur : " 
-echo    # (optional) move to a new line
-repmail=$REPLY
-read -p "Entrez un mot de passe administrateur : " 
-echo    # (optional) move to a new line
-repavmdp=$REPLY
 
-repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repavmdp').decode('utf-8'))")
+
+repmdp=$(python3.10 -c "from custom_paquets.security import encrypt_password; print(encrypt_password('$repavmdp', salt=15).decode('utf-8'))")
 
 deactivate
 
@@ -179,10 +237,6 @@ echo "Activation des modules terminée"
 # Create the virtual host
 printf "\n\n$BALISE\n${BLUE}Creation de l'host virtuel${NC}\n$BALISE\n\n"
 
-read -p "Entrez un nom de domaine pour acceder localement à l'application (ex: site.local ) : " 
-echo    
-nomdom=$REPLY
-
 sed -i -e "s/__AREMPLACERSN__/$current_directory/g" app.conf
 sed -i -e "s/__AREMPLACERSN__/$current_directory/g" app.wsgi
 sed -i -e "s/__AREMPLACERDN__/$nomdom/g" app.conf
@@ -211,7 +265,7 @@ cd modsecurity
 git submodule init
 git submodule update
 ./configure
-make
+make -j "$nbr_processors"
 make install
 cd ..
 mkdir conf
@@ -229,9 +283,32 @@ printf "\n\n$BALISE\n${BLUE}Demarrage d'Apache${NC}\n$BALISE\n\n"
 systemctl enable apache2 
 systemctl start apache2 
 
+printf "\n\n$BALISE\n${BLUE}Création d'un point relai et configuration du firewall${NC}\n$BALISE\n\n"
+
+printf "Interface du relai : $interf\n\nu"
+
+nmcli con add type wifi ifname $interf mode ap con-name $nomdom ssid $nomdom
+nmcli con modify $nomdom 802-11-wireless.band bg
+nmcli con modify $nomdom 802-11-wireless.channel 1
+nmcli con modify $nomdom 802-11-wireless-security.key-mgmt wpa-psk
+nmcli con modify $nomdom 802-11-wireless-security.proto rsn
+nmcli con modify $nomdom 802-11-wireless-security.group ccmp
+nmcli con modify $nomdom 802-11-wireless-security.pairwise ccmp
+nmcli con modify $nomdom 802-11-wireless-security.psk $mdpssid
+nmcli con modify $nomdom ipv4.method shared
+nmcli con up $nomdom
+
+iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
+iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
+iptables -P FORWARD -j DROP
+
+iptables-save > /etc/iptables/rules.v4
+ip6tables-save > /etc/iptables/rules.v6
+
 printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
 
-rm db_production.sql app.conf
+rm db_production.sql app.conf app.wsgi
 
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 443 à l'adresse : https://$nomdom ${NC}\n$BALISE\n\n"
 
@@ -242,3 +319,5 @@ printf "Identfiants administrateur de la base de donnée :\n - login : 'root'\n 
 printf "Identfiants utilisateur de la base de donnée :\n - login : 'user'\n - mot de passe : '$pwdusr'  ${NC}\n$BALISE\n\n"
 
 printf "$BALISE\n${RED}Notez les quelques part, ils ne seront plus affichés et ne seront enregistrés nulle part.${NC}\n$BALISE\n\n"
+
+unset HISTFILE

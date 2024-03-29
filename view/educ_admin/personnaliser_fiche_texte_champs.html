@@ -1,5 +1,7 @@
 {% extends 'common/base.html' %}
 
+{% block title %}Personnalisation fiche{% endblock %}
+
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/dd.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/personnalisation_fiche.css') }}">
@@ -87,6 +89,7 @@
         <div id="zone_personnalisation">
             <h2>Personnalisation</h2>
             <form id="personnalisation" name="personnalisation" method="post" >
+                {{ form.csrf_token }}
                 {% for categorie in composition %}
                     <div class="set-hidde" id="set-{{ categorie["position_elem"] }}"
                          {% if loop.index0 != 0 %}hidden="" {% endif %}>
@@ -345,6 +348,6 @@
         </div>
     </div>
     <div class="d-flex my-3 px-5" id="actions_finales">
-        <button class="btn btn-primary form-control" type="submit" value="Submit" form="personnalisation">Envoyer</button>
+        {{ form.submit }}
     </div>
 {% endblock %}

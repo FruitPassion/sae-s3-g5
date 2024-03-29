@@ -5,6 +5,8 @@ from configparser_crypt import ConfigParserCrypt
 from custom_paquets.app_checker import lire_config
 from custom_paquets.getion_logs import gestion_logs
 
+import redis
+
 import pymysql
 
 pymysql.install_as_MySQLdb()
@@ -39,8 +41,8 @@ class DevConfig:
     FLASK_APP = "FichesDev"
     DEBUG = True
     SESSION_PERMANENT = False
-    WTF_CSRF_ENABLED = False
     SESSION_TYPE = "filesystem"
+    WTF_CSRF_ENABLED = False
     DB_SCHEMA = f"db_fiches_{config.lower()}"
     SQLALCHEMY_DATABASE_URI = f'mariadb://local_user:password@localhost:3306/{DB_SCHEMA}'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -57,10 +59,12 @@ class ProdConfig:
     SECRET_KEY = os.urandom(32)
     ENVIRONMENT = "production"
     FLASK_APP = "FichesProd"
-    WTF_CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = True
     DEBUG = False
     SESSION_PERMANENT = False
-    SESSION_TYPE = "filesystem"
+    SESSION_TYPE = "redis"
+    SESSION_USE_SIGNER = True
+    SESSION_REDIS = redis.from_url('redis://127.0.0.1:6379')
     DB_SCHEMA = f"db_fiches_{config.lower()}"
     SQLALCHEMY_DATABASE_URI = 'mariadb://user:{}@localhost:3306/{}'.format(
         conf_file['DBS']['db_password'], DB_SCHEMA)

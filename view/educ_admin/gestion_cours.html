@@ -12,6 +12,7 @@
     <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/recherche_cours.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -30,7 +31,11 @@
         </div>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
-                <table class="table table-bordered" aria-describedby="table des cours" id="table-non-archive">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchCours" placeholder="Rechercher un cours ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchCours')">
+                </div>
+                <table class="table table-bordered" aria-describedby="table des cours" id="table_non_archive">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Thème</th>
@@ -43,14 +48,14 @@
                     </thead>
                     <tbody>
                     {% for cour in cours %}
-                        <tr class="text-center" id="ele-{{ cour.id_cours }}">
+                        <tr class="text-center row-to-search" id="ele-{{ cour.id_cours }}">
                             <td id="theme-{{ cour.id_cours }}"
                                 class="align-middle">{{ cour.theme }}</td>
                             <td id="cours-{{ cour.id_cours }}" class="align-middle">{{ cour.cours }}</td>
                             <td id="duree-{{ cour.id_cours }}" class="align-middle">{{ cour.duree }}</td>
                             {% for formation in formations %}
                                 {% if formation.id_formation == cour.id_formation %}
-                                    <td id="duree-{{ formation.intitule }}"
+                                    <td id="formation-{{ cour.id_cours }}"
                                         class="align-middle">{{ formation.intitule }}</td>
                                 {% endif %}
                             {% endfor %}
@@ -68,6 +73,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
                 <form method="post" id="container-ajout" enctype="multipart/form-data">
@@ -96,7 +104,7 @@
                             </div>
                             <div>
                                 <h3 class="fs-1 my-3">Choisissez une formation :</h3>
-                                <select name="select_formation" class="fs-1 my-3 form-select" required>
+                                <select id="select_formation" name="select_formation" class="fs-1 my-3 form-select" required>
                                     <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                     </option>
                                     {% for formation in formations %}
@@ -112,7 +120,11 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="nav-archiver" role="tabpanel" aria-labelledby="nav-archiver-tab">
-                <table class="table table-bordered" id="table-archive" aria-describedby="table cours archivés">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchCoursArchive" placeholder="Rechercher un cours archivé ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_archive', 'searchCoursArchive')">
+                </div>
+                <table class="table table-bordered" id="table_archive" aria-describedby="table cours archivés">
                     <thead>
                     <tr class="text-center fs-1">
                         <th scope="col">Thème</th>
@@ -125,7 +137,7 @@
                     </thead>
                     <tbody>
                     {% for cour in cours_archives %}
-                        <tr class="text-center" id="arch-ele-{{ cour.id_cours }}">
+                        <tr class="text-center row-to-search" id="arch-ele-{{ cour.id_cours }}">
                             <td class="align-middle">{{ cour.theme }}</td>
                             <td class="align-middle">{{ cour.cours }}</td>
                             <td class="align-middle">{{ cour.duree }}</td>
@@ -146,6 +158,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div id="table_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
             </div>
         </div>
         <div style="height: 200px; position: relative"></div>
@@ -242,12 +257,12 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Formation associée :</h3>
-                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select"
+                            <select name="select_formation_modifier" id="select_formation_modifier" class="fs-1 my-3 form-select"
                                     required>
                                 <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                 </option>
                                 {% for formation in formations %}
-                                    <option value="{{ formation.id_formation }}">{{ formation.intitule }}</option>
+                                    <option value="{{ formation.intitule }}">{{ formation.intitule }}</option>
                                 {% endfor %}
                             </select>
                         </div>
