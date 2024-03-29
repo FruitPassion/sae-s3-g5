@@ -88,19 +88,13 @@ read -p "Entrez le mot de passe du SSID de votre réseau wifi : "
 echo   
 mdpssid=$REPLY
 
-cp init/db_production.sql .
-cp init/app.conf .
-cp init/app.wsgi .
-cp init/redis.conf .
-
-
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
 apt update -y && apt upgrade -y
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables nmcli mydumper iptables-persistent
+apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables mydumper iptables-persistent
 
 
 printf "\n\n$BALISE\n${PURPLE}Installation de ${RED}redis${NC}\n$BALISE\n\n"
@@ -109,8 +103,8 @@ curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/
 
 echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
 
-apt-get update
-apt-get install redis-server
+apt-get -y  update
+apt-get -y install redis-server
 
 redis-server redis.conf
 cp redis.conf /etc/redis/redis.conf
