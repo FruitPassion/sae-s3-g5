@@ -9,6 +9,7 @@ check_requirements.checking()
 # Paquets flask
 from flask import Flask, url_for, render_template
 from flask_wtf import CSRFProtect
+from flask_session import Session
 from werkzeug.exceptions import HTTPException
 from custom_paquets import app_utils
 
@@ -74,6 +75,8 @@ def create_app(config=None):
 
     # Initialisation du schema de la base de données dans l'application
     db.init_app(app)
+    
+    Session(app)
 
     # Redéfinition de la fonction url_for pour ajouter un timestamp
     app_utils.rewrite_url(app)
