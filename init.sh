@@ -242,7 +242,7 @@ printf "\n\n$BALISE\n${BLUE}Creation d'un certificat SSL${NC}\n$BALISE\n\n"
 mkdir /etc/apache2/certificate
 cd /etc/apache2/certificate
 openssl req -new -newkey rsa:4096 -x509 -sha256 -nodes -subj "/C=FR/ST=France/L=Toulouse/O=APEAJ/OU=Aide/CN=$nomdom" -out apache-certificate.crt -keyout apache.key 
-selfip=$(ip -4 addr show wlan0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+selfip=$(ip -4 addr show $interf | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 echo "$selfip   $nomdom" >> /etc/hosts
 
 cd -
@@ -301,6 +301,8 @@ ip6tables-save > /etc/iptables/rules.v6
 apt install iptables-persistent -y
 
 printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
+
+cd $parent_directory/$current_directory
 
 rm db_production.sql app.conf app.wsgi
 
