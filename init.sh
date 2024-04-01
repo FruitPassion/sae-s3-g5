@@ -272,8 +272,13 @@ cd ..
 # Start and enable apache
 printf "\n\n$BALISE\n${BLUE}Demarrage d'Apache${NC}\n$BALISE\n\n"
 
+a2enmod ssl
+a2enmod rewrite
+a2enmod headers
+a2enmod unique_id
+a2enmod security2
 systemctl enable apache2 
-systemctl start apache2 
+systemctl restart apache2 
 
 printf "\n\n$BALISE\n${BLUE}Création d'un point relai et configuration du firewall${NC}\n$BALISE\n\n"
 
@@ -290,19 +295,20 @@ nmcli con modify $nomdom 802-11-wireless-security.psk $mdpssid
 nmcli con modify $nomdom ipv4.method shared
 nmcli con up $nomdom
 
-iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
-iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
-iptables -P FORWARD -j DROP
+/usr/sbin/iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
+/usr/sbin/iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
+/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
+/usr/sbin/iptables -P FORWARD -j DROP
 
-iptables-save > /etc/iptables/rules.v4
-ip6tables-save > /etc/iptables/rules.v6
+/usr/sbin/iptables-save > /etc/iptables/rules.v4
+/usr/sbin/ip6tables-save > /etc/iptables/rules.v6
 
 apt install iptables-persistent -y
 
 printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n"
 
 cd $parent_directory/$current_directory
+echo $(pwd)
 
 rm db_production.sql app.conf app.wsgi
 
