@@ -4,8 +4,8 @@ import bcrypt
 from configparser_crypt import ConfigParserCrypt
 
 
-def encrypt_password(password):
-    return bcrypt.hashpw(get_b64(password), bcrypt.gensalt(13))
+def encrypt_password(password, salt=13):
+    return bcrypt.hashpw(get_b64(password), bcrypt.gensalt(salt))
 
 
 def compare_passwords(new_passw, old_passwd):
