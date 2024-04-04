@@ -8,6 +8,9 @@
   "404" : {
     "description": "Page introuvable."
   },
+  "405": {
+    "description": "Méthode non autorisée."
+  },
   "500" : {
     "description": "Erreur interne du serveur."
   },
