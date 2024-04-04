@@ -59,15 +59,38 @@ repprenom=$REPLY
 read -p "Entrez un mail d'administrateur pour l'application : " 
 echo   
 repmail=$REPLY
-while true; do
-    read -p "Entrez un mot de passe administrateur pour l'application (sans @ dedans) : " 
-    echo   
-    repavmdp=$REPLY
-    if [[ $repavmdp == *"@"* ]]; then
-        echo "Le mot de passe ne doit pas contenir de @"
-    else
-        break
+while :
+do
+    read -s -p "Entrez un mot de passe administrateur pour l'application (sans @ dedans) : "  repavmdp
+    echo
+
+    if [ ${#repavmdp} -lt 12 ]; then
+        echo "Le mot de passe doit contenir au moins 12 caractères."
+        continue
     fi
+
+    if ! [[ "$repavmdp" =~ [[:upper:]] ]]; then
+        echo "Le mot de passe doit contenir au moins une lettre majuscule."
+        continue
+    fi
+
+    if ! [[ "$repavmdp" =~ [[:lower:]] ]]; then
+        echo "Le mot de passe doit contenir au moins une lettre minuscule."
+        continue
+    fi
+
+    if ! [[ "$repavmdp" =~ [[:digit:]] ]]; then
+        echo "Le mot de passe doit contenir au moins un chiffre."
+        continue
+    fi
+
+    if ! [[ "$repavmdp" =~ [[:punct:]] ]]; then
+        echo "Le mot de passe doit contenir au moins un caractère spécial (autre que @)."
+        continue
+    fi
+
+    echo "Le mot de passe est valide."
+    break
 done
 read -p "Entrez un nom de domaine pour acceder localement à l'application (ex: site.local ) : " 
 echo    
@@ -108,7 +131,7 @@ redis-server redis.conf
 cp redis.conf /etc/redis/redis.conf
 
 systemctl enable redis-server
-systemctl restart redis-server
+systemctl restart redis
 
 # Install python
 printf "\n\n$BALISE\n${PURPLE}Installation de ${GREEN}python${PURPLE} (cette étape peut prendre du temps) ...${NC}\n$BALISE\n\n"
@@ -284,16 +307,16 @@ printf "\n\n$BALISE\n${BLUE}Création d'un point relai et configuration du firew
 
 printf "Interface du relai : $interf\n\nu"
 
-nmcli con add type wifi ifname $interf mode ap con-name $nomdom ssid $nomdom
-nmcli con modify $nomdom 802-11-wireless.band bg
-nmcli con modify $nomdom 802-11-wireless.channel 1
-nmcli con modify $nomdom 802-11-wireless-security.key-mgmt wpa-psk
-nmcli con modify $nomdom 802-11-wireless-security.proto rsn
-nmcli con modify $nomdom 802-11-wireless-security.group ccmp
-nmcli con modify $nomdom 802-11-wireless-security.pairwise ccmp
-nmcli con modify $nomdom 802-11-wireless-security.psk $mdpssid
-nmcli con modify $nomdom ipv4.method shared
-nmcli con up $nomdom
+nmcli con add type wifi ifname $interf mode ap con-name $nomssid ssid $nomssid
+nmcli con modify $nomssid 802-11-wireless.band bg
+nmcli con modify $nomssid 802-11-wireless.channel 1
+nmcli con modify $nomssid 802-11-wireless-security.key-mgmt wpa-psk
+nmcli con modify $nomssid 802-11-wireless-security.proto rsn
+nmcli con modify $nomssid 802-11-wireless-security.group ccmp
+nmcli con modify $nomssid 802-11-wireless-security.pairwise ccmp
+nmcli con modify $nomssid 802-11-wireless-security.psk $mdpssid
+nmcli con modify $nomssid ipv4.method shared
+nmcli con up $nomssid
 
 /usr/sbin/iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
 /usr/sbin/iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
@@ -310,7 +333,7 @@ printf "\n\n$BALISE\n${BLUE}Suppression des fichiers sensibles${NC}\n$BALISE\n\n
 cd $parent_directory/$current_directory
 echo $(pwd)
 
-rm db_production.sql app.conf app.wsgi
+rm db_production.sql app.conf 
 
 printf "\n\n$BALISE\n${BLUE}Fin de l'initialisation\nApplication prête sur le port 443 à l'adresse : https://$nomdom ${NC}\n$BALISE\n\n"
 
