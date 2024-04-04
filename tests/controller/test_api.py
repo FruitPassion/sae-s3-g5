@@ -1,7 +1,7 @@
 import json
 from flask import url_for
 from custom_paquets.converter import generate_login
-from custom_paquets.tester_usages import FormationTest, connexion_personnel_mdp
+from custom_paquets.tester_usages import ApprentiTestModif, FormationTest, connexion_personnel_mdp
 from model.formation import Formation
 from model.personnel import Personnel
 from model.apprenti import Apprenti
@@ -14,12 +14,14 @@ Test des controller du fichier api.py
 # Test de la vérification du mot de passe de l'apprenti
 def test_api_check_password_apprenti(client):
     # Set up d'un apprenti
-    apprenti = Apprenti.query.filter_by(essais=0).filter(Apprenti.login != 'dummy').first()
-    mdp = "12369"
+    apprenti = ApprentiTestModif(apprenti.id_apprenti)
+    
+    data = {"login": apprenti.login, "password": apprenti.password}
 
     # Blocage d'un apprenti
     Apprenti.set_nbr_essais_connexion(apprenti.login, 5)
-    response = client.get(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp))
+    response = client.post(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp),
+                           json=data)
 
     # Test d'accès à la route
     assert response.status_code == 200
@@ -29,9 +31,11 @@ def test_api_check_password_apprenti(client):
 
     # Test de déblocage d'un apprenti
     Apprenti.set_nbr_essais_connexion(apprenti.login, 0)
-    response = client.get(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp))
+    response = client.post(url_for("api.api_check_password_apprenti", user=apprenti.login, password=mdp),
+                          json=data)
 
     # Test d'accès à la route
+    print(response.json)
     assert response.status_code == 200
 
     # Test de vérification que l'apprenti n'est pas bloqué
