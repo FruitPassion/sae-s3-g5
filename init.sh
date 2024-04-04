@@ -115,7 +115,7 @@ apt update -y && apt upgrade -y
 
 # Install the dependencies
 printf "\n\n$BALISE\n${PURPLE}Installation des dépendances ...${NC}\n$BALISE\n\n"
-apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables mydumper 
+apt install -y git unzip dialog mariadb-server wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables mydumper curl
 
 
 printf "\n\n$BALISE\n${PURPLE}Installation de ${RED}redis${NC}\n$BALISE\n\n"
@@ -318,13 +318,13 @@ nmcli con modify $nomssid 802-11-wireless-security.psk $mdpssid
 nmcli con modify $nomssid ipv4.method shared
 nmcli con up $nomssid
 
-/usr/sbin/iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
-/usr/sbin/iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
-/usr/sbin/iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
-/usr/sbin/iptables -P FORWARD -j DROP
+iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
+iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
+iptables -P FORWARD -j DROP
 
-/usr/sbin/iptables-save > /etc/iptables/rules.v4
-/usr/sbin/ip6tables-save > /etc/iptables/rules.v6
+iptables-save > /etc/iptables/rules.v4
+ip6tables-save > /etc/iptables/rules.v6
 
 apt install iptables-persistent -y
 
