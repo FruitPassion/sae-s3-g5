@@ -48,7 +48,6 @@ def create_app(config=None):
     # Chargement de la configuration dev ou prod
     app.config.from_object(f"config.{config.capitalize()}Config")
     
-    
     # Importation des controller
     from controller.cip import cip
     from controller.educateur_admin import educ_admin
@@ -83,6 +82,11 @@ def create_app(config=None):
     
     # Gestion des erreurs sur l'application
     app_utils.error_handler(app, config)
+    
+    if config == 'test':
+        with app.app_context():
+            db.create_all()
+            
 
     # Renvoie l'application
     return app
@@ -93,4 +97,4 @@ if __name__ == "__main__":
     try:
         create_app(sys.argv[1]).run(host="0.0.0.0")
     except IndexError:
-        raise ValueError("Argument de lancement manquant (dev ou prod)")
+        raise ValueError("Argument de lancement manquant (dev, test ou prod)")

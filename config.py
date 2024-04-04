@@ -76,3 +76,22 @@ class ProdConfig:
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
+
+
+class TestConfig:
+    """
+    Configuration de l'application en mode test
+    """
+    SECRET_KEY = "password"
+    ENVIRONMENT = "test"
+    FLASK_APP = "FichesTest"
+    WTF_CSRF_ENABLED = False
+    DEBUG = True
+    SESSION_PERMANENT = False
+    SESSION_TYPE = "filesystem"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    REMEMBER_COOKIE_SAMESITE = "strict"
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+    }

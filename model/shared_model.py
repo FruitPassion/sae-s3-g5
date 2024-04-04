@@ -6,7 +6,10 @@ db = SQLAlchemy()
 
 config = lire_config("config.txt")
 
-DB_SCHEMA = f"db_fiches_{config.lower()}"
+if config == "test":
+    DB_SCHEMA = "main"
+else:
+    DB_SCHEMA = f"db_fiches_{config.lower()}"
 
 
 class Assister(db.Model):
