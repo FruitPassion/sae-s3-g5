@@ -255,8 +255,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="container-modifier" autocomplete="off">*
-                        {{ form_modifier.csrf_token }}
+                    <form method="post" id="container-modifier" autocomplete="off">
+                        {{ csrf_token() }}
                         <input type="hidden" value="" id="id-element-personnel" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Nom :</h3>
