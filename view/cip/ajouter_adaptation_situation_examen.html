@@ -1,24 +1,27 @@
 {% extends 'common/base.html' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/modifier_commentaires.css') }}">
 {% endblock %}
 
 {% block title %}Ajout commentaire{% endblock %}
 
 {% block body %}
     <h1>Ajout commentaire (adaptation situation d'examen) pour {{ apprenti.prenom }} {{ apprenti.nom }} </h1>
-    <div id="bloc">
-       
-        <form name="ajouter_commentaire" method="post">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <p>Commentaire (CIP) : </p>
-            <textarea class="commentaire" name="commentaire" maxlength="500" rows="10" cols="100" class="ajout"></textarea>
 
-            <input type="submit" value="Valider">
-        </form>
-
-        {% include "_partial/_retour_bouton.html" %}
-    </div>
     
+    <div class="w-75 m-auto mt-5">
+        <form name="ajouter_commentaire" id="ajouter" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <p>Commentaire (CIP) :</p>
+            <textarea class="modifiable form-control commentaire" id="commentaire" name="commentaire"
+                      maxlength="500"  rows="10" cols="100"></textarea>
+            <input class=" btn btn-primary form-control" type="submit" value="Valider" id="enregistrer">
+
+            <div class="fixed-bottom bg-light">
+                <a href="{{ url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti.login) }}">
+                    {% include "_partial/_retour_bouton.html" %}</a>
+            </div>
+        </form>
+    </div>
 {% endblock %}

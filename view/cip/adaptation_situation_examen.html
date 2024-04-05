@@ -11,7 +11,7 @@
     <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
     <div id="titre">
     <h2 class="commentaireTitre">Commentaire
-        {% if commentaire|length == 0 %}
+        {% if commentaire is none %}
             <a href="{{ url_for('cip.ajouter_commentaire', apprenti = apprenti.login) }}">
                 <img id="ajouter" class="plus" src="{{ url_for('static', filename='images/cross.png' ) }}" alt="ajouter">
             </a>
@@ -22,7 +22,7 @@
         {% endif %}
     </h2>
     </div>
-    {% if commentaire|length > 0 %}
+    {% if commentaire is not none %}
         <p class="commentaire">{{ commentaire }}</p>
     {% else %}
         <p class="commentaire">Pas encore de commentaire</p>
