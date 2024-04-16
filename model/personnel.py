@@ -35,6 +35,19 @@ class Personnel(db.Model):
             logging.error(e)
 
     @staticmethod
+    def get_personnel_par_id_personnel(id_personnel: int):
+        """
+        Récupère un membre du personnel par son id_personnel
+
+        :return: Le membre du personnel
+        """
+        try:
+            return Personnel.query.filter_by(id_personnel=id_personnel).first()
+        except Exception as e:
+            logging.error(f"Erreur lors de la récupération du personnel {id_personnel}")
+            logging.error(e)
+    
+    @staticmethod
     def get_liste_personnel_non_super(archive=False):
         try:
             return Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(

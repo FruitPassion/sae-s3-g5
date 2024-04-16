@@ -43,6 +43,7 @@
         {{ form.csrf_token }}
         {{ form.login(value=apprenti.login) }}
         {{ form.password() }}
+        <input id="send" name="send" type="submit" style="display: none;">
     </form>
 
     <div class="fixed-bottom bg-light">

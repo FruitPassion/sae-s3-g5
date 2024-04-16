@@ -98,11 +98,15 @@ def connexion_personnel_pin():
     if request.method == "POST" and form.validate_on_submit():
         passwd = request.form["hiddencode"]
         login = request.form.get('login_select')
-        if not Personnel.check_personnel(login) or Personnel.check_super_admin(login):
+        if (not Personnel.check_personnel(login)) or (Personnel.check_super_admin(login)):
             flash(COMPTE_INCONNU, "error")
             code = 403
-        elif not Personnel.check_password(login, passwd) and Personnel.get_nbr_essais_connexion_personnel(login) == 3:
+        elif not Personnel.check_password(login, passwd):
+            if Personnel.get_nbr_essais_connexion_personnel(login) == 3:
                 flash(COMPTE_BLOQUE, "error")
+                code = 403
+            else:
+                flash(COMPTE_INCONNU, "error")
                 code = 403
         else:
             if Personnel.get_nbr_essais_connexion_personnel(login) == 3:

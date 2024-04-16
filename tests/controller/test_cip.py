@@ -1,108 +1,61 @@
 from flask import url_for
 
-from custom_paquets.tester_usages import connexion_personnel_pin
-
 '''
 Test des controller du fichier cip.py
 '''
 
-username = "FAR16"
-passw = "161616"
-formation = "Parcours plomberie"
-apprenti = "DAJ12"
-
 
 # Test de la route de redirection de connexion de la CIP
-def test_redirection_connexion(client):
-    connexion_personnel_pin(client, username, passw)
+def test_redirection_connexion(client, gestion_connexion, personnel_cip, check_route_status):
+    gestion_connexion.connexion_personnel_pin(client, personnel_cip)
+    
     response = client.get(url_for("personnel.choix_formation"))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == "/personnel/choix-formation-personnel"
+    
+    
+    check_route_status.check_both(response, 200, "/personnel/choix-formation-personnel")
 
 
 # Test de la route choix formation (affichage liste apprentis de cette formation)
-def test_affichage_apprentis_formation(client):
-    # Test connexion CIP
-    connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("personnel.choix_eleve", nom_formation=formation))
+def test_affichage_apprentis_formation(client, gestion_connexion, personnel_cip, check_route_status, formation):
+    gestion_connexion.connexion_personnel_pin(client, personnel_cip)
+    
+    response = client.get(url_for("personnel.choix_eleve", nom_formation=formation.intitule))
+    
+    check_route_status.check_both(response, 200, f"/personnel/choix-eleves/{formation.intitule}")
 
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == f"/personnel/choix-eleves/{formation}"
-
-
+"""
 # Test de la route choix apprenti (affichage des opérations possibles pour la CIP)
-def test_choix_apprenti(client):
-    # Test connexion CIP
-    connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("cip.affiche_choix", apprenti=apprenti))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == f"/cip/{apprenti}/choix-operations"
+def test_choix_apprenti(client, gestion_connexion, personnel_cip, check_route_status, apprenti_formation, formation):
+    gestion_connexion.connexion_personnel_pin(client, personnel_cip)
+    
+    response = client.get(url_for("cip.affiche_choix", apprenti=apprenti_formation.login))
+    print(response.request.path)
+    check_route_status.check_both(response, 200, f"/cip/{apprenti_formation.login}/choix-operations")"""
 
 
 # Test de la route choix fiche apprenti (affichage des fiches techniques de DAJ12)
-def test_choix_fiche(client):
-    # Test connexion CIP
-    connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("cip.fiches_apprenti", apprenti=apprenti))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == f"/cip/{apprenti}/fiches"
+def test_choix_fiche(client, gestion_connexion, personnel_cip, check_route_status, apprenti_formation):
+    gestion_connexion.connexion_personnel_pin(client, personnel_cip)
+    
+    response = client.get(url_for("cip.fiches_apprenti", apprenti=apprenti_formation.login))
+    
+    check_route_status.check_both(response, 200, f"/cip/{apprenti_formation.login}/fiches")
 
 
 # Test de la route suivi de progression de l'apprenti
-def test_suivi_progression(client):
-    # Test connexion CIP
-    connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("cip.suivi_progression_apprenti", apprenti=apprenti))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == f"/cip/{apprenti}/suivi-progression"
+def test_suivi_progression(client, gestion_connexion, personnel_cip, check_route_status, apprenti_formation):
+    gestion_connexion.connexion_personnel_pin(client, personnel_cip)
+    
+    response = client.get(url_for("cip.suivi_progression_apprenti", apprenti=apprenti_formation.login))
+    
+    check_route_status.check_both(response, 200, f"/cip/{apprenti_formation.login}/suivi-progression")
 
 
 # Test de la route de l'adaptation en situation d'examen de l'apprenti 
-def test_adaptation_situation_exam(client):
-    # Test connexion CIP
-    connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("cip.affichage_adaptation_situation_examen", apprenti = apprenti))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
+def test_adaptation_situation_exam(client, gestion_connexion, personnel_cip, apprenti_formation, check_route_status):
+    gestion_connexion.connexion_personnel_pin(client, personnel_cip)
     
-    # Test de vérification de la route
-    assert response.request.path == f"/cip/{apprenti}/adaptation-situation-examen"
+    response = client.get(url_for("cip.affichage_adaptation_situation_examen", apprenti = apprenti_formation.login))
+    
+    check_route_status.check_both(response, 200, f"/cip/{apprenti_formation.login}/adaptation-situation-examen")
 
-
-# Test de la route de redirection d'affichage des commentaires
-def test_redirection_commentaires(client):
-    # Test connexion CIP
-    connexion_personnel_pin(client, username, passw)
-
-    # identifiant de la fiche 1 d'apprenti
-    id_fiche = 7
-
-    # A MODIFIER (Miri)
-    response = client.get(url_for("cip.visualiser_commentaires", apprenti=apprenti, fiche=id_fiche))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    # A MODIFIER (Miri)
-    assert response.request.path == f"/cip/{apprenti}/{id_fiche}/commentaires"

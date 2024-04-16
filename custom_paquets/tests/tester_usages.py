@@ -51,8 +51,7 @@ class PersonnelTest:
         self.password = encrypt_password("000000")
         self.login = generate_login(self.nom, self.prenom)
 
-        self.id_personnel = Personnel.add_personnel(self.login, self.nom, self.prenom, self.email, self.password,
-                                                    self.role, commit=False)
+        self.id_personnel = Personnel.add_personnel(self.login, self.nom, self.prenom, self.email, self.password, self.role, commit=False)
 
 
 class PersonnelTestModif:
@@ -65,8 +64,7 @@ class PersonnelTestModif:
         self.email = "dark@mail.com"
         self.password = encrypt_password("090909")
 
-        Personnel.update_personnel(self.id_personnel, self.login, self.nom, self.prenom, self.email, self.password,
-                                   self.role, commit=False)
+        Personnel.update_personnel(self.id_personnel, self.login, self.nom, self.prenom, self.email, self.password, self.role, commit=False)
 
 
 class ApprentiTest:
@@ -77,8 +75,7 @@ class ApprentiTest:
         self.login = generate_login(self.nom, self.prenom)
 
         self.id_apprenti = Apprenti.add_apprenti(self.nom, self.prenom, self.login, self.photo)
-
-
+        
 class ApprentiTestModif:
     def __init__(self, id_apprenti):
         self.id_apprenti = id_apprenti
@@ -89,10 +86,7 @@ class ApprentiTestModif:
         self.password = encrypt_password("121212")
         self.actif = True
 
-        Apprenti.update_apprenti(self.id_apprenti, self.login, self.nom, self.prenom, self.photo, self.password,
-                                 self.actif,
-                                 commit=False)
-
+        Apprenti.update_apprenti(self.id_apprenti, self.login, self.nom, self.prenom, self.photo, self.password, self.actif)
 
 class FormationTest:
     def __init__(self):
