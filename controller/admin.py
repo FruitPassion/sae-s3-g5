@@ -48,9 +48,8 @@ def gestion_personnel():
     form_modifier = ModifierPersonnel()
     form_modifier_admin = ModifierAdmin()
     REDIRECTION = "admin.gestion_personnel"
-
-    if (form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin'
-            in request.form.values()):
+    
+    if (form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin' in request.form.values()):
         role = "SuperAdministrateur"
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)

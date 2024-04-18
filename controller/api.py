@@ -37,7 +37,8 @@ def api_set_password_apprenti():
     :param password: Nouveau mot de passe
     """
     infos = request.get_json()
-    if Apprenti.check_password_apprenti(infos["login"], str(infos["password"])):
+    
+    if not Apprenti.check_apprenti(infos["login"]) or not Apprenti.check_password_non_set(infos["login"]):
         return {"valide": False}
     else:
         return {"valide": Apprenti.set_password_apprenti(infos["login"], str(infos["password"]))}
@@ -87,7 +88,7 @@ def api_archive_apprenti(id_apprenti):
     Archive/Désarchive un apprenti à partir de son id
     """
     infos = request.get_json()
-    return {"valide": Apprenti.archiver_apprenti(id_apprenti, archiver=infos["archive"], commit=True)}
+    return {"valide": Apprenti.archiver_apprenti(id_apprenti, archiver=infos["archive"])}
 
 
 @api.route("/apprenti/<int:id_apprenti>", methods=["DELETE"])

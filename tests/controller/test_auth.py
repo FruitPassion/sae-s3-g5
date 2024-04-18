@@ -1,6 +1,5 @@
 from flask import url_for
 
-from custom_paquets.tester_usages import connexion_apprentis, connexion_personnel_pin, connexion_personnel_mdp, deconnexion
 from model.cours import Cours
 from model.formation import Formation
 
@@ -11,14 +10,10 @@ Test des controller du fichier auth.py
 COMPTE_INC_OU_INV = b'Compte inconnu ou mot de passe invalide'
 
 # Tests de la route d'accueil du site
-def test_choix_connexion(client):
+def test_choix_connexion(client, check_route_status):
     response = client.get(url_for("auth.choix_connexion"))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == "/"
+    
+    check_route_status.check_both(response, 200, "/")
 
 
 # Tests de la route de connexion pour le personnel avant l'identification
@@ -38,141 +33,117 @@ def test_connexion_personnel_chargement(client):
     assert response.request.path == "/connexion-personnel-mdp"
 
 
-def test_connexion_deconnexion_personnel(client):
+def test_connexion_deconnexion_personnel(client, gestion_connexion, personnel_super_admin, personnel_educateur_admin, personnel_educateur, personnel_cip, check_route_status):
 
-    # Test connexion superadministrateur
-    username = "JED10"
-    passw = "superadmin"
-    response = connexion_personnel_mdp(client, username, passw)
-    with client.session_transaction() as sess:
-        assert sess['name'] == 'JED10'
-        assert sess['role'] == 'SuperAdministrateur'
-
-    assert response.status_code == 200
-    assert response.request.path == "/admin/accueil-admin"
-
-    # Test deconnexion
-    response = deconnexion(client)
-    with client.session_transaction() as sess:
-        assert sess.get('name') is None
-    assert response.status_code == 200
-    assert response.request.path == "/"
-
-    # Test connexion educateur admin
-    username = "ALL11"
-    passw = "111111"
-    response = connexion_personnel_pin(client, username, passw)
-    with client.session_transaction() as sess:
-        assert sess['name'] == 'ALL11'
-        assert sess['role'] == 'Educateur Administrateur'
-
-    assert response.status_code == 200
-    assert response.request.path == "/educ-admin/accueil-educadmin"
-    deconnexion(client)
-
-    # Test connexion educateur
-    username = "MAC10"
-    passw = "101010"
-    response = connexion_personnel_pin(client, username, passw)
-    with client.session_transaction() as sess:
-        assert sess['name'] == 'MAC10'
-        assert sess['role'] == 'Educateur'
-    assert response.status_code == 200
-    assert response.request.path == "/personnel/choix-formation-personnel"
-    deconnexion(client)
-
-    # Test connexion cip
-    username = "FAR16"
-    passw = "161616"
-    response = connexion_personnel_pin(client, username, passw)
+    # Test connexion personnel super admin
+    response = gestion_connexion.connexion_personnel_mdp(client, personnel_super_admin)
     
     with client.session_transaction() as sess:
-        assert sess['name'] == 'FAR16'
-        assert sess['role'] == 'CIP'
-    assert response.status_code == 200
-    assert response.request.path == "/personnel/choix-formation-personnel"
-    deconnexion(client)
+        assert sess['name'] == personnel_super_admin.login
+        assert sess['role'] == personnel_super_admin.role
+    
+    check_route_status.check_both(response, 200, "/admin/accueil-admin")
 
-    response = connexion_personnel_pin(client, "JED10", '123456')
+    # Test deconnexion
+    response = gestion_connexion.deconnexion(client)
+    with client.session_transaction() as sess:
+        assert sess.get('name') is None
+        
+    check_route_status.check_both(response, 200, "/")
 
+    # Test connexion personnel educateur admin
+    response = gestion_connexion.connexion_personnel_pin(client, personnel_educateur_admin)
+    
+    with client.session_transaction() as sess:
+        assert sess['name'] == personnel_educateur_admin.login
+        assert sess['role'] == personnel_educateur_admin.role
+
+    check_route_status.check_both(response, 200, "/educ-admin/accueil-educadmin")
+    
+    gestion_connexion.deconnexion(client)
+
+    # Test connexion personnel educateur
+    response = gestion_connexion.connexion_personnel_pin(client, personnel_educateur)
+    
+    with client.session_transaction() as sess:
+        assert sess['name'] == personnel_educateur.login
+        assert sess['role'] == personnel_educateur.role
+
+    check_route_status.check_both(response, 200, "/personnel/choix-formation-personnel")
+    
+    gestion_connexion.deconnexion(client)
+
+    # Test connexion personnel cip
+    response = gestion_connexion.connexion_personnel_pin(client, personnel_cip)
+    
+    with client.session_transaction() as sess:
+        assert sess['name'] == personnel_cip.login
+        assert sess['role'] == personnel_cip.role
+
+    check_route_status.check_both(response, 200, "/personnel/choix-formation-personnel")
+    
+    gestion_connexion.deconnexion(client)
+
+
+
+
+def test_connexion_deconnexion_raté(client, gestion_connexion, faux_personnel, check_route_status):
+    # Test connexion personnel avec un faux personnel
+    response = gestion_connexion.connexion_personnel_pin(client, faux_personnel, reset=False)
+    
     assert COMPTE_INC_OU_INV in response.data
+        
+    check_route_status.check_both(response, 403, "/connexion-personnel-pin")
+    
 
 
 # Test de la route affichant la liste des formations
-def test_choix_formation_apprentis(client):
+def test_choix_formation_apprentis(client, check_route_status, formation):
     response = client.get(url_for("auth.choix_formation_apprentis"))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == "/choix-formation-apprentis"
+        
+    check_route_status.check_both(response, 200, "/choix-formation-apprentis")
 
     # Test de verification de l'utilisation de tout les intitules de formation
     formations = Formation.get_all_formations()
+    
     html = response.get_data(as_text=True)
-    for formation in formations:
-        assert formation.intitule in html
+    for tformation in formations:
+        assert tformation.intitule in html
 
 
 # Test de la route affichant la liste des apprentis en fonction d'une formation
-def test_choix_eleve_apprentis(client):
-    nom_formation = "Parcours maintenance batiment"
-    response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=nom_formation))
-
-    # Test d'accès à la route
-    assert response.status_code == 200
-
-    # Test de vérification de la route
-    assert response.request.path == f"/choix-eleve-apprentis/{nom_formation}"
+def test_choix_eleve_apprentis(client, formation, check_route_status, apprenti_formation):
+    
+    response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=formation.intitule))
+        
+    check_route_status.check_both(response, 200, f"/choix-eleve-apprentis/{formation.intitule}")
 
     # Test de verification de l'utilisation de toutes les informations de l'apprentis
-    apprentis = Cours.get_apprentis_by_formation(nom_formation)
+    apprentis = Cours.get_apprentis_by_formation(formation.intitule)
     html = response.get_data(as_text=True)
     for apprenti in apprentis:
         assert 'class="libelle">' + apprenti.prenom + ' ' + apprenti.nom in html
 
-    nom_formation = "Page erreur"
-    response = client.get(url_for("auth.choix_eleve_apprentis", nom_formation=nom_formation))
 
-    # Test d'accès à la route
-    assert response.status_code == 404
-
-
-def test_connexion_deconnexion_apprenti(client):
+def test_connexion_deconnexion_apprenti(client, formation, apprenti_formation, check_route_status, gestion_connexion):
     # Test accès apprenti sans login
     response = client.get(url_for("apprenti.redirection_connexion"))
 
-    # Test d'accès à la route et echec car non connecté
-    assert response.status_code == 302
-    
-    nom_formation = "Parcours plomberie"
-    login = "DAJ12"
+    check_route_status.check_status(response, 302)
     
     # Test de connexion bon mot de passe et bon login
-    response = connexion_apprentis(client, nom_formation, login, '12369')
-    assert response.status_code == 200
-    assert response.request.path == "/apprenti/redirection-connexion"
+    response = gestion_connexion.connexion_apprentis(client, formation, apprenti_formation)
+
+    check_route_status.check_both(response, 200, "/apprenti/redirection-connexion")
     
     with client.session_transaction() as sess:
-        assert sess['name'] == 'DAJ12'
+        assert sess['name'] == apprenti_formation.login
         assert sess['role'] == 'apprentis'
-        
+    
     # Test deconnexion
-    response = deconnexion(client)
+    response = gestion_connexion.deconnexion(client)
+    
     with client.session_transaction() as sess:
         assert sess.get('name') is None
     assert response.status_code == 200
     assert response.request.path == "/"
-        
-    # Test de connexion mauvais login
-    response = connexion_apprentis(client, nom_formation, 'BEN10', '12367')
-    
-    assert COMPTE_INC_OU_INV in response.data
-    
-    
-    # Test de connexion mauvais mot de passe et bon login
-    response = connexion_apprentis(client, nom_formation, login, '12367')
-    
-    assert COMPTE_INC_OU_INV in response.data
-    

@@ -98,7 +98,10 @@ def connexion_personnel_pin():
     if request.method == "POST" and form.validate_on_submit():
         passwd = request.form["hiddencode"]
         login = request.form.get('login_select')
-        if not Personnel.check_password(login, passwd):
+        if (not Personnel.check_personnel(login)) or (Personnel.check_super_admin(login)):
+            flash(COMPTE_INCONNU, "error")
+            code = 403
+        elif not Personnel.check_password(login, passwd):
             if Personnel.get_nbr_essais_connexion_personnel(login) == 3:
                 flash(COMPTE_BLOQUE, "error")
                 code = 403
@@ -113,9 +116,7 @@ def connexion_personnel_pin():
                 session["name"] = login
                 session["role"] = Personnel.get_role_by_login(login)
                 flash(CONNEXION_REUSSIE)
-                if session["role"] == 'SuperAdministrateur':
-                    return redirect(url_for("admin.accueil_admin"), 302)
-                elif session["role"] == "Educateur Administrateur":
+                if session["role"] == "Educateur Administrateur":
                     return redirect(url_for('educ_admin.accueil_educadmin'), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)

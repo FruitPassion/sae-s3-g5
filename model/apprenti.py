@@ -1,5 +1,3 @@
-import logging
-
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.gestions_erreur import suplement_erreur
 from custom_paquets.security import compare_passwords, encrypt_password
@@ -152,6 +150,15 @@ class Apprenti(db.Model):
             return False
 
     @staticmethod
+    def check_password_non_set(login: str):
+        """
+        A partir d'un login, vérifie si le mot de passe de l'apprenti est à sa valeur par défaut
+        
+        :return: Un booleen vrai si le mot de passe est à sa valeur par défaut
+        """
+        return Apprenti.query.filter_by(login=login).first().mdp == "0000"
+
+    @staticmethod
     def check_password_apprenti(login: str, new_password: str):
         """
         À partir d'un login et d'un mot de passe, vérifie si le mot de passe est valide
@@ -255,7 +262,7 @@ class Apprenti(db.Model):
             suplement_erreur(e, message=f"Erreur lors de l'ajout de l'apprenti {prenom} {nom}")
 
     @staticmethod
-    def update_apprenti(identifiant, login, nom, prenom, photo, password, actif, commit=True):
+    def update_apprenti(identifiant, login, nom, prenom, photo, password, actif):
         """
         Modifie un apprenti en BD
 
@@ -273,13 +280,12 @@ class Apprenti(db.Model):
                 apprenti.essais = 0
             else:
                 apprenti.essais = 5
-            if commit:
-                db.session.commit()
+            db.session.commit()
         except Exception as e:
             suplement_erreur(e, message=f"Erreur lors de la modification de l'apprenti {prenom} {nom}")
 
     @staticmethod
-    def archiver_apprenti(id_apprenti, archiver=True, commit=True):
+    def archiver_apprenti(id_apprenti, archiver=True):
         """
         Archive un apprenti en BD
 
@@ -291,8 +297,7 @@ class Apprenti(db.Model):
         try:
             apprenti = Apprenti.query.filter_by(id_apprenti=id_apprenti).first()
             apprenti.archive = archiver
-            if commit:
-                db.session.commit()
+            db.session.commit()
             return True
         except Exception as e:
             suplement_erreur(e, message=f"Erreur lors de l'archivage de l'apprenti {id_apprenti}")

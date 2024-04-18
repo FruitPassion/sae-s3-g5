@@ -8,12 +8,18 @@ function reinitialiser() {
 
     afficher_snack("Réinitialisation en cours...", "info");
 
-    $.getJSON("/api/reinitialiser-formation/" + encodeURIComponent(id_element), function (data) {
-        if (data["valide"]) {
-            afficher_snack("Réinitialisation réussie !", "success");
-            $("#modal-lien").modal("toggle");
-        } else {
-            afficher_snack("Réinitialisation échouée.", "error");
-        }
+    const requestOptions = {
+        method: 'PATCH'
+    };
+
+    fetch("/api/reinitialiser-formation/" + encodeURIComponent(id_element), requestOptions)
+        .then(response => response.json()) // Convertir la réponse en JSON
+        .then(data => {
+            if (data["valide"]) {
+                afficher_snack("Réinitialisation réussie !", "success");
+                $("#modal-lien").modal("toggle");
+            } else {
+                afficher_snack("Réinitialisation échouée.", "error");
+            }
     });
 }

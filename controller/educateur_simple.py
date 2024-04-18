@@ -126,7 +126,6 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
 
     apprenti_existe(apprenti)
     fiche_by_numero_existe(apprenti, numero)
-    
     if type_commentaire not in ["educateur", "apprenti"]:
         abort(404)
 
@@ -143,7 +142,7 @@ def ajouter_commentaires(apprenti, numero, type_commentaire):
                                                      session.get("name"), intitule, type_c)
         return redirect(url_for('educ_simple.visualiser_commentaires', apprenti=apprenti, numero=numero), 302)
 
-    return Response(render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche), 200)
+    return Response(render_template("personnel/ajouter_commentaires.html", apprenti=apprenti, fiche=fiche, type_commentaire=type_commentaire), 200)
 
 
 @educ_simple.route("/imprimer-pdf/<int:id_fiche>", methods=["GET"])

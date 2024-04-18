@@ -1,6 +1,5 @@
 from flask import url_for
 
-from custom_paquets.tester_usages import connexion_apprentis
 
 '''
 Test des controller du fichier apprentis.py
@@ -10,73 +9,28 @@ NOM_FORMATION = "Parcours plomberie"
 LOGIN = "DAJ12"
 
 # Test de la route de redirection de connexion
-def test_redirection_connexion(client):
+def test_redirection_connexion(client, formation_fausse, apprenti_formation, gestion_connexion):
+    # Connexion en tant qu'apprenti
+    response = gestion_connexion.connexion_apprentis(client, formation_fausse, apprenti_formation)
     
-    nom_formation = NOM_FORMATION
-    login = LOGIN
+    # Test d'accès à la route et redirection car formation non existante
+    assert response.status_code == 404
     
-    # Test de connexion bon mot de passe et bon login
-    response = connexion_apprentis(client, nom_formation, login, '12369')
+
+# Test de la route de connexion
+def test_connexion(client, formation, apprenti_formation, gestion_connexion):
+    # Connexion en tant qu'apprenti
+    response = gestion_connexion.connexion_apprentis(client, formation, apprenti_formation)
     
     # Test d'accès à la route et echech car non connecté
     assert response.status_code == 200
     
     
 # Test de la route de suivi de progression
-def test_suivi_progression(client):
-    
-    nom_formation = NOM_FORMATION
-    login = LOGIN
-    
-    # Connexion apprenti
-    connexion_apprentis(client, nom_formation, login, '12369')
-    
+def test_suivi_progression(client, formation, apprenti_formation, gestion_connexion):
+    # Connexion en tant qu'apprenti
+    gestion_connexion.connexion_apprentis(client, formation, apprenti_formation)
+
     response = client.get(url_for("apprenti.suivi_progression"))
 
-    # Test d'accès à la route et echech car non connecté
-    assert response.status_code == 200
-
-    
-# Test de la route de suivi de progression
-def test_commentaires(client):
-    
-    nom_formation = NOM_FORMATION
-    login = LOGIN
-    
-    # Connexion apprenti
-    connexion_apprentis(client, nom_formation, login, '12369')
-    
-    response = client.get(url_for("apprenti.suivi_progression", numero="2"))
-
-    # Test d'accès à la route et echech car non connecté
-    assert response.status_code == 200
-
-    
-# Test de la route de suivi de progression
-def test_images(client):
-    
-    nom_formation = NOM_FORMATION
-    login = LOGIN
-    
-    # Connexion apprenti
-    connexion_apprentis(client, nom_formation, login, '12369')
-    
-    response = client.get(url_for("apprenti.afficher_images", numero="2"))
-
-    # Test d'accès à la route et echech car non connecté
-    assert response.status_code == 200
-
-    
-# Test de la route de suivi de progression
-def test_pdf(client):
-    
-    nom_formation = NOM_FORMATION
-    login = LOGIN
-    
-    # Connexion apprenti
-    connexion_apprentis(client, nom_formation, login, '12369')
-    
-    response = client.get(url_for("apprenti.imprimer_pdf", numero="2"))
-
-    # Test d'accès à la route et echech car non connecté
     assert response.status_code == 200

@@ -1,4 +1,5 @@
 from datetime import date
+import datetime
 import logging
 from sqlalchemy import func, asc
 from time import strftime, localtime
@@ -11,6 +12,13 @@ from model.apprenti import Apprenti
 from model.personnel import Personnel
 from model.composer import ComposerPresentation
 
+class MyDateTime(db.TypeDecorator):
+    impl = db.DateTime
+    
+    def process_bind_param(self, value, dialect):
+        if type(value) is str:
+            return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+        return value
 
 class FicheIntervention(db.Model):
     __tablename__ = 'FicheIntervention'
@@ -25,7 +33,7 @@ class FicheIntervention(db.Model):
     degre_urgence = db.Column(db.Integer)
     couleur_intervention = db.Column(db.String(50))
     etat_fiche = db.Column(db.Integer)
-    date_creation = db.Column(db.DateTime)
+    date_creation = db.Column(MyDateTime, default=datetime.datetime.now())
     photo_avant = db.Column(db.String(150))
     photo_apres = db.Column(db.String(150))
     nom_intervenant = db.Column(db.String(50), nullable=False)

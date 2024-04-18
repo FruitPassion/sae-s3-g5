@@ -8,8 +8,8 @@ def check_config(config):
     :param config: Nom de la configuration demandée
     :return: True si la configuration est valide
     """
-    if config not in ["dev", "prod"]:
-        raise ConfigurationError("Argument de lancement incorrect (dev ou prod)")
+    if config not in ["dev", "prod", "test"]:
+        raise ConfigurationError("Argument de lancement incorrect (dev, test ou prod)")
     return True
 
 

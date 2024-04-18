@@ -317,7 +317,7 @@ INSERT INTO FicheIntervention (id_fiche, numero, nom_du_demandeur, date_demande,
                                degre_urgence, couleur_intervention, etat_fiche, date_creation, id_personnel,
                                id_apprenti, nom_intervenant, prenom_intervenant, id_cours)
 VALUES (1, 0, 'dummy', '1990-01-01', 'dummy', 'dummy', 4, 'vert', 0, '1999-01-01 01:01:01', 3, 1, 'Daniel', 'Bernard', 1),
-       (2, 1, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 0, '2023-11-03 12:30:00', 3,
+       (2, 1, 'Mermaid Corp', '2023-11-03', 'Espace Lingerie', 'Lorem Ipsum 1', 3, 'jaune', 1, '2023-11-03 12:30:00', 3,
         2, 'Daniel', 'Bernard', 1),
        (3, 1, 'CROUS', '2023-11-05', 'Batiment A', 'Lorem Ipsum 2', 2, 'orange', 0, '2023-10-05 07:12:01', 3, 3,
         'Daniel', 'Bernard', 1),
@@ -903,7 +903,7 @@ INSERT INTO FicheIntervention VALUES (14,4,'Popoff','2024-01-17','CRDOC','Lorem 
 (21,6,'Chocolatine','2023-11-29','McDo','npçvgagahjp,oezp,gonfiacgbuzfacpko,zga^;pk rihu',1,'rouge',1,'2023-11-22 11:52:09',null,null,'Jackson','Mickael',4,2,3),
 (22,7,'Noël','2023-12-27','Pôle Nord','Ho ho ho, tu dois m''aider à réparer mes toilettes, jeune apprenti!',4,'vert',2,'2023-12-25 11:52:09',null,null,'Lutin','Petit',3,2,4),
 (23,8,'Princeton','2023-07-19','Village de Konoha','azertyuiop^ùmlkjhgfdsdcvbnuhjksdvolj moinzhgiuekjrbgoljeprodjv^pmqdkiclgzuj',2,'orange',2,'2023-07-16 11:52:09',null,null,'Bernard','Daniel',4,2,4),
-(24,9,'Sparrow','2023-10-25','Bateau Piratus Maximus','Eh aide moi à déboucher les toilettes!',4,'vert',1,'2023-10-04 11:52:09',null,null,'Obama','Barack',4,2,3);
+(24,9,'Sparrow','2023-10-25','Bateau Piratus Maximus','Eh aide moi à déboucher les toilettes!',4,'vert',0,'2023-10-04 11:52:09',null,null,'Obama','Barack',4,2,3);
 
 INSERT INTO ComposerPresentation (id_element, id_fiche, taille_texte, audio, police, couleur, couleur_fond,
                                   niveau, position_elem, ordre_saisie_focus, id_pictogramme, taille_pictogramme,

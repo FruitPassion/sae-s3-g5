@@ -9,7 +9,8 @@ def encrypt_password(password, salt=13):
 
 
 def compare_passwords(new_passw, old_passwd):
-    old_passwd = bytes(old_passwd, 'utf-8')
+    if type(old_passwd) == str:
+        old_passwd = bytes(old_passwd, 'utf-8')
     return bcrypt.checkpw(get_b64(str(new_passw)), old_passwd)
 
 

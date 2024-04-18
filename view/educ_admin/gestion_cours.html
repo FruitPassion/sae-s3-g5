@@ -241,7 +241,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
-                        {{ form_modifier.hidden_tag() }}
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <input type="hidden" value="" id="id-element-cours" name="id-element">
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Thème :</h3>
@@ -257,12 +257,12 @@
                         </div>
                         <div class="w-75 test">
                             <h3 class="fs-1 my-3">Formation associée :</h3>
-                            <select name="select_formation_modifier" id="select_formation_modifier" class="fs-1 my-3 form-select"
+                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select"
                                     required>
                                 <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
                                 </option>
                                 {% for formation in formations %}
-                                    <option value="{{ formation.intitule }}">{{ formation.intitule }}</option>
+                                    <option value="{{ loop.index }}">{{ formation.intitule }}</option>
                                 {% endfor %}
                             </select>
                         </div>

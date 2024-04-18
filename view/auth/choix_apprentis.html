@@ -18,8 +18,8 @@
                 <a href="{{ url_for('auth.connexion_apprentis', nom_formation=nom_formation, login_apprenti=apprenti.login) }}">
                     <img class="photo_profil" src="{{ url_for('static', filename='images/'+apprenti.photo) }}"
                          alt="profil picture" style="border-radius: 160px;">
-                </a>
                 <p class="libelle">{{ apprenti.prenom }} {{ apprenti.nom }} {% include "_partial/_tts.html" %}</p>
+                </a>
             </div>
         {% endfor %}
     </div>

@@ -112,11 +112,10 @@ class ModifierPersonnel(FlaskForm):
     """
     Formulaire de modification de personnel
     """
-    form_identifiant = HiddenField()
     form_nom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Durand"})
     form_prenom = StringField(validators=[InputRequired()], render_kw={"placeholder": "Paul"})
     form_email = EmailField(validators=[InputRequired()], render_kw={"placeholder": "paul.durand@gmail.com"})
-    form_password = PasswordField(validators=[InputRequired(), Length(min=6, max=6)], widget=NumberInput())
+    form_password = PasswordField(widget=NumberInput())
     submit = SubmitField("Modifier")
 
 
@@ -167,11 +166,9 @@ class ModifierCours(FlaskForm):
     """
     Formulaire de modification d'un cours
     """
-    form_identifiant = HiddenField()
     form_theme = StringField(validators=[InputRequired()], render_kw={"placeholder": "Problème tuyauterie"})
     form_cours = StringField(validators=[InputRequired()], render_kw={"placeholder": COLMATER_FUITE})
     form_duree = IntegerField(widget=NumberInput(min = 1))
-    select_formation = StringField(validators=[InputRequired()], render_kw={"placeholder": COLMATER_FUITE})
     form_submit = SubmitField("Modifier")
 
 
