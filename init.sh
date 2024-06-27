@@ -30,7 +30,8 @@ if [ "$parent_directory/" != "/var/www/" ]; then
     exit 1
 fi
 
-interf=(nmcli --get-values GENERAL.DEVICE,GENERAL.TYPE device show | grep -B 1 'wifi' | head -n 1)
+output=$(nmcli --get-values GENERAL.DEVICE,GENERAL.TYPE device show)
+interf=$(echo "$output" | grep -B 1 'wifi' | head -n 1)
 if [ -z "$interf" ]; then
     printf "\n\n${RED}Aucune interface wifi n'a été détectée${NC}\n\n"
     exit 1
@@ -130,7 +131,8 @@ echo \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
 apt-get -y  install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-docker run --name redis-cont -d -p 6379:6379 redis
+docker run --name redis-cont -d -p 6379:6379 --restart always redis
+systemctl enable docker
 
 
 # Install python
@@ -151,10 +153,9 @@ apt install -y libcurl4-openssl-dev libpcre3 libghc-regex-pcre-dev
 
 printf "\n\n$BALISE\n${GREEN}Installation des requirements python${NC}\n$BALISE\n\n" 
 
-cd ..
-chown -R www-data:www-data "$current_directory/"
-
-cd $current_directory
+cd /var
+chown -R www-data:www-data www
+cd /var/www/$current_directory
 
 pip3.10 install virtualenv
 virtualenv .env 
