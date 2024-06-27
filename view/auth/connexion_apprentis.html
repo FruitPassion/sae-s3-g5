@@ -60,6 +60,8 @@
                 validate(lock, login, lock.getPattern());
             }
         });
+        const csrf_token = document.getElementById('csrf_token').value;
+
     </script>
     {% if code_set %}
         <script defer>
@@ -71,7 +73,9 @@
             
                 const requestOptions = {
                     method: 'POST', // Méthode HTTP
-                    headers: { 'Content-Type': 'application/json' }, // Type de contenu
+                    headers: { 'Content-Type': 'application/json' ,
+                        'X-CSRFToken': csrf_token
+                    }, // Type de contenu et jeton CSRF
                     body: JSON.stringify(contentData) // Corps de la requête
                 };
             
@@ -101,7 +105,9 @@
             
                 const requestOptions = {
                     method: 'POST', // Méthode HTTP
-                    headers: { 'Content-Type': 'application/json' }, // Type de contenu
+                    headers: { 'Content-Type': 'application/json' ,
+                        'X-CSRFToken': csrf_token
+                    }, // Type de contenu et jeton CSRF
                     body: JSON.stringify(contentData) // Corps de la requête
                 };
             
