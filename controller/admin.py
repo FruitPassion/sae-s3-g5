@@ -78,6 +78,7 @@ def gestion_personnel():
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
+        role = role.replace("_", " ")
         password = encrypt_password(request.form.get('password'))
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         Personnel.add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
