@@ -30,13 +30,6 @@ if [ "$parent_directory/" != "/var/www/" ]; then
     exit 1
 fi
 
-output=$(nmcli --get-values GENERAL.DEVICE,GENERAL.TYPE device show)
-interf=$(echo "$output" | grep -B 1 'wifi' | head -n 1)
-if [ -z "$interf" ]; then
-    printf "\n\n${RED}Aucune interface wifi n'a été détectée${NC}\n\n"
-    exit 1
-fi
-
 # Check the architecture of the system and if it is supported
 architecture=$(dpkg --print-architecture)
 if [ "$architecture" = "amd64" ]; then
@@ -49,6 +42,24 @@ else
 fi
 
 printf "\n\n$BALISE\n${GREEN}Architecture detectée : $proc${NC}\n$BALISE\n\n"
+
+# Ask for the intallation type, installation are server or pc
+# This will determine the type of network interface to use (ethernet or wifi)
+while true; do
+    read -p "Entrez le type d'installation (server/pc) : " typeinstall
+    case $typeinstall in
+        [Ss][Ee][Rr][Vv][Ee][Rr]* ) typeinstall="ethernet"; break;;
+        [Pp][Cc]* ) typeinstall="wifi"; break;;
+        * ) echo "Veuillez répondre par 'server' ou 'pc'";;
+    esac
+done
+
+output=$(nmcli --get-values GENERAL.DEVICE,GENERAL.TYPE device show)
+interf=$(echo "$output" | grep -B 1 $typeinstall | head -n 1)
+if [ -z "$interf" ]; then
+    printf "\n\n${RED}Aucune interface wifi n'a été détectée${NC}\n\n"
+    exit 1
+fi
 
 
 read -p "Entrez un nom d'administrateur pour l'application : " 
@@ -306,18 +317,22 @@ systemctl restart apache2
 
 printf "\n\n$BALISE\n${BLUE}Création d'un point relai et configuration du firewall${NC}\n$BALISE\n\n"
 
-printf "Interface du relai : $interf\n\nu"
 
-nmcli con add type wifi ifname $interf mode ap con-name $nomssid ssid $nomssid
-nmcli con modify $nomssid 802-11-wireless.band bg
-nmcli con modify $nomssid 802-11-wireless.channel 1
-nmcli con modify $nomssid 802-11-wireless-security.key-mgmt wpa-psk
-nmcli con modify $nomssid 802-11-wireless-security.proto rsn
-nmcli con modify $nomssid 802-11-wireless-security.group ccmp
-nmcli con modify $nomssid 802-11-wireless-security.pairwise ccmp
-nmcli con modify $nomssid 802-11-wireless-security.psk $mdpssid
-nmcli con modify $nomssid ipv4.method shared
-nmcli con up $nomssid
+if [ "$typeinstall" = "wifi" ]; then
+    printf "Interface du relai : $interf\n\nu"
+
+    nmcli con add type wifi ifname $interf mode ap con-name $nomssid ssid $nomssid
+    nmcli con modify $nomssid 802-11-wireless.band bg
+    nmcli con modify $nomssid 802-11-wireless.channel 1
+    nmcli con modify $nomssid 802-11-wireless-security.key-mgmt wpa-psk
+    nmcli con modify $nomssid 802-11-wireless-security.proto rsn
+    nmcli con modify $nomssid 802-11-wireless-security.group ccmp
+    nmcli con modify $nomssid 802-11-wireless-security.pairwise ccmp
+    nmcli con modify $nomssid 802-11-wireless-security.psk $mdpssid
+    nmcli con modify $nomssid ipv4.method shared
+    nmcli con up $nomssid
+fi
+
 
 iptables -A INPUT -p tcp -m tcp -m multiport --dports 22,80,443 -j ACCEPT
 iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
