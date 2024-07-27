@@ -216,6 +216,8 @@ class Personnel(db.Model):
             if personnel.role == "Educateur Administrateur":
                 educ_admin = EducAdmin(id_personnel=identifiant)
                 db.session.add(educ_admin)
+                if commit:
+                    db.session.commit()
         except Exception as e:
             logging.error(f"Erreur lors de la modification de {prenom} {nom}")
             logging.error(e)

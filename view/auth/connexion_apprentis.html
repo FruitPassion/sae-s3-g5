@@ -79,7 +79,7 @@
                     body: JSON.stringify(contentData) // Corps de la requête
                 };
             
-                fetch("/api/check-password-apprenti/", requestOptions)
+                fetch(baseApiUrl + "/api/check-password-apprenti/", requestOptions)
                     .then(response => response.json()) 
                     .then(data => {
                         if (data["valide"]) {
@@ -111,7 +111,7 @@
                     body: JSON.stringify(contentData) // Corps de la requête
                 };
             
-                fetch(`/api/set-password-apprenti/`, requestOptions)
+                fetch(`${baseApiUrl}/api/set-password-apprenti/`, requestOptions)
                     .then(response => response.json()) // Convertir la réponse en JSON
                     .then(data => {
                         if (data["valide"]) {

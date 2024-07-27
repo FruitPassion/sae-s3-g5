@@ -12,7 +12,7 @@ function reinitialiser() {
         method: 'PATCH'
     };
 
-    fetch("/api/reinitialiser-formation/" + encodeURIComponent(id_element), requestOptions)
+    fetch(baseApiUrl + "/api/reinitialiser-formation/" + encodeURIComponent(id_element), requestOptions)
         .then(response => response.json()) // Convertir la réponse en JSON
         .then(data => {
             if (data["valide"]) {

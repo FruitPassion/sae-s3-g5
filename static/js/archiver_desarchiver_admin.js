@@ -79,7 +79,7 @@ function archiver(route, elementid = "archiver-value") {
         body: JSON.stringify(contentData) // Corps de la requête
     };
 
-    fetch("/api/" + route + "/"+ encodeURIComponent(id_element), requestOptions)
+    fetch(baseApiUrl + "/api/" + route + "/"+ encodeURIComponent(id_element), requestOptions)
         .then(response => response.json()) // Convertir la réponse en JSON
         .then(data => {
             afficher_snack("Archivage réussi !", "success");
@@ -156,7 +156,7 @@ function desarchiver(route) {
         body: JSON.stringify(contentData) // Corps de la requête
     };
 
-    fetch("/api/" + route + "/" + encodeURIComponent(id_element), requestOptions)
+    fetch(baseApiUrl + "/api/" + route + "/" + encodeURIComponent(id_element), requestOptions)
         .then(response => response.json()) // Convertir la réponse en JSON
         .then(data => {
             if (data["valide"]) {

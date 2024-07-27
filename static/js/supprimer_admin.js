@@ -33,7 +33,7 @@ function supprimer(route){
         headers: { 'Content-Type': 'application/json' }, // Type de contenu
     };
 
-    fetch("/api/"+route+"/" + encodeURIComponent(id_element), requestOptions)
+    fetch(baseApiUrl + "/api/"+route+"/" + encodeURIComponent(id_element), requestOptions)
         .then(response => response.json()) // Convertir la réponse en JSON
         .then(data => {
             if (data["valide"]) {

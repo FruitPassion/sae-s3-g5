@@ -61,7 +61,7 @@
                             const formData = new FormData();
                             formData.append('audio', audioBlob);
                             
-                            fetch('/api/save_audio/{{ id_personnel }}', {
+                            fetch(baseApiUrl + '/api/save_audio/{{ id_personnel }}', {
                                 method: 'POST',
                                 body: formData
                             })

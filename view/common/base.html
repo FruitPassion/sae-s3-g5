@@ -22,6 +22,12 @@
 
     {% block stylesheets %}{% endblock %}
 
+    <script>
+        const protocol = window.location.protocol;
+        const host = window.location.host;
+        const baseApiUrl = `${protocol}//${host}`; 
+    </script>
+
     {% block javascripts %}{% endblock %}
 
     {% block headSuppl %}{% endblock %}
