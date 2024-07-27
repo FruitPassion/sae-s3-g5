@@ -207,11 +207,15 @@ class Personnel(db.Model):
 
             if actif:
                 personnel.essais = 0
-            elif actif == False:
+            elif not actif:
                 personnel.essais = 3
 
             if commit:
                 db.session.commit()
+
+            if personnel.role == "Educateur Administrateur":
+                educ_admin = EducAdmin(id_personnel=identifiant)
+                db.session.add(educ_admin)
         except Exception as e:
             logging.error(f"Erreur lors de la modification de {prenom} {nom}")
             logging.error(e)
