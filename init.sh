@@ -107,19 +107,21 @@ done
 read -p "Entrez un nom de domaine pour acceder localement à l'application (ex: site.local ) : " 
 echo    
 nomdom=$REPLY
-while true; do
-    read -p "Entrez le nom du SSID de votre réseau wifi (ex: Wifi-1234) (sans espace dedans) : "
+if [ "$typeinstall" = "wifi" ]; then
+    while true; do
+        read -p "Entrez le nom du SSID de votre réseau wifi (ex: Wifi-1234) (sans espace dedans) : "
+        echo   
+        nomssid=$REPLY
+        if [[ $nomssid == *" "* ]]; then
+            echo "Le nom du SSID ne doit pas contenir d'espace"
+        else
+            break
+        fi
+    done
+    read -p "Entrez le mot de passe du SSID de votre réseau wifi : " 
     echo   
-    nomssid=$REPLY
-    if [[ $nomssid == *" "* ]]; then
-        echo "Le nom du SSID ne doit pas contenir d'espace"
-    else
-        break
-    fi
-done
-read -p "Entrez le mot de passe du SSID de votre réseau wifi : " 
-echo   
-mdpssid=$REPLY
+    mdpssid=$REPLY
+fi
 
 # Update of the packages
 printf "$BALISE\n${PURPLE}Mise à jour des paquets ...${NC}\n$BALISE\n\n"
