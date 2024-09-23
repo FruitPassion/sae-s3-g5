@@ -345,7 +345,6 @@ class FicheIntervention(db.Model):
 
             numero = FicheIntervention.get_dernier_numero_fiche_apprenti(login_apprenti) + 1
 
-            print(id_personnel)
             nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=nom_demandeur, date_demande=date_demande,
                                                localisation=localisation, description_demande=description_demande,
                                                degre_urgence=degre_urgence, couleur_intervention=couleur_intervention,
