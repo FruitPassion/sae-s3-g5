@@ -370,5 +370,8 @@
 {% endblock %}
 
 {% block javascripts2 %}
+    <script>
+        const csrf_token = "{{ csrf_token() }}";
+    </script>
     <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
 {% endblock %}

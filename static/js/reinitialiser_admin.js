@@ -9,7 +9,9 @@ function reinitialiser() {
     afficher_snack("Réinitialisation en cours...", "info");
 
     const requestOptions = {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' ,
+        'X-CSRFToken': csrf_token },
     };
 
     fetch(baseApiUrl + "/api/reinitialiser-formation/" + encodeURIComponent(id_element), requestOptions)

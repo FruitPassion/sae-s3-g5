@@ -29,8 +29,9 @@ function supprimer(route){
     afficher_snack("Suppression en cours...", "info");
 
     const requestOptions = {
-        method: 'DELETE', // Méthode HTTP
-        headers: { 'Content-Type': 'application/json' }, // Type de contenu
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' ,
+        'X-CSRFToken': csrf_token },
     };
 
     fetch(baseApiUrl + "/api/"+route+"/" + encodeURIComponent(id_element), requestOptions)

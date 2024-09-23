@@ -75,7 +75,8 @@ function archiver(route, elementid = "archiver-value") {
 
     const requestOptions = {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' }, // Type de contenu
+        headers: { 'Content-Type': 'application/json' ,
+            'X-CSRFToken': csrf_token }, // Type de contenu
         body: JSON.stringify(contentData) // Corps de la requête
     };
 
@@ -152,7 +153,8 @@ function desarchiver(route) {
 
     const requestOptions = {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' }, // Type de contenu
+        headers: { 'Content-Type': 'application/json' ,
+            'X-CSRFToken': csrf_token }, // Type de contenu
         body: JSON.stringify(contentData) // Corps de la requête
     };
 

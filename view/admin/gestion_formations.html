@@ -13,6 +13,9 @@
     <script src="{{ url_for('static',filename='js/archiver_desarchiver_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/supprimer_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+    <script>
+        const csrf_token = "{{ csrf_token() }}";
+    </script>
     <script src="{{ url_for('static',filename='js/reinitialiser_admin.js') }}"></script>
     <script src="{{ url_for('static',filename='js/recherche_formation.js') }}"></script>
 {% endblock %}
