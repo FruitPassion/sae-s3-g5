@@ -180,11 +180,11 @@ class Personnel(db.Model):
         try:
             personnel = Personnel(login=login, nom=nom, prenom=prenom, email=email, mdp=password, role=role)
             db.session.add(personnel)
-            if personnel.role == "Educateur Administrateur":
-                educ_admin = EducAdmin(id_personnel=identifiant)
-                db.session.add(educ_admin)
             if commit:
                 db.session.commit()
+            if personnel.role == "Educateur Administrateur":
+                educ_admin = EducAdmin(id_personnel=personnel.id_personnel)
+                db.session.add(educ_admin)
             return Personnel.get_id_personnel_by_login(login)
         except Exception as e:
             logging.error(f"Erreur lors de l'ajout de {prenom} {nom}")
