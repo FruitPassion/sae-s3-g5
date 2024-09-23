@@ -185,6 +185,8 @@ class Personnel(db.Model):
             if personnel.role == "Educateur Administrateur":
                 educ_admin = EducAdmin(id_personnel=personnel.id_personnel)
                 db.session.add(educ_admin)
+            if commit:
+                db.session.commit()
             return Personnel.get_id_personnel_by_login(login)
         except Exception as e:
             logging.error(f"Erreur lors de l'ajout de {prenom} {nom}")
@@ -217,10 +219,10 @@ class Personnel(db.Model):
                 db.session.commit()
 
             if personnel.role == "Educateur Administrateur":
-                educ_admin = EducAdmin(id_personnel=identifiant)
+                educ_admin = EducAdmin(id_personnel=personnel.id_personnel)
                 db.session.add(educ_admin)
             else:
-                educ_admin = EducAdmin.query.filter_by(id_personnel=identifiant).first()
+                educ_admin = EducAdmin.query.filter_by(id_personnel=personnel.id_personnel).first()
                 if educ_admin:
                     db.session.delete(educ_admin)
             if commit:
