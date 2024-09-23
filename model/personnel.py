@@ -180,6 +180,9 @@ class Personnel(db.Model):
         try:
             personnel = Personnel(login=login, nom=nom, prenom=prenom, email=email, mdp=password, role=role)
             db.session.add(personnel)
+            if personnel.role == "Educateur Administrateur":
+                educ_admin = EducAdmin(id_personnel=identifiant)
+                db.session.add(educ_admin)
             if commit:
                 db.session.commit()
             return Personnel.get_id_personnel_by_login(login)
@@ -216,8 +219,12 @@ class Personnel(db.Model):
             if personnel.role == "Educateur Administrateur":
                 educ_admin = EducAdmin(id_personnel=identifiant)
                 db.session.add(educ_admin)
-                if commit:
-                    db.session.commit()
+            else:
+                educ_admin = EducAdmin.query.filter_by(id_personnel=identifiant).first()
+                if educ_admin:
+                    db.session.delete(educ_admin)
+            if commit:
+                db.session.commit()
         except Exception as e:
             logging.error(f"Erreur lors de la modification de {prenom} {nom}")
             logging.error(e)
