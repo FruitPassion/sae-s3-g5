@@ -20,7 +20,7 @@ config.txt
 
 
 static/files/*
-static/images/photo_fiche/*
+static/images/photo_fiche/*.jpg
 
 
 # Flask stuff:
