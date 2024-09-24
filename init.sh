@@ -303,6 +303,7 @@ wget https://github.com/coreruleset/coreruleset/archive/v3.3.5.tar.gz
 tar -xvzf v3.3.5.tar.gz
 ln -s coreruleset-3.3.5 /etc/apache2/conf/crs
 cp crs/crs-setup.conf.example crs/crs-setup.conf
+echo "SecAction \"id:900200, phase:1,nolog, pass, t:none, setvar:'tx.allowed_methods=GET HEAD POST OPTIONS PATCH PUT DELETE OPTIONS'\"" >> crs/crs-setup.conf
 rm v3.3.5.tar.gz
 cd ..
 
