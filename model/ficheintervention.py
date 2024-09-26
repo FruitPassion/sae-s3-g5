@@ -1,28 +1,30 @@
-from datetime import date
 import datetime
 import logging
-from sqlalchemy import func, asc
-from time import strftime, localtime
+from datetime import date
+from time import localtime, strftime
+
+from sqlalchemy import asc, func
 
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.gestions_erreur import suplement_erreur
-from model.shared_model import db, DB_SCHEMA
-
 from model.apprenti import Apprenti
-from model.personnel import Personnel
 from model.composer import ComposerPresentation
+from model.personnel import Personnel
+from model.shared_model import DB_SCHEMA, db
+
 
 class MyDateTime(db.TypeDecorator):
     impl = db.DateTime
-    
+
     def process_bind_param(self, value, dialect):
         if type(value) is str:
-            return datetime.datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+            return datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
         return value
 
+
 class FicheIntervention(db.Model):
-    __tablename__ = 'FicheIntervention'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "FicheIntervention"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_fiche = db.Column(db.Integer, primary_key=True, autoincrement=True)
     numero = db.Column(db.Integer, nullable=False)
@@ -38,16 +40,13 @@ class FicheIntervention(db.Model):
     photo_apres = db.Column(db.String(150))
     nom_intervenant = db.Column(db.String(50), nullable=False)
     prenom_intervenant = db.Column(db.String(50), nullable=False)
-    id_apprenti = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Apprenti.id_apprenti'), nullable=False, index=True)
-    id_personnel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Personnel.id_personnel'), nullable=False, index=True)
-    id_cours = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Cours.id_cours'), nullable=False, index=True)
+    id_apprenti = db.Column(db.ForeignKey(f"{DB_SCHEMA}.Apprenti.id_apprenti"), nullable=False, index=True)
+    id_personnel = db.Column(db.ForeignKey(f"{DB_SCHEMA}.Personnel.id_personnel"), nullable=False, index=True)
+    id_cours = db.Column(db.ForeignKey(f"{DB_SCHEMA}.Cours.id_cours"), nullable=False, index=True)
 
-    Apprenti = db.relationship('Apprenti', primaryjoin='FicheIntervention.id_apprenti == Apprenti.id_apprenti',
-                               backref='fiches')
-    Personnel = db.relationship('Personnel', primaryjoin='FicheIntervention.id_personnel == Personnel.id_personnel',
-                                backref='fiches')
-    Cours = db.relationship('Cours', primaryjoin='FicheIntervention.id_cours == Cours.id_cours',
-                            backref='fiches')
+    Apprenti = db.relationship("Apprenti", primaryjoin="FicheIntervention.id_apprenti == Apprenti.id_apprenti", backref="fiches")
+    Personnel = db.relationship("Personnel", primaryjoin="FicheIntervention.id_personnel == Personnel.id_personnel", backref="fiches")
+    Cours = db.relationship("Cours", primaryjoin="FicheIntervention.id_cours == Cours.id_cours", backref="fiches")
 
     @staticmethod
     def get_fiches_techniques_par_login(login):
@@ -58,9 +57,9 @@ class FicheIntervention(db.Model):
         """
         try:
             from model.apprenti import Apprenti
+
             id_apprenti = Apprenti.get_id_apprenti_by_login(login)
-            return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).order_by(asc(
-                FicheIntervention.etat_fiche)).all()
+            return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).order_by(asc(FicheIntervention.etat_fiche)).all()
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des fiches techniques de l'apprenti {login}")
             logging.error(e)
@@ -73,8 +72,7 @@ class FicheIntervention(db.Model):
         :return: Le propriétaire de la fiche
         """
         try:
-            return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Apprenti).with_entities(
-                Apprenti.login).first().login
+            return FicheIntervention.query.filter_by(id_fiche=id_fiche).join(Apprenti).with_entities(Apprenti.login).first().login
         except Exception as e:
             logging.error(f"Erreur lors de la récupération du propriétaire de la fiche {id_fiche}")
             logging.error(e)
@@ -87,8 +85,7 @@ class FicheIntervention(db.Model):
         :return: Les fiches techniques de l'apprenti
         """
         try:
-            return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(
-                FicheIntervention.id_fiche, FicheIntervention.numero).first()
+            return FicheIntervention.query.filter_by(id_apprenti=id_apprenti).with_entities(FicheIntervention.id_fiche, FicheIntervention.numero).first()
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des fiches techniques de l'apprenti {id_apprenti}")
             logging.error(e)
@@ -116,10 +113,13 @@ class FicheIntervention(db.Model):
         try:
             id_apprenti = Apprenti.get_id_apprenti_by_login(login)
             fiche_niveau = (
-                db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label('total_niveau'),
-                                 FicheIntervention.etat_fiche).join(ComposerPresentation).join(Apprenti)
+                db.session.query(FicheIntervention.numero, func.sum(ComposerPresentation.niveau).label("total_niveau"), FicheIntervention.etat_fiche)
+                .join(ComposerPresentation)
+                .join(Apprenti)
                 .filter(FicheIntervention.id_apprenti == id_apprenti)
-                .filter(~ComposerPresentation.position_elem.like('%0%')).group_by(FicheIntervention.id_fiche).all()
+                .filter(~ComposerPresentation.position_elem.like("%0%"))
+                .group_by(FicheIntervention.id_fiche)
+                .all()
             )
             return convert_to_dict(fiche_niveau)
         except Exception as e:
@@ -136,11 +136,11 @@ class FicheIntervention(db.Model):
         try:
             id_apprenti = Apprenti.get_id_apprenti_by_login(login)
             niveau_champ = (
-                db.session.query(FicheIntervention.numero, func.avg(ComposerPresentation.niveau).label('moyenne_niveau'))
+                db.session.query(FicheIntervention.numero, func.avg(ComposerPresentation.niveau).label("moyenne_niveau"))
                 .join(ComposerPresentation)
                 .join(Apprenti)
                 .filter(FicheIntervention.id_apprenti == id_apprenti)
-                .filter(~ComposerPresentation.position_elem.like('%0%'))
+                .filter(~ComposerPresentation.position_elem.like("%0%"))
                 .group_by(FicheIntervention.id_fiche)
                 .all()
             )
@@ -153,8 +153,7 @@ class FicheIntervention(db.Model):
                     total_niveau_champ += niveau.moyenne_niveau
                 return round(total_niveau_champ / len(liste_niveau_champ), 2)
         except Exception as e:
-            logging.error(
-                f"Erreur lors de la récupération des niveaux moyens des champs des fiches techniques de l'apprenti {login}")
+            logging.error(f"Erreur lors de la récupération des niveaux moyens des champs des fiches techniques de l'apprenti {login}")
             logging.error(e)
 
     @staticmethod
@@ -195,8 +194,7 @@ class FicheIntervention(db.Model):
         :return: L'état de la fiche
         """
         try:
-            return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(
-                FicheIntervention.etat_fiche).first().etat_fiche
+            return FicheIntervention.query.filter_by(id_fiche=id_fiche).with_entities(FicheIntervention.etat_fiche).first().etat_fiche
         except Exception as e:
             logging.error(f"Erreur lors de la récupération de l'état de la fiche {id_fiche}")
             logging.error(e)
@@ -239,9 +237,7 @@ class FicheIntervention(db.Model):
         """
         try:
             if FicheIntervention.get_fiche_apprentis_existe(login):
-                return FicheIntervention.query.filter_by(id_apprenti=Apprenti.get_id_apprenti_by_login(login),
-                                                         numero=numero).with_entities(
-                    FicheIntervention.id_fiche).first().id_fiche
+                return FicheIntervention.query.filter_by(id_apprenti=Apprenti.get_id_apprenti_by_login(login), numero=numero).with_entities(FicheIntervention.id_fiche).first().id_fiche
             else:
                 return None
         except Exception as e:
@@ -252,8 +248,13 @@ class FicheIntervention(db.Model):
     def get_dernier_numero_fiche_apprenti(login: str):
         try:
             if FicheIntervention.get_fiche_apprentis_existe(login):
-                return FicheIntervention.query.filter_by(id_apprenti=Apprenti.get_id_apprenti_by_login(login)).with_entities(
-                    FicheIntervention.numero).order_by(FicheIntervention.numero.desc()).first().numero
+                return (
+                    FicheIntervention.query.filter_by(id_apprenti=Apprenti.get_id_apprenti_by_login(login))
+                    .with_entities(FicheIntervention.numero)
+                    .order_by(FicheIntervention.numero.desc())
+                    .first()
+                    .numero
+                )
             else:
                 return 0
         except Exception as e:
@@ -270,8 +271,13 @@ class FicheIntervention(db.Model):
         """
         try:
             if FicheIntervention.get_fiche_apprentis_existe(login):
-                return FicheIntervention.query.filter_by(id_apprenti=Apprenti.get_id_apprenti_by_login(login)).with_entities(
-                    FicheIntervention.id_fiche).order_by(FicheIntervention.id_fiche.desc()).first().id_fiche
+                return (
+                    FicheIntervention.query.filter_by(id_apprenti=Apprenti.get_id_apprenti_by_login(login))
+                    .with_entities(FicheIntervention.id_fiche)
+                    .order_by(FicheIntervention.id_fiche.desc())
+                    .first()
+                    .id_fiche
+                )
             else:
                 return None
         except Exception as e:
@@ -292,19 +298,24 @@ class FicheIntervention(db.Model):
             fiche_a_copier.etat_fiche = 2
             login_apprenti = Apprenti.get_login_apprenti_by_id(fiche_a_copier.id_apprenti)
             numero = FicheIntervention.get_dernier_numero_fiche_apprenti(login_apprenti) + 1
-            nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=fiche_a_copier.nom_du_demandeur,
-                                               date_demande=fiche_a_copier.date_demande,
-                                               localisation=fiche_a_copier.localisation,
-                                               description_demande=fiche_a_copier.description_demande,
-                                               degre_urgence=fiche_a_copier.degre_urgence,
-                                               couleur_intervention=fiche_a_copier.couleur_intervention,
-                                               etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
-                                               photo_avant=None, photo_apres=None,
-                                               nom_intervenant=fiche_a_copier.nom_intervenant,
-                                               prenom_intervenant=fiche_a_copier.prenom_intervenant,
-                                               id_personnel=Personnel.get_id_personnel_by_login(login_personnel),
-                                               id_apprenti=Apprenti.get_id_apprenti_by_login(login_apprenti),
-                                               id_cours=fiche_a_copier.id_cours)
+            nouvelle_fiche = FicheIntervention(
+                numero=numero,
+                nom_du_demandeur=fiche_a_copier.nom_du_demandeur,
+                date_demande=fiche_a_copier.date_demande,
+                localisation=fiche_a_copier.localisation,
+                description_demande=fiche_a_copier.description_demande,
+                degre_urgence=fiche_a_copier.degre_urgence,
+                couleur_intervention=fiche_a_copier.couleur_intervention,
+                etat_fiche=0,
+                date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                photo_avant=None,
+                photo_apres=None,
+                nom_intervenant=fiche_a_copier.nom_intervenant,
+                prenom_intervenant=fiche_a_copier.prenom_intervenant,
+                id_personnel=Personnel.get_id_personnel_by_login(login_personnel),
+                id_apprenti=Apprenti.get_id_apprenti_by_login(login_apprenti),
+                id_cours=fiche_a_copier.id_cours,
+            )
             db.session.add(nouvelle_fiche)
             db.session.commit()
             composer_fiche = ComposerPresentation.get_composer_presentation(id_fiche)
@@ -316,9 +327,19 @@ class FicheIntervention(db.Model):
             logging.error(e)
 
     @staticmethod
-    def assigner_fiche_dummy_eleve(login_apprenti: str, id_personnel: str, date_demande: date, nom_demandeur: str,
-                                   localisation: str, description_demande: str, degre_urgence: int,
-                                   couleur_intervention: str, nom_intervenant: str, prenom_intervenant: str, id_cours: str):
+    def assigner_fiche_dummy_eleve(
+        login_apprenti: str,
+        id_personnel: str,
+        date_demande: date,
+        nom_demandeur: str,
+        localisation: str,
+        description_demande: str,
+        degre_urgence: int,
+        couleur_intervention: str,
+        nom_intervenant: str,
+        prenom_intervenant: str,
+        id_cours: str,
+    ):
         """
         A partir de la fiche par defaut, la duplique et l'assigne a un apprenti
 
@@ -345,14 +366,24 @@ class FicheIntervention(db.Model):
 
             numero = FicheIntervention.get_dernier_numero_fiche_apprenti(login_apprenti) + 1
 
-            nouvelle_fiche = FicheIntervention(numero=numero, nom_du_demandeur=nom_demandeur, date_demande=date_demande,
-                                               localisation=localisation, description_demande=description_demande,
-                                               degre_urgence=degre_urgence, couleur_intervention=couleur_intervention,
-                                               etat_fiche=0, date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
-                                               photo_avant=None, photo_apres=None, nom_intervenant=nom_intervenant,
-                                               prenom_intervenant=prenom_intervenant,
-                                               id_personnel=id_personnel,
-                                               id_apprenti=Apprenti.get_id_apprenti_by_login(login_apprenti), id_cours=id_cours)
+            nouvelle_fiche = FicheIntervention(
+                numero=numero,
+                nom_du_demandeur=nom_demandeur,
+                date_demande=date_demande,
+                localisation=localisation,
+                description_demande=description_demande,
+                degre_urgence=degre_urgence,
+                couleur_intervention=couleur_intervention,
+                etat_fiche=0,
+                date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                photo_avant=None,
+                photo_apres=None,
+                nom_intervenant=nom_intervenant,
+                prenom_intervenant=prenom_intervenant,
+                id_personnel=id_personnel,
+                id_apprenti=Apprenti.get_id_apprenti_by_login(login_apprenti),
+                id_cours=id_cours,
+            )
             db.session.add(nouvelle_fiche)
             db.session.commit()
             # On ajoute les éléments de la fiche
@@ -375,15 +406,22 @@ class FicheIntervention(db.Model):
         """
         try:
             for element in composer_fiche:
-                composer = ComposerPresentation(id_element=element.id_element, id_fiche=fiche.id_fiche,
-                                                id_pictogramme=element.id_pictogramme,
-                                                taille_pictogramme=element.taille_pictogramme,
-                                                couleur_pictogramme=element.couleur_pictogramme,
-                                                text=None, taille_texte=element.taille_texte, audio=None,
-                                                police=element.police, couleur=element.couleur,
-                                                couleur_fond=element.couleur_fond, niveau=element.niveau,
-                                                position_elem=element.position_elem,
-                                                ordre_saisie_focus=element.ordre_saisie_focus)
+                composer = ComposerPresentation(
+                    id_element=element.id_element,
+                    id_fiche=fiche.id_fiche,
+                    id_pictogramme=element.id_pictogramme,
+                    taille_pictogramme=element.taille_pictogramme,
+                    couleur_pictogramme=element.couleur_pictogramme,
+                    text=None,
+                    taille_texte=element.taille_texte,
+                    audio=None,
+                    police=element.police,
+                    couleur=element.couleur,
+                    couleur_fond=element.couleur_fond,
+                    niveau=element.niveau,
+                    position_elem=element.position_elem,
+                    ordre_saisie_focus=element.ordre_saisie_focus,
+                )
                 db.session.add(composer)
             db.session.commit()
         except Exception as e:
@@ -397,9 +435,9 @@ class FicheIntervention(db.Model):
         try:
             fiche = FicheIntervention.query.filter_by(id_fiche=id_fiche).first()
             if avant_apres:
-                fiche.photo_apres = f'{id_fiche}_photo-apres.jpg'
+                fiche.photo_apres = f"{id_fiche}_photo-apres.jpg"
             else:
-                fiche.photo_avant = f'{id_fiche}_photo-avant.jpg'
+                fiche.photo_avant = f"{id_fiche}_photo-avant.jpg"
             db.session.commit()
         except Exception as e:
             suplement_erreur(e, f"Erreur lors de la définition des photos de la fiche {id_fiche}")

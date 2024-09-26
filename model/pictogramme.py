@@ -1,12 +1,12 @@
 import logging
-from custom_paquets.gestions_erreur import suplement_erreur
 
-from model.shared_model import db, DB_SCHEMA
+from custom_paquets.gestions_erreur import suplement_erreur
+from model.shared_model import DB_SCHEMA, db
 
 
 class Pictogramme(db.Model):
-    __tablename__ = 'Pictogramme'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "Pictogramme"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_pictogramme = db.Column(db.Integer, primary_key=True, autoincrement=True)
     label = db.Column(db.String(50), nullable=False)
@@ -23,6 +23,7 @@ class Pictogramme(db.Model):
         """
         try:
             from model.composer import ComposerPresentation
+
             return Pictogramme.query.join(ComposerPresentation).filter(ComposerPresentation.id_fiche != id_fiche).distinct().all()
         except Exception as e:
             logging.error("Erreur lors de la récupération des pictogrammes")
@@ -79,7 +80,7 @@ class Pictogramme(db.Model):
 
         """
         try:
-            pictogramme = Pictogramme.query.filter_by(id_pictogramme = identifiant).first()
+            pictogramme = Pictogramme.query.filter_by(id_pictogramme=identifiant).first()
             pictogramme.label = label
             pictogramme.categorie = categorie
             pictogramme.souscategorie = souscategorie
@@ -104,7 +105,7 @@ class Pictogramme(db.Model):
 
         """
         try:
-            pictogramme = Pictogramme(label=label, categorie = categorie, url=url, souscategorie=souscategorie)
+            pictogramme = Pictogramme(label=label, categorie=categorie, url=url, souscategorie=souscategorie)
             db.session.add(pictogramme)
             if commit:
                 db.session.commit()

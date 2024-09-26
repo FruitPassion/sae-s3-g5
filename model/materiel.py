@@ -3,8 +3,8 @@ from model.shared_model import DB_SCHEMA, db
 
 
 class Materiel(db.Model):
-    __tablename__ = 'Materiel'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "Materiel"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_materiel = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom = db.Column(db.String(50), nullable=False)
@@ -27,7 +27,7 @@ class Materiel(db.Model):
 
         """
         try:
-            materiel = Materiel(nom=nom, categorie = categorie, lien=lien)
+            materiel = Materiel(nom=nom, categorie=categorie, lien=lien)
             db.session.add(materiel)
             if commit:
                 db.session.commit()
@@ -42,7 +42,7 @@ class Materiel(db.Model):
 
         """
         try:
-            materiel = Materiel.query.filter_by(id_materiel = identifiant).first()
+            materiel = Materiel.query.filter_by(id_materiel=identifiant).first()
             materiel.nom = nom
             materiel.categorie = categorie
             materiel.lien = lien

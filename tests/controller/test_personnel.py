@@ -1,8 +1,8 @@
 from flask import url_for
 
-'''
+"""
 Test des controller du fichier personnel.py
-'''
+"""
 
 # identifiants de connexion pour les tests
 username = "ALL11"

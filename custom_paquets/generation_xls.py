@@ -1,21 +1,22 @@
-import xlsxwriter, os
-from custom_paquets.converter import changer_date
+import os
 
+import xlsxwriter
+
+from custom_paquets.converter import changer_date
 from model.apprenti import Apprenti
 from model.ficheintervention import FicheIntervention
 from model.laissertrace import LaisserTrace
 
 
 def generer_xls_apprentis(id_formation):
-    
+
     if not os.path.exists("./static/files"):
         os.makedirs("./static/files")
-    
+
     workbook = xlsxwriter.Workbook("./static/files/apprentis.xlsx")
-    cell_header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 
-                                              'border': 1, 'text_wrap': True})
-    cell_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1, 'text_wrap': True})
-   
+    cell_header_format = workbook.add_format({"bold": True, "align": "center", "valign": "vcenter", "border": 1, "text_wrap": True})
+    cell_format = workbook.add_format({"align": "center", "valign": "vcenter", "border": 1, "text_wrap": True})
+
     apprentis = Apprenti.get_apprentis_for_xls(id_formation)
 
     col1 = "Nom"
@@ -29,8 +30,8 @@ def generer_xls_apprentis(id_formation):
 
     for i in range(len(apprentis)):
 
-        worksheet = workbook.add_worksheet(apprentis[i].prenom + ' ' + apprentis[i].nom)
-        
+        worksheet = workbook.add_worksheet(apprentis[i].prenom + " " + apprentis[i].nom)
+
         fiches = FicheIntervention.get_fiches_techniques_par_login(apprentis[i].login)
         fiches = changer_date(fiches)
 
@@ -44,31 +45,30 @@ def generer_xls_apprentis(id_formation):
                 commentaires = LaisserTrace.get_commentaires_par_fiche(fiches[j].id_fiche)
 
                 for k in range(len(commentaires)):
-                    worksheet.write(f'F{k * 2 + 4}',
-                                    f"Commentaire de la fiche {commentaires[k].id_fiche} du {fiches[j].date_creation}", cell_format)
-                    worksheet.write(f'G{k * 2 + 4}', commentaires[k].commentaire_texte, cell_format)
-                    worksheet.write(f'F{k * 2 + 4}', None)
+                    worksheet.write(f"F{k * 2 + 4}", f"Commentaire de la fiche {commentaires[k].id_fiche} du {fiches[j].date_creation}", cell_format)
+                    worksheet.write(f"G{k * 2 + 4}", commentaires[k].commentaire_texte, cell_format)
+                    worksheet.write(f"F{k * 2 + 4}", None)
 
             elif fiches[j].etat_fiche == 2:
                 nb_fiches_abandonnees += 1
 
-        worksheet.write('A1', col1, cell_header_format)
-        worksheet.write('B1', col2, cell_header_format)
-        worksheet.write('C1', col3, cell_header_format)
-        worksheet.write('D1', col4, cell_header_format)
-        worksheet.write('F1', col5, cell_header_format)
-        worksheet.write('G1', col6, cell_header_format)
-        worksheet.write('H1', col7, cell_header_format)
-        worksheet.write('I1', col8, cell_header_format)
+        worksheet.write("A1", col1, cell_header_format)
+        worksheet.write("B1", col2, cell_header_format)
+        worksheet.write("C1", col3, cell_header_format)
+        worksheet.write("D1", col4, cell_header_format)
+        worksheet.write("F1", col5, cell_header_format)
+        worksheet.write("G1", col6, cell_header_format)
+        worksheet.write("H1", col7, cell_header_format)
+        worksheet.write("I1", col8, cell_header_format)
 
-        worksheet.write('A2', apprentis[i].nom, cell_format)
-        worksheet.write('B2', apprentis[i].prenom, cell_format)
-        worksheet.write('C2', apprentis[i].login, cell_format)
-        worksheet.write('D2', apprentis[i].adaptation_situation_examen, cell_format)
-        worksheet.write('F2', nb_fiches_abandonnees, cell_format)
-        worksheet.write('G2', nb_fiches_en_cours, cell_format)
-        worksheet.write('H2', nb_fiches_finies, cell_format)
-        worksheet.write('I2', len(fiches), cell_format)
+        worksheet.write("A2", apprentis[i].nom, cell_format)
+        worksheet.write("B2", apprentis[i].prenom, cell_format)
+        worksheet.write("C2", apprentis[i].login, cell_format)
+        worksheet.write("D2", apprentis[i].adaptation_situation_examen, cell_format)
+        worksheet.write("F2", nb_fiches_abandonnees, cell_format)
+        worksheet.write("G2", nb_fiches_en_cours, cell_format)
+        worksheet.write("H2", nb_fiches_finies, cell_format)
+        worksheet.write("I2", len(fiches), cell_format)
 
         worksheet.autofit()
 

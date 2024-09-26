@@ -24,8 +24,8 @@ def build_categories(id_fiche):
 
 def check_ressenti(build):
     nb = 0
-    for e in build[5]['elements']:
-        if e['text'] is None:
+    for e in build[5]["elements"]:
+        if e["text"] is None:
             nb += 1
     return nb != 5
 
@@ -41,8 +41,7 @@ def build_materiel():
     for categorie in to_return:
         for materiel in materiaux:
             if materiel.categorie == categorie["nom"]:
-                categorie["elements"].append({"nom": materiel.nom, "id_materiel": materiel.id_materiel,
-                                              "lien": materiel.lien})
+                categorie["elements"].append({"nom": materiel.nom, "id_materiel": materiel.id_materiel, "lien": materiel.lien})
     return to_return
 
 

@@ -2,17 +2,17 @@ from flask import Blueprint, request
 
 from custom_paquets.decorateur import admin_login_required
 from model.apprenti import Apprenti
+from model.cours import Cours
 from model.formation import Formation
 from model.personnel import Personnel
-from model.cours import Cours
 
-api = Blueprint('api', __name__, url_prefix="/api")
+api = Blueprint("api", __name__, url_prefix="/api")
 
-'''
+"""
 Blueprint pour toutes les routes relatives aux URL d'API
 
 Préfixe d'URL : /api/ .
-'''
+"""
 
 
 @api.route("/check-password-apprenti/", methods=["POST"])
@@ -21,7 +21,7 @@ def api_check_password_apprenti():
     Vérifie que le login et le password correspondent bien à ceux de la base de données
     """
     infos = request.get_json()
-    
+
     if Apprenti.get_nbr_essais_connexion_apprenti(infos["login"]) != 5:
         return {"valide": Apprenti.check_password_apprenti(infos["login"], infos["password"])}
     else:
@@ -37,13 +37,11 @@ def api_set_password_apprenti():
     :param password: Nouveau mot de passe
     """
     infos = request.get_json()
-    
+
     if not Apprenti.check_apprenti(infos["login"]) or not Apprenti.check_password_non_set(infos["login"]):
         return {"valide": False}
     else:
         return {"valide": Apprenti.set_password_apprenti(infos["login"], str(infos["password"]))}
-    
-
 
 
 @api.route("/reinitialiser-formation/<int:id_formation>", methods=["PATCH"])
@@ -126,7 +124,7 @@ def api_archive_personnel(id_personnel):
     Archive/Désarchive un personnel à partir de son id
     """
     infos = request.get_json()
-    
+
     return {"valide": Personnel.archiver_personnel(id_personnel, archiver=infos["archive"])}
 
 

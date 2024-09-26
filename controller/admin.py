@@ -1,26 +1,37 @@
-from custom_paquets.converter import generate_login
-from custom_paquets.security import encrypt_password
-
 from flask import Blueprint, Response, redirect, render_template, request, url_for
 
+from custom_paquets.converter import generate_login
+from custom_paquets.custom_form import (
+    AjouterApprenti,
+    AjouterFormation,
+    AjouterPersonnel,
+    ModifierAdmin,
+    ModifierApprenti,
+    ModifierFormation,
+    ModifierPersonnel,
+)
 from custom_paquets.decorateur import admin_login_required
-from custom_paquets.gestion_image import default_image_formation, default_image_profil, stocker_photo_profile, supprimer_photo_profil
-from custom_paquets.gestion_image import stocker_image_formation
+from custom_paquets.gestion_image import (
+    default_image_formation,
+    default_image_profil,
+    stocker_image_formation,
+    stocker_photo_profile,
+    supprimer_photo_profil,
+)
+from custom_paquets.security import encrypt_password
 from model.apprenti import Apprenti
-from model.personnel import Personnel
-from model.formation import Formation
 from model.cours import Cours
-from custom_paquets.custom_form import AjouterApprenti, ModifierApprenti, ModifierPersonnel, ModifierAdmin
-from custom_paquets.custom_form import AjouterPersonnel
-from custom_paquets.custom_form import AjouterFormation, ModifierFormation
+from model.formation import Formation
+from model.personnel import Personnel
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
-'''
+"""
 Blueprint pour toutes les routes relatives aux pages super admin.
 
 Préfixe d'URL : /admin/ .
-'''
+"""
+
 
 @admin.route("/", methods=["GET"])
 @admin.route("/accueil-admin", methods=["GET"])
@@ -40,16 +51,15 @@ def gestion_personnel():
     Page listant tous les comptes du personnel et permettant de supprimer ou modifier leurs informations
     On peut aussi y rajouter du personnel
     """
-    couleurs = {"SuperAdministrateur": "text-primary", "Educateur Administrateur": "text-warning",
-                "Educateur": "text-success", "CIP": "text-info"}
+    couleurs = {"SuperAdministrateur": "text-primary", "Educateur Administrateur": "text-warning", "Educateur": "text-success", "CIP": "text-info"}
     personnel = Personnel.get_all_personnel()
     liste_personnel_archive = Personnel.get_all_personnel(archive=True)
     form_ajouter = AjouterPersonnel()
     form_modifier = ModifierPersonnel()
     form_modifier_admin = ModifierAdmin()
     REDIRECTION = "admin.gestion_personnel"
-    
-    if (form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and 'Modifier Admin' in request.form.values()):
+
+    if form_modifier_admin.validate_on_submit() and form_modifier.validate_on_submit() and "Modifier Admin" in request.form.values():
         role = "SuperAdministrateur"
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
@@ -57,12 +67,10 @@ def gestion_personnel():
             new_password = encrypt_password(form_modifier_admin.form_password.data)
         else:
             new_password = None
-        Personnel.update_personnel(identifiant, login, form_modifier_admin.form_nom.data,
-                         form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data,
-                         role, password=new_password)
+        Personnel.update_personnel(identifiant, login, form_modifier_admin.form_nom.data, form_modifier_admin.form_prenom.data, form_modifier_admin.form_email.data, role, password=new_password)
         return redirect(url_for(REDIRECTION), 302)
 
-    elif form_modifier.validate_on_submit() and request.method == "POST" and 'Modifier' in request.form.values():
+    elif form_modifier.validate_on_submit() and request.method == "POST" and "Modifier" in request.form.values():
         nouveau_role = request.form.get("nouveau_role").replace("_", " ")
         identifiant = request.form.get("id-element")
         login = generate_login(form_modifier.form_nom.data, form_modifier.form_prenom.data)
@@ -72,22 +80,29 @@ def gestion_personnel():
         else:
             new_password = None
         actif = request.form.get("form_actif") == "on"
-        Personnel.update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data,
-                         form_modifier.form_email.data, nouveau_role, actif=actif, password=new_password)
+        Personnel.update_personnel(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, form_modifier.form_email.data, nouveau_role, actif=actif, password=new_password)
         return redirect(url_for(REDIRECTION), 302)
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         role = request.form.get("select_role")
         role = role.replace("_", " ")
-        password = encrypt_password(request.form.get('password'))
+        password = encrypt_password(request.form.get("password"))
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
         Personnel.add_personnel(login, form_ajouter.nom.data, form_ajouter.prenom.data, form_ajouter.email.data, password, role)
         return redirect(url_for(REDIRECTION), 302)
 
-    return Response(render_template("admin/gestion_personnel.html", liste_personnel=personnel,
-                           form_ajouter=form_ajouter, form_modifier=form_modifier,
-                           form_modifier_admin=form_modifier_admin, couleurs=couleurs,
-                           liste_personnel_archive=liste_personnel_archive), 200)
+    return Response(
+        render_template(
+            "admin/gestion_personnel.html",
+            liste_personnel=personnel,
+            form_ajouter=form_ajouter,
+            form_modifier=form_modifier,
+            form_modifier_admin=form_modifier_admin,
+            couleurs=couleurs,
+            liste_personnel_archive=liste_personnel_archive,
+        ),
+        200,
+    )
 
 
 @admin.route("/gestion-apprentis", methods=["GET", "POST"])
@@ -101,10 +116,10 @@ def gestion_apprentis():
 
     formations = Formation.get_all_formations()
     apprentis = Apprenti.get_all_apprentis()
-    ## Gestion des images par défaut
+    # Gestion des images par défaut
     for apprenti in apprentis:
-        apprenti['photo'] = default_image_profil(apprenti['photo'])
-    
+        apprenti["photo"] = default_image_profil(apprenti["photo"])
+
     liste_apprentis_archives = Apprenti().get_all_apprentis(archive=True)
     form_ajouter = AjouterApprenti()
     form_modifier = ModifierApprenti()
@@ -119,10 +134,9 @@ def gestion_apprentis():
             chemin_avatar = stocker_photo_profile(f)
         else:
             chemin_avatar = Apprenti.get_photos_profil_apprenti(identifiant)
-        actif = (request.form.get("form_actif") == "on")
-        reinitialiser_pass = (request.form.get("form_reinitialiser") == "on")
-        Apprenti.update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, chemin_avatar,
-                        reinitialiser_pass, actif)
+        actif = request.form.get("form_actif") == "on"
+        reinitialiser_pass = request.form.get("form_reinitialiser") == "on"
+        Apprenti.update_apprenti(identifiant, login, form_modifier.form_nom.data, form_modifier.form_prenom.data, chemin_avatar, reinitialiser_pass, actif)
         return redirect(url_for("admin.gestion_apprentis"), 302)
     elif form_ajouter.validate_on_submit() and request.method == "POST":
         login = generate_login(form_ajouter.nom.data, form_ajouter.prenom.data)
@@ -132,9 +146,12 @@ def gestion_apprentis():
         Cours.add_apprenti_assister(id_apprenti, formations[int(request.form.get("select_formation")) - 1].id_formation)
         return redirect(url_for("admin.gestion_apprentis"), 302)
 
-    return Response(render_template("admin/gestion_apprentis.html", liste_apprentis=apprentis,
-                           form_ajouter=form_ajouter, form_modifier=form_modifier, formations=formations,
-                           liste_apprentis_archives=liste_apprentis_archives), 200)
+    return Response(
+        render_template(
+            "admin/gestion_apprentis.html", liste_apprentis=apprentis, form_ajouter=form_ajouter, form_modifier=form_modifier, formations=formations, liste_apprentis_archives=liste_apprentis_archives
+        ),
+        200,
+    )
 
 
 @admin.route("/gestion-formations", methods=["GET", "POST", "DELETE"])
@@ -145,10 +162,10 @@ def gestion_formations():
     On peut aussi y rajouter une formation
     """
     formations = Formation.get_all_formations()
-    ## Gestion des images par défaut
+    # Gestion des images par défaut
     for formation in formations:
         formation.image = default_image_formation(formation.image)
-    
+
     liste_formations_archivees = Formation.get_all_formations(archive=True)
     form = AjouterFormation()
     form_modifier = ModifierFormation()
@@ -168,9 +185,7 @@ def gestion_formations():
             chemin_image = stocker_image_formation(f)
         else:
             chemin_image = Formation.get_image_formation(identifiant)
-        Formation.update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data,
-                         form_modifier.form_groupe.data, chemin_image)
+        Formation.update_formation(identifiant, form_modifier.form_intitule.data, form_modifier.form_niveau_qualif.data, form_modifier.form_groupe.data, chemin_image)
         return redirect(url_for("admin.gestion_formations"), 302)
 
-    return Response(render_template("admin/gestion_formations.html", liste_formations=formations, form=form,
-                           form_modifier=form_modifier, liste_formations_archivees=liste_formations_archivees), 200)
+    return Response(render_template("admin/gestion_formations.html", liste_formations=formations, form=form, form_modifier=form_modifier, liste_formations_archivees=liste_formations_archivees), 200)

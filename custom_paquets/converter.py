@@ -9,15 +9,15 @@ def convert_to_dict(elements):
         try:
             for element in elements:
                 element_list.append(element.__dict__)
-        except:
+        except Exception as e:
+            print(e)
             for element in elements:
                 element_list.append(element._asdict())
     return element_list
 
 
 def generate_login(nom, prenom):
-    login = unidecode(prenom[0:2].upper().strip()) + unidecode(nom[0].upper().strip()) + str(
-        len(nom.strip() + prenom.strip())).zfill(2)
+    login = unidecode(prenom[0:2].upper().strip()) + unidecode(nom[0].upper().strip()) + str(len(nom.strip() + prenom.strip())).zfill(2)
     return login
 
 

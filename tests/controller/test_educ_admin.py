@@ -1,8 +1,8 @@
 from flask import url_for
 
-'''
+"""
 Test des controller du fichier educateur_admin.py
-'''
+"""
 
 # création d'identifiants pour les tests
 login = "ALL11"
@@ -45,6 +45,7 @@ def test_route_personnalisation(client):
 
     # Test de vérification de la route
     assert response.request.path == "/educ-admin/personnalisation/" + str(id_fiche)
+
 
 def test_route_gestion_cours(client):
     connexion_personnel_pin(client, login, mdp)

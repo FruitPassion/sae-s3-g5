@@ -2,15 +2,19 @@ from flask import (
     Blueprint,
     Response,
     abort,
-    render_template,
     flash,
     redirect,
-    url_for,
+    render_template,
     request,
     session,
+    url_for,
 )
 
-from custom_paquets.custom_form import LoginApprentiForm, LoginPersonnelForm, LoginPersonnelPin
+from custom_paquets.custom_form import (
+    LoginApprentiForm,
+    LoginPersonnelForm,
+    LoginPersonnelPin,
+)
 from custom_paquets.decorateur import logout_required
 from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
 from custom_paquets.gestion_image import default_image_formation, default_image_profil
@@ -20,15 +24,16 @@ from model.personnel import Personnel
 
 auth = Blueprint("auth", __name__)
 
-'''
+"""
 Blueprint pour toutes les routes relatives au authentifications.
 
 Pas de préfice d'URL.
-'''
+"""
 
 COMPTE_BLOQUE = "Compte bloqué, contacter un admin"
 COMPTE_INCONNU = "Compte inconnu ou mot de passe invalide."
 CONNEXION_REUSSIE = "Connexion réussie."
+
 
 @auth.route("/interdit", methods=["GET"])
 @logout_required
@@ -40,6 +45,7 @@ def forbidden():
     """
     abort(403)
 
+
 @auth.route("/introuvable", methods=["GET"])
 @logout_required
 def not_found():
@@ -50,6 +56,7 @@ def not_found():
     """
     abort(404)
 
+
 @auth.route("/erreur-serveur", methods=["GET"])
 @logout_required
 def serveur_error():
@@ -59,6 +66,7 @@ def serveur_error():
     :return: Rendu de la page d'erreur  500
     """
     abort(500)
+
 
 @auth.route("/")
 @logout_required
@@ -97,7 +105,7 @@ def connexion_personnel_pin():
     code = 200
     if request.method == "POST" and form.validate_on_submit():
         passwd = request.form["hiddencode"]
-        login = request.form.get('login_select')
+        login = request.form.get("login_select")
         if (not Personnel.check_personnel(login)) or (Personnel.check_super_admin(login)):
             flash(COMPTE_INCONNU, "error")
             code = 403
@@ -117,7 +125,7 @@ def connexion_personnel_pin():
                 session["role"] = Personnel.get_role_by_login(login)
                 flash(CONNEXION_REUSSIE)
                 if session["role"] == "Educateur Administrateur":
-                    return redirect(url_for('educ_admin.accueil_educadmin'), 302)
+                    return redirect(url_for("educ_admin.accueil_educadmin"), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)
     return Response(render_template("auth/connexion_personnel_pin.html", personnels=personnels, form=form), code)
@@ -153,14 +161,14 @@ def connexion_personnel_mdp():
                 session["name"] = form.login.data
                 session["role"] = Personnel.get_role_by_login(form.login.data)
                 flash(CONNEXION_REUSSIE)
-                
-                if session["role"] == 'SuperAdministrateur':
+
+                if session["role"] == "SuperAdministrateur":
                     return redirect(url_for("admin.accueil_admin"), 302)
                 elif session["role"] == "Educateur Administrateur":
-                    return redirect(url_for('educ_admin.accueil_educadmin'), 302)
+                    return redirect(url_for("educ_admin.accueil_educadmin"), 302)
                 else:
                     return redirect(url_for("personnel.choix_formation"), 302)
-                
+
     return Response(render_template("auth/connexion_personnel_code.html", form=form), code)
 
 
@@ -173,7 +181,7 @@ def choix_formation_apprentis():
     :return: Rendu de la page choix_formation_apprentis.html avec la liste des formations.
     """
     formations = Formation.get_all_formations()
-    ## Gestion des images par défaut
+    # Gestion des images par défaut
     for formation in formations:
         formation.image = default_image_formation(formation.image)
     return render_template("auth/choix_formation_apprentis.html", formations=formations)
@@ -191,10 +199,10 @@ def choix_eleve_apprentis(nom_formation):
 
     id_formation = Formation.get_formation_id_par_nom_formation(nom_formation)
     apprentis = Apprenti.get_apprentis_by_formation(id_formation)
-    ## Gestion des images par défaut
+    # Gestion des images par défaut
     for apprenti in apprentis:
         apprenti.photo = default_image_profil(apprenti.photo)
-    
+
     return render_template("auth/choix_apprentis.html", apprentis=apprentis, nom_formation=nom_formation)
 
 
@@ -202,14 +210,14 @@ def choix_eleve_apprentis(nom_formation):
 @logout_required
 def connexion_apprentis(nom_formation, login_apprenti):
     """
-    Page d'authentification des apprentis. Ils doivent résoudre le schéma pour accéder 
+    Page d'authentification des apprentis. Ils doivent résoudre le schéma pour accéder
     à la page de toutes les fiches techniques qu'ils ont réalisé
 
     :return: connexion_apprentis.html
     """
     formation_existe(nom_formation)
     apprenti_existe(login_apprenti)
-    
+
     form = LoginApprentiForm()
     apprenti = Apprenti.get_apprenti_by_login(login_apprenti)
     code = 200
@@ -229,8 +237,7 @@ def connexion_apprentis(nom_formation, login_apprenti):
             else:
                 flash(COMPTE_INCONNU, "error")
                 code = 403
-    return Response(render_template("auth/connexion_apprentis.html", apprenti=apprenti,
-                           nom_formation=nom_formation, code_set=code_set, form=form), code)
+    return Response(render_template("auth/connexion_apprentis.html", apprenti=apprenti, nom_formation=nom_formation, code_set=code_set, form=form), code)
 
 
 @auth.route("/logout", methods=["GET"])
@@ -240,7 +247,7 @@ def logout():
 
     :return: Redirection vers la page d'index
     """
-    session.pop('role', None)
-    session.pop('name', None)
+    session.pop("role", None)
+    session.pop("name", None)
     flash("Déconnexion réussie.")
     return redirect(url_for("auth.choix_connexion"), 302)

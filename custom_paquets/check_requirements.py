@@ -1,8 +1,8 @@
+import subprocess
+import sys
 import warnings
 
 import pkg_resources
-import sys
-import subprocess
 
 
 def checking():
@@ -18,6 +18,4 @@ def checking():
         pkg_resources.require(dependencies)
     except Exception as e:
         print("Mise à jour des prérequis : " + str(e))
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt', '--upgrade'])
-
-
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "--upgrade"])

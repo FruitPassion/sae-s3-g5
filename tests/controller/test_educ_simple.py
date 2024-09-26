@@ -1,8 +1,8 @@
 from flask import url_for
 
-'''
+"""
 Test des controller du fichier educateur_simple.py
-'''
+"""
 
 username = "MAC10"
 passw = "101010"
@@ -10,6 +10,7 @@ formation = "Parcours plomberie"
 apprenti = "ANG12"
 fiche = 8
 numero_fiche = 2
+
 
 # Test de la route de redirection de connexion de l'éducateur simple
 def test_redirection_connexion(client):
@@ -69,8 +70,7 @@ def test_modification_commentaire(client):
     # Test connexion éducateur simple
     connexion_personnel_pin(client, username, passw)
 
-    response = client.get(url_for("educ_simple.modifier_commentaires", apprenti=apprenti, numero=numero_fiche,
-                                  type_commentaire="educateur"))
+    response = client.get(url_for("educ_simple.modifier_commentaires", apprenti=apprenti, numero=numero_fiche, type_commentaire="educateur"))
 
     # Test d'accès à la route
     assert response.status_code == 200
@@ -78,8 +78,7 @@ def test_modification_commentaire(client):
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/{numero_fiche}/modifier-commentaires/educateur"
 
-    response = client.get(url_for("educ_simple.modifier_commentaires", apprenti=apprenti, numero=numero_fiche,
-                                  type_commentaire="apprenti"))
+    response = client.get(url_for("educ_simple.modifier_commentaires", apprenti=apprenti, numero=numero_fiche, type_commentaire="apprenti"))
 
     # Test d'accès à la route
     assert response.status_code == 200
@@ -92,8 +91,7 @@ def test_modification_commentaire(client):
 def test_ajouter_commentaire(client):
     # Test connexion éducateur simple
     connexion_personnel_pin(client, username, passw)
-    response = client.get(url_for("educ_simple.ajouter_commentaires", apprenti=apprenti, numero=numero_fiche,
-                                  type_commentaire="educateur"))
+    response = client.get(url_for("educ_simple.ajouter_commentaires", apprenti=apprenti, numero=numero_fiche, type_commentaire="educateur"))
 
     # Test d'accès à la route
     assert response.status_code == 200
@@ -101,12 +99,10 @@ def test_ajouter_commentaire(client):
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/{numero_fiche}/ajouter-commentaires/educateur"
 
-    response = client.get(url_for("educ_simple.ajouter_commentaires", apprenti=apprenti, numero=numero_fiche,
-                                  type_commentaire="apprenti"))
+    response = client.get(url_for("educ_simple.ajouter_commentaires", apprenti=apprenti, numero=numero_fiche, type_commentaire="apprenti"))
 
     # Test d'accès à la route
     assert response.status_code == 200
 
     # Test de vérification de la route
     assert response.request.path == f"/educ-simple/{apprenti}/{numero_fiche}/ajouter-commentaires/apprenti"
-

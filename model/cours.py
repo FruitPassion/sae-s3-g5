@@ -1,22 +1,20 @@
 import logging
 
-from model.shared_model import db, DB_SCHEMA, Assister
-
+from model.shared_model import DB_SCHEMA, Assister, db
 
 
 class Cours(db.Model):
-    __tablename__ = 'Cours'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "Cours"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_cours = db.Column(db.Integer, primary_key=True, autoincrement=True)
     theme = db.Column(db.String(50), nullable=False)
     cours = db.Column(db.String(50), nullable=False)
     duree = db.Column(db.Integer)
     archive = db.Column(db.Boolean, nullable=False, default=False)
-    id_formation = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Formation.id_formation'), nullable=False, index=True)
+    id_formation = db.Column(db.ForeignKey(f"{DB_SCHEMA}.Formation.id_formation"), nullable=False, index=True)
 
-    Formation = db.relationship('Formation', primaryjoin='Cours.id_formation == Formation.id_formation',
-                                backref='cours')
+    Formation = db.relationship("Formation", primaryjoin="Cours.id_formation == Formation.id_formation", backref="cours")
 
     @staticmethod
     def get_all_cours(archive=False):
@@ -39,8 +37,7 @@ class Cours(db.Model):
         :return: Une liste des cours
         """
         try:
-            return Cours.query.with_entities(Cours.cours).filter(Cours.archive == archive).join(
-                Assister).filter_by(id_apprenti=id_apprenti).distinct().all()
+            return Cours.query.with_entities(Cours.cours).filter(Cours.archive == archive).join(Assister).filter_by(id_apprenti=id_apprenti).distinct().all()
         except Exception as e:
             logging.error("Erreur lors de la récupération de tous les cours")
             logging.error(e)
@@ -53,12 +50,18 @@ class Cours(db.Model):
         :return: Une liste d'apprentis
         """
         try:
-            from model.formation import Formation
             from model.apprenti import Apprenti
-            return Cours.query.distinct().filter_by(
-                id_formation=Formation.get_formation_id_par_nom_formation(nom_formation)).join(
-                Assister).join(Apprenti).with_entities(Apprenti.id_apprenti, Apprenti.nom, Apprenti.prenom, Apprenti.login,
-                                                       Apprenti.photo).filter(Apprenti.archive == archive).all()
+            from model.formation import Formation
+
+            return (
+                Cours.query.distinct()
+                .filter_by(id_formation=Formation.get_formation_id_par_nom_formation(nom_formation))
+                .join(Assister)
+                .join(Apprenti)
+                .with_entities(Apprenti.id_apprenti, Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.photo)
+                .filter(Apprenti.archive == archive)
+                .all()
+            )
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des apprentis de la formation {nom_formation}")
             logging.error(e)
@@ -71,8 +74,7 @@ class Cours(db.Model):
         :return: Une liste de cours
         """
         try:
-            return Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours).join(Assister).filter_by(
-                id_apprenti=id_apprenti).all()
+            return Cours.query.with_entities(Cours.theme, Cours.cours, Cours.id_cours).join(Assister).filter_by(id_apprenti=id_apprenti).all()
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des cours de l'apprenti {id_apprenti}")
             logging.error(e)
@@ -152,6 +154,7 @@ class Cours(db.Model):
         :return: id_cours
         """
         from model.formation import Formation
+
         try:
             cours_ajoute = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
             db.session.add(cours_ajoute)

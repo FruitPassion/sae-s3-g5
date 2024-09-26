@@ -1,4 +1,5 @@
 import sys
+
 from custom_paquets.gestions_erreur import ConfigurationError
 
 

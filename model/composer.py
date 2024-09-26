@@ -1,17 +1,18 @@
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.gestions_erreur import suplement_erreur
-
-from model.shared_model import db, DB_SCHEMA, ElementBase as Elem
-
+from model.shared_model import DB_SCHEMA
+from model.shared_model import ElementBase as Elem
+from model.shared_model import db
 
 ERREUR_RECUPERATION = "Erreur lors de la récupération des éléments de la fiche."
 
-class ComposerPresentation(db.Model):
-    __tablename__ = 'ComposerPresentation'
-    __table_args__ = {'schema': DB_SCHEMA}
 
-    id_element = db.Column(db.ForeignKey(f'{DB_SCHEMA}.ElementBase.id_element'), primary_key=True)
-    id_fiche = db.Column(db.ForeignKey(f'{DB_SCHEMA}.FicheIntervention.id_fiche'), primary_key=True)
+class ComposerPresentation(db.Model):
+    __tablename__ = "ComposerPresentation"
+    __table_args__ = {"schema": DB_SCHEMA}
+
+    id_element = db.Column(db.ForeignKey(f"{DB_SCHEMA}.ElementBase.id_element"), primary_key=True)
+    id_fiche = db.Column(db.ForeignKey(f"{DB_SCHEMA}.FicheIntervention.id_fiche"), primary_key=True)
     text = db.Column(db.String(50))
     taille_texte = db.Column(db.String(50))
     audio = db.Column(db.String(50))
@@ -21,20 +22,14 @@ class ComposerPresentation(db.Model):
     niveau = db.Column(db.Integer)
     position_elem = db.Column(db.String(50))
     ordre_saisie_focus = db.Column(db.String(50))
-    id_pictogramme = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Pictogramme.id_pictogramme'), index=True)
+    id_pictogramme = db.Column(db.ForeignKey(f"{DB_SCHEMA}.Pictogramme.id_pictogramme"), index=True)
     taille_pictogramme = db.Column(db.Integer)
     couleur_pictogramme = db.Column(db.String(7))
-    id_materiel = db.Column(db.ForeignKey(f'{DB_SCHEMA}.Materiel.id_materiel'), index=True)
+    id_materiel = db.Column(db.ForeignKey(f"{DB_SCHEMA}.Materiel.id_materiel"), index=True)
 
-    ElementBase = db.relationship('ElementBase',
-                                  primaryjoin='ComposerPresentation.id_element == ElementBase.id_element',
-                                  backref='composerpresentations')
-    FicheIntervention = db.relationship('FicheIntervention',
-                                        primaryjoin='ComposerPresentation.id_fiche == FicheIntervention.id_fiche',
-                                        backref='composerpresentations')
-    Pictogramme = db.relationship('Pictogramme',
-                                  primaryjoin='ComposerPresentation.id_pictogramme == Pictogramme.id_pictogramme',
-                                  backref='composerpresentations')
+    ElementBase = db.relationship("ElementBase", primaryjoin="ComposerPresentation.id_element == ElementBase.id_element", backref="composerpresentations")
+    FicheIntervention = db.relationship("FicheIntervention", primaryjoin="ComposerPresentation.id_fiche == FicheIntervention.id_fiche", backref="composerpresentations")
+    Pictogramme = db.relationship("Pictogramme", primaryjoin="ComposerPresentation.id_pictogramme == Pictogramme.id_pictogramme", backref="composerpresentations")
 
     @staticmethod
     def get_composer_presentation(id_fiche=1):
@@ -69,13 +64,29 @@ class ComposerPresentation(db.Model):
         """
         try:
             return convert_to_dict(
-                ComposerPresentation.query.with_entities(ComposerPresentation.id_element, ComposerPresentation.text, ComposerPresentation.taille_texte, ComposerPresentation.police, ComposerPresentation.audio,
-                                                         ComposerPresentation.police, ComposerPresentation.couleur, ComposerPresentation.couleur_fond, ComposerPresentation.niveau,
-                                                         ComposerPresentation.position_elem,
-                                                         ComposerPresentation.taille_pictogramme, ComposerPresentation.ordre_saisie_focus,
-                                                         ComposerPresentation.id_pictogramme.label("pictogramme"), ComposerPresentation.taille_pictogramme,
-                                                         ComposerPresentation.couleur_pictogramme, ComposerPresentation.id_materiel).filter_by(
-                    id_fiche=id_fiche).join(Elem).filter(Elem.type != "categorie").all())
+                ComposerPresentation.query.with_entities(
+                    ComposerPresentation.id_element,
+                    ComposerPresentation.text,
+                    ComposerPresentation.taille_texte,
+                    ComposerPresentation.police,
+                    ComposerPresentation.audio,
+                    ComposerPresentation.police,
+                    ComposerPresentation.couleur,
+                    ComposerPresentation.couleur_fond,
+                    ComposerPresentation.niveau,
+                    ComposerPresentation.position_elem,
+                    ComposerPresentation.taille_pictogramme,
+                    ComposerPresentation.ordre_saisie_focus,
+                    ComposerPresentation.id_pictogramme.label("pictogramme"),
+                    ComposerPresentation.taille_pictogramme,
+                    ComposerPresentation.couleur_pictogramme,
+                    ComposerPresentation.id_materiel,
+                )
+                .filter_by(id_fiche=id_fiche)
+                .join(Elem)
+                .filter(Elem.type != "categorie")
+                .all()
+            )
         except Exception as e:
             suplement_erreur(e, message=ERREUR_RECUPERATION)
 
@@ -87,9 +98,11 @@ class ComposerPresentation(db.Model):
         :return: liste de dictionnaires avec l'id, le libellé, le type et l'url audio des éléments
         """
         try:
-            return convert_to_dict(ComposerPresentation.query.with_entities(Elem.id_element, Elem.libelle.label('libelle_elem'),
-                                                                            Elem.type.label('type_elem'), Elem.text.label('label_elem'),
-                                                                            Elem.audio.label('audio_elem')).all())
+            return convert_to_dict(
+                ComposerPresentation.query.with_entities(
+                    Elem.id_element, Elem.libelle.label("libelle_elem"), Elem.type.label("type_elem"), Elem.text.label("label_elem"), Elem.audio.label("audio_elem")
+                ).all()
+            )
         except Exception as e:
             suplement_erreur(e, message="Erreur lors de la récupération des éléments de base.")
 
@@ -99,7 +112,7 @@ class ComposerPresentation(db.Model):
             compositions = ComposerPresentation.query.filter_by(id_fiche=id_fiche).all()
             for composition in compositions:
                 for key, value in form_data.items():
-                    if composition.position_elem == key.split('-')[-1] and "selecteur-element" not in key:
+                    if composition.position_elem == key.split("-")[-1] and "selecteur-element" not in key:
                         ComposerPresentation.modifier_composition_par_element(composition, key, value)
             db.session.commit()
         except Exception as e:
@@ -108,22 +121,23 @@ class ComposerPresentation(db.Model):
     @staticmethod
     def modifier_composition_par_element(composition, key, value):
         from model.pictogramme import Pictogramme
+
         try:
-            if 'selecteur-niveau' in key:
+            if "selecteur-niveau" in key:
                 composition.niveau = value
-            elif 'selecteur-police' in key:
+            elif "selecteur-police" in key:
                 composition.police = value
-            elif 'taille-police' in key:
+            elif "taille-police" in key:
                 composition.taille_texte = value
-            elif 'couleur-police' in key:
+            elif "couleur-police" in key:
                 composition.couleur = value
-            elif 'couleur-fond' in key:
+            elif "couleur-fond" in key:
                 composition.couleur_fond = value
-            elif 'selecteur-picto' in key:
+            elif "selecteur-picto" in key:
                 composition.id_pictogramme = Pictogramme.get_pictogramme_by_url(value).id_pictogramme
-            elif 'taille-picto' in key:
+            elif "taille-picto" in key:
                 composition.taille_pictogramme = value
-            elif 'couleur-picto' in key:
+            elif "couleur-picto" in key:
                 composition.couleur_pictogramme = value
 
         except Exception as e:
@@ -142,7 +156,7 @@ class ComposerPresentation(db.Model):
             compositions = ComposerPresentation.query.filter_by(id_fiche=id_fiche).all()
             for element in compositions:
                 if element.position_elem in majs.keys():
-                    element.id_materiel = majs[f'{element.position_elem}']
+                    element.id_materiel = majs[f"{element.position_elem}"]
             db.session.commit()
         except Exception as e:
             suplement_erreur(e, message="Erreur lors de l'enregistrement des modifications de la fiche.")
@@ -160,7 +174,7 @@ class ComposerPresentation(db.Model):
             compositions = ComposerPresentation.query.filter_by(id_fiche=id_fiche).all()
             for element in compositions:
                 if element.position_elem in majs.keys():
-                    element.text = majs[f'{element.position_elem}']
+                    element.text = majs[f"{element.position_elem}"]
             db.session.commit()
         except Exception as e:
             suplement_erreur(e, message="Erreur lors de l'enregistrement des modifications de la fiche.")

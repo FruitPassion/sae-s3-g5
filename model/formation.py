@@ -2,13 +2,12 @@ import logging
 
 from model.apprenti import Apprenti
 from model.cours import Cours
-
-from model.shared_model import db, DB_SCHEMA, Assister
+from model.shared_model import DB_SCHEMA, Assister, db
 
 
 class Formation(db.Model):
-    __tablename__ = 'Formation'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "Formation"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_formation = db.Column(db.Integer, primary_key=True, autoincrement=True)
     intitule = db.Column(db.String(50), nullable=False)
@@ -39,8 +38,7 @@ class Formation(db.Model):
         :return: Une formation
         """
         try:
-            return Formation.query.with_entities(Formation.intitule).join(Cours).join(Assister).join(Apprenti).filter_by(
-                login=login_apprenti).first().intitule
+            return Formation.query.with_entities(Formation.intitule).join(Cours).join(Assister).join(Apprenti).filter_by(login=login_apprenti).first().intitule
         except Exception as e:
             logging.error(f"Erreur lors de la récupération de la formation de l'apprenti {login_apprenti}")
             logging.error(e)
@@ -53,8 +51,7 @@ class Formation(db.Model):
         :return: Un id de formation
         """
         try:
-            return Formation.query.with_entities(Formation.id_formation).filter_by(
-                intitule=nom_formation).first().id_formation
+            return Formation.query.with_entities(Formation.id_formation).filter_by(intitule=nom_formation).first().id_formation
         except Exception as e:
             logging.error(f"Erreur lors de la récupération de l'id de la formation {nom_formation}")
             logging.error(e)
@@ -91,7 +88,7 @@ class Formation(db.Model):
         try:
             formation = Formation(intitule=intitule, niveau_qualif=niveau_qualif, groupe=groupe, image=image)
             db.session.add(formation)
-            if commit == True:
+            if commit is True:
                 db.session.commit()
             return Formation.get_formation_id_par_nom_formation(intitule)
         except Exception as e:
@@ -174,6 +171,7 @@ class Formation(db.Model):
         """
         try:
             from custom_paquets.generation_xls import generer_xls_apprentis
+
             # Suppression des cours
             generer_xls_apprentis(id_formation)
 

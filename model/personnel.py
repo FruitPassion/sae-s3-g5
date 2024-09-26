@@ -1,14 +1,13 @@
 import logging
 
 from custom_paquets.security import compare_passwords
-
-from model.shared_model import db, DB_SCHEMA, EducAdmin
 from model.laissertrace import LaisserTrace
+from model.shared_model import DB_SCHEMA, EducAdmin, db
 
 
 class Personnel(db.Model):
-    __tablename__ = 'Personnel'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "Personnel"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_personnel = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom = db.Column(db.String(50), nullable=False)
@@ -28,8 +27,7 @@ class Personnel(db.Model):
         :return: La liste des membres du personnel
         """
         try:
-            return Personnel.query.order_by(Personnel.login).filter(
-                Personnel.archive == archive).filter(Personnel.role != "dummy").all()
+            return Personnel.query.order_by(Personnel.login).filter(Personnel.archive == archive).filter(Personnel.role != "dummy").all()
         except Exception as e:
             logging.error("Erreur lors de la récupération de la liste de tout le personnel")
             logging.error(e)
@@ -46,13 +44,17 @@ class Personnel(db.Model):
         except Exception as e:
             logging.error(f"Erreur lors de la récupération du personnel {id_personnel}")
             logging.error(e)
-    
+
     @staticmethod
     def get_liste_personnel_non_super(archive=False):
         try:
-            return Personnel.query.with_entities(Personnel.id_personnel, Personnel.login).filter(
-                Personnel.role != "SuperAdministrateur").filter(Personnel.archive == archive).filter(
-                Personnel.role != "dummy").all()
+            return (
+                Personnel.query.with_entities(Personnel.id_personnel, Personnel.login)
+                .filter(Personnel.role != "SuperAdministrateur")
+                .filter(Personnel.archive == archive)
+                .filter(Personnel.role != "dummy")
+                .all()
+            )
         except Exception as e:
             logging.error("Erreur lors de la récupération de la liste du personnel sans l'admin")
             logging.error(e)
@@ -76,10 +78,10 @@ class Personnel(db.Model):
         :return: Un booleen vrai si l'username appartient à un compte superadmin
         """
         try:
-            return Personnel.query.with_entities(Personnel.role).filter_by(
-                login=login).first().role == "SuperAdministrateur"
+            return Personnel.query.with_entities(Personnel.role).filter_by(login=login).first().role == "SuperAdministrateur"
         except AttributeError as e:
             logging.error("Erreur lors de la vérification du superadmin")
+            print(e)
             return False
 
     @staticmethod
@@ -99,10 +101,10 @@ class Personnel(db.Model):
         :return: Un rôle
         """
         try:
-            return Personnel.query.filter_by(login=login).with_entities(
-                Personnel.role).first().role
+            return Personnel.query.filter_by(login=login).with_entities(Personnel.role).first().role
         except AttributeError as e:
             logging.error(f"Erreur lors de la récupération du role de {login}")
+            print(e)
             return None
 
     @staticmethod
@@ -152,7 +154,8 @@ class Personnel(db.Model):
         try:
             db.session.commit()
             return True
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     @staticmethod
@@ -167,7 +170,8 @@ class Personnel(db.Model):
         try:
             db.session.commit()
             return True
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     @staticmethod

@@ -1,45 +1,36 @@
 """
 Fonctions utilitaires
 """
+
 from custom_paquets.converter import generate_login
 from custom_paquets.security import encrypt_password
 from model.apprenti import Apprenti
+from model.cours import Cours
 from model.formation import Formation
 from model.personnel import Personnel
-from model.cours import Cours
 
 
 # Fonction de connexion avec un code pin
 def connexion_personnel_pin(client, username, password):
     Personnel.reset_nbr_essais_connexion(username)
-    return client.post("/connexion-personnel-pin", data=dict(
-        login_select=username,
-        code=password
-    ), follow_redirects=True)
+    return client.post("/connexion-personnel-pin", data=dict(login_select=username, code=password), follow_redirects=True)
 
 
 # Fonction de connexion avec un mot de passe
 def connexion_personnel_mdp(client, username, password):
     Personnel.reset_nbr_essais_connexion(username)
-    return client.post("/connexion-personnel-mdp", data=dict(
-        login=username,
-        password=password
-    ), follow_redirects=True)
-
+    return client.post("/connexion-personnel-mdp", data=dict(login=username, password=password), follow_redirects=True)
 
 
 # Fonction de connexion avec un mot de passe
 def connexion_apprentis(client, nom_formation, login, password):
     Apprenti.reset_nbr_essais_connexion(login)
-    return client.post(f"/connexion-apprentis/{nom_formation}/{login}", data=dict(
-        login=login,
-        password=password
-    ), follow_redirects=True)
-    
+    return client.post(f"/connexion-apprentis/{nom_formation}/{login}", data=dict(login=login, password=password), follow_redirects=True)
+
 
 # Fonction de deconnexion
 def deconnexion(client):
-    return client.get('/logout', follow_redirects=True)
+    return client.get("/logout", follow_redirects=True)
 
 
 class PersonnelTest:
@@ -75,7 +66,8 @@ class ApprentiTest:
         self.login = generate_login(self.nom, self.prenom)
 
         self.id_apprenti = Apprenti.add_apprenti(self.nom, self.prenom, self.login, self.photo)
-        
+
+
 class ApprentiTestModif:
     def __init__(self, id_apprenti):
         self.id_apprenti = id_apprenti
@@ -87,6 +79,7 @@ class ApprentiTestModif:
         self.actif = True
 
         Apprenti.update_apprenti(self.id_apprenti, self.login, self.nom, self.prenom, self.photo, self.password, self.actif)
+
 
 class FormationTest:
     def __init__(self):

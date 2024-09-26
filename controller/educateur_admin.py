@@ -1,30 +1,61 @@
-from flask import Blueprint, Response, render_template, request, session, flash, redirect, url_for
 import json
+
+from flask import (
+    Blueprint,
+    Response,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
-from custom_paquets.custom_form import AjouterFiche, AjouterPicto, ModifierCours, ModifierFiche, ModifierMateriel, ModifierPicto, RaisonArretForm
-from custom_paquets.custom_form import AjouterCours, AjouterMateriel
+from custom_paquets.custom_form import (
+    AjouterCours,
+    AjouterFiche,
+    AjouterMateriel,
+    AjouterPicto,
+    ModifierCours,
+    ModifierFiche,
+    ModifierMateriel,
+    ModifierPicto,
+    RaisonArretForm,
+)
 from custom_paquets.decorateur import educadmin_login_required
-from custom_paquets.gestion_filtres_routes import apprenti_existe, check_accessibilite_fiche, fiche_by_id_existe, fiche_by_numero_existe, formation_existe
-from custom_paquets.gestion_image import default_image_formation, default_image_profil, stocker_photo_materiel, stocker_picto
+from custom_paquets.gestion_filtres_routes import (
+    apprenti_existe,
+    check_accessibilite_fiche,
+    fiche_by_id_existe,
+    fiche_by_numero_existe,
+    formation_existe,
+)
+from custom_paquets.gestion_image import (
+    default_image_formation,
+    default_image_profil,
+    stocker_photo_materiel,
+    stocker_picto,
+)
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
 from model.cours import Cours
 from model.ficheintervention import FicheIntervention
 from model.formation import Formation
+from model.laissertrace import LaisserTrace
 from model.materiel import Materiel
 from model.personnel import Personnel
 from model.pictogramme import Pictogramme
-from model.laissertrace import LaisserTrace
 
 educ_admin = Blueprint("educ_admin", __name__, url_prefix="/educ-admin")
 
-'''
+"""
 Blueprint pour toutes les routes relatives aux URL des pages des educs admin
 
 Préfixe d'URL : /educ-admin/ .
-'''
+"""
+
 
 @educ_admin.route("/", methods=["GET"])
 @educ_admin.route("/accueil-educadmin", methods=["GET"])
@@ -46,7 +77,7 @@ def choix_formation():
     :return: rendu de la page choix_formation.html
     """
     formations = Formation.get_all_formations()
-    ## Gestion des images par défaut
+    # Gestion des images par défaut
     for formation in formations:
         formation.image = default_image_formation(formation.image)
     return render_template("educ_admin/choix_formation.html", formations=formations), 200
@@ -86,9 +117,7 @@ def gestion_images():
         Materiel.add_materiel(form_ajouter.nom.data, categorie, chemin_materiel)
         return redirect(url_for("educ_admin.gestion_images"), 302)
 
-    return Response(render_template("educ_admin/gestion_materiaux.html", materiaux=materiaux,
-                           form_ajouter=form_ajouter, categories=categories,
-                           form_modifier=form_modifier), 200)
+    return Response(render_template("educ_admin/gestion_materiaux.html", materiaux=materiaux, form_ajouter=form_ajouter, categories=categories, form_modifier=form_modifier), 200)
 
 
 @educ_admin.route("/gestion-pictos", methods=["GET", "POST"])
@@ -122,13 +151,10 @@ def gestion_pictos():
             chemin_picto = stocker_picto(f)
         else:
             chemin_picto = Pictogramme.get_photo_picto_by_id(identifiant)
-        Pictogramme.update_picto(identifiant, form_modifier.form_modifier_label.data,
-                                 form_modifier.form_modifier_categorie.data,
-                                 form_modifier.form_modifier_souscategorie.data, chemin_picto)
+        Pictogramme.update_picto(identifiant, form_modifier.form_modifier_label.data, form_modifier.form_modifier_categorie.data, form_modifier.form_modifier_souscategorie.data, chemin_picto)
         return redirect(url_for("educ_admin.gestion_pictos"), 302)
 
-    return Response(render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier,
-                           form_ajouter=form_ajouter, categories=categories), 200)
+    return Response(render_template("educ_admin/gestion_pictos.html", pictos=pictos, form_modifier=form_modifier, form_ajouter=form_ajouter, categories=categories), 200)
 
 
 @educ_admin.route("/gestion-cours", methods=["GET", "POST"])
@@ -137,7 +163,7 @@ def gestion_cours():
     """
     Page listant tous les cours et permettant de les supprimer, modifier, archiver et désarchiver.
     On peux également rajouter des cours.
-    
+
     :return: rendu de la page gestion_cours.html
     """
     cours = Cours.get_all_cours()
@@ -148,19 +174,15 @@ def gestion_cours():
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        Cours.update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data,
-                           form_modifier.form_duree.data)
+        Cours.update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data, form_modifier.form_duree.data)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":
-        selected_formation_id = request.form.get('select_formation')
-        Cours.add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data,
-                        selected_formation_id)
+        selected_formation_id = request.form.get("select_formation")
+        Cours.add_cours(form_ajouter.theme.data, form_ajouter.cours.data, form_ajouter.duree.data, selected_formation_id)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
 
-    return Response(render_template("educ_admin/gestion_cours.html", cours=cours,
-                           form_modifier=form_modifier, form_ajouter=form_ajouter, cours_archives=cours_archives,
-                           formations=formations), 200)
+    return Response(render_template("educ_admin/gestion_cours.html", cours=cours, form_modifier=form_modifier, form_ajouter=form_ajouter, cours_archives=cours_archives, formations=formations), 200)
 
 
 @educ_admin.route("/choix-eleve/<string:nom_formation>", methods=["GET"])
@@ -176,8 +198,8 @@ def choix_eleve(nom_formation):
     formation_existe(nom_formation)
     id_formation = Formation.get_formation_id_par_nom_formation(nom_formation)
     apprentis = Apprenti.get_apprentis_by_formation(id_formation)
-    
-    ## Gestion des images par défaut
+
+    # Gestion des images par défaut
     for apprenti in apprentis:
         apprenti.photo = default_image_profil(apprenti.photo)
     return render_template("educ_admin/choix_apprentis.html", apprentis=apprentis)
@@ -189,7 +211,7 @@ def fiches_apprenti(apprenti):
     """
     Récupère toutes les fiches techniques de l'apprenti sélectionné et les affiche.
 
-    Permet de sélectionner une fiche technique réalisée par un apprenti. 
+    Permet de sélectionner une fiche technique réalisée par un apprenti.
 
     :return: rendu de la page choix_fiches_apprenti.html
     """
@@ -201,9 +223,7 @@ def fiches_apprenti(apprenti):
     fiches = FicheIntervention.get_fiches_techniques_par_login(apprenti)
     fiches = changer_date(fiches)
     cours = Cours.get_cours_par_apprenti(Apprenti.get_id_apprenti_by_login(apprenti))
-    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos,
-                           fiches=fiches, get_nom_cours_by_id=Cours.get_nom_cours_by_id, formation=formation,
-                           cours=cours)
+    return render_template("educ_admin/choix_fiches_apprenti.html", apprenti=apprenti_infos, fiches=fiches, get_nom_cours_by_id=Cours.get_nom_cours_by_id, formation=formation, cours=cours)
 
 
 @educ_admin.route("/modifier-fiche/<int:id_fiche>", methods=["GET", "POST"])
@@ -216,17 +236,16 @@ def modifier_fiche(id_fiche):
 
     :return: rendu de la page personnaliser_fiche_texte_champs.html
     """
-    
-    check_accessibilite_fiche(id_fiche, 0) # la fiche doit être accessible pour être modifiable
+
+    check_accessibilite_fiche(id_fiche, 0)  # la fiche doit être accessible pour être modifiable
     form = RaisonArretForm()
     fiche_by_id_existe(id_fiche)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         flash("Fiche copiée avec succès")
         id_nouvelle_fiche = FicheIntervention.copier_fiche(id_fiche, session["name"])
-        LaisserTrace.ajouter_commentaires_evaluation(id_fiche, request.form.get("raison_arret"), "", None, None,
-                                                     session["name"], "Copie de la fiche", "0")
-        
+        LaisserTrace.ajouter_commentaires_evaluation(id_fiche, request.form.get("raison_arret"), "", None, None, session["name"], "Copie de la fiche", "0")
+
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_nouvelle_fiche))
     apprenti = FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
@@ -249,19 +268,25 @@ def ajouter_fiche(apprenti):
     form = AjouterFiche()
     cours = Cours.get_cours_par_apprenti(Apprenti.get_id_apprenti_by_login(apprenti))
     if form.validate_on_submit():
-        degres = request.form.get('degres_urgence')
-        id_cours = request.form.get('coursinput')
+        degres = request.form.get("degres_urgence")
+        id_cours = request.form.get("coursinput")
         id_personnel = Personnel.get_id_personnel_by_login(session["name"])
-        id_fiche = FicheIntervention.assigner_fiche_dummy_eleve(apprenti, id_personnel, form.dateinput.data,
-                                                                form.nominput.data,
-                                                                form.lieuinput.data, form.decriptioninput.data,
-                                                                degres.index(degres) + 1,
-                                                                degres, form.nomintervenant.data,
-                                                                form.prenomintervenant.data, id_cours)
+        id_fiche = FicheIntervention.assigner_fiche_dummy_eleve(
+            apprenti,
+            id_personnel,
+            form.dateinput.data,
+            form.nominput.data,
+            form.lieuinput.data,
+            form.decriptioninput.data,
+            degres.index(degres) + 1,
+            degres,
+            form.nomintervenant.data,
+            form.prenomintervenant.data,
+            id_cours,
+        )
         flash("Fiche enregistrée avec succès")
         return redirect(url_for("educ_admin.personnalisation", id_fiche=id_fiche), 302)
-    return Response(render_template('educ_admin/ajouter_fiche.html', form=form, apprenti=apprenti,
-                           cours=cours), 200)
+    return Response(render_template("educ_admin/ajouter_fiche.html", form=form, apprenti=apprenti, cours=cours), 200)
 
 
 @educ_admin.route("/personnalisation/<int:id_fiche>", methods=["GET", "POST"])
@@ -275,20 +300,18 @@ def personnalisation(id_fiche):
     check_accessibilite_fiche(id_fiche, 0)
     form = ModifierFiche()
     fiche_by_id_existe(id_fiche)
-    
-    liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto",
-                     "Open Sans", "Lato", "Oswald", "Poppins"]
+
+    liste_polices = ["Arial", "Courier New", "Times New Roman", "Verdana", "Impact", "Montserrat", "Roboto", "Open Sans", "Lato", "Oswald", "Poppins"]
     liste_pictogrammes = build_pictogrammes()
     composer_fiche = build_categories(id_fiche)
     fiche = FicheIntervention.get_fiche_par_id_fiche(id_fiche)
-    if request.method == 'POST':
+    if request.method == "POST":
         ComposerPresentation.modifier_composition(request.form, id_fiche)
         flash("Fiche enregistrée avec succès")
-        return redirect(url_for("educ_admin.fiches_apprenti",
-                                apprenti=FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)),
-                        302)
-    return Response(render_template('educ_admin/personnaliser_fiche_texte_champs.html', polices=liste_polices,
-                           composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche, form=form), 200)
+        return redirect(url_for("educ_admin.fiches_apprenti", apprenti=FicheIntervention.get_proprietaire_fiche_par_id_fiche(id_fiche)), 302)
+    return Response(
+        render_template("educ_admin/personnaliser_fiche_texte_champs.html", polices=liste_polices, composition=composer_fiche, liste_pictogrammes=liste_pictogrammes, fiche=fiche, form=form), 200
+    )
 
 
 @educ_admin.route("/<string:apprenti>/<int:numero>/commentaires", methods=["GET"])
@@ -304,12 +327,9 @@ def visualiser_commentaires(apprenti, numero):
     apprenti_existe(apprenti)
     fiche_by_numero_existe(apprenti, numero)
 
-    commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche(
-        (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
-    commentaires_appr = LaisserTrace.get_commentaires_type_par_fiche(
-        (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
-    return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero,
-                           commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
+    commentaires_educ = LaisserTrace.get_commentaires_type_par_fiche((FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
+    commentaires_appr = LaisserTrace.get_commentaires_type_par_fiche((FicheIntervention.get_id_fiche_apprenti(apprenti, numero)), apprenti="1")
+    return render_template("personnel/commentaires.html", apprenti=apprenti, numero=numero, commentaires_educ=commentaires_educ, commentaires_appr=commentaires_appr), 200
 
 
 @educ_admin.route("/<string:apprenti>/<int:numero>/commentaires-arret", methods=["GET"])
@@ -324,10 +344,8 @@ def visualiser_commentaires_arret(apprenti, numero):
     apprenti_existe(apprenti)
     fiche_by_numero_existe(apprenti, numero)
 
-    commentaire = LaisserTrace.get_commentaires_type_par_fiche(
-        (FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
-    return render_template("personnel/commentaires_arret.html", apprenti=apprenti, numero=numero,
-                           commentaire=commentaire), 200
+    commentaire = LaisserTrace.get_commentaires_type_par_fiche((FicheIntervention.get_id_fiche_apprenti(apprenti, numero)))
+    return render_template("personnel/commentaires_arret.html", apprenti=apprenti, numero=numero, commentaire=commentaire), 200
 
 
 @educ_admin.route("/<string:apprenti>/suivi-progression", methods=["GET"])
@@ -341,7 +359,7 @@ def suivi_progression_apprenti(apprenti):
     """
 
     apprenti_existe(apprenti)
-    
+
     apprenti_infos = Apprenti.get_apprenti_by_login(apprenti)
 
     # Récupération des niveaux et états des fiches
@@ -352,8 +370,7 @@ def suivi_progression_apprenti(apprenti):
     niveau_moyen = FicheIntervention.get_niveau_moyen_champs_par_login(apprenti)
     nb_fiches_finies = FicheIntervention.get_nombre_fiches_finies_par_login(apprenti)
 
-    return render_template("educ_admin/suivi_progression.html", niv_fiche=json.dumps(niv_fiche),
-                           niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
+    return render_template("educ_admin/suivi_progression.html", niv_fiche=json.dumps(niv_fiche), niveau_moyen=niveau_moyen, nb_fiches_finies=nb_fiches_finies, apprenti=apprenti_infos), 200
 
 
 @educ_admin.route("/<string:apprenti>/adaptation-situation-examen", methods=["GET"])
@@ -367,8 +384,7 @@ def adaptation_situation_examen(apprenti):
     """
 
     apprenti_existe(apprenti)
-        
+
     commentaire = Apprenti.get_adaptation_situation_examen_par_apprenti(apprenti)
     apprenti = Apprenti.get_apprenti_by_login(apprenti)
-    return render_template("educ_admin/adaptation_situation_examen.html", apprenti=apprenti,
-                           commentaire=commentaire), 200
+    return render_template("educ_admin/adaptation_situation_examen.html", apprenti=apprenti, commentaire=commentaire), 200

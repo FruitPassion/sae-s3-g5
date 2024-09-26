@@ -1,17 +1,15 @@
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.gestions_erreur import suplement_erreur
 from custom_paquets.security import compare_passwords, encrypt_password
-
-from model.shared_model import db, DB_SCHEMA, Assister
-
+from model.composer import ComposerPresentation
 from model.cours import Cours
 from model.laissertrace import LaisserTrace
-from model.composer import ComposerPresentation
+from model.shared_model import DB_SCHEMA, Assister, db
 
 
 class Apprenti(db.Model):
-    __tablename__ = 'Apprenti'
-    __table_args__ = {'schema': DB_SCHEMA}
+    __tablename__ = "Apprenti"
+    __table_args__ = {"schema": DB_SCHEMA}
 
     id_apprenti = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nom = db.Column(db.String(50), nullable=False)
@@ -32,9 +30,13 @@ class Apprenti(db.Model):
         """
 
         try:
-            apprentis = Apprenti.query.with_entities(
-                Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essais
-            ).order_by(Apprenti.login).filter(Apprenti.login != "dummy").filter(Apprenti.archive == archive).all()
+            apprentis = (
+                Apprenti.query.with_entities(Apprenti.id_apprenti, Apprenti.login, Apprenti.nom, Apprenti.prenom, Apprenti.photo, Apprenti.essais)
+                .order_by(Apprenti.login)
+                .filter(Apprenti.login != "dummy")
+                .filter(Apprenti.archive == archive)
+                .all()
+            )
             return convert_to_dict(apprentis)
         except Exception as e:
             suplement_erreur(e, message="Erreur lors de la récupération des apprentis.")
@@ -47,12 +49,9 @@ class Apprenti(db.Model):
         :return: Le commentaire de la CIP
         """
         try:
-            return Apprenti.query.filter_by(login=login).with_entities(
-                Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
+            return Apprenti.query.filter_by(login=login).with_entities(Apprenti.adaptation_situation_examen).first().adaptation_situation_examen
         except Exception as e:
-            suplement_erreur(e,
-                             message=f"Erreur lors de la récupération de l'adaptation situation d'examen de l'apprenti "
-                                     f"{login}")
+            suplement_erreur(e, message=f"Erreur lors de la récupération de l'adaptation situation d'examen de l'apprenti " f"{login}")
 
     @staticmethod
     def update_adaptation_situation_examen_par_apprenti(login, adaptation_situation_examen):
@@ -68,9 +67,7 @@ class Apprenti(db.Model):
             db.session.commit()
             return True
         except Exception as e:
-            suplement_erreur(e,
-                             message=f"Erreur lors de la modification de l'adaptation situation d'examen de l'apprenti "
-                                     f"{login}")
+            suplement_erreur(e, message=f"Erreur lors de la modification de l'adaptation situation d'examen de l'apprenti " f"{login}")
             return False
 
     @staticmethod
@@ -95,8 +92,7 @@ class Apprenti(db.Model):
         :return: Les informations de l'apprenti
         """
         try:
-            return Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom,
-                                                                       Apprenti.login, Apprenti.id_apprenti).first()
+            return Apprenti.query.filter_by(login=login).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.id_apprenti).first()
         except Exception as e:
             suplement_erreur(e, message=f"Erreur lors de la récupération de l'apprenti {login}")
 
@@ -153,7 +149,7 @@ class Apprenti(db.Model):
     def check_password_non_set(login: str):
         """
         A partir d'un login, vérifie si le mot de passe de l'apprenti est à sa valeur par défaut
-        
+
         :return: Un booleen vrai si le mot de passe est à sa valeur par défaut
         """
         return Apprenti.query.filter_by(login=login).first().mdp == "0000"
@@ -189,8 +185,7 @@ class Apprenti(db.Model):
         try:
             return Apprenti.query.filter_by(login=login).first().essais
         except Exception as e:
-            suplement_erreur(e,
-                             message=f"Erreur lors de la récupération du nombre d'essais de connexion de l'apprenti {login}")
+            suplement_erreur(e, message=f"Erreur lors de la récupération du nombre d'essais de connexion de l'apprenti {login}")
 
     @staticmethod
     def update_nbr_essais_connexion(login: str):
@@ -206,8 +201,7 @@ class Apprenti(db.Model):
             db.session.commit()
             return True
         except Exception as e:
-            suplement_erreur(e,
-                             message=f"Erreur lors de la modification du nombre d'essais de connexion de l'apprenti {login}")
+            suplement_erreur(e, message=f"Erreur lors de la modification du nombre d'essais de connexion de l'apprenti {login}")
             return False
 
     @staticmethod
@@ -224,11 +218,10 @@ class Apprenti(db.Model):
             db.session.commit()
             return True
         except Exception as e:
-            suplement_erreur(e,
-                             message=f"Erreur lors de la modification du nombre d'essais de connexion de l'apprenti {login}")
+            suplement_erreur(e, message=f"Erreur lors de la modification du nombre d'essais de connexion de l'apprenti {login}")
             return False
 
-    @staticmethod 
+    @staticmethod
     def reset_nbr_essais_connexion(login: str):
         """
         Reset le nombre d'essais de connexion d'un apprenti à 0
@@ -241,8 +234,7 @@ class Apprenti(db.Model):
             db.session.commit()
             return True
         except Exception as e:
-            suplement_erreur(e,
-                             message=f"Erreur lors de la réinitialisation du nombre d'essais de connexion de l'apprenti {login}")
+            suplement_erreur(e, message=f"Erreur lors de la réinitialisation du nombre d'essais de connexion de l'apprenti {login}")
             return False
 
     @staticmethod
@@ -314,6 +306,7 @@ class Apprenti(db.Model):
         """
         try:
             from model.ficheintervention import FicheIntervention
+
             Assister.query.filter_by(id_apprenti=id_apprenti).delete()
             if commit:
                 db.session.commit()
@@ -350,9 +343,14 @@ class Apprenti(db.Model):
         Récupère les apprentis d'une formation
         """
         try:
-            return Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
-                                                Apprenti.adaptation_situation_examen).join(
-                Assister).join(Cours).filter_by(id_formation=id_formation).distinct().all()
+            return (
+                Apprenti.query.with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login, Apprenti.adaptation_situation_examen)
+                .join(Assister)
+                .join(Cours)
+                .filter_by(id_formation=id_formation)
+                .distinct()
+                .all()
+            )
         except Exception as e:
             suplement_erreur(e, message="Erreur lors de la récupération des apprentis de la formation.")
 
