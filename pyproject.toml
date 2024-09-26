@@ -59,6 +59,7 @@ werkzeug = "^3.0.4"
 wtforms = "^3.1.2"
 xlsxwriter = "^3.2.0"
 xmlrunner = "^1.7.7"
+djlint = "^1.35.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"
