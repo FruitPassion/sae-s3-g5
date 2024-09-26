@@ -57,7 +57,7 @@ class Cours(db.Model):
             from model.apprenti import Apprenti
             return Cours.query.distinct().filter_by(
                 id_formation=Formation.get_formation_id_par_nom_formation(nom_formation)).join(
-                Assister).join(Apprenti).with_entities(Apprenti.nom, Apprenti.prenom, Apprenti.login,
+                Assister).join(Apprenti).with_entities(Apprenti.id_apprenti, Apprenti.nom, Apprenti.prenom, Apprenti.login,
                                                        Apprenti.photo).filter(Apprenti.archive == archive).all()
         except Exception as e:
             logging.error(f"Erreur lors de la récupération des apprentis de la formation {nom_formation}")
