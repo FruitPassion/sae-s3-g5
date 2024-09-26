@@ -114,7 +114,6 @@ class CoursTestModif:
         self.theme = "Serrurier"
         self.cours = "Réparer une serrure"
         self.duree = 2
-        self.id_formation = 1
         self.archive = False
 
-        Cours.update_cours(self.id_cours, self.theme, self.cours, self.duree, self.id_formation, commit=False)
+        Cours.update_cours(self.id_cours, self.theme, self.cours, self.duree, commit=False)

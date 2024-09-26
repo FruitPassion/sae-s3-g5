@@ -148,9 +148,8 @@ def gestion_cours():
 
     if form_modifier.validate_on_submit() and request.method == "POST":
         identifiant = request.form.get("id-element")
-        sel_formation = request.form.get("select_formation")
         Cours.update_cours(identifiant, form_modifier.form_theme.data, form_modifier.form_cours.data,
-                           form_modifier.form_duree.data, sel_formation)
+                           form_modifier.form_duree.data)
         return redirect(url_for("educ_admin.gestion_cours"), 302)
 
     elif form_ajouter.validate_on_submit() and request.method == "POST":

@@ -173,7 +173,6 @@ class Cours(db.Model):
             cours.theme = theme
             cours.cours = intitule
             cours.duree = duree
-            cours.id_formation = id_formation
             if commit:
                 db.session.commit()
         except Exception as e:

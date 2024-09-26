@@ -255,17 +255,6 @@
                             <h3 class="fs-1 my-3">Durée (en semaines):</h3>
                             {{ form_modifier.form_duree(class="form-control fs-1 my-3") }}
                         </div>
-                        <div class="w-75 test">
-                            <h3 class="fs-1 my-3">Formation associée :</h3>
-                            <select name="select_formation" id="select_formation" class="fs-1 my-3 form-select"
-                                    required>
-                                <option value="" selected disabled="disabled">--- Sélectionnez une formation ---
-                                </option>
-                                {% for formation in formations %}
-                                    <option value="{{ loop.index }}">{{ formation.intitule }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer d-flex">
