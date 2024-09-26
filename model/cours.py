@@ -151,9 +151,16 @@ class Cours(db.Model):
 
         :return: id_cours
         """
+        from model.formation import Formation
         try:
             cours_ajoute = Cours(theme=theme, cours=cours, duree=duree, id_formation=id_formation)
             db.session.add(cours_ajoute)
+            if commit:
+                db.session.commit()
+            apprentis = Cours.get_apprentis_by_formation(Formation.get_nom_formation(id_formation))
+            for apprenti in apprentis:
+                assister = Assister(id_apprenti=apprenti.id_apprenti, id_cours=cours_ajoute.id_cours)
+                db.session.add(assister)
             if commit:
                 db.session.commit()
             return Cours.get_cours_id(cours)
@@ -162,7 +169,7 @@ class Cours(db.Model):
             logging.error(e)
 
     @staticmethod
-    def update_cours(identifiant, theme, intitule, duree, id_formation, commit=True):
+    def update_cours(identifiant, theme, intitule, duree, commit=True):
         """
         Modifie un cours en BD
 
