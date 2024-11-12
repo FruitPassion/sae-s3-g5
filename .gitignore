@@ -49,3 +49,6 @@ MANIFEST
 flask_session/
 
 test_data.json
+
+*.pem
+*.key
