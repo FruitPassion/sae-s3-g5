@@ -45,7 +45,7 @@ def app(creation):
     app = create_app("test")
 
     with app.app_context():
-        with open("./db_test.sql", "r") as file:
+        with open("./sql/db_test.sql", "r") as file:
             sql_data = file.read().replace("\n", "")
             sql_data = sql_data.split("##")
 
