@@ -58,8 +58,9 @@ webencodings = "^0.5.1"
 werkzeug = "^3.0.4"
 wtforms = "^3.1.2"
 xlsxwriter = "^3.2.0"
-xmlrunner = "^1.7.7"
 djlint = "^1.35.2"
+flask-migrate = "^4.0.7"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"
