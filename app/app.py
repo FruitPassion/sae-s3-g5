@@ -1,38 +1,29 @@
 # Importation des librairies nécessaires
 import os
-import sys
 
-# Vérification de la présence des dépendances dans l'environnement virtuel
 from custom_paquets import check_requirements
 
 check_requirements.checking()
 
-# Paquets flask
-from flask import Flask, render_template, url_for
+from flask import Flask
 from flask_wtf import CSRFProtect
-from werkzeug.exceptions import HTTPException
+from flask_migrate import Migrate
 
 from custom_paquets import app_utils
 
-# Paquet gestion d'erreur
 from custom_paquets.gestions_erreur import LogOpeningError
 from flask_session import Session
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Fonction pour créer une application et la paramétrer
-def create_app(config=None):
-    from custom_paquets.app_checker import check_config, lire_config
+def create_app():
+    from custom_paquets.app_checker import check_config
 
-    # Vérification de la configuration demandée.
-    # Si aucune configuration n'est demandée, le programme s'arrête
+    config = os.getenv("CONFIG")
     check_config(config)
-    if not os.path.exists("config.txt"):
-        file = open("config.txt", "w")
-        file.close()
-    with open("config.txt", "w") as file:
-        file.write(config)
-
-    config = lire_config("config.txt")
 
     # model de la base de données
     from model.shared_model import db
@@ -47,7 +38,6 @@ def create_app(config=None):
     if open("logs/access.log", "w").close():
         raise LogOpeningError("Impossible d'ouvrir le fichier de log")
 
-    # Chargement de la configuration dev ou prod
     app.config.from_object(f"config.{config.capitalize()}Config")
 
     # Importation des controller
@@ -77,6 +67,9 @@ def create_app(config=None):
     # Initialisation du schema de la base de données dans l'application
     db.init_app(app)
 
+    # Initialisation de la migration de la base de données
+    Migrate(app, db)
+
     Session(app)
 
     # Redéfinition de la fonction url_for pour ajouter un timestamp
@@ -95,7 +88,4 @@ def create_app(config=None):
 
 # Appel principal pour lancer l'application
 if __name__ == "__main__":
-    try:
-        create_app(sys.argv[1]).run(host="0.0.0.0")
-    except IndexError:
-        raise ValueError("Argument de lancement manquant (dev, test ou prod)")
+    create_app().run(host="0.0.0.0")
