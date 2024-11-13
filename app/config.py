@@ -3,10 +3,12 @@ import sys
 
 import pymysql
 import redis
-from configparser_crypt import ConfigParserCrypt
 
-from custom_paquets.app_checker import lire_config
 from custom_paquets.getion_logs import gestion_logs
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 pymysql.install_as_MySQLdb()
 
@@ -25,8 +27,8 @@ class DevConfig:
     SESSION_PERMANENT = False
     SESSION_TYPE = "filesystem"
     WTF_CSRF_ENABLED = False
-    DB_SCHEMA = f"db_fiches_{config.lower()}"
-    SQLALCHEMY_DATABASE_URI = f"mariadb://local_user:password@localhost:3306/{DB_SCHEMA}"
+    DB_SCHEMA = "main"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///project.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {
@@ -47,9 +49,9 @@ class ProdConfig:
     SESSION_PERMANENT = False
     SESSION_TYPE = "redis"
     SESSION_USE_SIGNER = True
-    SESSION_REDIS = redis.from_url("redis://127.0.0.1:6379")
-    DB_SCHEMA = f"db_fiches_{config.lower()}"
-    SQLALCHEMY_DATABASE_URI = "mariadb://user:{}@localhost:3306/{}".format(conf_file["DBS"]["db_password"], DB_SCHEMA)
+    SESSION_REDIS = redis.from_url(f"redis://{os.getenv("CACHE_HOST")}:6379")
+    DB_SCHEMA = "main"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///project.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     REMEMBER_COOKIE_SAMESITE = "strict"
     SQLALCHEMY_ENGINE_OPTIONS = {
