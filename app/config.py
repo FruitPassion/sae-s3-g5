@@ -10,24 +10,6 @@ from custom_paquets.getion_logs import gestion_logs
 
 pymysql.install_as_MySQLdb()
 
-config = lire_config("config.txt")
-
-if config == "prod":
-    file = "dbs.encrypted"
-    conf_file = ConfigParserCrypt()
-    try:
-        with open("key.encrypt", "rb") as passwd:
-            password = passwd.read()
-    except Exception as error:
-        print("Fichier clée manquant")
-        print(error)
-        sys.exit(1)
-    conf_file.aes_key = password
-    conf_file.read_encrypted(file)
-else:
-    conf_file = {"DBS": {"db_password": "password"}}
-
-
 gestion_logs()
 
 
