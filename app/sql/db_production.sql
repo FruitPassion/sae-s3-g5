@@ -1,209 +1,31 @@
--- Active: 1706110255136@@127.0.0.1@3306@db_fiches_dev
-
-drop DATABASE db_fiches_prod;
-CREATE DATABASE IF NOT EXISTS db_fiches_prod;
-USE db_fiches_prod;
 
 
-CREATE TABLE Personnel
-(
-    id_personnel INT AUTO_INCREMENT,
-    nom          VARCHAR(50) NOT NULL,
-    prenom       VARCHAR(50) NOT NULL,
-    login        VARCHAR(50) NOT NULL,
-    mdp          TEXT        NOT NULL,
-    role         VARCHAR(50) NOT NULL,
-    email        VARCHAR(100),
-    essais      INT         NOT NULL DEFAULT (0),
-    archive      BOOLEAN     NOT NULL DEFAULT (0),
-    PRIMARY KEY (id_personnel),
-    CONSTRAINT ch_personnel_role CHECK (role IN
-                                        ('SuperAdministrateur', 'Educateur Administrateur', 'Educateur', 'CIP', 'dummy')),
-    CONSTRAINT ch_personnel_essais CHECK (Personnel.essais >= 0 AND Personnel.essais <= 3)
-);
-
-CREATE TABLE Apprenti
-(
-    id_apprenti INT AUTO_INCREMENT,
-    nom         VARCHAR(50) NOT NULL,
-    prenom      VARCHAR(50) NOT NULL,
-    login       VARCHAR(50) NOT NULL,
-    mdp         TEXT,
-    photo       VARCHAR(100),
-    essais     INT         NOT NULL DEFAULT (0),
-    archive     BOOLEAN     NOT NULL DEFAULT (0),
-    adaptation_situation_examen TEXT,
-    PRIMARY KEY (id_apprenti),
-    CONSTRAINT ch_apprenti_essais CHECK (Apprenti.essais >= 0 AND Apprenti.essais <= 5)
-);
-
-CREATE TABLE Formation
-(
-    id_formation  INT AUTO_INCREMENT,
-    intitule      VARCHAR(50) NOT NULL,
-    niveau_qualif SMALLINT    NOT NULL,
-    groupe        VARCHAR(50),
-    image         VARCHAR(100),
-    archive       BOOLEAN     NOT NULL DEFAULT (0),
-    PRIMARY KEY (id_formation)
-);
-
-CREATE TABLE Cours
-(
-    id_cours   INT AUTO_INCREMENT,
-    theme        VARCHAR(50) NOT NULL,
-    cours        VARCHAR(50) NOT NULL,
-    duree        INT,
-    id_formation INT         NOT NULL,
-    archive      BOOLEAN     NOT NULL DEFAULT (0),
-    PRIMARY KEY (id_cours),
-    FOREIGN KEY (id_formation) REFERENCES Formation (id_formation)
-);
-
-CREATE TABLE EducAdmin
-(
-    id_personnel INT,
-    PRIMARY KEY (id_personnel),
-    FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel)
-);
-
-CREATE TABLE Pictogramme
-(
-    id_pictogramme INT AUTO_INCREMENT,
-    label          VARCHAR(50),
-    url            VARCHAR(100),
-    categorie      VARCHAR(50),
-    souscategorie  VARCHAR(50),
-    PRIMARY KEY (id_pictogramme)
-);
-
-CREATE TABLE ElementBase
-(
-    id_element   INT AUTO_INCREMENT,
-    libelle      VARCHAR(50) NOT NULL,
-    type         VARCHAR(50) NOT NULL,
-    text         VARCHAR(50),
-    audio        VARCHAR(100),
-    PRIMARY KEY (id_element)
-);
-
-CREATE TABLE FicheIntervention
-(
-    id_fiche             INT AUTO_INCREMENT,
-    numero               SMALLINT,
-    nom_du_demandeur     VARCHAR(50),
-    date_demande         DATE,
-    localisation         VARCHAR(50),
-    description_demande  TEXT,
-    degre_urgence        TINYINT,
-    couleur_intervention VARCHAR(50),
-    etat_fiche           TINYINT,
-    date_creation        DATETIME,
-    photo_avant          VARCHAR(150),
-    photo_apres          VARCHAR(150),
-    nom_intervenant      VARCHAR(50) NOT NULL,
-    prenom_intervenant   VARCHAR(50) NOT NULL,
-    id_personnel         INT         NOT NULL,
-    id_apprenti          INT         NOT NULL,
-    id_cours         INT         NOT NULL,
-    PRIMARY KEY (id_fiche),
-    FOREIGN KEY (id_personnel) REFERENCES EducAdmin (id_personnel),
-    FOREIGN KEY (id_apprenti) REFERENCES Apprenti (id_apprenti),
-    FOREIGN KEY (id_cours) REFERENCES Cours (id_cours),
-    CONSTRAINT ch_fiche_etat CHECK (FicheIntervention.etat_fiche >= 0 AND FicheIntervention.etat_fiche <= 2),
-    CONSTRAINT ch_fiche_degre CHECK (FicheIntervention.degre_urgence >= 1 AND FicheIntervention.degre_urgence <= 4)
-);
-
-CREATE TABLE LaisserTrace
-(
-    id_personnel      INT,
-    horodatage        DATETIME,
-    intitule          VARCHAR(50) NOT NULL,
-    eval_texte        TEXT        NOT NULL,
-    commentaire_texte TEXT        NOT NULL,
-    eval_audio        VARCHAR(255),
-    commentaire_audio VARCHAR(50),
-    apprenti          BOOLEAN,
-    id_fiche          INT         NOT NULL,
-    PRIMARY KEY (id_personnel, horodatage),
-    FOREIGN KEY (id_personnel) REFERENCES Personnel (id_personnel),
-    FOREIGN KEY (id_fiche) REFERENCES FicheIntervention (id_fiche),
-    CONSTRAINT uc_commentaire_fiche UNIQUE (id_fiche, apprenti)
-
-);
-
-
-
-CREATE TABLE Assister
-(
-    id_apprenti INT,
-    id_cours  INT,
-    PRIMARY KEY (id_apprenti, id_cours),
-    FOREIGN KEY (id_apprenti) REFERENCES Apprenti (id_apprenti),
-    FOREIGN KEY (id_cours) REFERENCES Cours (id_cours)
-);
-
-
-CREATE TABLE Materiel
-(
-    id_materiel INT AUTO_INCREMENT,
-    nom         VARCHAR(50) NOT NULL,
-    categorie   VARCHAR(50) NOT NULL,
-    lien       VARCHAR(100) NOT NULL,
-    PRIMARY KEY (id_materiel)
-);
-
-CREATE TABLE ComposerPresentation
-(
-    id_element          INT,
-    id_fiche            INT,
-    text                VARCHAR(50),
-    taille_texte        VARCHAR(50),
-    audio               VARCHAR(50),
-    police              VARCHAR(50),
-    couleur             VARCHAR(7),
-    couleur_fond        VARCHAR(7),
-    niveau              TINYINT,
-    position_elem       VARCHAR(50),
-    ordre_saisie_focus  VARCHAR(50),
-    id_pictogramme      INT,
-    taille_pictogramme  INT,
-    couleur_pictogramme VARCHAR(7),
-    id_materiel         INT,
-    PRIMARY KEY (id_element, id_fiche),
-    FOREIGN KEY (id_element) REFERENCES ElementBase (id_element),
-    FOREIGN KEY (id_fiche) REFERENCES FicheIntervention (id_fiche),
-    FOREIGN KEY (id_pictogramme) REFERENCES Pictogramme (id_pictogramme)
-);
-
-
-INSERT INTO Personnel (nom, prenom, login, mdp, role, email, essais)
-VALUES ('Supprimé', 'Utilisateur', 'dummy', 'dummy', 'dummy', NULL, 3),
-       ('--AREMPLACERNOM--', '--AREMPLACERPRENOM--', '--AREMPLACERLOG--', '--AREMPLACERMDP--', 'SuperAdministrateur', '--AREMPLACERMAIL--', 0);
+INSERT INTO Personnel (nom, prenom, login, mdp, role, email, essais, archive)
+VALUES ('Supprimé', 'Utilisateur', 'dummy', 'dummy', 'dummy', 'mail@mail.com', 3, 0);
 
 INSERT INTO EducAdmin (id_personnel)
 VALUES (1);
 
-INSERT INTO Formation (intitule, niveau_qualif, groupe, image)
-VALUES ('Parcours plomberie', 3, 1, 'formation_image/plomberie.jpg');
+INSERT INTO Formation (intitule, niveau_qualif, groupe, image, archive)
+VALUES ('Parcours plomberie', 3, 1, 'formation_image/plomberie.jpg', 0);
 
-INSERT INTO Cours (theme, cours, duree, id_formation)
-VALUES ('Probleme tuyauterie', 'Colmater fuite', 3, 1);
+INSERT INTO Cours (theme, cours, duree, id_formation, archive)
+VALUES ('Probleme tuyauterie', 'Colmater fuite', 3, 1, 0);
 
-INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essais, adaptation_situation_examen)
-VALUES ('dummy', 'dummy', 'dummy', 'dummy', 'dummy', 0, null);
+INSERT INTO Apprenti (nom, prenom, mdp, login, photo, essais, adaptation_situation_examen, archive)
+VALUES ('dummy', 'dummy', 'dummy', 'dummy', 'dummy', 0, null, 0);
 
 
 INSERT INTO ElementBase (libelle, type, text, audio)
 VALUES ('Intervention', 'categorie', NULL, NULL),
-       ('Date de l\'intervention', 'date', NULL, NULL),
-       ('Durée de l\'opération', 'select-time', NULL, NULL),
+       ("Date de l'intervention", 'date', NULL, NULL),
+       ("Durée de l'opération", 'select-time', NULL, NULL),
        ('Confirmation des informations', 'checkbox', NULL, NULL),
        ('Type de Maintenance', 'categorie', NULL, NULL),
        ('améliorative', 'checkbox', NULL, NULL),
        ('préventive', 'checkbox', NULL, NULL),
        ('corrective', 'checkbox', NULL, NULL),
-       ('Nature de l\'intervention', 'categorie', NULL, NULL),
+       ("Nature de l'intervention", 'categorie', NULL, NULL),
        ('Aménagement', 'checkbox', NULL, NULL),
        ('Finitions', 'checkbox', NULL, NULL),
        ('Installation sanitaire', 'checkbox', NULL, NULL),

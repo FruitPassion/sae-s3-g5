@@ -1,11 +1,3 @@
--- Active: 1706110255136@@127.0.0.1@3306@db_fiches_dev
-CREATE OR REPLACE USER 'local_user'@'localhost' IDENTIFIED BY 'password';
-DROP DATABASE IF EXISTS db_fiches_dev;
-create database db_fiches_dev;
-grant all privileges on db_fiches_dev.* TO 'local_user'@'localhost' identified by 'password';
-flush privileges;
-USE db_fiches_dev;
-
 
 CREATE TABLE Personnel
 (
