@@ -1,7 +1,5 @@
 import os
-import sys
 
-import pymysql
 import redis
 
 from custom_paquets.getion_logs import gestion_logs
@@ -9,8 +7,6 @@ from custom_paquets.getion_logs import gestion_logs
 from dotenv import load_dotenv
 
 load_dotenv()
-
-pymysql.install_as_MySQLdb()
 
 gestion_logs()
 
@@ -49,7 +45,7 @@ class ProdConfig:
     SESSION_PERMANENT = False
     SESSION_TYPE = "redis"
     SESSION_USE_SIGNER = True
-    SESSION_REDIS = redis.from_url(f"redis://{os.getenv("CACHE_HOST")}:6379")
+    SESSION_REDIS = redis.from_url(f"redis://{os.getenv('CACHE_HOST')}:6379")
     DB_SCHEMA = "main"
     SQLALCHEMY_DATABASE_URI = "sqlite:///project.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
