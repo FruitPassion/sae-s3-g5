@@ -1,15 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
+import os
+from dotenv import load_dotenv
 
-from custom_paquets.app_checker import lire_config
+load_dotenv()
 
 db = SQLAlchemy()
 
-config = lire_config("config.txt")
+config = os.getenv("CONFIG")
 
-if config == "test":
-    DB_SCHEMA = "main"
-else:
-    DB_SCHEMA = f"db_fiches_{config.lower()}"
+DB_SCHEMA = "main"
 
 
 class Assister(db.Model):

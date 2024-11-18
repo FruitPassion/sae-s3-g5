@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import logging
 from datetime import date
 from time import localtime, strftime
@@ -11,15 +11,6 @@ from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
 from model.personnel import Personnel
 from model.shared_model import DB_SCHEMA, db
-
-
-class MyDateTime(db.TypeDecorator):
-    impl = db.DateTime
-
-    def process_bind_param(self, value, dialect):
-        if type(value) is str:
-            return datetime.datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-        return value
 
 
 class FicheIntervention(db.Model):
@@ -35,7 +26,7 @@ class FicheIntervention(db.Model):
     degre_urgence = db.Column(db.Integer)
     couleur_intervention = db.Column(db.String(50))
     etat_fiche = db.Column(db.Integer)
-    date_creation = db.Column(MyDateTime, default=datetime.datetime.now())
+    date_creation = db.Column(db.DateTime, default=datetime.now)
     photo_avant = db.Column(db.String(150))
     photo_apres = db.Column(db.String(150))
     nom_intervenant = db.Column(db.String(50), nullable=False)
@@ -47,6 +38,10 @@ class FicheIntervention(db.Model):
     Apprenti = db.relationship("Apprenti", primaryjoin="FicheIntervention.id_apprenti == Apprenti.id_apprenti", backref="fiches")
     Personnel = db.relationship("Personnel", primaryjoin="FicheIntervention.id_personnel == Personnel.id_personnel", backref="fiches")
     Cours = db.relationship("Cours", primaryjoin="FicheIntervention.id_cours == Cours.id_cours", backref="fiches")
+
+    def set_date_creation(self, date_str):
+        """Permet de définir date_creation à partir d'une chaîne au format attendu"""
+        self.date_creation = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
 
     @staticmethod
     def get_fiches_techniques_par_login(login):

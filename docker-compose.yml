@@ -1,0 +1,55 @@
+services:
+  web:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: apeaj-web
+    volumes:
+      - db_volume:/usr/src/app/instance
+      - static_volume:/usr/src/app/static
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    restart: unless-stopped
+  nginx:
+    image: nginx:1.26.2
+    container_name: apeaj-nginx
+    volumes:
+      - static_volume:/usr/src/app/static
+      - ./nginx/ssl:/etc/ssl
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 443:443
+    depends_on:
+      - web
+    restart: unless-stopped
+  cache:
+    image: redis:latest
+    container_name: apeaj-cache
+    expose:
+      - 6379
+    env_file:
+      - ./.env
+    restart: unless-stopped
+  # Serveur DNS avec dnsmasq et interface web
+  # dnsmasq:
+  #   image: jpillora/dnsmasq
+  #   container_name: apeaj-dns
+  #   volumes:
+  #     - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+  #   ports:
+  #     - 5653:53/udp
+  #     - 5380:8080
+  #   environment:
+  #     - HTTP_USER=foo
+  #     - HTTP_PASS=bar
+  #   restart: unless-stopped
+  #   logging:
+  #     options:
+  #       max-size: "100m"
+
+
+volumes:
+  static_volume:
+  db_volume:
