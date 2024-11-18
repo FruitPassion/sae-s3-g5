@@ -27,7 +27,7 @@
 
 ## Installation/Déploiement
 
-Cloner ce projet dans le répertoire `/var/www` (le nom que vous lui donnerez seras celui de l'application Apache).
+Cloner ce projet dans le répertoire souhaité
 
 ```bash
 $ git clone https://github.com/FruitPassion/sae-s3-g5.git nom-projet
