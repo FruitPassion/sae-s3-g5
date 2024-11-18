@@ -7,7 +7,7 @@ Ce script d'initiation permet de gérer les tâches suivantes :
 - Configuration de l'hote
 - Generation certificat
 - Mise en point wifi (si hardware compatible)
-- Generation conf dns mask
+(Non utilisé) - Generation conf dns mask
 - Lancement du docker compose
 - Mise en place de CRON pour:
     - Mise a jour du certificats
