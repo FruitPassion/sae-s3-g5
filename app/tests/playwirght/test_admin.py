@@ -2,7 +2,6 @@ import pytest
 from faker import Faker
 from flask import url_for
 from playwright.sync_api import Page, expect
-
 from tests.utils import (
     connexion_personnel_mdp,
     connexion_personnel_pin,

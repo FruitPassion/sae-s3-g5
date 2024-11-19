@@ -1,5 +1,4 @@
 from flask import request
-
 from model.composer import ComposerPresentation
 
 
@@ -19,9 +18,9 @@ def complete_form_data(completer_fiche):
 def process_material(fiche, ajouter_materiel):
     for element in request.form:
         if "selecteur-" in element and len(request.form.get(f"{element}")) != 0:
-            ajouter_materiel[f"{element.replace('selecteur-','')}"] = request.form.get(f"{element}")
+            ajouter_materiel[f"{element.replace('selecteur-', '')}"] = request.form.get(f"{element}")
         elif "selecteur-" in element:
-            ajouter_materiel[f"{element.replace('selecteur-','')}"] = None
+            ajouter_materiel[f"{element.replace('selecteur-', '')}"] = None
     if len(ajouter_materiel) != 0:
         ComposerPresentation.maj_materiaux_fiche(ajouter_materiel, fiche.id_fiche)
 

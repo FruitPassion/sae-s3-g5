@@ -1,0 +1,43 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Suivi de progression{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/camembert.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Suivi de progression {% include "_partial/_tts.html" %}</h1>
+    <div id="suivi">
+        <canvas id="camembert" width="200" height="200"></canvas>
+        {% block javascripts %}
+            <script src="{{ url_for('static',filename='js/chart.js') }}"></script>
+            <script src="{{ url_for('static',filename='js/chartjs-plugin-datalabels.js') }}"></script>
+            <script src="{{ url_for('static',filename='js/suivi_progression_apprenti.js') }}"></script>
+            <script>
+                window.onload = function () {
+                    creation_graphique_suivi_progression_apprenti({{ etat_fiches|safe }});
+                }
+            </script>
+        {% endblock %}
+    </div>
+    <div class="legend">
+        <div class="texte">
+            <div class='box green'></div>
+            <p>Fiches terminées {% include "_partial/_tts.html" %}</p>
+        </div>
+        <div class="texte">
+            <div class='box orange'></div>
+            <p>Fiches en cours {% include "_partial/_tts.html" %}</p>
+        </div>
+        <div class="texte">
+            <div class='box red'></div>
+            <p>Fiches arrêtées {% include "_partial/_tts.html" %}</p>
+        </div>
+    </div>
+    <div style="height: 200px"> </div>
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('apprenti.redirection_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

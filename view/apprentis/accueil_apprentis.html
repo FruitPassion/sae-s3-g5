@@ -1,0 +1,73 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Fiches{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/fiches_techniques.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static', filename='js/filtre_fiche.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue {{ apprenti.prenom }} {{ apprenti.nom }} {% include "_partial/_tts.html" %}</h1>
+
+    <select id="selectCours" class="form-select fs-2" aria-label="Default select example"
+    onchange="filtrer_fiches(this)">
+        <option value="0">Tous les cours</option>
+        {% for cour in cours %}
+            <option value="{{ cour.cours }}">{{ cour.cours }}</option>
+        {% endfor %}
+    </select>
+    <div id="blocFiches" class="py-4 px-2">
+        {% if fiches|length == 0 %}
+            <p class="text-center fs-1 my-5">Aucune fiche pour l'instant. {% include "_partial/_tts.html" %}</p>
+        {% endif %}
+        {% for fiche in fiches %}
+            <div class="d-block block-fiche text-wrap" data-cour="{{ get_nom_cours_by_id(fiche.id_cours) }}">
+                <div class="parent">
+                    {% if fiche.etat_fiche == 1 %}
+                        <a class="modifier" target="_blank" rel="noopener"
+                           href="{{ url_for('apprenti.imprimer_pdf', numero=fiche.numero) }}">
+                            <i class="fa fa-print" aria-hidden="true"></i></a>
+                        <a class="modifier2" href="{{ url_for('apprenti.afficher_images', numero=fiche.numero) }}">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i></a>
+                    {% else %}
+                        <a class="modifier"></a>
+                    {% endif %}
+
+                    {% if fiche.etat_fiche == 0 %}
+                        <a href="{{ url_for('apprenti.completer_fiche', numero=fiche.numero) }}" class="bg-modifier">
+                    {% elif fiche.etat_fiche == 1 %}
+                        <a href="{{ url_for('apprenti.afficher_commentaires', numero=fiche.numero) }}" class="bg-modifier">
+                    {% else %}
+                        <a class="bg-modifier">
+                    {% endif %}
+                        <img class="fiche" src="{{ url_for('static', filename='images/page-blanche.jpg') }}"
+                             alt="fiche finie">
+                        {% if fiche.etat_fiche == 1 %}
+                            <img class="check" src="{{ url_for('static', filename='images/check.png') }}" alt="fini">
+                        {% elif fiche.etat_fiche == 2 %}
+                            <img class="check" src="{{ url_for('static', filename='images/stop.png') }}" alt="fini">
+                        {% else %}
+                            <img class="check" src="{{ url_for('static', filename='images/pause.png') }}" alt="pause">
+                        {% endif %}
+                    </a>
+                </div>
+                <p class="text-center fs-1">Fiche n°{{ fiche.numero }} {% include "_partial/_tts.html" %}</p>
+                <p class="text-center fs-2">{{ get_nom_cours_by_id(fiche.id_cours) }} {% include "_partial/_tts.html" %}</p>
+                <p class="text-center fs-3">{{ fiche.date_convertis }} {% include "_partial/_tts.html" %}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center">
+        {% if fiches|length != 0 %}
+            <div id="suivi_progression" class="bg-primary">
+                <a href="{{ url_for('apprenti.suivi_progression') }}">
+                    <img src="{{ url_for('static', filename='images/progression.png') }}" alt="progression">
+                    Suivi de progression {% include "_partial/_tts.html" %}</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

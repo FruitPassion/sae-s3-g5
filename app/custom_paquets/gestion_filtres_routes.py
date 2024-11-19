@@ -1,5 +1,4 @@
 from flask import abort, session
-
 from model.apprenti import Apprenti
 from model.ficheintervention import FicheIntervention
 from model.formation import Formation

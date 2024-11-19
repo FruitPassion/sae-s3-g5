@@ -1,7 +1,6 @@
 from functools import wraps
 
 from flask import redirect, session, url_for
-
 from model.personnel import Personnel
 
 ACTION_INDEX = "auth.choix_connexion"

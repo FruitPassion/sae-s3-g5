@@ -1,0 +1,42 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Commentaires de la fiche technique numero {{ numero }} {% include "_partial/_tts.html" %}</h1>
+
+    <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
+        <h2 class="commentaireTitre">Commentaires intervenant {% include "_partial/_tts.html" %}</h2>
+        {% if commentaires|length > 0 %}
+            <p class="commentaire">Commentaire : {{ commentaires[0].commentaire_texte }} {% include "_partial/_tts.html" %}</p>
+            <p class="commentaire">Evaluation : {{ commentaires[0].eval_texte }} {% include "_partial/_tts.html" %}</p>
+        {% else %}
+            <p>Pas encore de commentaire de l'éducateur {% include "_partial/_tts.html" %}</p>
+        {% endif %}
+
+        <h2 class="commentaireTitre">Ressenti apprenti {% include "_partial/_tts.html" %}</h2>
+        <div class="d-flex mb-4" style="height: 70px">
+            {% if ressenti %}
+                {% for e in emoji[5]['elements'] %}
+                    {% if e['text']!=None %}
+                        <img class="commentaire" alt="{{ e['libelle_elem'] }}"
+                             src="{{ url_for('static',filename='images/icone_fiches/'+e['pictogramme']) }}">
+                        <p class="commentaire">{{ e['libelle_elem'] }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="commentaire">Pas de ressenti mit. {% include "_partial/_tts.html" %}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="height: 200px"></div>
+
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

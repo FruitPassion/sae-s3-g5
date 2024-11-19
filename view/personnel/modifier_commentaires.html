@@ -1,0 +1,51 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/modifier_commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Modification commentaire{% endblock %}
+
+{% block body %}
+   
+    {% if typeCommentaire =="educateur"%}
+        <h1>Modification commentaire éducateur de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% else %}
+        <h1>Modification commentaire apprenti de la fiche n°{{ fiche.numero }} de {{ apprenti }} </h1>
+    {% endif %}
+
+    <div class="w-75 m-auto mt-5">
+
+        <form name="modifier" id="modifier" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            {% if typeCommentaire =="educateur"%}
+                <p>Commentaire de l'éducateur :</p>
+            {% else %}
+                <p>Commentaire de l'apprenti :</p>
+            {% endif %}
+            <textarea class="modifiable form-control mb-3" id="commentaire_texte" name="commentaire_texte"
+                      maxlength="500">{{ commentaires.commentaire_texte }}</textarea>
+
+
+            {% if typeCommentaire =="educateur"%}
+                <p>Evaluation de l'éducateur :</p>
+            {% else %}
+                <p>Evaluation de l'apprenti :</p>
+            {% endif %}
+            <textarea class="modifiable form-control mb-3" id="eval_texte" name="eval_texte"
+                      maxlength="500">{{ commentaires.eval_texte }}</textarea>
+
+            <br>
+
+            <!-- Gestion de la modification du commentaire/évaluation... ? -->
+            <input type="submit" value="Enregistrer" id="enregistrer" class="btn btn-primary form-control">
+
+        </form>
+        
+    </div>
+
+
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

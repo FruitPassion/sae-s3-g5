@@ -1,3 +1,11 @@
+from custom_paquets.custom_form import (
+    LoginApprentiForm,
+    LoginPersonnelForm,
+    LoginPersonnelPin,
+)
+from custom_paquets.decorateur import logout_required
+from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
+from custom_paquets.gestion_image import default_image_formation, default_image_profil
 from flask import (
     Blueprint,
     Response,
@@ -9,15 +17,6 @@ from flask import (
     session,
     url_for,
 )
-
-from custom_paquets.custom_form import (
-    LoginApprentiForm,
-    LoginPersonnelForm,
-    LoginPersonnelPin,
-)
-from custom_paquets.decorateur import logout_required
-from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
-from custom_paquets.gestion_image import default_image_formation, default_image_profil
 from model.apprenti import Apprenti
 from model.formation import Formation
 from model.personnel import Personnel

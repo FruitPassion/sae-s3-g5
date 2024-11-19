@@ -1,9 +1,7 @@
 import os
 
 import redis
-
 from custom_paquets.getion_logs import gestion_logs
-
 from dotenv import load_dotenv
 
 load_dotenv()

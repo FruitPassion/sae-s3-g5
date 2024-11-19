@@ -1,0 +1,33 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Raison de l'arrêt de la fiche numéro {{ numero }} de {{ apprenti }} </h1>
+    <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
+        {% if commentaire != None and commentaire.commentaire_texte != "" %}
+            <p class="commentaire">{{ commentaire.commentaire_texte }}</p>
+        {% else %}
+            <p class="commentaire">Aucune raison fournie</p>
+        {% endif %}
+    </div>
+
+    <div style="height: 200px"></div>
+
+    {% if session["role"] == "Educateur Administrateur" %}
+        <div class="fixed-bottom bg-light">
+            <a href="{{ url_for("educ_admin.fiches_apprenti", apprenti=apprenti) }}">
+                {% include "_partial/_retour_bouton.html" %}</a>
+        </div>
+    {% else %}
+        <div class="fixed-bottom bg-light">
+            <a href="{{ url_for("educ_simple.fiches_apprenti", apprenti=apprenti) }}">
+                {% include "_partial/_retour_bouton.html" %}</a>
+        </div>
+    {% endif %}
+{% endblock %}
+

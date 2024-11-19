@@ -1,16 +1,5 @@
 import json
 
-from flask import (
-    Blueprint,
-    Response,
-    flash,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
-
 from custom_paquets.builder import build_categories, build_pictogrammes
 from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import (
@@ -37,6 +26,16 @@ from custom_paquets.gestion_image import (
     default_image_profil,
     stocker_photo_materiel,
     stocker_picto,
+)
+from flask import (
+    Blueprint,
+    Response,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
 )
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation

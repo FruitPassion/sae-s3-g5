@@ -1,3 +1,11 @@
+from custom_paquets.builder import build_materiel
+from custom_paquets.converter import changer_date
+from custom_paquets.decorateur import educsimple_login_required
+from custom_paquets.gestion_filtres_routes import (
+    apprenti_existe,
+    fiche_by_id_existe,
+    fiche_by_numero_existe,
+)
 from flask import (
     Blueprint,
     Response,
@@ -7,15 +15,6 @@ from flask import (
     request,
     session,
     url_for,
-)
-
-from custom_paquets.builder import build_materiel
-from custom_paquets.converter import changer_date
-from custom_paquets.decorateur import educsimple_login_required
-from custom_paquets.gestion_filtres_routes import (
-    apprenti_existe,
-    fiche_by_id_existe,
-    fiche_by_numero_existe,
 )
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation

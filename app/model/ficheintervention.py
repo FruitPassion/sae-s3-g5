@@ -1,9 +1,6 @@
-from datetime import datetime
 import logging
-from datetime import date
+from datetime import date, datetime
 from time import localtime, strftime
-
-from sqlalchemy import asc, func
 
 from custom_paquets.converter import convert_to_dict
 from custom_paquets.gestions_erreur import suplement_erreur
@@ -11,6 +8,7 @@ from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
 from model.personnel import Personnel
 from model.shared_model import DB_SCHEMA, db
+from sqlalchemy import asc, func
 
 
 class FicheIntervention(db.Model):

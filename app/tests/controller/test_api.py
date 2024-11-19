@@ -1,6 +1,5 @@
-from flask import url_for
-
 from custom_paquets.converter import generate_login
+from flask import url_for
 from model.apprenti import Apprenti
 
 """

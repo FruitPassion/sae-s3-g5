@@ -5,10 +5,9 @@ from random import randint
 import cv2
 import numpy as np
 from matplotlib import colors
+from model.shared_model import db
 from PIL import Image, ImageColor, ImageFilter, ImageOps
 from werkzeug.utils import secure_filename
-
-from model.shared_model import db
 
 
 def img_estim(img, thrshld):

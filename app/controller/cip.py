@@ -1,10 +1,9 @@
 import json
 
-from flask import Blueprint, Response, redirect, render_template, request, url_for
-
 from custom_paquets.converter import changer_date
 from custom_paquets.decorateur import cip_login_required
 from custom_paquets.gestion_filtres_routes import apprenti_existe, fiche_by_id_existe
+from flask import Blueprint, Response, redirect, render_template, request, url_for
 from model.apprenti import Apprenti
 from model.cours import Cours
 from model.ficheintervention import FicheIntervention

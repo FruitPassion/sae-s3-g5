@@ -1,0 +1,28 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Choix opérations{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/choix_operations_cip.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>Choix opérations</h1>
+    <ol id="listeOperationsCIP">
+        <li class="lignes" id="fichesTechniques"><a href="{{ url_for('cip.fiches_apprenti', apprenti=apprenti) }}">
+            Fiches techniques</a></li>
+
+        <li class="lignes" id="suiviProg"><a href="{{ url_for('cip.suivi_progression_apprenti', apprenti=apprenti) }}">
+            Suivi de progression</a></li>
+
+        <li class="lignes" id="situationExam"><a
+                href="{{ url_for('cip.affichage_adaptation_situation_examen', apprenti=apprenti) }}">Adaptation situation
+            d'examen</a></li>
+    </ol>
+    <div class="fixed-bottom bg-light">
+        <a onclick="history.back();">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('personnel.choix_eleve', nom_formation=formation) }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

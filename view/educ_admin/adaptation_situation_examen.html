@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/commentaires.css') }}">
+{% endblock %}
+
+{% block title %}Adaptation en situation d'examen{% endblock %}
+
+{% block body %}
+    <h1>Adaptation en situation d'examen pour {{ apprenti.prenom }} {{ apprenti.nom }}</h1><br><br>
+    <div class="w-75 m-auto bg-light px-4 py-2 rounded-5 mt-5">
+        {% if commentaire == None %}
+            <p class="commentaireTitre">Pas encore réalisée</p>
+        {% else %}
+            <p class="commentaire">{{ commentaire }}</p>
+        {% endif %}
+    </div>
+    <div style="height: 200px"></div>
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('educ_admin.fiches_apprenti', apprenti=apprenti.login) }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

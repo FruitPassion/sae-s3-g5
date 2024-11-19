@@ -1,5 +1,4 @@
 from flask import url_for
-
 from model.cours import Cours
 from model.formation import Formation
 

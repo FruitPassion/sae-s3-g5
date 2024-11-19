@@ -1,13 +1,3 @@
-from flask import (
-    Blueprint,
-    Response,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
-
 from custom_paquets.builder import build_categories, build_materiel, check_ressenti
 from custom_paquets.converter import changer_date
 from custom_paquets.custom_form import CompleterFiche
@@ -23,6 +13,15 @@ from custom_paquets.gestion_filtres_routes import (
     fiche_by_numero_existe,
 )
 from custom_paquets.gestion_image import process_photo
+from flask import (
+    Blueprint,
+    Response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from model.apprenti import Apprenti
 from model.composer import ComposerPresentation
 from model.cours import Cours

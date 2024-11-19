@@ -1,8 +1,7 @@
-from flask import Blueprint, redirect, render_template, session, url_for
-
 from custom_paquets.decorateur import personnel_login_required
 from custom_paquets.gestion_filtres_routes import apprenti_existe, formation_existe
 from custom_paquets.gestion_image import default_image_formation, default_image_profil
+from flask import Blueprint, redirect, render_template, session, url_for
 from model.apprenti import Apprenti
 from model.formation import Formation
 from model.personnel import Personnel

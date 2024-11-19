@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Accueil{% endblock %} - APEAJ</title>
+    <link {% block favicon %}rel="icon"
+          href="{{ url_for('static',filename='images/logo-pastille.png') }}" {% endblock %}>
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+
+    <script src="{{ url_for('static',filename='js/tts.js') }}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/font-awesome.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/base.css') }}">
+
+
+    <meta name="viewport" content="width=1280">
+
+    {% block stylesheets %}{% endblock %}
+
+    <script>
+        const protocol = window.location.protocol;
+        const host = window.location.host;
+        const baseApiUrl = `${protocol}//${host}`; 
+    </script>
+
+    {% block javascripts %}{% endblock %}
+
+    {% block headSuppl %}{% endblock %}
+</head>
+
+<body>
+{% if not session["role"] %}
+    {% include "_partial/_nav_deconnecte.html" %}
+{% else %}
+    {% include "_partial/_nav_connexion.html" %}
+{% endif %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div style="{% if category == 'message' %}background-color: #6ce56c;{% else %}
+                background-color: #e83c55;
+            {% endif %} color: black; font-size : 35px">
+                <ul class="flashes" style="margin-top: revert">
+                    <li>{{ message }}
+                        {% include "_partial/_tts.html" %}
+                    </li>
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="d-flex justify-content-center center-div pt-4 mt-4">
+    <div class="d-block w-100">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+{% include "_partial/_footer.html" %}
+</body>
+{% block javascripts2 %}{% endblock %}
+</html>

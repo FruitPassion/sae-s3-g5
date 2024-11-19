@@ -1,16 +1,13 @@
 import datetime
-
 import json
-
 import os
 import sys
 from datetime import date
 
 from faker import Faker
 from flask import url_for
-from playwright.sync_api import Page, expect
-
 from model.formation import Formation
+from playwright.sync_api import Page, expect
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 

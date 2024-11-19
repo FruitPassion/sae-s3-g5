@@ -1,0 +1,27 @@
+{% extends 'common/base.html' %}
+
+{% block body %}
+
+    <h1 class="mb-5">Choisissez votre type d'authentification</h1>
+
+    <div class="d-flex justify-content-center text-center pt-5">
+        <div class="px-5">
+            <a href="{{ url_for('auth.connexion_personnel_mdp') }}" class="p-5">
+                <img src="{{ url_for('static', filename='images/pass_password.png') }}" class="rounded" alt="connexion mdp"
+                     height="200px">
+            </a>
+            <p class="text-link">Mot de passe</p>
+        </div>
+        <div class="px-5">
+            <a href="{{ url_for('auth.connexion_personnel_pin') }}" class="p-5">
+                <img src="{{ url_for('static', filename='images/pass_pin.png') }}" class="rounded" alt="connexion pin"
+                     height="200px">
+            </a>
+            <p class="text-link">Code PIN</p>
+        </div>
+    </div>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

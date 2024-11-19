@@ -1,7 +1,6 @@
 import os
 
 import xlsxwriter
-
 from custom_paquets.converter import changer_date
 from model.apprenti import Apprenti
 from model.ficheintervention import FicheIntervention

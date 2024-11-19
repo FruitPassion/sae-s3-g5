@@ -1,6 +1,5 @@
-from flask import Blueprint, request
-
 from custom_paquets.decorateur import admin_login_required
+from flask import Blueprint, request
 from model.apprenti import Apprenti
 from model.cours import Cours
 from model.formation import Formation

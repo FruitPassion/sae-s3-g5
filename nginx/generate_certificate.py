@@ -34,7 +34,7 @@ def cert_gen():
     cert.gmtime_adj_notAfter(validity_end)
     cert.set_issuer(cert.get_subject())
     cert.set_pubkey(k)
-    cert.sign(k, 'sha512')
+    cert.sign(k, "sha512")
 
     # Write the private key to a PEM file
     with open(KEY_FILE, "wt") as f:

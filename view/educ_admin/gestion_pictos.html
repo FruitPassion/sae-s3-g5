@@ -1,0 +1,173 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Gestion des pictogrammes{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/gestion_admin.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/snackbar.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/snackbar.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/recherche_pictogramme.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5 text-black">Liste des pictogrammes</h1>
+    <div class="px-3 fs-2 h-50">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-tous-tab" data-bs-toggle="tab" data-bs-target="#nav-tous"
+                    type="button" role="tab" aria-controls="nav-tous" aria-selected="true">Tous
+            </button>
+            <button class="nav-link" id="nav-ajouter-tab" data-bs-toggle="tab" data-bs-target="#nav-ajouter"
+                    type="button" role="tab" aria-controls="nav-ajouter" aria-selected="false">Ajouter
+            </button>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tous" role="tabpanel" aria-labelledby="nav-tous-tab">
+                <div id="searchbar">
+                    <input type="text" class="form-control" id="searchPicto" placeholder="Rechercher un pictogramme ..." 
+                    aria-label="Rechercher...." aria-describedby="button-addon2" onkeyup="searchTable('table_non_archive', 'searchPicto')">
+                </div>
+                <table class="table table-bordered" aria-describedby="table des pictos" id="table_non_archive">
+                    <thead>
+                    <tr class="text-center fs-1">
+                        <th scope="col">Label</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Catégorie</th>
+                        <th scope="col">Sous-catégorie</th>
+                        <th scope="col">Modifier</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for picto in pictos %}
+                        <tr class="text-center row-to-search" id="arch-ele-{{ picto['id_pictogramme'] }}">
+                            <td id="label-{{ picto['id_pictogramme'] }}" class="align-middle">{{ picto["label"] }}</td>
+                            <td id="url-{{ picto['id_pictogramme'] }}" value="{{ picto['lien'] }}">
+                                <img src="{{ url_for('static', filename='images/icone_fiches/'+picto['url']) }}" alt="icone pictogramme" style="width:100px;">
+                            </td>
+                            <td id="categorie-{{ picto['id_pictogramme'] }}"
+                                class="align-middle">{{ picto["categorie"] }}</td>
+                            <td id="souscategorie-{{ picto['id_pictogramme'] }}"
+                                class="align-middle">{{ picto["souscategorie"] }}</td>
+                            
+                            <th scope="row" onclick="passer_parametre_form(this, 'picto')"
+                                class="align-middle ele-btn-modif" data-bs-toggle="modal"
+                                data-bs-target="#modal-modifier">
+                                <button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div id="table_non_archiveRes" style="display: none;">
+                    <p>Aucun résultat</p>
+                </div>
+                <div style="height: 200px; position: relative"></div>
+            </div>
+            <div class="tab-pane fade" id="nav-ajouter" role="tabpanel" aria-labelledby="nav-ajouter-tab">
+                <form method="post" id="container-ajout" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="d-flex w-75 test">
+                        <div class="m-4 w-50">
+                            <div>
+                                <h3 class="fs-1 my-3">Label :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.label(class="form-control fs-1 my-3") }}
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Catégorie :</h3>
+                            </div>
+                            <div>
+                                <select class="form-select fs-1 my-3" id="categorie-ajouter" name="categorie-ajouter">
+                                    <option selected disabled="disabled">--- Sélectionnez une catégorie ---</option>
+                                    {% for categorie in categories %}
+                                        <option value="{{ categorie }}">{{ categorie }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="m-4 w-50">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="picto" name="picto"
+                                        accept="image/png, image/jpeg, image/jpg"/>
+                            </div>
+                            <div>
+                                <h3 class="fs-1 my-3">Sous-catégorie :</h3>
+                            </div>
+                            <div>
+                                {{ form_ajouter.souscategorie(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="w-50 mx-auto my-5">
+                        {{ form_ajouter.submit(class="btn btn-primary fs-1 form-control text-center") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar">.</div>
+
+    <div class="modal fade" id="modal-modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-1" id="modal-title">Modifier le pictogramme</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="container-modifier" enctype="multipart/form-data" autocomplete="off">
+                        {{ form_modifier.hidden_tag() }}
+                        <input type="hidden" value="" id="id-element-picto" name="id-element">
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Label :</h3>
+                            {{ form_modifier.form_modifier_label(class="form-control fs-1 my-3") }}
+                        </div>
+                        <div class="w-75 test">
+                            <h3 class="fs-1 my-3">Catégorie :</h3>
+                            <select class="form-select fs-1 my-3" id="categorie-modifier" name="categorie-modifier">
+                                {% for categorie in categories %}
+                                    <option value="{{ categorie }}">{{ categorie }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                        </div>
+
+                        <div class="w-75 test">
+                            <div class="mb-3">
+                                <h3 class="form-label fs-1 my-3">Choisissez une image :</h3>
+                                <input class="form-control fs-1 my-3" type="file" id="picto-modifier"
+                                       name="picto-modifier" accept="image/png" value="oui.jpg"/>
+                            </div>
+                            <div class="mb-3">
+                                <h3 class="fs-1 my-3">Sous-catégorie :</h3>
+                                {{ form_modifier.form_modifier_souscategorie(class="form-control fs-1 my-3") }}
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex">
+                            {{ form_modifier.form_modifier_submit(form="container-modifier", class="btn btn-primary fs-3 form-control text-center") }}
+                            <button type="button" class="btn btn-secondary fs-3 form-control text-center"
+                                    data-bs-dismiss="modal">Annuler
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('educ_admin.accueil_educadmin') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ url_for('static',filename='js/modifier_admin.js') }}"></script>
+{% endblock %}

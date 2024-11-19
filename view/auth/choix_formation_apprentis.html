@@ -1,0 +1,39 @@
+{% extends 'common/base.html' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/choix_formation_apprentis.css') }}">
+{% endblock %}
+
+{% block title %}Choix formation{% endblock %}
+
+{% block body %}
+
+    <h1>Choix de la formation en cours {% include "_partial/_tts.html" %}</h1>
+    
+    {% if formations|length == 0 %}
+        <p>Aucune formation n'est disponible pour le moment</p>
+    {% endif %}
+    <div>
+        {% for formation in formations %}
+            <div class="container d-flex form-card mt-5">
+                <div class="lien-formation">
+                    <a  href="{{ url_for('auth.choix_eleve_apprentis', nom_formation=formation.intitule) }}">
+                        <div class="container">
+                            <img class="img-formation" alt="image fond"
+                                 src="{{ url_for('static', filename='images/'+formation.image) }}">
+                            <p class="formation-txt">{{ formation.intitule }}</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="button-speak">
+                    <img src="{{ url_for('static',filename='images/speak.png') }}"
+                        alt="Nom parcour" class="speak-img" onclick="lireTexte('{{ formation.intitule }}')">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

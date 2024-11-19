@@ -1,0 +1,35 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Connexion personnel{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/connexion_personnel.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquerysctiptotop.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='js/cryxpad.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Entrez vos identifiants</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div id="choix-milieux">
+            <p class="label">Login :</p>
+            {{ form.login(class="boutton-formation") }}
+        </div>
+        <div id="choix-milieux">
+            <p class="label">Mot de Passe :</p>
+            {{ form.password(class="boutton-formation") }}
+        </div>
+        <div id="choix-milieux">
+            {{ form.submit(class="boutton-formation") }}
+        </div>
+    </form>
+
+    <div class="fixed-bottom bg-light">
+        <a href="{{ url_for('auth.choix_type_connexion') }}">{% include "_partial/_retour_bouton.html" %}</a>
+    </div>
+{% endblock %}

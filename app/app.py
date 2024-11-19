@@ -5,15 +5,13 @@ from custom_paquets import check_requirements
 
 check_requirements.checking()
 
-from flask import Flask
-from flask_wtf import CSRFProtect
-from flask_migrate import Migrate
-
 from custom_paquets import app_utils
-
 from custom_paquets.gestions_erreur import LogOpeningError
-from flask_session import Session
 from dotenv import load_dotenv
+from flask import Flask
+from flask_migrate import Migrate
+from flask_session import Session
+from flask_wtf import CSRFProtect
 
 load_dotenv()
 

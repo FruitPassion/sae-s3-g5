@@ -8,11 +8,12 @@ from sqlalchemy import text
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from app import create_app
 from custom_paquets.converter import generate_login
 from model.apprenti import Apprenti
 from model.personnel import Personnel
 from tests.utils import *
+
+from app import create_app
 
 fake = Faker(["fr_FR"])
 

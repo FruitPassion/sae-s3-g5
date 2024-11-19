@@ -1,0 +1,23 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Actions admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/accueil_superadmin.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5 mb-5 pt-5">Choix actions</h1>
+
+    <div class="w-75 m-auto">
+        <a href="{{ url_for('admin.gestion_apprentis') }}">
+            <button class="boutton-choix">Comptes apprenti</button>
+        </a>
+        <a href="{{ url_for('admin.gestion_personnel') }}">
+            <button class="boutton-choix">Comptes personnel</button>
+        </a>
+        <a href="{{ url_for('admin.gestion_formations') }}">
+            <button class="boutton-choix">Formations</button>
+        </a>
+    </div>
+{% endblock %}

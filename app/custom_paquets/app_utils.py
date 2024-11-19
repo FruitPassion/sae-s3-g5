@@ -2,10 +2,9 @@ import json
 import logging
 import os
 
+from custom_paquets.gestions_erreur import LogOpeningError, logging_erreur
 from flask import render_template, url_for
 from werkzeug.exceptions import HTTPException
-
-from custom_paquets.gestions_erreur import LogOpeningError, logging_erreur
 
 
 def rewrite_url(app):

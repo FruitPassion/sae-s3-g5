@@ -1,5 +1,3 @@
-from flask import Blueprint, Response, redirect, render_template, request, url_for
-
 from custom_paquets.converter import generate_login
 from custom_paquets.custom_form import (
     AjouterApprenti,
@@ -19,6 +17,7 @@ from custom_paquets.gestion_image import (
     supprimer_photo_profil,
 )
 from custom_paquets.security import encrypt_password
+from flask import Blueprint, Response, redirect, render_template, request, url_for
 from model.apprenti import Apprenti
 from model.cours import Cours
 from model.formation import Formation
