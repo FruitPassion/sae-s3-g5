@@ -53,7 +53,7 @@ fi
 
 printf "${BALISE}${GREEN}Installation des dépendances${NC}${BALISE}\n"
 
-apt update -y && apt upgrade -y  && apt install -y git dialog wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables ca-certificates curl libcurl4-openssl-dev libpcre3 libghc-regex-pcre-dev network-manager cron openssl
+apt update -y && apt upgrade -y  && apt install -y git dialog wget build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev iptables ca-certificates curl libcurl4-openssl-dev libpcre3 libghc-regex-pcre-dev network-manager cron openssl docker.io docker-compose
 
 if ! [ -x "$(command -v docker)" ]; then
     printf "${BALISE}${GREEN}Installation de Docker${NC}${BALISE}\n"
@@ -66,10 +66,10 @@ if ! [ -x "$(command -v docker)" ]; then
     tee /etc/apt/sources.list.d/docker.list > /dev/null
     apt-get update
     apt-get -y  install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose docker-compose-plugin
-    systemctl enable docker
-    systemctl start docker
 fi
 
+systemctl enable docker
+systemctl start docker
 
 printf "${BALISE}${GREEN}Configuration de l'environnement${NC}${BALISE}\n"
 CONFIG=prod
