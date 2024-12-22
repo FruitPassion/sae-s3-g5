@@ -24,6 +24,26 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 BALISE='\n##############################\n'
 
+generate_login() {
+  local nom="$1"
+  local prenom="$2"
+
+  # Get the first two characters of 'prenom', uppercase, and strip whitespace
+  local prenom_part=$(echo "$prenom" | head -c 2 | tr '[:lower:]' '[:upper:]' | xargs)
+
+  # Get the first character of 'nom', uppercase, and strip whitespace
+  local nom_part=$(echo "$nom" | head -c 1 | tr '[:lower:]' '[:upper:]' | xargs)
+
+  # Combine trimmed 'nom' and 'prenom' and calculate the length without newline
+  local combined=$(echo -n "$nom$prenom" | xargs)
+  local total_length=$(echo -n "$combined" | wc -c)
+
+  # Generate the login
+  local login="${prenom_part}${nom_part}$(printf "%02d" "$total_length")"
+
+  echo "$login"
+}
+
 # Vérifie que le script est executé en root
 if [ "$EUID" -ne 0 ]; then
     printf "\n\n${RED}Ce script doit être exécuté en tant que root${NC}\n\n"
@@ -225,6 +245,12 @@ chmod +x /usr/local/bin/backup_db.sh
 
 printf "${BALISE}${GREEN}Fin de l'initialisation${NC}${BALISE}\n"
 printf "${BLUE}L'application est maintenant accessible à l'adresse https://$DOMAIN_NAME${NC}\n"
+ADMIN_LOGIN=$(generate_login $ADMIN_NOM $ADMIN_PRENOM)
+printf "Login admin: %s\n" "$ADMIN_LOGIN"
+printf "Admin password: %s\n" "${ADMIN_PASSWORD}"
+printf "Redis admin: %s\n" "$REDIS_USER"
+printf "Redis password: %s\n" "${REDIS_PASSWORD}"
+
 if [ "$TYPEINSTALL" = "wifi" ]; then
     printf "${BLUE}Le point d'accès sans fil est maintenant disponible avec le ssid $WIFI_SSID et le mot de passe $WIFI_PASSWORD${NC}\n"
 fi
