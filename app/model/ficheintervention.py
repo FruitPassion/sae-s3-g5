@@ -1,7 +1,7 @@
 from datetime import datetime
 import logging
 from datetime import date
-from time import localtime, strftime
+from time import localtime
 
 from sqlalchemy import asc, func
 
@@ -302,7 +302,7 @@ class FicheIntervention(db.Model):
                 degre_urgence=fiche_a_copier.degre_urgence,
                 couleur_intervention=fiche_a_copier.couleur_intervention,
                 etat_fiche=0,
-                date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                date_creation=datetime.now(),
                 photo_avant=None,
                 photo_apres=None,
                 nom_intervenant=fiche_a_copier.nom_intervenant,
@@ -370,7 +370,7 @@ class FicheIntervention(db.Model):
                 degre_urgence=degre_urgence,
                 couleur_intervention=couleur_intervention,
                 etat_fiche=0,
-                date_creation=strftime("%Y-%m-%d %H:%M:%S", localtime()),
+                date_creation=datetime.now(),
                 photo_avant=None,
                 photo_apres=None,
                 nom_intervenant=nom_intervenant,

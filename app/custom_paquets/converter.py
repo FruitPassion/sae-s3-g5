@@ -1,4 +1,5 @@
 from unidecode import unidecode
+from datetime import datetime
 
 
 def convert_to_dict(elements):
