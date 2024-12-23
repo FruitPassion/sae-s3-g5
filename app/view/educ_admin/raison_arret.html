@@ -15,7 +15,7 @@
         <form name="raison" id="raison" method="POST">
 
             <h2>Pourquoi arrêter cette fiche ?</h2>
-            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             {{ form.raison_arret }}
 
             <br>

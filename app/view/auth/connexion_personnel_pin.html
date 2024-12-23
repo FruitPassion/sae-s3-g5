@@ -24,7 +24,7 @@
     <h1>Entrez vos identifiants</h1>
     <div class="container" style="height: 90%">
             <form method="post" name="code-form">
-                {{ form.csrf_token }}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 {{ form.hiddencode }}
                 {{ form.fantomclick }}
                 <div id="cryxpad-clavier" style="position: absolute;left: 50%;">
